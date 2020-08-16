@@ -11,8 +11,9 @@ Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &event
 
     unsigned long int seed = 8932478970182;
     // Configure camera
-    player = Player(textures, renderer, camera);
-    chunks = Chunk_Group(seed, renderer, camera, textures);
+    player = Player(textures);
+    chunks = Chunk_Group(seed, textures);
+	// TODO keep working here...
     inv = new Inventory(renderer, textures, events, WINDOW_W, WINDOW_H);
 }
 
