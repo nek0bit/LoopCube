@@ -1,5 +1,6 @@
 #include "chunkgroup.hpp"
 
+// I could probably move the renderer and camera out of the class, but it doesn't take much memory so I think it's fine
 Chunk_Group::Chunk_Group(unsigned long seed, SDL_Renderer* renderer, Camera &camera, TextureHandler &textures) {
     this->renderer = renderer;
     this->camera = &camera;
@@ -126,12 +127,12 @@ int Chunk_Group::get_id(int surrounding) {
 
 void Chunk_Group::render_all() {
     for (auto &chunk: group) {
-        chunk.render_all();
+        chunk.render_all(renderer, *camera);
     }
 }
 
 void Chunk_Group::update_all() {
     for (auto &chunk: group) {
-        chunk.update_all();
+        chunk.update_all(*camera);
     }
 }
