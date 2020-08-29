@@ -11,7 +11,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &event
 
     unsigned long int seed = 8932478970182;
     // Configure camera
-    player = Player(textures, renderer, camera);
+    player = Player(textures);
     chunks = Chunk_Group(seed, renderer, camera, textures);
     inv = new Inventory(renderer, textures, events, WINDOW_W, WINDOW_H);
 }
@@ -32,47 +32,42 @@ void Play::update() {
     chunks.check_area(player.get_default_x());
 
     // Update player
-    player.update(chunks);
+    player.update(chunks, camera);
 
     inv->update();
 
 
     for (int i = 0; i < 4; ++i) {
         if (events->get_state()[i]) {
-            player.direct_player(i, chunks);
+            player.direct_player(i, chunks, camera);
         }
     }
 
     // Jump (A)
     if (events->get_button_state()[4]) {
-        player.direct_player(0, chunks);
+        player.direct_player(0, chunks, camera);
     }
 
     // Down
     if (events->get_button_state()[0]) {
-        player.direct_player(2, chunks);
+        player.direct_player(2, chunks, camera);
     }
 
     // Right
     if (events->get_button_state()[1]) {
-        player.direct_player(1, chunks);
+        player.direct_player(1, chunks, camera);
     }
 
     // Left
     if (events->get_button_state()[2]) {
-        player.direct_player(3, chunks);
+        player.direct_player(3, chunks, camera);
     }
 
     // Up
     if (events->get_button_state()[3]) {
-        player.direct_player(0, chunks);
+        player.direct_player(0, chunks, camera);
     }
-
-
-
     
-
-
     // Update camera
     handle_camera();
 
@@ -84,7 +79,7 @@ void Play::render() {
     chunks.render_all();
 
     SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
-    player.render();
+    player.render(renderer);
 
 
 

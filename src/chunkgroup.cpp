@@ -31,7 +31,7 @@ void Chunk_Group::generate_chunk(int id) {
     bool check = chunk_already_generated(id);
     // Generate the chunk if it hasn't been generated before
     if (std::find(loaded_chunks.begin(), loaded_chunks.end(), id) == loaded_chunks.end() && !check) {
-        Chunk temp_chunk(seed, id, renderer, *textures, *camera);
+        Chunk temp_chunk(seed, id, *textures);
         group.push_back(temp_chunk);
 
         loaded_chunks.push_back(id);
