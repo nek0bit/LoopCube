@@ -2,8 +2,8 @@
 
 Block::Block() {}
 
-Block::Block(std::string id, TextureHandler &textures, SDL_Renderer* renderer, Camera &camera, int x, int y)
-    : Game_Object{0, textures, renderer, camera, (double)x, (double)y, constants::block_w, constants::block_h} {
+Block::Block(std::string id, TextureHandler &textures, int x, int y)
+    : Game_Object{0, textures, (double)x, (double)y, constants::block_w, constants::block_h} {
 
     for (auto &i: constants::block_info) {
         if (i.get_id() == id) {
@@ -13,12 +13,12 @@ Block::Block(std::string id, TextureHandler &textures, SDL_Renderer* renderer, C
     }
 }
 
-double Block::get_x() const {
-    return obj.x*obj.w + (camera->get_x());
+double Block::get_x(Camera& camera) const {
+    return obj.x*obj.w + (camera.get_x());
 }
 
-double Block::get_y() const {
-    return obj.y*obj.h + (camera->get_y());
+double Block::get_y(Camera& camera) const {
+    return obj.y*obj.h + (camera.get_y());
 
 }
 
@@ -26,7 +26,7 @@ const BlockInfo* Block::get_blockinfo() {
     return blockinfo;
 }
 
-void Block::update() {
+void Block::update(Camera& camera) {
     src.h = obj.h;
     src.w = obj.w;
     src.x = 0;
@@ -34,17 +34,17 @@ void Block::update() {
 
     dest.h = src.h;
     dest.w = src.w;
-    dest.x = get_x();
-    dest.y = get_y();
+    dest.x = get_x(camera);
+    dest.y = get_y(camera);
 }
 
-void Block::render() {
+void Block::render(SDL_Renderer* renderer) {
     // Disabled until blocks get sorted on placement
     //render_shadow(); // Note: When settings menu added, add option to disable shadow, it can be resource hungry
     SDL_RenderCopy(renderer, textures->get_texture(texture_id), &src, &dest);
 }
 
-void Block::render_shadow() {
+void Block::render_shadow(SDL_Renderer* renderer) {
     SDL_Rect shadow;
     shadow.x = dest.x + 10;
     shadow.y = dest.y + 10;

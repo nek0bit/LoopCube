@@ -17,13 +17,13 @@
 class Chunk {
 
 public:
-    Chunk(unsigned long int seed, int slot, SDL_Renderer* renderer, TextureHandler &texture, Camera &camera);
+    Chunk(unsigned long int seed, int slot, TextureHandler &texture);
     ~Chunk();
     // For std::sort
     bool operator<(const Chunk &c);
 
-    void update_all();
-    void render_all();
+    void update_all(Camera& camera);
+    void render_all(SDL_Renderer* renderer, Camera& camera);
     void place_block(std::string id, int x, int y);
     void destroy_block(int x, int y, Inventory *inv);
     void generate_chunk();
@@ -43,9 +43,7 @@ private:
     int slot;
     PerlinNoise terrain_gen;
 
-    SDL_Renderer* renderer;
     TextureHandler* textures;
-    Camera* camera;
 };
 
 

@@ -8,14 +8,14 @@ class Block: public Game_Object {
 
 public:
     Block();
-    Block(std::string id, TextureHandler &textures, SDL_Renderer* renderer, Camera &camera, int x, int y);
+    Block(std::string id, TextureHandler &textures, int x, int y);
 
-    void update();
-    void render();
-    void render_shadow();
+    void update(Camera& camera);
+    void render(SDL_Renderer* renderer);
+    void render_shadow(SDL_Renderer* renderer);
     const BlockInfo* get_blockinfo();
-    double get_x() const override;
-    double get_y() const override;
+    double get_x(Camera& camera) const override;
+    double get_y(Camera& camera) const override;
 private:
     const BlockInfo *blockinfo;
 };
