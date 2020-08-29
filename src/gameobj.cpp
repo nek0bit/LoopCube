@@ -2,7 +2,7 @@
 
 Game_Object::Game_Object() {}
 
-Game_Object::Game_Object(int texture_id, TextureHandler &textures, SDL_Renderer* renderer, Camera &camera,
+Game_Object::Game_Object(int texture_id, TextureHandler &textures,
     double x, double y, double w, double h) {
     obj.x = x;
     obj.y = y;
@@ -10,9 +10,7 @@ Game_Object::Game_Object(int texture_id, TextureHandler &textures, SDL_Renderer*
     obj.h = h;
 
     this->texture_id = texture_id;
-    this->renderer = renderer;
-    // Camera needs to be a pointer incase another object changes the camera
-    this->camera = &camera;
+    
     this->textures = &textures;
 }
 
@@ -27,12 +25,12 @@ double Game_Object::get_default_y() const {
     return obj.y;
 }
 
-double Game_Object::get_x() const {
-    return obj.x + (camera->get_x());
+double Game_Object::get_x(Camera& camera) const {
+    return obj.x + (camera.get_x());
 }
 
-double Game_Object::get_y() const {
-    return obj.y + (camera->get_y());
+double Game_Object::get_y(Camera& camera) const {
+    return obj.y + (camera.get_y());
 }
 
 double Game_Object::get_width() const {
@@ -44,17 +42,17 @@ double Game_Object::get_height() const {
 }
 
 // Used for rendering optimizations
-bool Game_Object::out_of_view() {
-    if (get_x()+(obj.w*2) < 0 || get_y()+(obj.h*2) < 0) {
+bool Game_Object::out_of_view(Camera& camera) {
+    if (get_x(camera)+(obj.w*2) < 0 || get_y(camera)+(obj.h*2) < 0) {
         return true;
     }
-    if (get_x()-obj.w > camera->get_width() || get_y()-obj.h > camera->get_height()) {
+    if (get_x(camera)-obj.w > camera.get_width() || get_y(camera)-obj.h > camera.get_height()) {
         return true;
     }
     return false;
 }
 
-void Game_Object::update() {
+void Game_Object::update(Camera& camera) {
     src.h = get_height();
     src.w = get_width();
     src.x = 0;
@@ -62,11 +60,11 @@ void Game_Object::update() {
 
     dest.h = src.h;
     dest.w = src.w;
-    dest.x = get_x();
-    dest.y = get_y();
+    dest.x = get_x(camera);
+    dest.y = get_y(camera);
 }
 
-void Game_Object::render() {
+void Game_Object::render(SDL_Renderer* renderer) {
     SDL_RenderCopy(renderer, textures->get_texture(texture_id), &src, &dest);
 }
 
@@ -74,17 +72,17 @@ const Position* Game_Object::get_obj() const {
     return &obj;
 }
 
-bool Game_Object::is_colliding(const Game_Object &obj2) {
+bool Game_Object::is_colliding(const Game_Object &obj2, Camera& camera) {
     // We are going to get the prefered positions instead of using their object
     // For example, the block class uses tiles, so when get_x is called, it returns the x in its obj and multiplies it by the width
     Position r1, r2;
-    r1.x = get_x();
-    r1.y = get_y();
+    r1.x = get_x(camera);
+    r1.y = get_y(camera);
     r1.w = get_width();
     r1.h = get_height();
 
-    r2.x = obj2.get_x();
-    r2.y = obj2.get_y();
+    r2.x = obj2.get_x(camera);
+    r2.y = obj2.get_y(camera);
     r2.w = obj2.get_width();
     r2.h = obj2.get_height();
 
