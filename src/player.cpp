@@ -1,14 +1,14 @@
 #include "player.hpp"
 
-Player::Player(TextureHandler &textures, SDL_Renderer* renderer, Camera &camera)
-    : Game_Object{4, textures, renderer, camera, 0, 0, 30, 58}, vel_x{0}, vel_y{0}, vel_x_speed{2} {
+Player::Player(TextureHandler &textures)
+    : Game_Object{4, textures, 0, 0, 30, 58}, vel_x{0}, vel_y{0}, vel_x_speed{2} {
 }
 
 Player::~Player() {
 
 }
 
-bool Player::check_block_collision(Chunk_Group &chunks) {
+bool Player::check_block_collision(Chunk_Group &chunks, Camera& camera) {
     std::vector<Chunk> chunkgroup = *chunks.get_chunks();
 
     // Loop through all chunks
@@ -19,7 +19,7 @@ bool Player::check_block_collision(Chunk_Group &chunks) {
 
         // Loop through blocks in the chunk
         for (auto &block: chunk) {
-            while (is_colliding(block)) {
+            while (is_colliding(block, camera)) {
                 return true;
             }
         }
@@ -27,19 +27,19 @@ bool Player::check_block_collision(Chunk_Group &chunks) {
     return false;
 }
 
-void Player::jump(Chunk_Group &chunks) {
+void Player::jump(Chunk_Group &chunks, Camera& camera) {
     obj.y += 3;
-    if (check_block_collision(chunks)) {
+    if (check_block_collision(chunks, camera)) {
         vel_y = -14;
     }
     obj.y -= 3;
 }
 
-void Player::direct_player(int direction, Chunk_Group &chunks) {
+void Player::direct_player(int direction, Chunk_Group &chunks, Camera& camera) {
     switch (direction) {
         case 0: // UP
             // TODO Optimize this, game checks for jumps repeatedly when held
-            jump(chunks);
+            jump(chunks, camera);
             break;
         case 1: // RIGHT
             vel_x += vel_x_speed;
@@ -64,7 +64,7 @@ double Player::get_vel_y() const {
     return vel_y;
 }
 
-void Player::update(Chunk_Group &chunks) {
+void Player::update(Chunk_Group &chunks, Camera& camera) {
     // TODO move engine code into it's own class for reusability
     vel_x *= 0.75;
     obj.x += vel_x;
@@ -72,7 +72,7 @@ void Player::update(Chunk_Group &chunks) {
 
 
     // Check X velocity
-    if (check_block_collision(chunks)) {
+    if (check_block_collision(chunks, camera)) {
         if (vel_x == 0) {
             // If player happens to get stuck in the wall then push them out
             if (last_pos == 1) {
@@ -92,7 +92,7 @@ void Player::update(Chunk_Group &chunks) {
     obj.y += vel_y;
 
     // Check Y velocity
-    if (check_block_collision(chunks)) {
+    if (check_block_collision(chunks, camera)) {
         obj.y += vel_y * -1;
         vel_y = 0;
     }
@@ -106,6 +106,6 @@ void Player::update(Chunk_Group &chunks) {
 
     dest.h = src.h;
     dest.w = src.w;
-    dest.x = get_x();
-    dest.y = get_y();
+    dest.x = get_x(camera);
+    dest.y = get_y(camera);
 }

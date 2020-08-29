@@ -9,15 +9,15 @@
 class Player: public Game_Object {
 public:
     Player() = default;
-    Player(TextureHandler &textures, SDL_Renderer* renderer, Camera &camera);
+    Player(TextureHandler &textures);
     ~Player();
 
-    void update(Chunk_Group &chunks);
-    bool check_block_collision(Chunk_Group &chunks);
+    void update(Chunk_Group &chunks, Camera& camera);
+    bool check_block_collision(Chunk_Group &chunks, Camera& camera);
 
     // Movement
-    void jump(Chunk_Group &chunks);
-    void direct_player(int direction, Chunk_Group &chunks);
+    void jump(Chunk_Group &chunks, Camera& camera);
+    void direct_player(int direction, Chunk_Group &chunks, Camera& camera);
 
     double get_vel_x() const;
     double get_vel_y() const;
