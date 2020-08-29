@@ -1,7 +1,9 @@
 #include "chunk.hpp"
 
-Chunk::Chunk(unsigned long int seed, int slot, TextureHandler &textures)
+Chunk::Chunk(unsigned long int seed, int slot, SDL_Renderer* renderer, TextureHandler &textures, Camera &camera)
     : MAX_WIDTH{8}, MAX_HEIGHT{128}, terrain_gen{seed} {
+    this->renderer = renderer;
+    this->camera = &camera;
     this->textures = &textures;
     this->slot = slot;
     generate_chunk();
@@ -73,7 +75,7 @@ void Chunk::destroy_block(int x, int y, Inventory *inv) {
 }
 
 void Chunk::place_block(std::string id, int x, int y) {
-    Block temp_block{id, *textures, get_chunk_x(x), y};
+    Block temp_block{id, *textures, renderer, *camera, get_chunk_x(x), y};
     // Check if between chunk size
     if (x < MAX_WIDTH+1 && x >= 0 && y < MAX_HEIGHT+1 && y >= 0) {
         // Check if a block has been placed here before
@@ -93,15 +95,15 @@ void Chunk::place_block(std::string id, int x, int y) {
 
 }
 
-void Chunk::update_all(Camera& camera) {
+void Chunk::update_all() {
     for(size_t i = 0; i < chunk.size(); i++) {
-        chunk[i].update(camera);
+        chunk[i].update();
     }
 }
 
-void Chunk::render_all(Camera& camera, SDL_Renderer* renderer) {
+void Chunk::render_all() {
     for(size_t i = 0; i < chunk.size(); i++) {
-        if (!chunk[i].out_of_view(camera)) {
+        if (!chunk[i].out_of_view()) {
             chunk[i].render();
         }
     }
