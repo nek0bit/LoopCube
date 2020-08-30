@@ -57,7 +57,7 @@ void Chunk_Group::generate_chunk(int id) {
 }
 
 void Chunk_Group::check_area(int x) {
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__SWITCH__)
     const int load_distance = 4;
 #else
     const int load_distance = 16;

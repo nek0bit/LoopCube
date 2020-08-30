@@ -31,6 +31,9 @@ void Game::game_init() {
 // Game related loop stuff
 void Game::update() {
     //game->update();
+    #ifdef __SWITCH__
+    state.set(STATE_PLAYING);
+    #endif
     if (state == STATE_MAIN_MENU) {
         menu->update();
         if (menu->get_pressed() == 0) {
@@ -73,7 +76,7 @@ void Game::render() {
         game->render();
     }
     
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__SWITCH__)
     SDL_Rect cursor_hover;
     cursor_hover.x = events.get_mouse_pos()[0];
     cursor_hover.y = events.get_mouse_pos()[1];
@@ -92,7 +95,7 @@ void Game::render() {
 void Game::init(bool fullscreen = false) {
     // Handle flags
     int flags = 0;
-#ifdef __WIIU__
+#if defined(__WIIU__) || defined(__SWITCH__)
     fullscreen = true;
 #endif
     if (fullscreen) {

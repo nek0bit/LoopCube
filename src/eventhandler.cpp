@@ -56,8 +56,13 @@ void EventHandler::listen() {
 
     // Left Joystick
     if (controller != NULL) {
+        #ifdef __SWITCH__
         auto axis_hor = SDL_JoystickGetAxis(controller, 2);
         auto axis_ver = SDL_JoystickGetAxis(controller, 3);
+        #else
+        auto axis_hor = SDL_JoystickGetAxis(controller, 2);
+        auto axis_ver = SDL_JoystickGetAxis(controller, 3);
+        #endif
 
         int deadzone = 3000;
         if (axis_hor < deadzone || axis_hor > deadzone || axis_ver < deadzone || axis_ver > deadzone) {

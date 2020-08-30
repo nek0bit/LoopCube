@@ -6,3 +6,7 @@ bin/
 .vscode/
 loopcube.elf
 loopcube.rpx
+loopcube.nacp
+loopcube.nro
+loopcube.nso
+loopcube.pfs0

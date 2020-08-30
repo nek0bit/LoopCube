@@ -1,5 +1,9 @@
 #include "main.hpp"
 int main() {
+    #ifdef __SWITCH__
+    while(appletMainLoop()) {
+    romfsInit();
+    #endif
     const int FPS = 60;
     const int frame_del = 1000 / FPS;
 
@@ -24,6 +28,9 @@ int main() {
         }
     }
     game.free();
+    #ifdef __SWITCH__
+    }
+    #endif
 
     return 0;
 }
