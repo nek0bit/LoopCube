@@ -1,6 +1,9 @@
 #ifndef EVENTHANDLER_HPP
 #define EVENTHANDLER_HPP
 #include <iostream>
+#ifdef __SWITCH__
+#include <switch.h>
+#endif
 #include <SDL2/SDL.h>
 #include <vector>
 #include <array>
@@ -45,6 +48,10 @@ private:
     int mouse_y;
     int mouse_down;
 
+    #ifdef __SWITCH__
+    HidControllerID conID;
+    #endif
+    
     SDL_Joystick* controller;
 
     SDL_Event event;

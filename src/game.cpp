@@ -30,10 +30,6 @@ void Game::game_init() {
 
 // Game related loop stuff
 void Game::update() {
-    //game->update();
-    #ifdef __SWITCH__
-    state.set(STATE_PLAYING);
-    #endif
     if (state == STATE_MAIN_MENU) {
         menu->update();
         if (menu->get_pressed() == 0) {

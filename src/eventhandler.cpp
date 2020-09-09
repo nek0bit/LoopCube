@@ -9,10 +9,18 @@ EventHandler::EventHandler()
         buttons_set{SDL_CONTROLLER_BUTTON_MAX, SDL_CONTROLLER_BUTTON_DPAD_RIGHT, SDL_CONTROLLER_BUTTON_DPAD_DOWN,
         SDL_CONTROLLER_BUTTON_DPAD_LEFT, SDL_CONTROLLER_BUTTON_X, SDL_CONTROLLER_BUTTON_START, SDL_CONTROLLER_BUTTON_LEFTSHOULDER, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER,
         SDL_CONTROLLER_BUTTON_Y},
+        #ifdef __SWITCH__
+        conID{hidGetHandheldMode() ? CONTROLLER_HANDHELD : CONTROLLER_PLAYER_1},
+        #endif
         mouse_down{0}, controller{NULL} {
     state.resize(keys_set.size());
     button_state.resize(buttons_set.size());
-
+    
+    
+    // Check if on a switch, then use libnx hdl
+    #ifdef __SWITCH__
+    hiddbgInitialize();
+    #endif
 }
 
 void EventHandler::open_controllers() {
@@ -28,7 +36,12 @@ void EventHandler::open_controllers() {
     }
 }
 
-EventHandler::~EventHandler() {}
+EventHandler::~EventHandler() {
+    std::cout << "Closing events..." << std::endl;
+    #ifdef __SWITCH__
+    hiddbgExit();
+    #endif
+}
 
 void EventHandler::listen() {
     std::vector<int> exceptions{4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
@@ -57,18 +70,34 @@ void EventHandler::listen() {
     // Left Joystick
     if (controller != NULL) {
         #ifdef __SWITCH__
-        auto axis_hor = SDL_JoystickGetAxis(controller, 2);
-        auto axis_ver = SDL_JoystickGetAxis(controller, 3);
+        // Switch doesn't like SDL joysticks (but recognizes buttons fine), instead, let's just use libnx for this
+        hidScanInput();
+        
+        if (hidIsControllerConnected(conID)) {
+            // TODO maybe add deadzone for controllers with slight drift
+            JoystickPosition tmp[2];
+            hidJoystickRead(&tmp[0], conID, JOYSTICK_LEFT);
+            hidJoystickRead(&tmp[1], conID, JOYSTICK_RIGHT);
+                
+            // Right joystick
+            mouse_x += tmp[1].dx / 2048;
+            // JoystickPosition.dy is inverted
+            mouse_y += (tmp[1].dy*-1) / 2048;
+            
+            // Left joystick
+            mouse_x += tmp[0].dx / 2048;
+            mouse_y += (tmp[0].dy*-1) / 2048;
+        }
         #else
         auto axis_hor = SDL_JoystickGetAxis(controller, 2);
         auto axis_ver = SDL_JoystickGetAxis(controller, 3);
-        #endif
 
         int deadzone = 3000;
         if (axis_hor < deadzone || axis_hor > deadzone || axis_ver < deadzone || axis_ver > deadzone) {
             mouse_x += axis_hor / 2048;
             mouse_y += axis_ver / 2048;
         }
+        #endif
     }
 
     while (SDL_PollEvent(&event)) {
