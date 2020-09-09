@@ -23,7 +23,8 @@ public:
     bool operator<(const Chunk &c);
 
     void update_all(Camera& camera);
-    void render_all(SDL_Renderer* renderer, Camera& camera);
+    void render_all_shadows(SDL_Renderer* renderer, Camera& camera);
+    void render_all_blocks(SDL_Renderer* renderer, Camera& camera);
     void place_block(std::string id, int x, int y);
     void destroy_block(int x, int y, Inventory *inv);
     void generate_chunk();

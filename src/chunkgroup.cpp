@@ -60,7 +60,7 @@ void Chunk_Group::check_area(int x) {
 #if defined(__WIIU__) || defined(__SWITCH__)
     const int load_distance = 4;
 #else
-    const int load_distance = 16;
+    const int load_distance = 6;
 #endif
     
     int id = 0;
@@ -127,7 +127,10 @@ int Chunk_Group::get_id(int surrounding) {
 
 void Chunk_Group::render_all() {
     for (auto &chunk: group) {
-        chunk.render_all(renderer, *camera);
+        chunk.render_all_shadows(renderer, *camera);
+    }
+    for (auto &chunk: group) {
+        chunk.render_all_blocks(renderer, *camera);
     }
 }
 

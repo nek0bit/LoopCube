@@ -85,6 +85,7 @@ void Chunk::place_block(std::string id, int x, int y) {
             }
         }
         if (!is_duplicate) {
+            // Place the block
             chunk.push_back(temp_block);
         }
     } else {
@@ -99,10 +100,21 @@ void Chunk::update_all(Camera& camera) {
     }
 }
 
-void Chunk::render_all(SDL_Renderer* renderer, Camera& camera) {
-    for(size_t i = 0; i < chunk.size(); i++) {
-        if (!chunk[i].out_of_view(camera)) {
-            chunk[i].render(renderer);
+
+void Chunk::render_all_shadows(SDL_Renderer* renderer, Camera& camera) {
+    // Then render blocks
+    for(size_t j = 0; j < chunk.size(); ++j) {
+        if (!chunk[j].out_of_view(camera)) {
+            chunk[j].render_shadow(renderer);
+        }
+    }
+}
+
+void Chunk::render_all_blocks(SDL_Renderer* renderer, Camera& camera) {
+    // Then render blocks
+    for(size_t j = 0; j < chunk.size(); ++j) {
+        if (!chunk[j].out_of_view(camera)) {
+            chunk[j].render(renderer);
         }
     }
 }
