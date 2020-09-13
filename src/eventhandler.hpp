@@ -21,6 +21,7 @@ public:
     std::vector<SDL_Scancode> get_keys_set();
     std::array<int, 2> get_mouse_pos();
     int get_mouse_down();
+    int get_mouse_clicked();
     SDL_Event get_event();
     void open_controllers();
 
@@ -47,6 +48,7 @@ private:
     int mouse_x;
     int mouse_y;
     int mouse_down;
+    int mouse_clicked;
 
     #ifdef __SWITCH__
     HidControllerID conID;

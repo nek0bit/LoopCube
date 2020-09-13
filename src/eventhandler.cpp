@@ -12,7 +12,7 @@ EventHandler::EventHandler()
         #ifdef __SWITCH__
         conID{hidGetHandheldMode() ? CONTROLLER_HANDHELD : CONTROLLER_PLAYER_1},
         #endif
-        mouse_down{0}, controller{NULL} {
+        mouse_down{0}, mouse_clicked{0}, controller{NULL} {
     state.resize(keys_set.size());
     button_state.resize(buttons_set.size());
     
@@ -45,7 +45,7 @@ EventHandler::~EventHandler() {
 
 void EventHandler::listen() {
     std::vector<int> exceptions{4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-    std::vector<int> controller_exceptions{8};
+    std::vector<int> controller_exceptions{6, 8};
 
     // Disable Exceptions
     for (auto exc: exceptions) {
@@ -59,6 +59,8 @@ void EventHandler::listen() {
             button_state[exc] = 0;
         }
     }
+    
+    if (mouse_down == 1) mouse_clicked = 0;
 
     if (mouse_x < 0) {
         mouse_x = 1;
@@ -67,7 +69,9 @@ void EventHandler::listen() {
         mouse_y = 1;
     }
 
-    // Left Joystick
+    /* TODO move this bit all into it's own function. Controllers are a seperate thing
+     * so it's best we move it all out of the way; same for the keyboard stuff
+     */
     if (controller != NULL) {
         #ifdef __SWITCH__
         // Switch doesn't like SDL joysticks (but recognizes buttons fine), instead, let's just use libnx for this
@@ -89,6 +93,14 @@ void EventHandler::listen() {
             mouse_y += (tmp[0].dy*-1) / 2048;
         }
         #else
+        /* Note: This works on the Wii U gamepad, but probably not for other controllers
+         * Soon there will be a menu so the user can setup their controller and it's
+         * axis's so I don't have to just guess them, which would be a pain.
+         *
+         * maybe one day I will also implement auto configuration, but in the end it mostly
+         * causes issues with different controllers. So it's best I allow the user to manually
+         * set them up.
+         */
         auto axis_hor = SDL_JoystickGetAxis(controller, 2);
         auto axis_ver = SDL_JoystickGetAxis(controller, 3);
 
@@ -132,9 +144,11 @@ void EventHandler::listen() {
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 mouse_down = 1;
+                mouse_clicked = 1;
                 break;
             case SDL_MOUSEBUTTONUP:
                 mouse_down = 0;
+                mouse_clicked = 0;
                 break;
             case SDL_MOUSEMOTION:
                 SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -151,6 +165,7 @@ void EventHandler::listen() {
                         }
                         if (i == 6) {
                             mouse_down = 1;
+                            mouse_clicked = 1;
                         }
                     }
                 }
@@ -161,6 +176,7 @@ void EventHandler::listen() {
                         button_state[i] = 0;
                         if (i == 6) {
                             mouse_down = 0;
+                            mouse_clicked = 0;
                         }
                     }
                 }
@@ -190,6 +206,10 @@ std::array<int, 2> EventHandler::get_mouse_pos() {
 
 int EventHandler::get_mouse_down() {
     return mouse_down;
+}
+
+int EventHandler::get_mouse_clicked() {
+    return mouse_clicked;
 }
 
 SDL_Event EventHandler::get_event() {

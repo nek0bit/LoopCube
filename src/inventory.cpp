@@ -5,7 +5,7 @@ Inventory::Inventory(SDL_Renderer* renderer,
         EventHandler &events,
         int* WINDOW_W,
         int* WINDOW_H) : hotbar_slots{10}, max_slots{hotbar_slots*5}, visible{true}, show_inventory_menu{0},
-            hotbar_pos{0}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H} {
+            hotbar_pos{0}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, item_held{nullptr} {
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;
@@ -93,10 +93,27 @@ void Inventory::draw_inventory_menu() {
         SDL_RenderCopy(renderer, textures->get_texture(11), &src, &dest);
 
         std::vector<int> pos = get_hovered_pos(events->get_mouse_pos()[0], events->get_mouse_pos()[1], MAX_X, MAX_Y, true);
-
+        
+        if (events->get_mouse_clicked() == 1 && pos[0] != -1 && pos[1] != -1) {
+            auto& it = items[pos[0]+(pos[1]*hotbar_slots)];
+            if (item_held == nullptr) {
+                // move pointer; null out inventory slot
+                item_held = it;
+                it = nullptr;
+            } else {
+                // Swap pointers
+                auto* tmp = it;
+                it = item_held;
+                item_held = tmp;
+            }
+        }
+        
+        auto mouse_pos = events->get_mouse_pos();
+        if (item_held != nullptr) item_held->draw(mouse_pos[0]-17, mouse_pos[1]-17, 35, 35);
     }
 }
 
+// returns std::vector<int>{-1, -1} if nothing is being hovered
 std::vector<int> Inventory::get_hovered_pos(int x, int y, int corner_x, int corner_y, bool draw = false) {
     const int tile_size = 40;
 

@@ -39,6 +39,9 @@ private:
     std::vector<int> slots;
 
     std::vector<Item*> items;
+    
+    // Temporary item slot for holding items
+    Item* item_held;
 
     int* WINDOW_W;
     int* WINDOW_H;
