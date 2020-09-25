@@ -45,12 +45,12 @@ void Block::render(SDL_Renderer* renderer) {
 }
 
 void Block::render_shadow(SDL_Renderer* renderer) {
-    /*SDL_Rect shadow;
+    SDL_Rect shadow;
     shadow.x = dest.x + 10;
     shadow.y = dest.y + 10;
     shadow.w = obj.w;
     shadow.h = obj.h;
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 40);
-    SDL_RenderFillRect(renderer, &shadow);*/
+    SDL_RenderFillRect(renderer, &shadow);
 }

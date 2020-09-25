@@ -18,6 +18,7 @@
 #include "animation.hpp"
 #include "inventory.hpp"
 #include "text.hpp"
+#include "gravityparticle.hpp"
 
 class Play {
 
@@ -35,6 +36,7 @@ private:
     void handle_camera();
     void draw_selection(int* p1, int* p2);
     void print_mouse_pos();
+    void dead_particles();
     //void draw_debug_menu();
 
     SDL_Renderer* renderer;
@@ -47,6 +49,7 @@ private:
 
     // Animations
     Animation fade;
+    std::vector<GravityParticle> particles;
 
 };
 

@@ -1,7 +1,7 @@
 #include "play.hpp"
 
 Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &events, int *WINDOW_W, int *WINDOW_H)
-    : WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, camera{WINDOW_W, WINDOW_H}, fade{60} {
+    : WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, camera{WINDOW_W, WINDOW_H}, fade{60}, particles{} {
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;
@@ -73,15 +73,24 @@ void Play::update() {
 
     // Update animation(s)
     fade.tick();
+    
+    // Particles
+    dead_particles();
+    
+    for (auto& particle: particles) {
+        particle.update(camera);
+    }
 }
 
 void Play::render() {
+    for (auto& particle: particles) {
+        particle.render(renderer);
+    }
+
     chunks.render_all();
 
     SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
     player.render(renderer);
-
-
 
     int p1, p2;
     if (!inv->get_inventory_visibility()) draw_selection(&p1, &p2);
@@ -92,7 +101,15 @@ void Play::render() {
         // Do some math to get the chunk position
         int chunk_pos = std::abs(p1-(chunk->get_slot()*8));
         if (events->get_mouse_down()) {
-            chunk->destroy_block(chunk_pos, p2, inv);
+            const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv);
+            
+            // Check if block found
+            if (block != nullptr) {
+                // Generate particles
+                GravityParticle temp{block->get_texture_id(), *textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
+                    p1*constants::block_w+(constants::block_w/2), p2*constants::block_h};
+                particles.push_back(temp);
+            }
         }
     }
 
@@ -133,6 +150,14 @@ void Play::handle_camera() {
     camera.set_pos(x, y);
 }
 
+void Play::dead_particles() {
+    for (auto i = 0; i < particles.size(); ++i) {
+        if (particles[i].is_dead()) particles.erase(particles.begin() + i);
+    }
+}
+
+// TODO I left this here because I wanted to do something with it...
+// Don't uncomment right now, this code is bad, horribly ugly, and VERY slow
 /*
 void Play::draw_debug_menu() {
     SDL_version compiled;

@@ -58,7 +58,7 @@ void Chunk::generate_chunk() {
 
 }
 
-void Chunk::destroy_block(int x, int y, Inventory *inv) {
+const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
     for (auto i = chunk.begin(); i < chunk.end(); ++i) {
         if (get_chunk_x(x) == i->get_default_x() && y == i->get_default_y()) {
 
@@ -67,9 +67,10 @@ void Chunk::destroy_block(int x, int y, Inventory *inv) {
             inv->add_item(std::string(info->get_id()));
             
             chunk.erase(i);
-            break;
+            return info;
         }
     }
+    return nullptr;
 }
 
 void Chunk::place_block(std::string id, int x, int y) {
