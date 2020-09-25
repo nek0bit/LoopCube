@@ -12,8 +12,8 @@ Chunk_Group::~Chunk_Group() {
 
 }
 
-std::vector<Chunk>* Chunk_Group::get_chunks() {
-    return &group;
+std::vector<Chunk>& Chunk_Group::get_chunks() {
+    return group;
 }
 
 bool Chunk_Group::chunk_already_generated(int id) {

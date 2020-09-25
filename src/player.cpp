@@ -8,14 +8,14 @@ Player::~Player() {
 
 }
 
-bool Player::check_block_collision(Chunk_Group &chunks, Camera& camera) {
-    std::vector<Chunk> chunkgroup = *chunks.get_chunks();
+bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
+    std::vector<Chunk>& chunkgroup = chunks.get_chunks();
 
     // Loop through all chunks
     for (auto &chunk_it: chunkgroup) {
 
         // Then grab the chunk we want
-        std::vector<Block> chunk = *chunk_it.get_chunk();
+        std::vector<Block>& chunk = chunk_it.get_chunk();
 
         // Loop through blocks in the chunk
         for (auto &block: chunk) {

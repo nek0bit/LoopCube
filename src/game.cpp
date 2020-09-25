@@ -98,6 +98,7 @@ void Game::init(bool fullscreen = false) {
         flags = SDL_WINDOW_FULLSCREEN;
     }
     flags = flags | SDL_WINDOW_RESIZABLE;
+    flags = flags | SDL_RENDERER_ACCELERATED;
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "[SDL] Initialized SDL" << std::endl;

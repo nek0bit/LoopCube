@@ -25,7 +25,7 @@ public:
 
     Chunk* get_chunk_at(int x);
 
-    std::vector<Chunk>* get_chunks();
+    std::vector<Chunk>& get_chunks();
     bool chunk_already_generated(int id);
 private:
     void sort_all();

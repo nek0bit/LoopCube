@@ -29,8 +29,8 @@ int Chunk::get_slot() {
     return slot;
 }
 
-std::vector<Block>* Chunk::get_chunk() {
-    return &chunk;
+std::vector<Block>& Chunk::get_chunk() {
+    return chunk;
 }
 
 void Chunk::generate_chunk() {
