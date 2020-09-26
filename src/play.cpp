@@ -28,7 +28,7 @@ void Play::print_mouse_pos() {
 
 void Play::update() {
     // Update all chunks
-    chunks.update_all();
+    chunks.update_all_viewport();
     chunks.check_area(player.get_default_x());
 
     // Update player
@@ -87,7 +87,7 @@ void Play::render() {
         particle.render(renderer);
     }
 
-    chunks.render_all();
+    chunks.render_all_viewport();
 
     SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
     player.render(renderer);

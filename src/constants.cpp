@@ -35,4 +35,12 @@ namespace constants {
 
     const double block_w = 36;
     const double block_h = 36;
+    
+    const int load_viewport = 6;
+
+    #if defined(__WIIU__) || defined(__SWITCH__)
+        const int load_distance = 8;
+    #else
+        const int load_distance = 12;
+    #endif
 }

@@ -19,6 +19,10 @@ namespace constants {
 
     extern const double block_w;
     extern const double block_h;
+    
+    extern const int load_viewport;
+
+    extern const int load_distance;
 }
 
 #endif // CONSTANTS

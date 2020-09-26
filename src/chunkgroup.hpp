@@ -18,14 +18,18 @@ public:
 
     void generate_chunk(int id);
     void check_area(int x);
+    void update_viewport();
     void render_all();
     void update_all();
+    void render_all_viewport();
+    void update_all_viewport();
 
     int get_id(int surrounding = 8);
 
     Chunk* get_chunk_at(int x);
 
     std::vector<Chunk>& get_chunks();
+    std::vector<Chunk*>& get_viewport_chunks();
     bool chunk_already_generated(int id);
 private:
     void sort_all();
@@ -33,6 +37,7 @@ private:
     std::vector<int> loaded_chunks; // group ids
     std::vector<Chunk> group_past; // Unloaded chunks, gets moved into group when loaded again
     std::vector<int> past_chunks; // group_past ids
+    std::vector<Chunk*> viewport_chunks; // Chunks that should be focused on
     unsigned long seed;
 
     SDL_Renderer* renderer;

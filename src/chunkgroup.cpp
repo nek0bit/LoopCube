@@ -16,6 +16,10 @@ std::vector<Chunk>& Chunk_Group::get_chunks() {
     return group;
 }
 
+std::vector<Chunk*>& Chunk_Group::get_viewport_chunks() {
+    return viewport_chunks;
+}
+
 bool Chunk_Group::chunk_already_generated(int id) {
     bool check = false;
     for (auto &i: past_chunks) {
@@ -35,6 +39,7 @@ void Chunk_Group::generate_chunk(int id) {
         group.push_back(temp_chunk);
 
         loaded_chunks.push_back(id);
+        update_viewport();
     }
 
     // If chunk has been generated before, just reload an older chunk
@@ -53,24 +58,28 @@ void Chunk_Group::generate_chunk(int id) {
         } catch (std::out_of_range &e) {
             std::cout << "[LOG] std::out_of_range handled: " << e.what() << std::endl;
         }
+        update_viewport();
     }
 }
 
 void Chunk_Group::check_area(int x) {
-#if defined(__WIIU__) || defined(__SWITCH__)
-    const int load_distance = 4;
-#else
-    const int load_distance = 6;
-#endif
+    const int load_distance = constants::load_distance;
     
+    // Takes x, and returns the current chunk id the player is in
     int id = 0;
+    // TODO 8 is a hardcoded value and it shouldn't, actually should be size of chunks (incase I change it in the future)
     id = ceil((x) / (8 * constants::block_w));
 
     // Unload old chunks
-    if (loaded_chunks.size() > load_distance) {
+    // Warning: This code below is very fragile and can easily break :P
+    if (loaded_chunks.size() > (load_distance*2)+1) {
         // Unloaded chunks off of rightside of screen
         /* We basically just move the chunk from group to group_past
            Since we want to reload these chunks when the screen gets back in view */
+        
+        // Sorts all the data beforehand, this helps a lot to prevent reruns of this block
+        sort_all();
+        
         if (id-load_distance-1 < loaded_chunks[0]) {
             group_past.push_back(*(group.end()-1));
             past_chunks.push_back(*(loaded_chunks.end()-1));
@@ -87,10 +96,24 @@ void Chunk_Group::check_area(int x) {
             loaded_chunks.erase(loaded_chunks.begin());
             group.erase(group.begin());
         }
+        
+        update_viewport();
     }
 
     for (int i = load_distance*-1; i < load_distance; ++i) {
         generate_chunk(id+i);
+    }
+}
+
+void Chunk_Group::update_viewport() {
+    const int total_load_dist = constants::load_distance * 2;
+    const int load_dist_midpoint = (total_load_dist / 2) - constants::load_viewport / 2;
+    
+    // Populate viewport_chunks with references
+    viewport_chunks.clear();
+    for (int i = 0; i < constants::load_viewport; ++i) {
+        Chunk* temp = &group[i+load_dist_midpoint];
+        viewport_chunks.push_back(temp);
     }
 }
 
@@ -134,8 +157,23 @@ void Chunk_Group::render_all() {
     }
 }
 
+void Chunk_Group::render_all_viewport() {
+    for (auto &chunk: viewport_chunks) {
+        chunk->render_all_shadows(renderer, *camera);
+    }
+    for (auto &chunk: viewport_chunks) {
+        chunk->render_all_blocks(renderer, *camera);
+    }
+}
+
 void Chunk_Group::update_all() {
     for (auto &chunk: group) {
         chunk.update_all(*camera);
+    }
+}
+
+void Chunk_Group::update_all_viewport() {
+    for (auto &chunk: viewport_chunks) {
+        chunk->update_all(*camera);
     }
 }
