@@ -2,6 +2,7 @@
 #define GRAVITYPARTICLE_HPP
 #include <iostream>
 #include "gameobj.hpp"
+#include "chunkgroup.hpp"
 
 class GravityParticle: public Game_Object {
 public:
@@ -10,7 +11,8 @@ public:
         int start_vel_x, int start_vel_y, int x, int y, int width=10, int height=10);
     ~GravityParticle();
     
-    void update(Camera& camera);
+    bool check_block_collision(Chunk_Group& chunks, Camera& camera);
+    void update(Chunk_Group& chunks, Camera& camera);
     
     // Returns true if time reached
     // Appropriate to destruct or quit rendering when done.

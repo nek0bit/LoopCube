@@ -78,7 +78,7 @@ void Play::update() {
     dead_particles();
     
     for (auto& particle: particles) {
-        particle.update(camera);
+        particle.update(chunks, camera);
     }
 }
 
@@ -107,7 +107,7 @@ void Play::render() {
             if (block != nullptr) {
                 // Generate particles
                 GravityParticle temp{block->get_texture_id(), *textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
-                    p1*constants::block_w+(constants::block_w/2), p2*constants::block_h};
+                    p1*constants::block_w+(constants::block_w/2), p2*constants::block_h, 8, 6};
                 particles.push_back(temp);
             }
         }
