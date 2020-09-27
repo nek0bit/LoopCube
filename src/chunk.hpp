@@ -4,6 +4,7 @@
 #include <string>
 #include <array>
 #include <cstdlib>
+#include <random>
 #include <time.h>
 #include <SDL2/SDL.h>
 
@@ -13,11 +14,12 @@
 #include "camera.hpp"
 #include "inventory.hpp"
 #include "texturehandler.hpp"
-
+#include "structure.hpp"
+#include "tree.hpp"
 class Chunk {
 
 public:
-    Chunk(unsigned long int seed, int slot, TextureHandler &texture);
+    Chunk(unsigned long int seed, int slot, TextureHandler &texture, std::vector<Structure*>& structure);
     ~Chunk();
     // For std::sort
     bool operator<(const Chunk &c);
@@ -27,7 +29,7 @@ public:
     void render_all_blocks(SDL_Renderer* renderer, Camera& camera);
     void place_block(std::string id, int x, int y);
     const BlockInfo* destroy_block(int x, int y, Inventory *inv);
-    void generate_chunk();
+    void generate_chunk(unsigned long int seed, std::vector<Structure*>& structure);
 
     int get_slot();
 

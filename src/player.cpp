@@ -19,7 +19,8 @@ bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
 
         // Loop through blocks in the chunk
         for (auto &block: chunk) {
-            while (is_colliding(block, camera)) {
+            auto blockinfo = block.get_blockinfo();
+            while (is_colliding(block, camera) && blockinfo->get_no_collision() != true) {
                 return true;
             }
         }

@@ -31,11 +31,11 @@ bool Chunk_Group::chunk_already_generated(int id) {
     return check;
 }
 
-void Chunk_Group::generate_chunk(int id) {
+void Chunk_Group::generate_chunk(int id, std::vector<Structure*>& structure) {
     bool check = chunk_already_generated(id);
     // Generate the chunk if it hasn't been generated before
     if (std::find(loaded_chunks.begin(), loaded_chunks.end(), id) == loaded_chunks.end() && !check) {
-        Chunk temp_chunk(seed, id, *textures);
+        Chunk temp_chunk(seed, id, *textures, structure);
         group.push_back(temp_chunk);
 
         loaded_chunks.push_back(id);
@@ -62,7 +62,7 @@ void Chunk_Group::generate_chunk(int id) {
     }
 }
 
-void Chunk_Group::check_area(int x) {
+void Chunk_Group::check_area(int x, std::vector<Structure*>& structures) {
     const int load_distance = constants::load_distance;
     
     // Takes x, and returns the current chunk id the player is in
@@ -101,7 +101,7 @@ void Chunk_Group::check_area(int x) {
     }
 
     for (int i = load_distance*-1; i < load_distance; ++i) {
-        generate_chunk(id+i);
+        generate_chunk(id+i, structures);
     }
 }
 
@@ -124,7 +124,7 @@ void Chunk_Group::sort_all() {
     std::sort(past_chunks.begin(), past_chunks.end());
 }
 
-Chunk* Chunk_Group::get_chunk_at(int x) {
+Chunk* Chunk_Group::get_chunk_at(int x, bool loaded=true) {
     int id = 0;
     id = ceil((x*constants::block_w) / (8 * constants::block_w));
 
@@ -133,6 +133,16 @@ Chunk* Chunk_Group::get_chunk_at(int x) {
     if (hovered_chunk != loaded_chunks.end()) {
         int chunk_index = std::distance(loaded_chunks.begin(), hovered_chunk);
         return &group[chunk_index];
+    }
+    
+    // Failed to find chunk in loaded chunks, lets search for past chunks if requested
+    if (!loaded) {
+        std::vector<int>::iterator hovered_chunk_past = std::find(past_chunks.begin(), past_chunks.end(), id);
+
+        if (hovered_chunk_past != past_chunks.end()) {
+            int chunk_index = std::distance(past_chunks.begin(), hovered_chunk_past);
+            return &group_past[chunk_index];
+        }
     }
     return nullptr;
 }

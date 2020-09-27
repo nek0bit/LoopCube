@@ -8,6 +8,8 @@
 #include "chunk.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
+#include "structure.hpp"
+#include "tree.hpp"
 
 // TODO non-important Rename this properly
 class Chunk_Group {
@@ -16,8 +18,8 @@ public:
     Chunk_Group(unsigned long int seed, SDL_Renderer* renderer, Camera &camera, TextureHandler &textures);
     ~Chunk_Group();
 
-    void generate_chunk(int id);
-    void check_area(int x);
+    void generate_chunk(int id, std::vector<Structure*>& structure);
+    void check_area(int x, std::vector<Structure*>& structure);
     void update_viewport();
     void render_all();
     void update_all();
@@ -26,7 +28,7 @@ public:
 
     int get_id(int surrounding = 8);
 
-    Chunk* get_chunk_at(int x);
+    Chunk* get_chunk_at(int x, bool loaded);
 
     std::vector<Chunk>& get_chunks();
     std::vector<Chunk*>& get_viewport_chunks();

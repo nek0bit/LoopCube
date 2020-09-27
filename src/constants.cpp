@@ -21,13 +21,15 @@ namespace constants {
         "title_2", // 9
         "hotbar_slot", // 10
         "inventory_menu", // 11
+        "leaf", // 12
     };
 
     const std::vector<BlockInfo> block_info = {
         BlockInfo{"grass", "Grass", 0},
         BlockInfo{"dirt", "Dirt", 1},
         BlockInfo{"stone", "Stone", 2},
-        BlockInfo{"wood", "Wood", 3}
+        BlockInfo{"wood", "Wood", 3, true},
+        BlockInfo{"leaf", "Leaf", 12},
     };
 
     TTF_Font* button_font = nullptr;
@@ -37,6 +39,8 @@ namespace constants {
     const double block_h = 36;
     
     const int load_viewport = 6;
+    
+    const int chunk_width = 8;
 
     #if defined(__WIIU__) || defined(__SWITCH__)
         const int load_distance = 8;

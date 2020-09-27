@@ -1,10 +1,10 @@
 #include "chunk.hpp"
 
-Chunk::Chunk(unsigned long int seed, int slot, TextureHandler &textures)
+Chunk::Chunk(unsigned long int seed, int slot, TextureHandler &textures, std::vector<Structure*>& structures)
     : MAX_WIDTH{8}, MAX_HEIGHT{128}, terrain_gen{seed} {
     this->textures = &textures;
     this->slot = slot;
-    generate_chunk();
+    generate_chunk(seed, structures);
 }
 
 Chunk::~Chunk() {
@@ -33,7 +33,14 @@ std::vector<Block>& Chunk::get_chunk() {
     return chunk;
 }
 
-void Chunk::generate_chunk() {
+void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& structures) {
+    // Start rng for structures
+    std::random_device dev;
+    std::mt19937 rng(seed);
+    std::uniform_int_distribution<std::mt19937::result_type> dist(-5,5);
+    
+    for (auto i = 0; i < std::abs(slot); ++i) dist(rng);
+
     for (int x = 1; x < MAX_WIDTH+1; ++x) {
         double d_x = (double)x/(double)MAX_WIDTH;
 
@@ -45,6 +52,7 @@ void Chunk::generate_chunk() {
             double d_y = (double)y/(double)MAX_HEIGHT;
             if (y == 0) {
                 place_block("grass", x, y+temp+offset);
+                if (dist(rng) == 0) structures.push_back(new Tree(get_chunk_x(x)-8, y+temp+offset));
             } else if (y >= 1 && y <= 3) {
                 place_block("dirt", x, y+temp+offset);
             } else {

@@ -19,6 +19,7 @@
 #include "inventory.hpp"
 #include "text.hpp"
 #include "gravityparticle.hpp"
+#include "tree.hpp"
 
 class Play {
 
@@ -51,6 +52,7 @@ private:
     Animation fade;
     std::vector<GravityParticle> particles;
 
+    std::vector<Structure*> structures;
 };
 
 

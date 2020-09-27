@@ -29,7 +29,7 @@ void Play::print_mouse_pos() {
 void Play::update() {
     // Update all chunks
     chunks.update_all_viewport();
-    chunks.check_area(player.get_default_x());
+    chunks.check_area(player.get_default_x(), structures);
 
     // Update player
     player.update(chunks, camera);
@@ -74,6 +74,31 @@ void Play::update() {
     // Update animation(s)
     fade.tick();
     
+    // Structures Queue Handling
+    for (size_t k = 0; k < structures.size(); ++k) {
+        auto& data = structures[k]->get_data();
+        
+        // Make sure we delete old structures to prevent memleaks
+        if (data.size() == 0) {
+            delete structures[k];
+            structures.erase(structures.begin() + k);
+            continue;
+        }
+        
+        for (size_t i = 0; i < data.size(); ++i) {
+            // See if the chunk actually exists
+            auto c1 = chunks.get_chunk_at(structures[k]->get_x() + data[i].x, false);
+            
+            if (c1 != nullptr) {
+                // Place block in proper chunk
+                c1->place_block(data[i].id, (structures[k]->get_x() + data[i].x)-(c1->get_slot()*constants::chunk_width)+constants::chunk_width, structures[k]->get_y() + data[i].y);
+                
+                // Erase the data now that we are done using it
+                data.erase(data.begin() + i);
+            }
+        }
+    }
+    
     // Particles
     dead_particles();
     
@@ -96,7 +121,7 @@ void Play::render() {
     if (!inv->get_inventory_visibility()) draw_selection(&p1, &p2);
 
     // Get cursor over chunk
-    Chunk* chunk = chunks.get_chunk_at(p1-8);
+    Chunk* chunk = chunks.get_chunk_at(p1-8, true);
     if (chunk != nullptr) {
         // Do some math to get the chunk position
         int chunk_pos = std::abs(p1-(chunk->get_slot()*8));
