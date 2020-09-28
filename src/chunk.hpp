@@ -16,13 +16,17 @@
 #include "texturehandler.hpp"
 #include "structure.hpp"
 #include "tree.hpp"
+
+
+
 class Chunk {
 
 public:
     Chunk(unsigned long int seed, int slot, TextureHandler &texture, std::vector<Structure*>& structure);
     ~Chunk();
     // For std::sort
-    bool operator<(const Chunk &c);
+    bool operator<(const Chunk &c) const;
+    bool operator>(const Chunk &c) const;
 
     void update_all(Camera& camera);
     void render_all_shadows(SDL_Renderer* renderer, Camera& camera);
@@ -31,7 +35,7 @@ public:
     const BlockInfo* destroy_block(int x, int y, Inventory *inv);
     void generate_chunk(unsigned long int seed, std::vector<Structure*>& structure);
 
-    int get_slot();
+    int get_slot() const;
 
     // Need to be able to view the chunk to do stuff such as collision detection
     std::vector<Block>& get_chunk();
@@ -48,6 +52,5 @@ private:
 
     TextureHandler* textures;
 };
-
 
 #endif // CHUNK_HPP

@@ -10,11 +10,12 @@ Chunk::Chunk(unsigned long int seed, int slot, TextureHandler &textures, std::ve
 Chunk::~Chunk() {
 }
 
-bool Chunk::operator<(const Chunk &c) {
-    if (slot < c.slot) {
-        return true;
-    }
-    return false;
+bool Chunk::operator<(const Chunk &c) const {
+    return slot < c.slot;
+}
+
+bool Chunk::operator>(const Chunk &c) const {
+    return slot > c.slot;
 }
 
 int Chunk::get_chunk_x(int x) {
@@ -25,7 +26,7 @@ int Chunk::get_chunk_max_size() {
     return MAX_WIDTH*MAX_HEIGHT;
 }
 
-int Chunk::get_slot() {
+int Chunk::get_slot() const {
     return slot;
 }
 

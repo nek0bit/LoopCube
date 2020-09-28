@@ -25,6 +25,7 @@ public:
     void update_all();
     void render_all_viewport();
     void update_all_viewport();
+    void print_chunks_fancy();
 
     int get_id(int surrounding = 8);
 
@@ -35,6 +36,12 @@ public:
     bool chunk_already_generated(int id);
 private:
     void sort_all();
+    template <class T, class U>
+    void insert_sorted(T &data, U value) {
+        typename T::iterator it = std::upper_bound(data.begin(), data.end(), value);
+        data.insert(it, value);
+    }
+    
     std::vector<Chunk> group; // Chunks the game works with in place
     std::vector<int> loaded_chunks; // group ids
     std::vector<Chunk> group_past; // Unloaded chunks, gets moved into group when loaded again
