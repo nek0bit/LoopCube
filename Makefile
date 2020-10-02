@@ -1,5 +1,5 @@
-CXXFLAGS=-g -Wall -Wextra -pipe -pedantic -ffunction-sections
-LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_ttf -O2
+CXXFLAGS=-g -Wall -Wextra -pipe -pedantic
+LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_ttf
 CXX=g++
 TARGET=bin/LoopCube
 
@@ -14,5 +14,5 @@ obj/%.o: %.cpp %.hpp
 	$(CXX) -c -o $@ $< $(CXXFLAGS) $(LDFLAGS)
 
 clean:
-	rm $(TARGET)
 	rm -rf obj/*
+	rm $(TARGET)

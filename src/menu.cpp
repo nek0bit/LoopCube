@@ -24,6 +24,8 @@ Menu::Menu(SDL_Renderer* renderer,
             BUTTON_W);
         button_group[i].set_text(option_str[i]);
     }
+    
+    textbox = new Textbox(0, 20, 20, 100, 50);
 }
 
 Menu::~Menu() { }
@@ -41,6 +43,8 @@ void Menu::update() {
 
     // Update animation for background
     shift.tick();
+    
+    textbox->update(*events);
 }
 
 void Menu::render_background() {
@@ -77,4 +81,6 @@ void Menu::render() {
     for (auto &i: button_group) {
         i.render();
     }
+    
+    textbox->render(renderer);
 }

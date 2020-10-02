@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 
+#include "textbox.hpp"
 #include "texturehandler.hpp"
 #include "eventhandler.hpp"
 #include "constants.hpp"
@@ -35,6 +36,8 @@ private:
     const int BUTTON_W;
     int* WINDOW_W;
     int* WINDOW_H;
+    
+    Textbox* textbox;
 
     SDL_Renderer* renderer;
     TextureHandler* textures;

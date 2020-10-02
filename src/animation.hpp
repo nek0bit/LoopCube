@@ -9,6 +9,8 @@ public:
 
     int tick();
     int get_frame();
+    int get_max_frames();
+    void reset(int num = 0);
 private:
     int frame;
     int max_frames;

@@ -24,11 +24,19 @@ public:
     int get_mouse_clicked();
     SDL_Event get_event();
     void open_controllers();
+    
+    // Text mode
+    void enable_text_mode();
+    void disable_text_mode();
+    void set_text_mode_buffer(std::string str);
+    void clear_text_mode_buffer();
+    std::string& get_text_buffer();
 
     bool get_quit();
 
 private:
     bool quit;
+    //const Uint8* keystate;
     /* Keyboard configuration
       [0] = up; default = SDL_SCANCODE_W
       [1] = right; default = SDL_SCANCODE_D
@@ -57,6 +65,10 @@ private:
     SDL_Joystick* controller;
 
     SDL_Event event;
+    
+    bool text_mode;
+    
+    std::string text_mode_buffer;
 };
 
 #endif // EVENTHANDLER_HPP

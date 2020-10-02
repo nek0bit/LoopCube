@@ -16,7 +16,6 @@ EventHandler::EventHandler()
     state.resize(keys_set.size());
     button_state.resize(buttons_set.size());
     
-    
     // Check if on a switch, then use libnx hdl
     #ifdef __SWITCH__
     hiddbgInitialize();
@@ -113,7 +112,7 @@ void EventHandler::listen() {
     }
 
     while (SDL_PollEvent(&event)) {
-        const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+        const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
         // Set state for each key
         for (size_t i = 0; i < keys_set.size(); ++i) {
@@ -135,10 +134,20 @@ void EventHandler::listen() {
         }
 
         switch(event.type) {
+            case SDL_TEXTINPUT:
+                if (text_mode) {
+                    text_mode_buffer += event.text.text;
+                }
+                break;
             case SDL_KEYDOWN:
                 for (auto exc: exceptions) {
                     if (keystate[keys_set[exc]]) {
                         state[exc] = 1;
+                    }
+                }
+                if (text_mode && event.key.keysym.sym == SDLK_BACKSPACE) {
+                    if (text_mode_buffer.length() != 0) {
+                        text_mode_buffer.pop_back();
                     }
                 }
                 break;
@@ -218,4 +227,26 @@ SDL_Event EventHandler::get_event() {
 
 bool EventHandler::get_quit() {
     return quit;
+}
+
+// Text mode
+
+void EventHandler::enable_text_mode() {
+    text_mode = true;
+}
+
+void EventHandler::disable_text_mode() {
+    text_mode = false;
+}
+
+void EventHandler::clear_text_mode_buffer() {
+    set_text_mode_buffer("");
+}
+
+void EventHandler::set_text_mode_buffer(std::string str) {
+    text_mode_buffer = str;
+}
+
+std::string& EventHandler::get_text_buffer() {
+    return text_mode_buffer;
 }

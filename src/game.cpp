@@ -101,6 +101,8 @@ void Game::init(bool fullscreen = false) {
     #if !defined(__WIIU__)
     flags = flags | SDL_RENDERER_ACCELERATED;
     #endif
+    
+    SDL_StartTextInput();
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         std::cout << "[SDL] Initialized SDL" << std::endl;
         window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_W, WINDOW_H, flags);
@@ -151,6 +153,8 @@ void Game::free() {
         std::cout << "[Game] Cleaning up..." << std::endl;
         //delete game;
         delete menu;
+        std::cout << "Closing SDL_TextInput..." << std::endl;
+        SDL_StopTextInput();
         std::cout << "[Textures] Freeing..." << std::endl;
         textures.free_textures();
         SDL_DestroyWindow(window);
