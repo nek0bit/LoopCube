@@ -31,7 +31,7 @@ LIBRARIES	:=	SDL2_gfx SDL2_image SDL2_mixer SDL2_ttf sdl2 \
 #-------------------------------------------------------------------------------
 # options for code generation
 #-------------------------------------------------------------------------------
-CFLAGS		:=	-g -Wall -Os -ffunction-sections \
+CFLAGS		:=	-Wall -O2 -ffunction-sections -ffast-math \
 			$(MACHDEP)
 
 CFLAGS		+=	$(INCLUDE) -D__WIIU__ -D__WUT__ -D__LOWENDDEVICE__
