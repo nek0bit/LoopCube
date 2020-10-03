@@ -1,7 +1,11 @@
 #include "textbox.hpp"
 
 Textbox::Textbox(int id, int x, int y, int width, int height)
-    : text{}, id{id}, x{x}, y{y}, width{width}, height{height}, focused{false}, textbox_text{nullptr}, blink{20}, rc{0}, kbd{} {
+    : text{}, id{id}, x{x}, y{y}, width{width}, height{height}, focused{false}, textbox_text{nullptr}, blink{20}
+#ifdef __SWITCH__
+	, rc{0}, kbd{}
+#endif
+{
 }
 
 Textbox::~Textbox() {}
