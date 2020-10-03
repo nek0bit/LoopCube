@@ -3,8 +3,12 @@
 #include <iostream>
 #include <string>
 
+#ifdef __SWITCH__
+#include <switch.h>
+#endif
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+
 #include "constants.hpp"
 #include "eventhandler.hpp"
 #include "text.hpp"
@@ -29,6 +33,11 @@ private:
     bool focused;
     Text* textbox_text;
     Animation blink;
+    
+    #ifdef __SWITCH__
+    Result rc;
+    SwkbdConfig kbd;
+    #endif
     
     void handle_keyboard(EventHandler& events);
 };

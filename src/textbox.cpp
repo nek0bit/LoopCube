@@ -1,7 +1,7 @@
 #include "textbox.hpp"
 
 Textbox::Textbox(int id, int x, int y, int width, int height)
-    : text{}, id{id}, x{x}, y{y}, width{width}, height{height}, focused{false}, textbox_text{nullptr}, blink{20} {
+    : text{}, id{id}, x{x}, y{y}, width{width}, height{height}, focused{false}, textbox_text{nullptr}, blink{20}, rc{0}, kbd{} {
 }
 
 Textbox::~Textbox() {}
@@ -11,9 +11,25 @@ void Textbox::update(EventHandler& events) {
     if (events.get_mouse_clicked()) {
         if (AABB(x, y, width, height, pos[0], pos[1], 1, 1)) {
             focused = true;
+            #ifdef __SWITCH__
+            rc = swkbdCreate(&kbd, 0);
+            char tmp[16] = {0};
+            if (R_SUCCEEDED(rc)) {
+                //swkbdConfigSetTextCheckCallback(&kbd);
+                rc = swkbdShow(&kbd, tmp, 15);
+                swkbdClose(&kbd);
+            }
+            
+            text = std::string(tmp);
+            if (textbox_text != nullptr) {
+                textbox_text->set_text(text);
+            }
+            focused = false;
+            #else
             blink.reset();
             events.set_text_mode_buffer(text);
             events.enable_text_mode();
+            #endif
         } else {
             focused = false;
             textbox_text->set_text(text);
