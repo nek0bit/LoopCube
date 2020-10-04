@@ -32,6 +32,7 @@ void Checkbox::update(EventHandler& events) {
 }
 
 void Checkbox::render(SDL_Renderer* renderer, int x_offset = 0, int y_offset = 0) {
+	// Draw box behind check
 	SDL_Rect box;
 	box.x = x;
 	box.y = y;
@@ -40,6 +41,20 @@ void Checkbox::render(SDL_Renderer* renderer, int x_offset = 0, int y_offset = 0
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 	SDL_RenderFillRect(renderer, &box);
+
+	// Draw check
+	if (checked) {
+		SDL_Rect check;
+		check.x = x+10;
+		check.y = y+10;
+		check.w = size-20;
+		check.h = size-20;
+
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_RenderFillRect(renderer, &check);
+	}
+
+	
 
 	if (text_render == nullptr) {
 		SDL_Color color;

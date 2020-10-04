@@ -7,6 +7,7 @@
 #include <cmath>
 
 #include "textbox.hpp"
+#include "checkbox.hpp"
 #include "texturehandler.hpp"
 #include "eventhandler.hpp"
 #include "constants.hpp"
@@ -37,7 +38,7 @@ private:
     int* WINDOW_W;
     int* WINDOW_H;
     
-    Textbox* textbox;
+    Checkbox* checkbox;
 
     SDL_Renderer* renderer;
     TextureHandler* textures;
