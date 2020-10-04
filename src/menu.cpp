@@ -5,7 +5,7 @@ Menu::Menu(SDL_Renderer* renderer,
         EventHandler &events,
         int* WINDOW_W,
         int* WINDOW_H,
-        std::vector<std::string> option_str) : BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, shift{BLOCK_S} {
+		   std::vector<std::string> option_str) : BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, shift{BLOCK_S}, pad_left{150} {
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;
@@ -16,11 +16,9 @@ Menu::Menu(SDL_Renderer* renderer,
     button_group.resize(option_str.size());
     const int offset_y = 48;
 
-
-
     for (size_t i = 0; i < button_group.size(); ++i) {
         button_group[i] = Button(i, this->renderer, *(this->textures), 
-            (*WINDOW_W/2)-(BUTTON_W/2), 30+(offset_y*i),
+								 0, 30+(offset_y*i),
             BUTTON_W);
         button_group[i].set_text(option_str[i]);
     }
@@ -31,13 +29,12 @@ Menu::Menu(SDL_Renderer* renderer,
 Menu::~Menu() { }
 
 void Menu::update() {
-
     // Set background
     SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 255);
-
+	
     auto mouse_pos = events->get_mouse_pos();
     for (auto &i: button_group) {
-        i.set_x((*WINDOW_W/2)-(BUTTON_W/2));
+        i.set_x(((*WINDOW_W/2)-(BUTTON_W/2))+pad_left);
         i.update(mouse_pos[0], mouse_pos[1], events->get_mouse_down());
     }
 
@@ -67,6 +64,18 @@ void Menu::render_background() {
     }
 }
 
+void Menu::render_sidebar() {
+	const int mid_left = (*WINDOW_W/2)-pad_left;
+	SDL_Rect line;
+	line.x = mid_left+pad_left;
+	line.y = 30;
+	line.w = 2;
+	line.h = 400;
+
+	SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
+	SDL_RenderFillRect(renderer, &line);
+}
+
 int Menu::get_pressed() {
     for (auto &i: button_group) {
         if (i.get_pressed()) {
@@ -78,9 +87,10 @@ int Menu::get_pressed() {
 
 void Menu::render() {
     render_background();
+	render_sidebar();
     for (auto &i: button_group) {
         i.render();
     }
     
-    checkbox->render(renderer, 0, 0);
+    //checkbox->render(renderer, 0, 0);
 }

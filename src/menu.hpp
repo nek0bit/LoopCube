@@ -27,6 +27,7 @@ public:
     void update();
     void render();
     void render_background();
+	void render_sidebar();
     int get_pressed();
 private:
     std::vector<std::string> option_str;
@@ -44,6 +45,8 @@ private:
     TextureHandler* textures;
     EventHandler* events;
     Animation shift;
+
+	const int pad_left;
 };
 
 
