@@ -9,13 +9,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "uielement.hpp"
 #include "constants.hpp"
 #include "eventhandler.hpp"
 #include "text.hpp"
 #include "aabb.hpp"
 #include "animation.hpp"
 
-class Textbox {
+class Textbox: public UiElement {
 public:
     Textbox() = default;
     Textbox(int id, int x, int y, int width, int height);
