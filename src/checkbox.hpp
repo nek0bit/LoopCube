@@ -17,7 +17,7 @@ public:
 	~Checkbox();
 
 	bool toggle();
-	void get_checked();
+	bool get_checked();
 	void check();
 	void uncheck();
 
