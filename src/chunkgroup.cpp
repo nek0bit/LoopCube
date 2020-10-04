@@ -93,7 +93,7 @@ void Chunk_Group::check_area(int x, std::vector<Structure*>& structures) {
             loaded_chunks.erase(loaded_chunks.begin());
             group.erase(group.begin());
         }
-        print_chunks_fancy();        
+		
         update_viewport();
     }
 
