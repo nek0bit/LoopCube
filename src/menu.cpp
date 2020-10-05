@@ -6,7 +6,7 @@ Menu::Menu(SDL_Renderer* renderer,
         int* WINDOW_W,
         int* WINDOW_H,
 		   std::vector<std::string> option_str) : BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W},
-												  WINDOW_H{WINDOW_H}, shift{BLOCK_S}, pad_left{150},
+												  WINDOW_H{WINDOW_H}, shift{BLOCK_S}, pad_left{180},
 												  header{nullptr} {
     this->renderer = renderer;
     this->textures = &textures;
@@ -20,8 +20,7 @@ Menu::Menu(SDL_Renderer* renderer,
 
     for (size_t i = 0; i < button_group.size(); ++i) {
         button_group[i] = Button(i, this->renderer, *(this->textures), 
-								 0, 30+(offset_y*i),
-            BUTTON_W);
+								 0, 30+(offset_y*i), BUTTON_W);
         button_group[i].set_text(option_str[i]);
     }
     
@@ -31,7 +30,6 @@ Menu::Menu(SDL_Renderer* renderer,
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(0, constants::block_info.size()-1);
-	// dist(rng);
 
 	std::string rand_id = constants::block_info.at(dist(rng)).get_id();
 	random_block = Item(rand_id, textures, renderer);
@@ -50,7 +48,7 @@ void Menu::update() {
 	
     auto mouse_pos = events->get_mouse_pos();
     for (auto &i: button_group) {
-        i.set_x(((*WINDOW_W/2)-(BUTTON_W/2))+pad_left);
+        i.set_x( (*WINDOW_W/2) + 30 );
         i.update(mouse_pos[0], mouse_pos[1], events->get_mouse_down());
     }
 

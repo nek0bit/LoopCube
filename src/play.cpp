@@ -12,8 +12,8 @@ Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &event
     unsigned long int seed = 8932478970182;
     // Configure camera
     player = Player(textures);
-    chunks = Chunk_Group(seed, renderer, camera, textures);
-    inv = new Inventory(renderer, textures, events, WINDOW_W, WINDOW_H);
+    chunks = Chunk_Group(seed);
+    inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, WINDOW_W, WINDOW_H));
 }
 
 Play::~Play() {
@@ -27,12 +27,15 @@ void Play::print_mouse_pos() {
 }
 
 void Play::update() {
-    // Update all chunks
-    chunks.update_all_viewport();
-    chunks.check_area(player.get_default_x(), structures);
+	// Update camera
+    handle_camera();
 
     // Update player
     player.update(chunks, camera);
+
+	// Update all chunks
+    chunks.update_all_viewport(camera);
+    chunks.check_area(*textures, player.get_default_x(), structures);
 
     inv->update();
 
@@ -68,8 +71,7 @@ void Play::update() {
         player.direct_player(0, chunks, camera);
     }
     
-    // Update camera
-    handle_camera();
+    
 
     // Update animation(s)
     fade.tick();
@@ -112,9 +114,10 @@ void Play::render() {
         particle.render(renderer);
     }
 
-    chunks.render_all_viewport();
+    chunks.render_all_viewport(renderer, camera);
 
     SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
+	
     player.render(renderer);
 
     int p1, p2;
@@ -126,7 +129,7 @@ void Play::render() {
         // Do some math to get the chunk position
         int chunk_pos = std::abs(p1-(chunk->get_slot()*8));
         if (events->get_mouse_down()) {
-            const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv);
+            const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv.get());
             
             // Check if block found
             if (block != nullptr) {

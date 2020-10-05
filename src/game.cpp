@@ -152,13 +152,23 @@ bool Game::running() {
 void Game::free() {
     // Incase user manually runs this method and then the destructor calls this afterwards
     if (has_freed == false) {
-        std::cout << "[Game] Cleaning up..." << std::endl;
-        //delete game;
+		// Cleanup core game stuff
+		std::cout << "[Game] Cleaning up..." << std::endl;
+        delete game;
         delete menu;
-        std::cout << "Closing SDL_TextInput..." << std::endl;
         SDL_StopTextInput();
+
+		// Cleanup textures
         std::cout << "[Textures] Freeing..." << std::endl;
-        textures.free_textures();
+		textures.free_textures();
+
+		// Cleanup fonts
+		std::vector<TTF_Font*> fonts = {constants::button_font, constants::item_font, constants::header_font};
+
+		for(auto i: fonts) {
+			TTF_CloseFont(i);
+		}
+		
         SDL_DestroyWindow(window);
         SDL_DestroyRenderer(renderer);
         SDL_Quit();

@@ -16,7 +16,6 @@ Text::Text(SDL_Renderer* renderer,
 }
 
 Text::~Text() {
-	std::cout << "Freed text" << std::endl;
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(messageText);
 }

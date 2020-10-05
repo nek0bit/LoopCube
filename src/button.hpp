@@ -2,6 +2,7 @@
 #define BUTTON_HPP
 #include <iostream>
 #include <string>
+#include <memory>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -44,7 +45,7 @@ private:
     bool clicked;
 
     SDL_Rect src, dest;
-    Text* button_text;
+	std::shared_ptr<Text> button_text;
 
 };
 

@@ -8,6 +8,7 @@ class Block: public Game_Object {
 
 public:
     Block();
+	~Block();
     Block(std::string id, TextureHandler &textures, int x, int y);
 
     void update(Camera& camera);

@@ -78,7 +78,7 @@ void Button::set_text(std::string text) {
     color.b = 255;
     color.a = 255;
     
-    button_text = new Text(renderer, this->text, color, constants::button_font);
+    button_text = std::shared_ptr<Text>(new Text(renderer, this->text, color, constants::button_font));
 }
 
 void Button::set_x(int x) {

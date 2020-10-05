@@ -44,7 +44,7 @@ private:
     TextureHandler* textures;
     EventHandler* events;
     Chunk_Group chunks;
-    Inventory* inv;
+	std::unique_ptr<Inventory> inv;
     Camera camera;
     Player player;
 

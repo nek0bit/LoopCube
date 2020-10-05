@@ -15,19 +15,19 @@
 class Chunk_Group {
 public:
     Chunk_Group() = default;
-    Chunk_Group(unsigned long int seed, SDL_Renderer* renderer, Camera &camera, TextureHandler &textures);
+    Chunk_Group(unsigned long int seed);
     ~Chunk_Group();
 
-    void generate_chunk(int id, std::vector<Structure*>& structure);
-    void check_area(int x, std::vector<Structure*>& structure);
+    void generate_chunk(TextureHandler& textures, int id, std::vector<Structure*>& structure);
+    void check_area(TextureHandler& textures, int x, std::vector<Structure*>& structure);
     void update_viewport();
-    void render_all();
-    void update_all();
-    void render_all_viewport();
-    void update_all_viewport();
+    void render_all(SDL_Renderer* renderer, Camera& camera);
+    void update_all(Camera& camera);
+    void render_all_viewport(SDL_Renderer* renderer, Camera& camera);
+    void update_all_viewport(Camera& camera);
     void print_chunks_fancy();
 
-    int get_id(int surrounding = 8);
+    int get_id(Camera& camera, int surrounding = 8);
 
     Chunk* get_chunk_at(int x, bool loaded);
 
@@ -48,10 +48,6 @@ private:
     std::vector<int> past_chunks; // group_past ids
     std::vector<Chunk*> viewport_chunks; // Chunks that should be focused on
     unsigned long seed;
-
-    SDL_Renderer* renderer;
-    Camera* camera;
-    TextureHandler* textures;
 };
 
 

@@ -1,10 +1,7 @@
 #include "chunkgroup.hpp"
 
 // I could probably move the renderer and camera out of the class, but it doesn't take much memory so I think it's fine
-Chunk_Group::Chunk_Group(unsigned long seed, SDL_Renderer* renderer, Camera &camera, TextureHandler &textures) {
-    this->renderer = renderer;
-    this->camera = &camera;
-    this->textures = &textures;
+Chunk_Group::Chunk_Group(unsigned long seed) {
     this->seed = seed;
 }
 
@@ -31,11 +28,11 @@ bool Chunk_Group::chunk_already_generated(int id) {
     return check;
 }
 
-void Chunk_Group::generate_chunk(int id, std::vector<Structure*>& structure) {
+void Chunk_Group::generate_chunk(TextureHandler& textures, int id, std::vector<Structure*>& structure) {
     bool check = chunk_already_generated(id);
     // Generate the chunk if it hasn't been generated before
     if (std::find(loaded_chunks.begin(), loaded_chunks.end(), id) == loaded_chunks.end() && !check) {
-        Chunk temp_chunk(seed, id, *textures, structure);
+        Chunk temp_chunk(seed, id, textures, structure);
         
         insert_sorted(group, temp_chunk);
         insert_sorted(loaded_chunks, id);
@@ -63,7 +60,7 @@ void Chunk_Group::generate_chunk(int id, std::vector<Structure*>& structure) {
     }
 }
 
-void Chunk_Group::check_area(int x, std::vector<Structure*>& structures) {
+void Chunk_Group::check_area(TextureHandler& textures, int x, std::vector<Structure*>& structures) {
     const int load_distance = constants::load_distance;
     
     // Takes x, and returns the current chunk id the player is in
@@ -98,7 +95,7 @@ void Chunk_Group::check_area(int x, std::vector<Structure*>& structures) {
     }
 
     for (int i = load_distance*-1; i < load_distance; ++i) {
-        generate_chunk(id+i, structures);
+        generate_chunk(textures, id+i, structures);
     }
 }
 
@@ -176,9 +173,9 @@ Chunk* Chunk_Group::get_chunk_at(int x, bool loaded=true) {
     return nullptr;
 }
 
-int Chunk_Group::get_id(int surrounding) {
+int Chunk_Group::get_id(Camera& camera, int surrounding) {
     double id = 0;
-    id = ceil((camera->get_x() - (camera->get_width()/2))  / (surrounding * constants::block_w));
+    id = ceil((camera.get_x() - (camera.get_width()/2))  / (surrounding * constants::block_w));
     if (id > 0) {
         id *= -1;
     } else {
@@ -187,32 +184,32 @@ int Chunk_Group::get_id(int surrounding) {
     return id;
 }
 
-void Chunk_Group::render_all() {
+void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
     for (auto &chunk: group) {
-        chunk.render_all_shadows(renderer, *camera);
+        chunk.render_all_shadows(renderer, camera);
     }
     for (auto &chunk: group) {
-        chunk.render_all_blocks(renderer, *camera);
+        chunk.render_all_blocks(renderer, camera);
     }
 }
 
-void Chunk_Group::render_all_viewport() {
+void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
     for (auto &chunk: viewport_chunks) {
-        chunk->render_all_shadows(renderer, *camera);
+        chunk->render_all_shadows(renderer, camera);
     }
     for (auto &chunk: viewport_chunks) {
-        chunk->render_all_blocks(renderer, *camera);
+        chunk->render_all_blocks(renderer, camera);
     }
 }
 
-void Chunk_Group::update_all() {
+void Chunk_Group::update_all(Camera& camera) {
     for (auto &chunk: group) {
-        chunk.update_all(*camera);
+        chunk.update_all(camera);
     }
 }
 
-void Chunk_Group::update_all_viewport() {
+void Chunk_Group::update_all_viewport(Camera& camera) {
     for (auto &chunk: viewport_chunks) {
-        chunk->update_all(*camera);
+        chunk->update_all(camera);
     }
 }

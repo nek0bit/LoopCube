@@ -13,6 +13,8 @@ Block::Block(std::string id, TextureHandler &textures, int x, int y)
     }
 }
 
+Block::~Block() {}
+
 double Block::get_x(Camera& camera) const {
     return obj.x*obj.w + (camera.get_x());
 }

@@ -14,7 +14,11 @@ Inventory::Inventory(SDL_Renderer* renderer,
 }
 
 Inventory::~Inventory() {
-
+	// Delete all pointers in items
+	for (auto &i: items) {
+		delete i;
+	}
+	delete item_held;
 }
 
 void Inventory::add_item(std::string id) {

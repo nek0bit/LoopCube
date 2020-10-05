@@ -2,7 +2,10 @@
 #define ITEM_HPP
 #include <iostream>
 #include <string>
+#include <memory>
+
 #include <SDL2/SDL.h>
+
 #include "text.hpp"
 #include "constants.hpp"
 #include "blockinfo.hpp"
@@ -19,7 +22,7 @@ public:
     int get_count();
     BlockInfo get_block();
 private:
-    Text* text;
+	std::shared_ptr<Text> text;
     std::string id;
     TextureHandler* textures;
     BlockInfo block;
