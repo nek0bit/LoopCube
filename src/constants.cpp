@@ -5,6 +5,8 @@
 
 // Texture stuff
 namespace constants {
+	const std::string version_str = "GIT";
+	
     const std::string path = "data/img/";
 
     // Please add comment with index for code readability
@@ -34,6 +36,8 @@ namespace constants {
 
     TTF_Font* button_font = nullptr;
     TTF_Font* item_font = nullptr;
+	TTF_Font* header_font = nullptr;
+	TTF_Font* paragraph_font = nullptr;
 
     const double block_w = 36;
     const double block_h = 36;
@@ -47,4 +51,10 @@ namespace constants {
     #else
         const int load_distance = 12;
     #endif
+
+	const std::string header = "LoopCube";
+	const std::vector<std::string> content = {
+		"Welcome to LoopCube!",
+		"The current version is " + version_str,
+	};
 }

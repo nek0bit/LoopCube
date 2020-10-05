@@ -10,6 +10,7 @@
 
 class Item {
 public:
+	Item() = default;
     Item(std::string id, TextureHandler &textures, SDL_Renderer *renderer);
     ~Item();
 

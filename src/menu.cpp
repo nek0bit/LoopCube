@@ -5,7 +5,9 @@ Menu::Menu(SDL_Renderer* renderer,
         EventHandler &events,
         int* WINDOW_W,
         int* WINDOW_H,
-		   std::vector<std::string> option_str) : BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, shift{BLOCK_S}, pad_left{150} {
+		   std::vector<std::string> option_str) : BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W},
+												  WINDOW_H{WINDOW_H}, shift{BLOCK_S}, pad_left{150},
+												  header{nullptr} {
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;
@@ -23,7 +25,21 @@ Menu::Menu(SDL_Renderer* renderer,
         button_group[i].set_text(option_str[i]);
     }
     
-    checkbox = new Checkbox(0, "text", 20, 100, 40);
+    //checkbox = new Checkbox(0, "text", 20, 100, 40);
+
+	// Setup random block
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> dist(0, constants::block_info.size()-1);
+	// dist(rng);
+
+	std::string rand_id = constants::block_info.at(dist(rng)).get_id();
+	random_block = Item(rand_id, textures, renderer);
+
+	// Setup paragraph string
+	for (auto &i: constants::content) {
+		p_string += i + "\n";
+	}
 }
 
 Menu::~Menu() { }
@@ -41,7 +57,7 @@ void Menu::update() {
     // Update animation for background
     shift.tick();
     
-    checkbox->update(*events);
+    //checkbox->update(*events);
 }
 
 void Menu::render_background() {
@@ -66,6 +82,9 @@ void Menu::render_background() {
 
 void Menu::render_sidebar() {
 	const int mid_left = (*WINDOW_W/2)-pad_left;
+	const int content_left = mid_left-100;
+	
+	// Draw line
 	SDL_Rect line;
 	line.x = mid_left+pad_left;
 	line.y = 30;
@@ -74,6 +93,25 @@ void Menu::render_sidebar() {
 
 	SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
 	SDL_RenderFillRect(renderer, &line);
+
+	// Lets render a random block and some text
+	random_block.draw(content_left, 35, 60, 60);
+
+	// White color
+	SDL_Color color;
+	color.r = 255; color.g = 255; color.b = 255; color.a = 255;
+	
+	if (header == nullptr) {
+		header = std::unique_ptr<Text>(new Text(renderer, constants::header, color, constants::header_font));  
+	} else {
+		header->draw(content_left+70, 40);
+	}
+
+	if (paragraph == nullptr) {
+		paragraph = std::unique_ptr<Text>(new Text(renderer, p_string, color, constants::paragraph_font, 400));
+	} else {
+		paragraph->draw(content_left+5, 120);
+	}
 }
 
 int Menu::get_pressed() {

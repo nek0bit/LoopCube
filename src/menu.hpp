@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <cmath>
+#include <random>
+#include <memory>
 
 #include "textbox.hpp"
 #include "checkbox.hpp"
@@ -13,6 +15,7 @@
 #include "constants.hpp"
 #include "button.hpp"
 #include "animation.hpp"
+#include "item.hpp"
 
 class Menu {
 public:
@@ -39,12 +42,20 @@ private:
     int* WINDOW_W;
     int* WINDOW_H;
     
-    Checkbox* checkbox;
+	//std::unique_ptr<Checkbox> checkbox;
 
     SDL_Renderer* renderer;
     TextureHandler* textures;
     EventHandler* events;
     Animation shift;
+
+	Item random_block;
+
+	// Content elements
+	std::unique_ptr<Text> header;
+	std::unique_ptr<Text> paragraph;
+
+	std::string p_string;
 
 	const int pad_left;
 };

@@ -7,6 +7,7 @@
 #include <SDL2/SDL_ttf.h>
 
 namespace constants {
+	extern const std::string version_str;
     extern const std::string path;
 
     // Please add comment with index for code readability
@@ -16,15 +17,19 @@ namespace constants {
 
     extern TTF_Font* button_font;
     extern TTF_Font* item_font;
+	extern TTF_Font* header_font;
+	extern TTF_Font* paragraph_font;
 
     extern const double block_w;
     extern const double block_h;
     
     extern const int chunk_width;
-    
+	
     extern const int load_viewport;
-
     extern const int load_distance;
+
+	extern const std::string header;
+	extern const std::vector<std::string> content;
 }
 
 #endif // CONSTANTS

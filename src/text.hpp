@@ -10,12 +10,15 @@ public:
     Text(SDL_Renderer* renderer,
         std::string text,
         SDL_Color color,
-        TTF_Font* font);
+		TTF_Font* font,
+		int wrap_width = -1);
     ~Text();
 
     void draw(int x, int y);
     void set_text(std::string text);
 private:
+	void update_surface();
+	int wrap_width;
     std::string text;
 
     SDL_Color color;
