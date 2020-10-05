@@ -23,40 +23,45 @@ public:
         TextureHandler &textures,
         EventHandler &events,
         int* WINDOW_W,
-        int* WINDOW_H,
-        std::vector<std::string> option_str);
+        int* WINDOW_H);
     ~Menu();
 
     void update();
     void render();
     void render_background();
 	void render_sidebar();
-    int get_pressed();
+	void render_main_menu();
+	void render_config_menu();
+	void set_state(int state);
+	int get_pressed();
 private:
+	int state;
+	// Main Menu Stuff
     std::vector<std::string> option_str;
     std::vector<int> option_state; 
-    Button button;
-    std::vector<Button> button_group;
+    std::vector<std::unique_ptr<Button>> button_group;
+
+	// MISC
     const int BLOCK_S;
     const int BUTTON_W;
     int* WINDOW_W;
     int* WINDOW_H;
-    
-	//std::unique_ptr<Checkbox> checkbox;
 
+	// Config stuff
+	std::unique_ptr<Button> back_button;
+	std::vector<UiElement*> c_elements;
+	
+	// Important setup
     SDL_Renderer* renderer;
     TextureHandler* textures;
     EventHandler* events;
     Animation shift;
 
+	// Content elements for sidebar
 	Item random_block;
-
-	// Content elements
 	std::unique_ptr<Text> header;
 	std::unique_ptr<Text> paragraph;
-
 	std::string p_string;
-
 	const int pad_left;
 };
 

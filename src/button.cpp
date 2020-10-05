@@ -1,21 +1,19 @@
 #include "button.hpp"
 
-Button::Button(int id, SDL_Renderer* renderer,
-        TextureHandler &textures,
-        int x,
-        int y, 
-        int width, 
-        int height) 
-    : id{static_cast<unsigned int>(id)}, width{width}, height{height}, hovered{false}, button_text{nullptr} {
-    this->renderer = renderer;
-    this->textures = &textures;
+Button::Button(int id,
+			   TextureHandler& textures,
+			   int x,
+			   int y, 
+			   int width, 
+			   int height) 
+    : textures{textures}, id{static_cast<unsigned int>(id)}, width{width}, height{height}, hovered{false}, button_text{nullptr} {
     this->x = x;
     this->y = y;
 }
 
 Button::~Button() {}
 
-void Button::update(int mouse_x, int mouse_y, int mouse_state) {
+void Button::update(EventHandler& events, int x_offset, int y_offset) {
     src.h = 16;
     src.w = 16;
     src.x = 0;
@@ -30,12 +28,14 @@ void Button::update(int mouse_x, int mouse_y, int mouse_state) {
 
     if (clicked == true) {
         clicked = false;
+		being_clicked = false;
     }
 
     int calc_width = dest.w + (src.w*2)*2;
-    if (AABB(mouse_x, mouse_y, 1, 1, x, y, calc_width, dest.h)) {
+	std::array<int, 2> mouse_pos = events.get_mouse_pos();
+    if (AABB(mouse_pos[0]+x_offset, mouse_pos[1]+y_offset, 1, 1, x, y, calc_width, dest.h)) {
         hovered = true;
-        if (mouse_state == 1) {
+        if (events.get_mouse_down() == 1) {
             dest.y += 5;
             being_clicked = true;
         } else {
@@ -60,17 +60,18 @@ int Button::get_id() {
     return id;
 }
 
-void Button::render() {
-    SDL_Rect begin{x, dest.y, src.w*2, dest.h}, end{dest.x+dest.w, dest.y, src.w*2, dest.h};
-    SDL_RenderCopy(renderer, textures->get_texture(6), &src, &begin);
-    SDL_RenderCopy(renderer, textures->get_texture(5), &src, &dest);
-    SDL_RenderCopy(renderer, textures->get_texture(7), &src, &end);
+void Button::render(SDL_Renderer* renderer, int x_offset, int y_offset) {
+    SDL_Rect begin{x+x_offset, dest.y+y_offset, src.w*2, dest.h},
+		end{dest.x+x_offset+dest.w, dest.y, src.w*2, dest.h};
+    SDL_RenderCopy(renderer, textures.get_texture(6), &src, &begin);
+    SDL_RenderCopy(renderer, textures.get_texture(5), &src, &dest);
+    SDL_RenderCopy(renderer, textures.get_texture(7), &src, &end);
     if (button_text != nullptr) {
-        button_text->draw(dest.x, dest.y);
+        button_text->draw(dest.x+x_offset, dest.y+y_offset);
     }
 }
 
-void Button::set_text(std::string text) {
+void Button::set_text(SDL_Renderer* renderer, std::string text) {
     this->text = text;
     SDL_Color color;
     color.r = 255;

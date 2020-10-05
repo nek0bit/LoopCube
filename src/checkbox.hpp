@@ -13,7 +13,7 @@
 class Checkbox: public UiElement {
 public:
 	Checkbox() = default;
-	Checkbox(int id, std::string text, int x, int y, int size);
+	Checkbox(int id, std::string text, int x, int y, int size, bool checked=false);
 	~Checkbox();
 
 	bool toggle();
@@ -21,8 +21,9 @@ public:
 	void check();
 	void uncheck();
 
-	void update(EventHandler& events);
+	void update(EventHandler& events, int x_offset, int y_offset);
 	void render(SDL_Renderer* renderer, int x_offset, int y_offset);
+	
 private:
 	int id;
 	std::string text;

@@ -6,14 +6,15 @@
 
 class UiElement {
 public:
-  UiElement();
-  virtual ~UiElement();
+	UiElement();
+	virtual ~UiElement();
 
-  virtual void update();
-  virtual void update(EventHandler& events);
-  virtual void render();
-  virtual void render(SDL_Renderer* renderer);
-  virtual void render(SDL_Renderer* renderer, int x_offset, int y_offset);
+	virtual void update();
+	virtual void update(EventHandler& events);
+	virtual void update(EventHandler& events, int x_offset, int y_offset);
+	virtual void render();
+	virtual void render(SDL_Renderer* renderer);
+	virtual void render(SDL_Renderer* renderer, int x_offset, int y_offset);
 };
 
 #endif

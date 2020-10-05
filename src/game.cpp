@@ -3,12 +3,9 @@
 enum GAME_STATE {
     // Menu
     STATE_MAIN_MENU,
-    STATE_CONFIG,
 
     // Game
     STATE_PLAYING,
-    STATE_PAUSE,
-    STATE_INVENTORY,
 } STATE;
 
 Game::Game() : title{"LoopCube"}, state{}, game{nullptr} {
@@ -25,7 +22,7 @@ Game::~Game() {
 void Game::game_init() {
     textures = TextureHandler(renderer);
     //game = new Play(renderer, textures, events, WINDOW_W, WINDOW_H);
-    menu = new Menu(renderer, textures, events, &WINDOW_W, &WINDOW_H, {"Play", "About", "Settings", "Exit"});
+    menu = new Menu(renderer, textures, events, &WINDOW_W, &WINDOW_H);
 }
 
 // Game related loop stuff
@@ -39,7 +36,7 @@ void Game::update() {
             std::cout << "Don't worry, about coming soon!" << std::endl;
         }
         if (menu->get_pressed() == 2) {
-            std::cout << "Don't worry, settings coming soon!" << std::endl;
+            menu->set_state(1);
         }
         if (menu->get_pressed() == 3) {
             is_running = false;

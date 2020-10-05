@@ -16,22 +16,22 @@
 class Button: public UiElement {
 public:
     Button() = default;
-    Button(int id, SDL_Renderer* renderer, TextureHandler &textures, int x, int y, int width, int height = 32);
+    Button(int id, TextureHandler& textures, int x, int y, int width, int height = 32);
     ~Button();
 
     void set_x(int x);
     void set_y(int y);
-    void update(int mouse_x, int mouse_y, int mouse_state);
-    void render();
+    void update(EventHandler& events, int x_offset = 0, int y_offset = 0);
+    void render(SDL_Renderer* renderer, int x_offset = 0, int y_offset = 0);
 
     // Text
-    void set_text(std::string text);
+    void set_text(SDL_Renderer* renderer, std::string text);
     std::string get_text();
     bool get_pressed();
     int get_id();
 private:
-    SDL_Renderer* renderer;
-    TextureHandler* textures;
+	TextureHandler& textures;
+	
     std::string text;
     unsigned int id;
     int x;
