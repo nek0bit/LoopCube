@@ -9,7 +9,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &event
     camera.set_pos(0, 125);
 
 
-    unsigned long int seed = 8932478970182;
+    unsigned long int seed = 89478970182;
     // Configure camera
     player = Player(textures);
     chunks = Chunk_Group(seed);
@@ -33,10 +33,11 @@ void Play::update() {
     // Update player
     player.update(chunks, camera);
 
+	//handle_camera();
 	// Update all chunks
     chunks.update_all_viewport(camera);
     chunks.check_area(*textures, player.get_default_x(), structures);
-
+	
     inv->update();
 
 
@@ -173,8 +174,8 @@ void Play::draw_selection(int* p1, int* p2) {
 
 // Sets camera to player position
 void Play::handle_camera() {
-    double x = (player.get_default_x()*-1 + (*WINDOW_W/2)) - player.get_width()/2;
-    double y = player.get_default_y()*-1 + (*WINDOW_H/2) - player.get_height()/2;
+    double x = ( player.get_default_x() * -1 + (*WINDOW_W/2) ) - player.get_width()/2;
+    double y = player.get_default_y() * -1  + (*WINDOW_H/2) - player.get_height()/2;
     camera.set_pos(x, y);
 }
 
