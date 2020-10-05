@@ -2,7 +2,7 @@
 
 Block::Block() {}
 
-Block::Block(std::string id, TextureHandler &textures, int x, int y)
+Block::Block(int id, TextureHandler &textures, int x, int y)
     : Game_Object{0, textures, (double)x, (double)y, constants::block_w, constants::block_h} {
 
     for (auto &i: constants::block_info) {

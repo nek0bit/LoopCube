@@ -31,7 +31,7 @@ Menu::Menu(SDL_Renderer* renderer,
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(0, constants::block_info.size()-1);
 
-	std::string rand_id = constants::block_info.at(dist(rng)).get_id();
+	int rand_id = constants::block_info.at(dist(rng)).get_id();
 	random_block = Item(rand_id, textures, renderer);
 
 	// Setup paragraph string

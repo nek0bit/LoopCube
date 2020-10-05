@@ -17,8 +17,6 @@
 #include "structure.hpp"
 #include "tree.hpp"
 
-
-
 class Chunk {
 
 public:
@@ -31,7 +29,7 @@ public:
     void update_all(Camera& camera);
     void render_all_shadows(SDL_Renderer* renderer, Camera& camera);
     void render_all_blocks(SDL_Renderer* renderer, Camera& camera);
-    void place_block(std::string id, int x, int y);
+    void place_block(int id, int x, int y);
     const BlockInfo* destroy_block(int x, int y, Inventory *inv);
     void generate_chunk(unsigned long int seed, std::vector<Structure*>& structure);
 

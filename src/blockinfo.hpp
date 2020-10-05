@@ -6,16 +6,16 @@
 class BlockInfo {
 public:
     BlockInfo() = default;
-    BlockInfo(std::string id, std::string name, int texture_id, bool no_collision = false);
+    BlockInfo(int id, std::string name, int texture_id, bool no_collision = false);
     ~BlockInfo();
 
     // Gets
-    std::string get_id() const;
+    int get_id() const;
     std::string get_name() const;
     int get_texture_id() const;
     bool get_no_collision() const;
 private:
-    std::string id;
+    int id;
     std::string name;
     int texture_id;
     bool no_collision;

@@ -3,6 +3,7 @@
 // TODO This file is LESS ugly than it used to, but I keep using it, send help
 // NOTE maybe move to texture.cpp?
 
+
 // Texture stuff
 namespace constants {
 	const std::string version_str = "GIT";
@@ -27,11 +28,11 @@ namespace constants {
     };
 
     const std::vector<BlockInfo> block_info = {
-        BlockInfo{"grass", "Grass", 0},
-        BlockInfo{"dirt", "Dirt", 1},
-        BlockInfo{"stone", "Stone", 2},
-        BlockInfo{"wood", "Wood", 3, true},
-        BlockInfo{"leaf", "Leaf", 12},
+        BlockInfo{BLOCK_GRASS, "Grass", 0},
+        BlockInfo{BLOCK_DIRT, "Dirt", 1},
+        BlockInfo{BLOCK_STONE, "Stone", 2},
+        BlockInfo{BLOCK_WOOD, "Wood", 3, true},
+        BlockInfo{BLOCK_LEAF, "Leaf", 12},
     };
 
     TTF_Font* button_font = nullptr;

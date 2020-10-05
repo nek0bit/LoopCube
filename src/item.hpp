@@ -14,7 +14,7 @@
 class Item {
 public:
 	Item() = default;
-    Item(std::string id, TextureHandler &textures, SDL_Renderer *renderer);
+    Item(int id, TextureHandler &textures, SDL_Renderer *renderer);
     ~Item();
 
     void draw(int x, int y, int width, int height);

@@ -21,7 +21,7 @@ Inventory::~Inventory() {
 	delete item_held;
 }
 
-void Inventory::add_item(std::string id) {
+void Inventory::add_item(int id) {
     // TODO Optimize this
     int found = -1;
     int max_count = 99;

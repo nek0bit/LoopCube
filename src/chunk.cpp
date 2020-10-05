@@ -52,14 +52,14 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
         for (int y = 0; y < MAX_HEIGHT-temp-offset; ++y) {
             double d_y = (double)y/(double)MAX_HEIGHT;
             if (y == 0) {
-                place_block("grass", x, y+temp+offset);
+                place_block(BLOCK_GRASS, x, y+temp+offset);
                 if (dist(rng) == 0) structures.push_back(new Tree(get_chunk_x(x)-8, y+temp+offset));
             } else if (y >= 1 && y <= 3) {
-                place_block("dirt", x, y+temp+offset);
+                place_block(BLOCK_DIRT, x, y+temp+offset);
             } else {
                 int cave_noise = terrain_gen.noise(d_x+(slot), d_y*12)*400;
                 if (cave_noise < 150 && cave_noise > -150) {
-                    place_block("stone", x, y+temp+offset);
+                    place_block(BLOCK_STONE, x, y+temp+offset);
                 }
             }
         }
@@ -73,7 +73,7 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
 
             // Get blockinfo
             const BlockInfo* info = i->get_blockinfo();
-            inv->add_item(std::string(info->get_id()));
+            inv->add_item(info->get_id());
             
             chunk.erase(i);
             return info;
@@ -82,7 +82,7 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
     return nullptr;
 }
 
-void Chunk::place_block(std::string id, int x, int y) {
+void Chunk::place_block(int id, int x, int y) {
     Block temp_block{id, *textures, get_chunk_x(x), y};
     // Check if between chunk size
     if (x < MAX_WIDTH+1 && x >= 0 && y < MAX_HEIGHT+1 && y >= 0) {

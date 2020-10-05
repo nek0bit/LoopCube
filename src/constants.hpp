@@ -6,6 +6,14 @@
 #include "blockinfo.hpp"
 #include <SDL2/SDL_ttf.h>
 
+enum block_enum {
+	BLOCK_GRASS,
+	BLOCK_DIRT,
+	BLOCK_STONE,
+	BLOCK_WOOD,
+    BLOCK_LEAF
+};
+
 namespace constants {
 	extern const std::string version_str;
     extern const std::string path;

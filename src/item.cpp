@@ -1,6 +1,6 @@
 #include "item.hpp"
 
-Item::Item(std::string id, TextureHandler &textures, SDL_Renderer *renderer) : count{} {
+Item::Item(int id, TextureHandler &textures, SDL_Renderer *renderer) : count{} {
     this->textures = &textures;
     this->renderer = renderer;
     for (auto &i: constants::block_info) {

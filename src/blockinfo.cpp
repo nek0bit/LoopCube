@@ -1,6 +1,6 @@
 #include "blockinfo.hpp"
 
-BlockInfo::BlockInfo(std::string id, std::string name, int texture_id, bool no_collision) {
+BlockInfo::BlockInfo(int id, std::string name, int texture_id, bool no_collision) {
     this->id = id;
     this->name = name;
     this->texture_id = texture_id;
@@ -11,7 +11,7 @@ BlockInfo::~BlockInfo() {
 
 }
 
-std::string BlockInfo::get_id() const{
+int BlockInfo::get_id() const{
     return id;
 }
 

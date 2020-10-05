@@ -5,12 +5,12 @@
 
 class StructureData {
 public:
-    StructureData(int x, int y, std::string id);
+    StructureData(int x, int y, int id);
     ~StructureData();
     
     int x;
     int y;
-    std::string id;
+    int id;
 };
 
 

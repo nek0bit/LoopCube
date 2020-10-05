@@ -9,7 +9,7 @@ class Block: public Game_Object {
 public:
     Block();
 	~Block();
-    Block(std::string id, TextureHandler &textures, int x, int y);
+    Block(int id, TextureHandler &textures, int x, int y);
 
     void update(Camera& camera);
     void render(SDL_Renderer* renderer);
