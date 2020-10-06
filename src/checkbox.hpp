@@ -21,8 +21,10 @@ public:
 	void check();
 	void uncheck();
 
-	void update(EventHandler& events, int x_offset, int y_offset);
-	void render(SDL_Renderer* renderer, int x_offset, int y_offset);
+	void set_x(int x);
+	void set_y(int y);
+	void update(EventHandler& events);
+	void render(SDL_Renderer* renderer);
 	
 private:
 	int id;
@@ -33,6 +35,8 @@ private:
 	bool checked;
 
 	Text* text_render;
+
+	SDL_Rect dest;
 };
 
 #endif

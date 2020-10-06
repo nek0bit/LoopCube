@@ -13,7 +13,7 @@ Button::Button(int id,
 
 Button::~Button() {}
 
-void Button::update(EventHandler& events, int x_offset, int y_offset) {
+void Button::update(EventHandler& events) {
 	src.h = 16;
     src.w = 16;
     src.x = 0;
@@ -33,7 +33,7 @@ void Button::update(EventHandler& events, int x_offset, int y_offset) {
 
     int calc_width = dest.w + (src.w*2)*2;
 	std::array<int, 2> mouse_pos = events.get_mouse_pos();
-    if (AABB(mouse_pos[0]+x_offset, mouse_pos[1]+y_offset, 1, 1, x, y, calc_width, dest.h)) {
+    if (AABB(mouse_pos[0], mouse_pos[1], 1, 1, x, y, calc_width, dest.h)) {
         hovered = true;
         if (events.get_mouse_down() == 1) {
             dest.y += 5;
@@ -60,14 +60,14 @@ int Button::get_id() {
     return id;
 }
 
-void Button::render(SDL_Renderer* renderer, int x_offset, int y_offset) {
-    SDL_Rect begin{x+x_offset, dest.y+y_offset, src.w*2, dest.h},
-		end{dest.x+x_offset+dest.w, dest.y, src.w*2, dest.h};
+void Button::render(SDL_Renderer* renderer) {
+    SDL_Rect begin{x, dest.y, src.w*2, dest.h},
+		end{dest.x+dest.w, dest.y, src.w*2, dest.h};
     SDL_RenderCopy(renderer, textures.get_texture(6), &src, &begin);
     SDL_RenderCopy(renderer, textures.get_texture(5), &src, &dest);
     SDL_RenderCopy(renderer, textures.get_texture(7), &src, &end);
     if (button_text != nullptr) {
-        button_text->draw(dest.x+x_offset, dest.y+y_offset);
+        button_text->draw(dest.x, dest.y);
     }
 }
 

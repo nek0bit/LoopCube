@@ -35,7 +35,7 @@ Menu::Menu(SDL_Renderer* renderer,
 	// Setup options
 	back_button = std::unique_ptr<Button>(new Button(-1, textures, 0, 30, 150));
 	back_button->set_text(renderer, "<- Back");
-	c_elements.push_back(new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 30));
+	c_elements.push_back(new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 150, 30));
 
 	// Setup random block
 	std::random_device dev;
@@ -76,7 +76,9 @@ void Menu::update(bool update_animations) {
 		back_button->set_x( (*WINDOW_W/2) + 30 );
 		back_button->update(*events);
 		for (size_t i = 0; i < c_elements.size(); ++i) {
-			c_elements[i]->update(*events, left, top+(gap*i));
+			c_elements[i]->set_x(left);
+			c_elements[i]->set_y(top+(gap*i));
+			c_elements[i]->update(*events);
 		}
 
 		if (back_button->get_pressed()) {
@@ -170,13 +172,10 @@ void Menu::render_main_menu() {
 }
 
 void Menu::render_config_menu() {
-	int left = ( (*WINDOW_W/2) + 30 );
-	int top = 80;
-	int gap = 50;
 	back_button->render(renderer);
 	// Render all elements, no matter the type
-	for (size_t i; i < c_elements.size(); ++i) {
-		c_elements[i]->render(renderer, left, top+(gap*i));
+	for (auto &i: c_elements) {
+		i->render(renderer);
 	}
 }
 
@@ -189,7 +188,5 @@ void Menu::render() {
 	} else if (state == CONFIG_MENU) {
 		render_config_menu();
 	}
-    
-    //checkbox->render(renderer, 0, 0);
 }
 

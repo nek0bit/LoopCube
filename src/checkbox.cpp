@@ -23,32 +23,32 @@ void Checkbox::uncheck() {
 	checked = false;
 }
 
-void Checkbox::update(EventHandler& events, int x_offset = 0, int y_offset = 0) {
+void Checkbox::update(EventHandler& events) {
 	std::array<int, 2> pos = events.get_mouse_pos();
 	if (events.get_mouse_clicked() &&
-		AABB(x+x_offset, y+y_offset, size, size, pos[0], pos[1], 1, 1)) {
+		AABB(x, y, size, size, pos[0], pos[1], 1, 1)) {
 		toggle();
 	}
+
+	dest.x = x;
+	dest.y = y;
+	dest.w = size;
+	dest.h = size;
 }
 
-void Checkbox::render(SDL_Renderer* renderer, int x_offset = 0, int y_offset = 0) {
+void Checkbox::render(SDL_Renderer* renderer) {
 	// Draw box behind check
-	SDL_Rect box;
-	box.x = x+x_offset;
-	box.y = y+y_offset;
-	box.w = size;
-	box.h = size;
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-	SDL_RenderFillRect(renderer, &box);
+	SDL_RenderFillRect(renderer, &dest);
 
 	// Draw check
 	if (checked) {
 		SDL_Rect check;
-		check.x = x+x_offset+10;
-		check.y = y+y_offset+10;
-		check.w = size-20;
-		check.h = size-20;
+		check.x = dest.x+10;
+		check.y = dest.y+10;
+		check.w = dest.w-20;
+		check.h = dest.h-20;
 
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderFillRect(renderer, &check);
@@ -61,6 +61,15 @@ void Checkbox::render(SDL_Renderer* renderer, int x_offset = 0, int y_offset = 0
 		color.r = 255; color.g = 255; color.b = 255; color.a = 255;
 		text_render = new Text(renderer, text, color, constants::option_font); 
 	} else {
-		text_render->draw((x+size+10)+x_offset, (y+5)+y_offset);
+		text_render->draw((dest.x+size+10), (dest.y+5));
 	}
+}
+
+
+void Checkbox::set_x(int x) {
+    this->x = x;
+}
+
+void Checkbox::set_y(int y) {
+    this->y = y;
 }

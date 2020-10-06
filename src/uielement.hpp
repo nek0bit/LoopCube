@@ -9,6 +9,8 @@ public:
 	UiElement();
 	virtual ~UiElement();
 
+	virtual void set_x(int x);
+	virtual void set_y(int y);
 	virtual void update();
 	virtual void update(EventHandler& events);
 	virtual void update(EventHandler& events, int x_offset, int y_offset);

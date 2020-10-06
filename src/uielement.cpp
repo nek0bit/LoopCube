@@ -4,6 +4,8 @@ UiElement::UiElement() {}
 
 UiElement::~UiElement() {}
 
+void UiElement::set_x(int x) {}
+void UiElement::set_y(int y) {}
 void UiElement::update() {}
 void UiElement::update(EventHandler& events) {}
 void UiElement::update(EventHandler& events, int x_offset, int y_offset) {}

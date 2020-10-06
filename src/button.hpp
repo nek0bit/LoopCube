@@ -21,8 +21,8 @@ public:
 
     void set_x(int x);
     void set_y(int y);
-    void update(EventHandler& events, int x_offset = 0, int y_offset = 0);
-    void render(SDL_Renderer* renderer, int x_offset = 0, int y_offset = 0);
+    void update(EventHandler& events);
+    void render(SDL_Renderer* renderer);
 
     // Text
     void set_text(SDL_Renderer* renderer, std::string text);
