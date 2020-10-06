@@ -1,10 +1,22 @@
 #include "checkbox.hpp"
 
 Checkbox::Checkbox(int id, std::string text, int x, int y, int size, bool checked)
-	: id{id}, text{text}, x{x}, y{y}, size{size}, text_render{nullptr}, checked{checked} {
+	: changed{false}, id{id}, text{text}, x{x}, y{y}, size{size}, text_render{nullptr}, checked{checked} {
 }
 
 Checkbox::~Checkbox() {}
+
+int Checkbox::get_id() {
+	return id;
+}
+
+void Checkbox::get_value(bool& here) {
+	here = checked;
+}
+
+bool Checkbox::is_changed() {
+	return changed;
+}
 
 bool Checkbox::toggle() {
 	checked = !checked;
@@ -24,10 +36,14 @@ void Checkbox::uncheck() {
 }
 
 void Checkbox::update(EventHandler& events) {
+	// Clear changed
+	changed = false;
+
 	std::array<int, 2> pos = events.get_mouse_pos();
 	if (events.get_mouse_clicked() &&
 		AABB(x, y, size, size, pos[0], pos[1], 1, 1)) {
 		toggle();
+		changed = true;
 	}
 
 	dest.x = x;

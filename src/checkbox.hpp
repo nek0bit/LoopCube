@@ -16,6 +16,9 @@ public:
 	Checkbox(int id, std::string text, int x, int y, int size, bool checked=false);
 	~Checkbox();
 
+	int get_id();
+	void get_value(bool& here);
+	bool is_changed();
 	bool toggle();
 	bool get_checked();
 	void check();
@@ -27,6 +30,7 @@ public:
 	void render(SDL_Renderer* renderer);
 	
 private:
+	bool changed;
 	int id;
 	std::string text;
 	int x;

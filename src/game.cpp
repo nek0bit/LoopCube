@@ -20,6 +20,10 @@ Game::~Game() {
 // Game related stuff below
 // Initiates Game objects
 void Game::game_init() {
+	// Setup config
+	constants::config.set(CONFIG_SHOW_SHADOWS, 1);
+	constants::config.set(CONFIG_LOAD_DISTANCE, 12);
+	
     textures = TextureHandler(renderer);
     //game = new Play(renderer, textures, events, WINDOW_W, WINDOW_H);
     menu = new Menu(renderer, textures, events, &WINDOW_W, &WINDOW_H);

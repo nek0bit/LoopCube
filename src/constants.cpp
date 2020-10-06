@@ -63,4 +63,6 @@ namespace constants {
 		"- The first version to be fair",
 		"- Playable"
 	};
+
+	Config config;
 }

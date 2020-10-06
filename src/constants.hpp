@@ -4,6 +4,7 @@
 #include <utility>
 #include <string>
 #include "blockinfo.hpp"
+#include "config.hpp"
 #include <SDL2/SDL_ttf.h>
 
 enum block_enum {
@@ -12,6 +13,11 @@ enum block_enum {
 	BLOCK_STONE,
 	BLOCK_WOOD,
     BLOCK_LEAF
+};
+
+enum config_enum {
+	CONFIG_SHOW_SHADOWS,
+	CONFIG_LOAD_DISTANCE
 };
 
 namespace constants {
@@ -39,6 +45,8 @@ namespace constants {
 
 	extern const std::string header;
 	extern const std::vector<std::string> content;
+
+	extern Config config;
 }
 
 #endif // CONSTANTS

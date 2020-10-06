@@ -19,25 +19,38 @@ Menu::Menu(SDL_Renderer* renderer,
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;
-    
+	
+    //************************************************
     // Resize option_state to match option_str size
-    this->option_str = {"Play", "About", "Config", "Exit"};
+	//************************************************
+	this->option_str = {"Play", "About", "Config", "Exit"};
     option_state.resize(option_str.size());
     button_group.resize(option_str.size());
-    const int offset_y = 48;
 
+	//************************************************
 	// Setup buttons in main menu
-    for (size_t i = 0; i < button_group.size(); ++i) {
+	//************************************************
+	const int offset_y = 48;
+	
+	for (size_t i = 0; i < button_group.size(); ++i) {
         button_group[i] = std::unique_ptr<Button>(new Button(i, textures, 0, 30+(offset_y*i), BUTTON_W));
         button_group[i]->set_text(renderer, option_str[i]);
     }
 
+	//************************************************
 	// Setup options
+	//************************************************
 	back_button = std::unique_ptr<Button>(new Button(-1, textures, 0, 30, 150));
 	back_button->set_text(renderer, "<- Back");
-	c_elements.push_back(new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 150, 30));
 
+	// Setup checkbox
+	Checkbox* show_shadows = new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 150, 30);
+	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) show_shadows->check();
+	c_elements.push_back(show_shadows);
+
+	//************************************************
 	// Setup random block
+	//************************************************
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(0, constants::block_info.size()-1);
@@ -45,7 +58,9 @@ Menu::Menu(SDL_Renderer* renderer,
 	int rand_id = constants::block_info.at(dist(rng)).get_id();
 	random_block = Item(rand_id, textures, renderer);
 
+	//************************************************
 	// Setup paragraph string
+	//************************************************
 	for (auto &i: constants::content) {
 		p_string += i + "\n";
 	}
@@ -79,11 +94,21 @@ void Menu::update(bool update_animations) {
 			c_elements[i]->set_x(left);
 			c_elements[i]->set_y(top+(gap*i));
 			c_elements[i]->update(*events);
+
+			if (c_elements[i]->is_changed()) {
+				if (c_elements[i]->get_id() == CB_RENDER_SHADOWS) {
+					bool tmp;
+					c_elements[i]->get_value(tmp);
+					constants::config.set(CONFIG_SHOW_SHADOWS, tmp);
+				}
+			}
 		}
 
 		if (back_button->get_pressed()) {
 			set_state(MAIN_MENU);
 		}
+
+		
 	}
 
     // Update animation for background

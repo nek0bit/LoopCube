@@ -4,6 +4,9 @@ UiElement::UiElement() {}
 
 UiElement::~UiElement() {}
 
+int UiElement::get_id() {}
+bool UiElement::is_changed() {}
+void UiElement::get_value(bool&) {}
 void UiElement::set_x(int x) {}
 void UiElement::set_y(int y) {}
 void UiElement::update() {}
