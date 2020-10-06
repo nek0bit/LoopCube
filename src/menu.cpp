@@ -35,7 +35,7 @@ Menu::Menu(SDL_Renderer* renderer,
 	// Setup options
 	back_button = std::unique_ptr<Button>(new Button(-1, textures, 0, 30, 150));
 	back_button->set_text(renderer, "<- Back");
-	c_elements.push_back(new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 40));
+	c_elements.push_back(new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 30));
 
 	// Setup random block
 	std::random_device dev;

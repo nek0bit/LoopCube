@@ -1,9 +1,5 @@
 #include "constants.hpp"
 
-// TODO This file is LESS ugly than it used to, but I keep using it, send help
-// NOTE maybe move to texture.cpp?
-
-
 // Texture stuff
 namespace constants {
 	// I thought it was funny to reference developer "git" versions
@@ -37,10 +33,12 @@ namespace constants {
         BlockInfo{BLOCK_LEAF, "Leaf", 12},
     };
 
+	// Assignment in game.cpp
     TTF_Font* button_font = nullptr;
     TTF_Font* item_font = nullptr;
 	TTF_Font* header_font = nullptr;
 	TTF_Font* paragraph_font = nullptr;
+	TTF_Font* option_font = nullptr;
 
     const double block_w = 36;
     const double block_h = 36;

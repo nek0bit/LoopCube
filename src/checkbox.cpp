@@ -59,7 +59,7 @@ void Checkbox::render(SDL_Renderer* renderer, int x_offset = 0, int y_offset = 0
 	if (text_render == nullptr) {
 		SDL_Color color;
 		color.r = 255; color.g = 255; color.b = 255; color.a = 255;
-		text_render = new Text(renderer, text, color, constants::button_font); 
+		text_render = new Text(renderer, text, color, constants::option_font); 
 	} else {
 		text_render->draw((x+size+10)+x_offset, (y+5)+y_offset);
 	}

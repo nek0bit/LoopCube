@@ -128,6 +128,7 @@ void Game::initialize_fonts() {
     constants::item_font = TTF_OpenFont("data/fonts/liberation-sans/LiberationSans-Regular.ttf", 12);
 	constants::header_font = TTF_OpenFont("data/fonts/liberation-sans/LiberationSans-Regular.ttf", 32);
 	constants::paragraph_font = TTF_OpenFont("data/fonts/liberation-sans/LiberationSans-Regular.ttf", 16);
+	constants::option_font = TTF_OpenFont("data/fonts/liberation-sans/LiberationSans-Regular.ttf", 18);
 }
 
 // Handles events such as exit, keypresses, mouse

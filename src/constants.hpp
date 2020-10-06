@@ -27,6 +27,7 @@ namespace constants {
     extern TTF_Font* item_font;
 	extern TTF_Font* header_font;
 	extern TTF_Font* paragraph_font;
+	extern TTF_Font* option_font;
 
     extern const double block_w;
     extern const double block_h;
