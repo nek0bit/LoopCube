@@ -26,7 +26,7 @@ public:
         int* WINDOW_H);
     ~Menu();
 
-    void update();
+    void update(bool update_animations = true);
     void render();
     void render_background();
 	void render_sidebar();

@@ -33,7 +33,7 @@ void Game::update() {
             state.set(STATE_PLAYING);
         }
         if (menu->get_pressed() == 1) {
-            std::cout << "Don't worry, about coming soon!" << std::endl;
+            std::cout << "The about menu is never, ever, ever, coming :)" << std::endl;
         }
         if (menu->get_pressed() == 2) {
             menu->set_state(1);

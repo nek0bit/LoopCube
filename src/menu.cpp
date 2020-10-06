@@ -59,7 +59,7 @@ Menu::~Menu() {
 	}
 }
 
-void Menu::update() {
+void Menu::update(bool update_animations) {
     // Set background
     SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 255);
 
@@ -80,15 +80,14 @@ void Menu::update() {
 		}
 
 		if (back_button->get_pressed()) {
-			//FIXME Return
-			//state = MAIN_MENU;
+			set_state(MAIN_MENU);
 		}
 	}
 
     // Update animation for background
-    shift.tick();
-    
-    //checkbox->update(*events);
+	if (update_animations) { // Removes stutter if we must call multiple updates in a single frame
+		shift.tick();
+	}
 }
 
 void Menu::render_background() {
@@ -112,7 +111,11 @@ void Menu::render_background() {
 }
 
 void Menu::set_state(int state) {
+	update(false); // If we don't update before we change state it thinks that the button is
+	          // forever pressed (or the caller of this function in general)
 	this->state = state;
+	// Update again before we render, or else things may looks strange for a frame
+	update(false);
 }
 
 void Menu::render_sidebar() {

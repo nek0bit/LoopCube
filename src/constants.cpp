@@ -6,7 +6,9 @@
 
 // Texture stuff
 namespace constants {
-	const std::string version_str = "GIT";
+	// I thought it was funny to reference developer "git" versions
+	// by putting a "x0" at the end of them :)
+	const std::string version_str = "v0.2x0";
 	
     const std::string path = "data/img/";
 
@@ -55,7 +57,12 @@ namespace constants {
 
 	const std::string header = "LoopCube";
 	const std::vector<std::string> content = {
-		"Welcome to LoopCube!",
-		"The current version is " + version_str,
+		"Welcome to LoopCube!\n",
+		"The current version is " + version_str + "\n",
+		"[  --  Changelog: v0.1  --  ]",
+		"- Wii U support",
+		"- Mostly optimizations",
+		"- The first version to be fair",
+		"- Playable"
 	};
 }

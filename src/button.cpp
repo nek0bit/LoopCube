@@ -14,7 +14,7 @@ Button::Button(int id,
 Button::~Button() {}
 
 void Button::update(EventHandler& events, int x_offset, int y_offset) {
-    src.h = 16;
+	src.h = 16;
     src.w = 16;
     src.x = 0;
 
