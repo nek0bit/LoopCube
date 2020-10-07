@@ -111,6 +111,25 @@ void EventHandler::listen() {
         #endif
     }
 
+	#ifdef __SWITCH__
+	if (conID == CONTROLLER_HANDHELD) {
+		touchPosition touch;
+		u32 touch_count = hidTouchCount();
+	    for (u32 i = 0; i < touch_count; ++i) {
+			hidTouchRead(&touch, i);
+
+			mouse_x = touch.px;
+			mouse_y = touch.py;
+			if (!mouse_down) mouse_clicked = true;
+			mouse_down = true;
+		}
+		if (touch_count == 0) {
+			mouse_down = false;
+			mouse_clicked = false;
+		}
+	}
+	#endif
+
     while (SDL_PollEvent(&event)) {
         const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
