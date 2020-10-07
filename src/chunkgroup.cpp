@@ -157,8 +157,9 @@ void Chunk_Group::sort_all() {
 
 Chunk* Chunk_Group::get_chunk_at(int x, bool loaded=true) {
     int id = 0;
-    id = ceil((x*constants::block_w) / (8 * constants::block_w));
-
+	if (id >= 0) id = ceil((x*constants::block_w) / (8 * constants::block_w));
+	if (id < 0) id = ((x*constants::block_w) / (8 * constants::block_w));
+	
     std::vector<int>::iterator hovered_chunk = std::find(loaded_chunks.begin(), loaded_chunks.end(), id);
 
     if (hovered_chunk != loaded_chunks.end()) {

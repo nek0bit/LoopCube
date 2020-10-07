@@ -1,7 +1,7 @@
 #include "chunk.hpp"
 
 Chunk::Chunk(unsigned long int seed, int slot, TextureHandler &textures, std::vector<Structure*>& structures)
-    : MAX_WIDTH{8}, MAX_HEIGHT{128}, terrain_gen{seed} {
+    : MAX_WIDTH{8}, MAX_HEIGHT{300}, terrain_gen{seed} {
     this->textures = &textures;
     this->slot = slot;
     generate_chunk(seed, structures);

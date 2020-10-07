@@ -40,10 +40,10 @@ void GravityParticle::update(Chunk_Group &chunks, Camera& camera) {
     obj.y += vel_y;
     
     // Check Y velocity
-    if (check_block_collision(chunks, camera)) {
-        obj.y += vel_y * -1;
-        vel_y = 0;
-    }
+    //if (check_block_collision(chunks, camera)) {
+    //    obj.y += vel_y * -1;
+    //    vel_y = 0;
+    //}
     
     // Update draw position
     src.h = get_height();
