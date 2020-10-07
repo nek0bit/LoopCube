@@ -37,9 +37,8 @@ public:
 
     // Need to be able to view the chunk to do stuff such as collision detection
     std::vector<Block>& get_chunk();
-
+	int get_chunk_x(int x);
 private:
-    int get_chunk_x(int x);
     int get_chunk_max_size();
 
     int MAX_WIDTH;

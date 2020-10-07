@@ -1,12 +1,17 @@
 #include "chunkgroup.hpp"
 
 // I could probably move the renderer and camera out of the class, but it doesn't take much memory so I think it's fine
-Chunk_Group::Chunk_Group(unsigned long seed) {
+Chunk_Group::Chunk_Group(unsigned long seed) : show_shadows{true} {
     this->seed = seed;
+	update_config();
 }
 
 Chunk_Group::~Chunk_Group() {
 
+}
+
+void Chunk_Group::update_config() {
+	show_shadows = constants::config.get_int(CONFIG_SHOW_SHADOWS);
 }
 
 std::vector<Chunk>& Chunk_Group::get_chunks() {
@@ -185,7 +190,7 @@ int Chunk_Group::get_id(Camera& camera, int surrounding) {
 }
 
 void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
-	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) {
+	if (show_shadows) {
 		for (auto &chunk: group) {
 			chunk.render_all_shadows(renderer, camera);
 		}
@@ -196,7 +201,7 @@ void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
 }
 
 void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
-	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) {
+	if (show_shadows) {
 		for (auto &chunk: viewport_chunks) {
 			chunk->render_all_shadows(renderer, camera);
 		}

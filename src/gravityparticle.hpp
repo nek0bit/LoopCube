@@ -3,6 +3,7 @@
 #include <iostream>
 #include "gameobj.hpp"
 #include "chunkgroup.hpp"
+#include "aabb.hpp"
 
 class GravityParticle: public Game_Object {
 public:

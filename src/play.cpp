@@ -1,10 +1,11 @@
 #include "play.hpp"
 
 Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &events, int *WINDOW_W, int *WINDOW_H)
-    : WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, camera{WINDOW_W, WINDOW_H}, fade{60}, background{}, particles{} {
+    : WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, show_particles{false}, textures{textures}, events{events},
+	  camera{WINDOW_W, WINDOW_H}, fade{60}, background{}, particles{} {
     this->renderer = renderer;
-    this->textures = &textures;
-    this->events = &events;
+    this->textures = textures;
+    this->events = events;
 
     camera.set_pos(0, 125);
 
@@ -14,6 +15,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &event
     player = Player(textures);
     chunks = Chunk_Group(seed);
     inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, WINDOW_W, WINDOW_H));
+	update_config();
 }
 
 Play::~Play() {
@@ -22,8 +24,8 @@ Play::~Play() {
 
 void Play::print_mouse_pos() {
     // Just for debugging
-    auto pos = events->get_mouse_pos();
-    std::cout << "x: " << pos[0] << " / y: " << pos[1] << " / down: " << events->get_mouse_down() << std::endl;
+    auto pos = events.get_mouse_pos();
+    std::cout << "x: " << pos[0] << " / y: " << pos[1] << " / down: " << events.get_mouse_down() << std::endl;
 }
 
 void Play::update() {
@@ -38,39 +40,39 @@ void Play::update() {
 
 	// Update all chunks
     chunks.update_all_viewport(camera);
-    chunks.check_area(*textures, player.get_default_x(), structures);
+    chunks.check_area(textures, player.get_default_x(), structures);
 	
     inv->update();
 
 
     for (int i = 0; i < 4; ++i) {
-        if (events->get_state()[i]) {
+        if (events.get_state()[i]) {
             player.direct_player(i, chunks, camera);
         }
     }
 
     // Jump (A)
-    if (events->get_button_state()[4]) {
+    if (events.get_button_state()[4]) {
         player.direct_player(0, chunks, camera);
     }
 
     // Down
-    if (events->get_button_state()[0]) {
+    if (events.get_button_state()[0]) {
         player.direct_player(2, chunks, camera);
     }
 
     // Right
-    if (events->get_button_state()[1]) {
+    if (events.get_button_state()[1]) {
         player.direct_player(1, chunks, camera);
     }
 
     // Left
-    if (events->get_button_state()[2]) {
+    if (events.get_button_state()[2]) {
         player.direct_player(3, chunks, camera);
     }
 
     // Up
-    if (events->get_button_state()[3]) {
+    if (events.get_button_state()[3]) {
         player.direct_player(0, chunks, camera);
     }
     
@@ -107,18 +109,22 @@ void Play::update() {
     // Particles
     dead_particles();
 
-	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) {
+	if (show_particles) {
 		for (auto& particle: particles) {
 			particle.update(chunks, camera);
 		}
 	}
 }
 
+void Play::update_config() {
+	show_particles = constants::config.get_int(CONFIG_SHOW_PARTICLES);
+}
+
 void Play::render() {
 	// Render background elements
-	background.render(renderer, *textures);
+	background.render(renderer, textures);
 	
-	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) {
+	if (show_particles) {
 		for (auto& particle: particles) {
 			particle.render(renderer);
 		}
@@ -138,14 +144,14 @@ void Play::render() {
     if (chunk != nullptr) {
         // Do some math to get the chunk position
         int chunk_pos = std::abs(p1-(chunk->get_slot()*8));
-        if (events->get_mouse_down()) {
+        if (events.get_mouse_down()) {
             const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv.get());
             
             // Check if block found
             if (block != nullptr) {
                 // Generate particles
-				if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) {
-					GravityParticle temp{block->get_texture_id(), *textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
+				if (show_particles) {
+					GravityParticle temp{block->get_texture_id(), textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
 						p1*constants::block_w+(constants::block_w/2), p2*constants::block_h, 8, 6};
 					particles.push_back(temp);
 				}
@@ -166,7 +172,7 @@ void Play::draw_selection(int* p1, int* p2) {
     int b_w = static_cast<int>(constants::block_w);
     int b_h = static_cast<int>(constants::block_h);
 
-    auto mpos = events->get_mouse_pos();
+    auto mpos = events.get_mouse_pos();
 
     const int sel_x = floor((mpos[0] - camera.get_x()) / b_w) * b_w;
     const int sel_y = floor((mpos[1] - camera.get_y()) / b_h) * b_h;

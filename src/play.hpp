@@ -25,7 +25,6 @@
 class Play {
 
 public:
-    Play() {};
     Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &events, int *WINDOW_W, int *WINDOW_H);
     ~Play();
 
@@ -39,11 +38,15 @@ private:
     void draw_selection(int* p1, int* p2);
     void print_mouse_pos();
     void dead_particles();
+	void update_config();
     //void draw_debug_menu();
 
+	// Options
+	bool show_particles;
+	
     SDL_Renderer* renderer;
-    TextureHandler* textures;
-    EventHandler* events;
+    TextureHandler& textures;
+    EventHandler& events;
     Chunk_Group chunks;
 	std::unique_ptr<Inventory> inv;
     Camera camera;

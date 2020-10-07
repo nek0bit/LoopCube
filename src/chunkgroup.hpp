@@ -35,12 +35,16 @@ public:
     std::vector<Chunk*>& get_viewport_chunks();
     bool chunk_already_generated(int id);
 private:
-    void sort_all();
+	void update_config();
+	void sort_all();
     template <class T, class U>
     void insert_sorted(T &data, U value) {
         typename T::iterator it = std::upper_bound(data.begin(), data.end(), value);
         data.insert(it, value);
     }
+
+	// Config
+	bool show_shadows;
     
     std::vector<Chunk> group; // Chunks the game works with in place
     std::vector<int> loaded_chunks; // group ids
