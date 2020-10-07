@@ -23,6 +23,7 @@ namespace constants {
         "hotbar_slot", // 10
         "inventory_menu", // 11
         "leaf", // 12
+		"bg_shine", // 13
     };
 
     const std::vector<BlockInfo> block_info = {

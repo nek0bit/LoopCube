@@ -1,7 +1,7 @@
 #include "play.hpp"
 
 Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &events, int *WINDOW_W, int *WINDOW_H)
-    : WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, camera{WINDOW_W, WINDOW_H}, fade{60}, particles{} {
+    : WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, camera{WINDOW_W, WINDOW_H}, fade{60}, background{}, particles{} {
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;
@@ -27,6 +27,9 @@ void Play::print_mouse_pos() {
 }
 
 void Play::update() {
+	// Update background
+	background.update(camera);
+	
 	// Update camera
     handle_camera();
 
@@ -112,6 +115,9 @@ void Play::update() {
 }
 
 void Play::render() {
+	// Render background elements
+	background.render(renderer, *textures);
+	
 	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) {
 		for (auto& particle: particles) {
 			particle.render(renderer);
