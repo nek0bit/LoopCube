@@ -6,6 +6,12 @@ Checkbox::Checkbox(int id, std::string text, int x, int y, int size, bool checke
 
 Checkbox::~Checkbox() {}
 
+void Checkbox::on_change(void (*function)(int, int)) {
+	if (changed) {
+		(*function)(id, checked ? 1 : 0);
+	}
+}
+
 int Checkbox::get_id() {
 	return id;
 }

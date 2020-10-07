@@ -35,6 +35,9 @@ public:
 	void set_state(int state);
 	int get_pressed();
 private:
+	// Functions
+	static void update_config_elements(int id, int value);
+	
 	int state;
 	// Main Menu Stuff
     std::vector<std::string> option_str;

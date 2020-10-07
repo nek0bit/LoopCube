@@ -4,6 +4,7 @@ UiElement::UiElement() {}
 
 UiElement::~UiElement() {}
 
+void UiElement::on_change(void (*function)(int, int)) {};
 int UiElement::get_id() {}
 bool UiElement::is_changed() {}
 void UiElement::get_value(bool&) {}

@@ -185,18 +185,22 @@ int Chunk_Group::get_id(Camera& camera, int surrounding) {
 }
 
 void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
-    for (auto &chunk: group) {
-        chunk.render_all_shadows(renderer, camera);
-    }
+	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) {
+		for (auto &chunk: group) {
+			chunk.render_all_shadows(renderer, camera);
+		}
+	}
     for (auto &chunk: group) {
         chunk.render_all_blocks(renderer, camera);
     }
 }
 
 void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
-    for (auto &chunk: viewport_chunks) {
-        chunk->render_all_shadows(renderer, camera);
-    }
+	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) {
+		for (auto &chunk: viewport_chunks) {
+			chunk->render_all_shadows(renderer, camera);
+		}
+	}
     for (auto &chunk: viewport_chunks) {
         chunk->render_all_blocks(renderer, camera);
     }

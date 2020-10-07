@@ -6,7 +6,8 @@ enum STATE {
 };
 
 enum CONFIG_ID {
-	CB_RENDER_SHADOWS
+	CB_RENDER_SHADOWS,
+	CB_RENDER_PARTICLES
 };
 
 Menu::Menu(SDL_Renderer* renderer,
@@ -43,10 +44,15 @@ Menu::Menu(SDL_Renderer* renderer,
 	back_button = std::unique_ptr<Button>(new Button(-1, textures, 0, 30, 150));
 	back_button->set_text(renderer, "<- Back");
 
-	// Setup checkbox
-	Checkbox* show_shadows = new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 150, 30);
+	// Setup checkboxes
+	Checkbox* show_shadows = new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 30);
+	Checkbox* show_particles = new Checkbox(CB_RENDER_PARTICLES, "Show Particles", 0, 0, 30);
 	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) show_shadows->check();
+	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) show_particles->check();
+
+	// Insert checkboxes
 	c_elements.push_back(show_shadows);
+	c_elements.push_back(show_particles);
 
 	//************************************************
 	// Setup random block
@@ -74,6 +80,19 @@ Menu::~Menu() {
 	}
 }
 
+void Menu::update_config_elements(int id, int value) {
+	switch(id) {
+	case CB_RENDER_SHADOWS:
+		constants::config.set(CONFIG_SHOW_SHADOWS, value);
+		break;
+	case CB_RENDER_PARTICLES:
+		constants::config.set(CONFIG_SHOW_PARTICLES, value);
+		break;
+	default:
+		break;
+	}
+}
+
 void Menu::update(bool update_animations) {
     // Set background
     SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 255);
@@ -95,13 +114,7 @@ void Menu::update(bool update_animations) {
 			c_elements[i]->set_y(top+(gap*i));
 			c_elements[i]->update(*events);
 
-			if (c_elements[i]->is_changed()) {
-				if (c_elements[i]->get_id() == CB_RENDER_SHADOWS) {
-					bool tmp;
-					c_elements[i]->get_value(tmp);
-					constants::config.set(CONFIG_SHOW_SHADOWS, tmp);
-				}
-			}
+			c_elements[i]->on_change(update_config_elements);
 		}
 
 		if (back_button->get_pressed()) {

@@ -16,6 +16,7 @@ public:
 	Checkbox(int id, std::string text, int x, int y, int size, bool checked=false);
 	~Checkbox();
 
+	void on_change(void (*function)(int, int));
 	int get_id();
 	void get_value(bool& here);
 	bool is_changed();

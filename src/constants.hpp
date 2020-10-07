@@ -17,6 +17,7 @@ enum block_enum {
 
 enum config_enum {
 	CONFIG_SHOW_SHADOWS,
+	CONFIG_SHOW_PARTICLES,
 	CONFIG_LOAD_DISTANCE
 };
 

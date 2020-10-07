@@ -22,6 +22,7 @@ Game::~Game() {
 void Game::game_init() {
 	// Setup config
 	constants::config.set(CONFIG_SHOW_SHADOWS, 1);
+	constants::config.set(CONFIG_SHOW_PARTICLES, 1);
 	constants::config.set(CONFIG_LOAD_DISTANCE, 12);
 	
     textures = TextureHandler(renderer);
