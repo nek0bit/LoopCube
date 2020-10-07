@@ -32,28 +32,45 @@ void Game::game_init() {
 
 // Game related loop stuff
 void Game::update() {
-    if (state == STATE_MAIN_MENU) {
+	switch(state.get()) {
+	case STATE_MAIN_MENU:
         menu->update();
-        if (menu->get_pressed() == 0) {
-            state.set(STATE_PLAYING);
-        }
-        if (menu->get_pressed() == 1) {
-            std::cout << "The about menu is never, ever, ever, coming :)" << std::endl;
-        }
-        if (menu->get_pressed() == 2) {
-            menu->set_state(1);
-        }
-        if (menu->get_pressed() == 3) {
-            is_running = false;
-        }
-    }
-    if (state == STATE_PLAYING) {
+		switch(menu->get_pressed()) {
+		case 0:
+			// Set state, we need to redo this switch case afterwards
+			state.set(STATE_PLAYING);
+			
+			// Go through update one more so we can setup the game
+			update();
+			
+			break;
+		case 1:
+			// NOTE not implemented yet
+			break;
+		case 2:
+			menu->set_state(1);
+			break;
+		case 3:
+			is_running = false;
+			break;
+		default:
+			break;
+		}
+		break;
+	case STATE_PLAYING:
         // Check if the game is nullptr, then create it
         if (game == nullptr) {
             game = new Play(renderer, textures, events, &WINDOW_W, &WINDOW_H);
-        }
-        game->update();
-    }
+			// Let's pre-load a frame so everything can generate and render
+			// This may need to change depending on world generation in the future
+			game->update();
+        } else {
+			game->update();
+		}
+		break;
+	default:
+		break;
+	}
 
     // Update screen size
     SDL_GetWindowSize(window, &WINDOW_W, &WINDOW_H);
@@ -66,13 +83,16 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
     SDL_RenderClear(renderer);
 
-    // game->render();
-    if (state == STATE_MAIN_MENU) {
-        menu->render();
-    }
-    if (state == STATE_PLAYING) {
-        game->render();
-    }
+	switch(state.get()) {
+	case STATE_MAIN_MENU:
+		menu->render();
+		break;
+    case STATE_PLAYING:
+		if (game != nullptr) game->render();
+		break;
+	default:
+		break;
+	}
     
 #if defined(__WIIU__) || defined(__SWITCH__)
     SDL_Rect cursor_hover;
@@ -81,7 +101,7 @@ void Game::render() {
     cursor_hover.w = 10;
     cursor_hover.h = 10;
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
     SDL_RenderFillRect(renderer, &cursor_hover);
 #endif
 
