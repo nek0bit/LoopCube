@@ -40,7 +40,7 @@ void Game::update() {
 			// Set state, we need to redo this switch case afterwards
 			state.set(STATE_PLAYING);
 			
-			// Go through update one more so we can setup the game
+			// Go through switch-case again so we can setup the game
 			update();
 			
 			break;
@@ -85,7 +85,7 @@ void Game::render() {
 
 	switch(state.get()) {
 	case STATE_MAIN_MENU:
-		menu->render();
+		if (menu != nullptr) menu->render();
 		break;
     case STATE_PLAYING:
 		if (game != nullptr) game->render();

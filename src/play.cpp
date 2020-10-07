@@ -33,7 +33,6 @@ void Play::update() {
     // Update player
     player.update(chunks, camera);
 
-	//handle_camera();
 	// Update all chunks
     chunks.update_all_viewport(camera);
     chunks.check_area(*textures, player.get_default_x(), structures);
@@ -104,17 +103,21 @@ void Play::update() {
     
     // Particles
     dead_particles();
-    
-    for (auto& particle: particles) {
-        particle.update(chunks, camera);
-    }
+
+	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) {
+		for (auto& particle: particles) {
+			particle.update(chunks, camera);
+		}
+	}
 }
 
 void Play::render() {
-    for (auto& particle: particles) {
-        particle.render(renderer);
-    }
-
+	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) {
+		for (auto& particle: particles) {
+			particle.render(renderer);
+		}
+	}
+	
     chunks.render_all_viewport(renderer, camera);
 
     SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
@@ -135,9 +138,11 @@ void Play::render() {
             // Check if block found
             if (block != nullptr) {
                 // Generate particles
-                GravityParticle temp{block->get_texture_id(), *textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
-                    p1*constants::block_w+(constants::block_w/2), p2*constants::block_h, 8, 6};
-                particles.push_back(temp);
+				if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) {
+					GravityParticle temp{block->get_texture_id(), *textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
+						p1*constants::block_w+(constants::block_w/2), p2*constants::block_h, 8, 6};
+					particles.push_back(temp);
+				}
             }
         }
     }
