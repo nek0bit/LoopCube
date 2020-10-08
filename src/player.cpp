@@ -18,7 +18,7 @@ bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
     for (auto *&chunk_it: chunkgroup) {
 		// See if player is within this chunk, if so, move on and handle collision
 		// If not, it's pointless to check the chunk, continue
-		if (chunk_it->get_slot() == c_behind->get_slot()
+		if (chunk_it->get_slot() == c_behind->get_slot() &&
 			chunk_it->get_slot() == c_front->get_slot()) {
 
 			// Store chunk as reference for further usage
@@ -37,8 +37,9 @@ bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
 
 void Player::jump(Chunk_Group &chunks, Camera& camera) {
     obj.y += 3;
-    if (check_block_collision(chunks, camera)) {
+    if (on_ground && check_block_collision(chunks, camera)) {
         vel_y = -14;
+		on_ground = false;
     }
     obj.y -= 3;
 }
@@ -46,7 +47,6 @@ void Player::jump(Chunk_Group &chunks, Camera& camera) {
 void Player::direct_player(int direction, Chunk_Group &chunks, Camera& camera) {
     switch (direction) {
         case 0: // UP
-            // TODO Optimize this, game checks for jumps repeatedly when held
             jump(chunks, camera);
             break;
         case 1: // RIGHT
@@ -77,8 +77,6 @@ void Player::update(Chunk_Group &chunks, Camera& camera) {
     vel_x *= 0.75;
     obj.x += vel_x;
 
-
-
     // Check X velocity
     if (check_block_collision(chunks, camera)) {
         if (vel_x == 0) {
@@ -94,6 +92,7 @@ void Player::update(Chunk_Group &chunks, Camera& camera) {
         }
         obj.x += vel_x * -1;
         vel_x = 0;
+		on_ground = true;
     }
 
     vel_y += .7;
@@ -103,6 +102,7 @@ void Player::update(Chunk_Group &chunks, Camera& camera) {
     if (check_block_collision(chunks, camera)) {
         obj.y += vel_y * -1;
         vel_y = 0;
+		on_ground = true;
     }
 
 
