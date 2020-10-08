@@ -24,6 +24,7 @@ void Game::game_init() {
 	constants::config.set(CONFIG_SHOW_SHADOWS, 1);
 	constants::config.set(CONFIG_SHOW_PARTICLES, 1);
 	constants::config.set(CONFIG_LOAD_DISTANCE, 12);
+	constants::config.set(CONFIG_SHOW_CHUNK_DEBUG, 0);
 	
     textures = TextureHandler(renderer);
     //game = new Play(renderer, textures, events, WINDOW_W, WINDOW_H);

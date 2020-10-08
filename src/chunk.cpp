@@ -137,7 +137,6 @@ void Chunk::render_info(SDL_Renderer* renderer, Camera& camera) {
 		// Note: chunk_text was nullptr before of course, so this is fine
 		std::string tmp = std::string{"Chunk "} + std::to_string(get_slot());
 		chunk_text = std::shared_ptr<Text>(new Text(renderer, tmp, color, constants::header_font));
-		std::cout << "Created chunk text " << get_slot() << std::endl;
 	} else {
 		chunk_text->draw(pos+20+camera.get_x(), 70);
 	}

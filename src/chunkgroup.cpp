@@ -12,6 +12,7 @@ Chunk_Group::~Chunk_Group() {
 
 void Chunk_Group::update_config() {
 	show_shadows = constants::config.get_int(CONFIG_SHOW_SHADOWS);
+	render_chunk_info = constants::config.get_int(CONFIG_SHOW_CHUNK_DEBUG);
 }
 
 std::vector<Chunk>& Chunk_Group::get_chunks() {
@@ -69,9 +70,7 @@ void Chunk_Group::check_area(TextureHandler& textures, int x, std::vector<Struct
     const int load_distance = constants::load_distance;
     
     // Takes x, and returns the current chunk id the player is in
-    int id = 0;
-    // TODO 8 is a hardcoded value and it shouldn't, actually should be size of chunks (incase I change it in the future)
-    id = ceil((x) / (8 * constants::block_w));
+    int id = ceil(x / (constants::chunk_width * constants::block_w));
 
     // Unload old chunks
     // Warning: This code below is very fragile and can easily break :P
@@ -155,17 +154,15 @@ void Chunk_Group::sort_all() {
     std::sort(past_chunks.begin(), past_chunks.end());
 }
 
-Chunk* Chunk_Group::get_chunk_at(int x, bool loaded=true) {
-    int id;
+Chunk* Chunk_Group::get_chunk_at(double x, bool loaded=true) {
+    double id_double;
 	if (x >= 0) {
-		id = x / (constants::chunk_width * constants::block_w);
+		id_double = x / (constants::chunk_width * constants::block_w);
 	} else {
-		id = floor(x / (constants::chunk_width * constants::block_w));
+		id_double = floor(x / (constants::chunk_width * constants::block_w));
 	}
-	
 
-	std::cout << x << " - " << id << std::endl;
-	
+	int id = id_double;
 	
     std::vector<int>::iterator hovered_chunk = std::find(loaded_chunks.begin(), loaded_chunks.end(), id);
 
@@ -207,8 +204,10 @@ void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
         chunk.render_all_blocks(renderer, camera);
     }
 
-	for (auto &chunk: group) {
-		if (render_chunk_info) chunk.render_info(renderer, camera);
+	if (render_chunk_info) {
+		for (auto &chunk: group) {
+			chunk.render_info(renderer, camera);
+		}
 	}
 }
 
@@ -221,8 +220,10 @@ void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
     for (auto &chunk: viewport_chunks) {
         chunk->render_all_blocks(renderer, camera);
     }
-	for (auto &chunk: viewport_chunks) { 
-		if (render_chunk_info) chunk->render_info(renderer, camera);
+	if (render_chunk_info) {
+		for (auto &chunk: viewport_chunks) { 
+			chunk->render_info(renderer, camera);
+		}
 	}
 }
 

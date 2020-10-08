@@ -47,7 +47,7 @@ namespace constants {
     const double block_w = 36;
     const double block_h = 36;
     
-    const int load_viewport = 2;
+    const int load_viewport = 16;
     
     const int chunk_width = 8;
 

@@ -11,27 +11,26 @@ Player::~Player() {
 bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
     std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 
-	// I don't know why I have to do this but it works...
-	//Chunk* c = chunks.get_chunk_at((obj.x/constants::block_w)-8, true); // Chunk in place
-	//Chunk* c2 = chunks.get_chunk_at(((obj.x+obj.w)/constants::block_w)-8, true); // Chunk in front
-	//Chunk* c3 = chunks.get_chunk_at(((obj.x-5-obj.w)/constants::block_w)-8, true); // Chunk in behind
-    
+	Chunk* c_behind = chunks.get_chunk_at(obj.x, true);
+	Chunk* c_front = chunks.get_chunk_at(obj.x+obj.w, true);
 
 	// Loop through all chunks
     for (auto *&chunk_it: chunkgroup) {
+		// See if player is within this chunk, if so, move on and handle collision
+		// If not, it's pointless to check the chunk, continue
+		if (chunk_it->get_slot() == c_behind->get_slot()
+			chunk_it->get_slot() == c_front->get_slot()) {
 
-        // Then grab the chunk we want
-        std::vector<Block>& chunk = chunk_it->get_chunk();
-
-		//if (chunk_it->get_slot() == c->get_slot() || chunk_it->get_slot() == c2->get_slot() || chunk_it->get_slot() == c3->get_slot()) {
-			// Loop through blocks in the chunk
+			// Store chunk as reference for further usage
+			std::vector<Block>& chunk = chunk_it->get_chunk();
+			// Loop through blocks in chunk
 			for (auto &block: chunk) {
 				auto blockinfo = block.get_blockinfo();
 				while (is_colliding(block, camera) && blockinfo->get_no_collision() != true) {
 					return true;
 				}
 			}
-		//}
+		}
     }
     return false;
 }

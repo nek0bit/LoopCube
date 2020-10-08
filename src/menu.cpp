@@ -7,7 +7,8 @@ enum STATE {
 
 enum CONFIG_ID {
 	CB_RENDER_SHADOWS,
-	CB_RENDER_PARTICLES
+	CB_RENDER_PARTICLES,
+	CB_SHOW_CHUNK_DEBUG,
 };
 
 Menu::Menu(SDL_Renderer* renderer,
@@ -47,12 +48,15 @@ Menu::Menu(SDL_Renderer* renderer,
 	// Setup checkboxes
 	Checkbox* show_shadows = new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 30);
 	Checkbox* show_particles = new Checkbox(CB_RENDER_PARTICLES, "Show Particles", 0, 0, 30);
+	Checkbox* show_info = new Checkbox(CB_SHOW_CHUNK_DEBUG, "Show Chunk Debug Info", 0, 0, 30);
 	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) show_shadows->check();
 	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) show_particles->check();
+	if (constants::config.get_int(CONFIG_SHOW_CHUNK_DEBUG) == 1) show_info->check();
 
 	// Insert checkboxes
 	c_elements.push_back(show_shadows);
 	c_elements.push_back(show_particles);
+	c_elements.push_back(show_info);
 
 	//************************************************
 	// Setup random block
@@ -87,6 +91,9 @@ void Menu::update_config_elements(int id, int value) {
 		break;
 	case CB_RENDER_PARTICLES:
 		constants::config.set(CONFIG_SHOW_PARTICLES, value);
+		break;
+	case CB_SHOW_CHUNK_DEBUG:
+		constants::config.set(CONFIG_SHOW_CHUNK_DEBUG, value);
 		break;
 	default:
 		break;

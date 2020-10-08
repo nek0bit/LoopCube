@@ -149,7 +149,6 @@ void Play::render() {
             
             // Check if block found
             if (block != nullptr) {
-				std::cout << chunk->get_slot() << std::endl;
                 // Generate particles
 				if (show_particles) {
 					GravityParticle temp{block->get_texture_id(), textures, 50, rand() % 2 == 1 ? -2 : 2, -3,

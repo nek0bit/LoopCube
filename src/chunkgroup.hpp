@@ -29,7 +29,7 @@ public:
 
     int get_id(Camera& camera, int surrounding = 8);
 
-    Chunk* get_chunk_at(int x, bool loaded);
+    Chunk* get_chunk_at(double x, bool loaded);
 
     std::vector<Chunk>& get_chunks();
     std::vector<Chunk*>& get_viewport_chunks();
