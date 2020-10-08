@@ -18,7 +18,7 @@ bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
     for (auto *&chunk_it: chunkgroup) {
 		// See if player is within this chunk, if so, move on and handle collision
 		// If not, it's pointless to check the chunk, continue
-		if (chunk_it->get_slot() == c_behind->get_slot() &&
+		if (chunk_it->get_slot() == c_behind->get_slot() ||
 			chunk_it->get_slot() == c_front->get_slot()) {
 
 			// Store chunk as reference for further usage
