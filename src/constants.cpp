@@ -4,7 +4,7 @@
 namespace constants {
 	// I thought it was funny to reference developer "git" versions
 	// by putting a "x0" at the end of them :)
-	const std::string version_str = "v0.2x0";
+	const std::string version_str = "v0.2";
 	
     const std::string path = "data/img/";
 
@@ -24,6 +24,9 @@ namespace constants {
         "inventory_menu", // 11
         "leaf", // 12
 		"bg_shine", // 13
+		"bg_cloud_loop", // 14
+		"bg_hills", // 15
+		"bg_hills_hq", // 16
     };
 
     const std::vector<BlockInfo> block_info = {
@@ -44,7 +47,7 @@ namespace constants {
     const double block_w = 36;
     const double block_h = 36;
     
-    const int load_viewport = 6;
+    const int load_viewport = 16;
     
     const int chunk_width = 8;
 
@@ -58,11 +61,17 @@ namespace constants {
 	const std::vector<std::string> content = {
 		"Welcome to LoopCube!\n",
 		"The current version is " + version_str + "\n",
-		"[  --  Changelog: v0.1  --  ]",
-		"- Wii U support",
-		"- Mostly optimizations",
-		"- The first version to be fair",
-		"- Playable"
+		"<><><> Changelog: v0.2 <><><>",
+		"- Beautiful Parallax Backgronds",
+		"- Chunk size increased, performs",
+		"   much better then before",  
+		"- Some code restructuring",
+		"- Switch Build",
+		"- Particles",
+		"- Menu progress",
+		"- Config options",
+		"- Inventory",
+		"- Lots of bugs fixed",
 	};
 
 	Config config;
