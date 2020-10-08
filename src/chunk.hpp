@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <random>
 #include <time.h>
+#include <memory>
 #include <SDL2/SDL.h>
 
 #include "constants.hpp"
@@ -16,6 +17,7 @@
 #include "texturehandler.hpp"
 #include "structure.hpp"
 #include "tree.hpp"
+#include "text.hpp"
 
 class Chunk {
 
@@ -27,6 +29,7 @@ public:
     bool operator>(const Chunk &c) const;
 
     void update_all(Camera& camera);
+	void render_info(SDL_Renderer* renderer, Camera& camera);
     void render_all_shadows(SDL_Renderer* renderer, Camera& camera);
     void render_all_blocks(SDL_Renderer* renderer, Camera& camera);
     void place_block(int id, int x, int y);
@@ -40,7 +43,7 @@ public:
 	int get_chunk_x(int x);
 private:
     int get_chunk_max_size();
-
+	
     int MAX_WIDTH;
     int MAX_HEIGHT;
     std::vector<Block> chunk;
@@ -48,6 +51,7 @@ private:
     PerlinNoise terrain_gen;
 
     TextureHandler* textures;
+	std::shared_ptr<Text> chunk_text;
 };
 
 #endif // CHUNK_HPP

@@ -1,10 +1,11 @@
 #include "chunk.hpp"
 
 Chunk::Chunk(unsigned long int seed, int slot, TextureHandler &textures, std::vector<Structure*>& structures)
-    : MAX_WIDTH{8}, MAX_HEIGHT{300}, terrain_gen{seed} {
+    : MAX_WIDTH{8}, MAX_HEIGHT{300}, terrain_gen{seed}, chunk_text{nullptr} {
     this->textures = &textures;
     this->slot = slot;
     generate_chunk(seed, structures);
+	
 }
 
 Chunk::~Chunk() {
@@ -42,7 +43,7 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
     
     for (auto i = 0; i < std::abs(slot); ++i) dist(rng);
 
-    for (int x = 1; x < MAX_WIDTH+1; ++x) {
+    for (int x = 0; x < MAX_WIDTH; ++x) {
         double d_x = (double)x/(double)MAX_WIDTH;
 
         // Generate world
@@ -53,7 +54,7 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
             double d_y = (double)y/(double)MAX_HEIGHT;
             if (y == 0) {
                 place_block(BLOCK_GRASS, x, y+temp+offset);
-                if (dist(rng) == 0) structures.push_back(new Tree(get_chunk_x(x)-8, y+temp+offset));
+                //if (dist(rng) == 0) structures.push_back(new Tree(get_chunk_x(x)-8, y+temp+offset));
             } else if (y >= 1 && y <= 3) {
                 place_block(BLOCK_DIRT, x, y+temp+offset);
             } else {
@@ -64,7 +65,6 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
             }
         }
     }
-
 }
 
 const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
@@ -127,4 +127,23 @@ void Chunk::render_all_blocks(SDL_Renderer* renderer, Camera& camera) {
             chunk[j].render(renderer);
         }
     }
+}
+
+void Chunk::render_info(SDL_Renderer* renderer, Camera& camera) {
+	int pos = get_chunk_x(0)*constants::block_w;
+	if (chunk_text == nullptr) {
+		SDL_Color color;
+		color.r = 100; color.g = 100; color.b = 100; color.a = 255;
+		// Note: chunk_text was nullptr before of course, so this is fine
+		std::string tmp = std::string{"Chunk "} + std::to_string(get_slot());
+		chunk_text = std::shared_ptr<Text>(new Text(renderer, tmp, color, constants::header_font));
+		std::cout << "Created chunk text " << get_slot() << std::endl;
+	} else {
+		chunk_text->draw(pos+20+camera.get_x(), 70);
+	}
+
+	// Draw gap
+	SDL_Rect block_line{pos+camera.get_x(), 0, 2, camera.get_height()};
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderFillRect(renderer, &block_line);
 }

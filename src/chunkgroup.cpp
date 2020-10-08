@@ -1,7 +1,7 @@
 #include "chunkgroup.hpp"
 
 // I could probably move the renderer and camera out of the class, but it doesn't take much memory so I think it's fine
-Chunk_Group::Chunk_Group(unsigned long seed) : show_shadows{true} {
+Chunk_Group::Chunk_Group(unsigned long seed) : render_chunk_info{true}, show_shadows{true} {
     this->seed = seed;
 	update_config();
 }
@@ -37,9 +37,9 @@ void Chunk_Group::generate_chunk(TextureHandler& textures, int id, std::vector<S
     bool check = chunk_already_generated(id);
     // Generate the chunk if it hasn't been generated before
     if (std::find(loaded_chunks.begin(), loaded_chunks.end(), id) == loaded_chunks.end() && !check) {
-        Chunk temp_chunk(seed, id, textures, structure);
+        //Chunk temp_chunk(seed, id, textures, structure);
         
-        insert_sorted(group, temp_chunk);
+        insert_sorted(group, Chunk{seed, id, textures, structure});
         insert_sorted(loaded_chunks, id);
         
         update_viewport();
@@ -156,9 +156,16 @@ void Chunk_Group::sort_all() {
 }
 
 Chunk* Chunk_Group::get_chunk_at(int x, bool loaded=true) {
-    int id = 0;
-	if (id >= 0) id = ceil((x*constants::block_w) / (8 * constants::block_w));
-	if (id < 0) id = ((x*constants::block_w) / (8 * constants::block_w));
+    int id;
+	if (x >= 0) {
+		id = x / (constants::chunk_width * constants::block_w);
+	} else {
+		id = floor(x / (constants::chunk_width * constants::block_w));
+	}
+	
+
+	std::cout << x << " - " << id << std::endl;
+	
 	
     std::vector<int>::iterator hovered_chunk = std::find(loaded_chunks.begin(), loaded_chunks.end(), id);
 
@@ -199,6 +206,10 @@ void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
     for (auto &chunk: group) {
         chunk.render_all_blocks(renderer, camera);
     }
+
+	for (auto &chunk: group) {
+		if (render_chunk_info) chunk.render_info(renderer, camera);
+	}
 }
 
 void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
@@ -210,6 +221,9 @@ void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
     for (auto &chunk: viewport_chunks) {
         chunk->render_all_blocks(renderer, camera);
     }
+	for (auto &chunk: viewport_chunks) { 
+		if (render_chunk_info) chunk->render_info(renderer, camera);
+	}
 }
 
 void Chunk_Group::update_all(Camera& camera) {

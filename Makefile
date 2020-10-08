@@ -1,4 +1,4 @@
-CXXFLAGS=-g -Wall -Wextra -pipe -pedantic -O2 -ffast-math
+CXXFLAGS=-g -Wall -Wextra -pipe -pedantic
 LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_ttf
 CXX=g++
 TARGET=bin/LoopCube

@@ -45,7 +45,8 @@ private:
 
 	// Config
 	bool show_shadows;
-    
+	bool render_chunk_info;
+	
     std::vector<Chunk> group; // Chunks the game works with in place
     std::vector<int> loaded_chunks; // group ids
     std::vector<Chunk> group_past; // Unloaded chunks, gets moved into group when loaded again
