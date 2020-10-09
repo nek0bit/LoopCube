@@ -1,7 +1,8 @@
 #include "player.hpp"
 
 Player::Player(TextureHandler &textures)
-    : Game_Object{4, textures, 0, 0, 30, 58}, vel_x{0}, vel_y{0}, vel_x_speed{2} {
+    : Game_Object{4, textures, 0, 0, 30, 58}, vel_x{0}, vel_y{0}, vel_x_speed{1.8}, on_ground{false}, jumping{false} {
+	
 }
 
 Player::~Player() {
@@ -35,13 +36,14 @@ bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
     return false;
 }
 
-void Player::jump(Chunk_Group &chunks, Camera& camera) {
-    obj.y += 3;
-    if (on_ground && check_block_collision(chunks, camera)) {
-        vel_y = -14;
+void Player::jump(Chunk_Group &chunks, Camera& camera) {	
+	obj.y += 1;
+    if (on_ground) {
+        vel_y = -12;
 		on_ground = false;
     }
-    obj.y -= 3;
+    obj.y -= 1;
+	jumping = true;
 }
 
 void Player::direct_player(int direction, Chunk_Group &chunks, Camera& camera) {
@@ -50,13 +52,15 @@ void Player::direct_player(int direction, Chunk_Group &chunks, Camera& camera) {
             jump(chunks, camera);
             break;
         case 1: // RIGHT
-            vel_x += vel_x_speed;
+            if (!on_ground) vel_x += vel_x_speed/12;
+			else vel_x += vel_x_speed;
             last_pos = 1;
             break;
         case 2: // DOWN
             break;
         case 3: // LEFT
-            vel_x -= vel_x_speed;
+            if (!on_ground) vel_x -= vel_x_speed/12;
+			else vel_x -= vel_x_speed;
             last_pos = 3;
             break;
         default:
@@ -74,8 +78,15 @@ double Player::get_vel_y() const {
 
 void Player::update(Chunk_Group &chunks, Camera& camera) {
     // TODO move engine code into it's own class for reusability
-    vel_x *= 0.75;
-    obj.x += vel_x;
+	
+	if (on_ground) vel_x *= 0.78;
+
+	// Reset back
+    if (vel_x > 6) vel_x = 6;
+	if (vel_x < -6) vel_x = -6;
+	
+	obj.x += vel_x;
+
 
     // Check X velocity
     if (check_block_collision(chunks, camera)) {
@@ -95,7 +106,7 @@ void Player::update(Chunk_Group &chunks, Camera& camera) {
 		on_ground = true;
     }
 
-    vel_y += .7;
+    vel_y += .5;
     obj.y += vel_y;
 
     // Check Y velocity
@@ -103,8 +114,18 @@ void Player::update(Chunk_Group &chunks, Camera& camera) {
         obj.y += vel_y * -1;
         vel_y = 0;
 		on_ground = true;
-    }
+    } else {
+		on_ground = false;
+	}
 
+	// Check if jump released
+	if (!on_ground && !jumping) {
+		if (vel_y < -5) {
+			vel_y += 1.0;
+		}
+	}
+
+	jumping = false;
 
     // Update draw position
     src.h = get_height();
