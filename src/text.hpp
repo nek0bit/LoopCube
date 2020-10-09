@@ -14,6 +14,8 @@ public:
 		int wrap_width = -1);
     ~Text();
 
+	int get_width();
+	int get_height();
     void draw(int x, int y);
     void set_text(std::string text);
 private:

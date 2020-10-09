@@ -36,6 +36,16 @@ void Text::set_text(std::string text) {
 	messageText = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
+int Text::get_width() {
+	if (surface != nullptr) return surface->w;
+	return 0;
+}
+
+int Text::get_height() {
+	if (surface != nullptr) return surface->h;
+	return 0;
+}
+
 void Text::draw(int x, int y) {
     int w = 0, h = 0;
 	if (surface != nullptr) {

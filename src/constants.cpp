@@ -16,8 +16,8 @@ namespace constants {
         "wood", // 3
         "player", // 4
         "menu_solid", // 5
-        "menu_rounded_left", // 6
-        "menu_rounded_right", // 7
+        "menu_solid_left", // 6
+        "menu_solid_right", // 7
         "title_1", // 8
         "title_2", // 9
         "hotbar_slot", // 10

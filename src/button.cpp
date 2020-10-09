@@ -67,7 +67,7 @@ void Button::render(SDL_Renderer* renderer) {
     SDL_RenderCopy(renderer, textures.get_texture(5), &src, &dest);
     SDL_RenderCopy(renderer, textures.get_texture(7), &src, &end);
     if (button_text != nullptr) {
-        button_text->draw(dest.x, dest.y);
+        button_text->draw(x+(width/2)-(button_text->get_width()/2)-2, dest.y+(height/2)-(button_text->get_height()/2)-2);
     }
 }
 
