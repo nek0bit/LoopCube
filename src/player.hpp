@@ -26,8 +26,12 @@ private:
     double vel_y;
     double vel_x_speed;
     int last_pos;
+
+	// For jumping
 	bool on_ground;
 	bool jumping;
+	bool can_jump;
+	bool jump_enabled;
 };
 
 #endif // PLAYER_HPP

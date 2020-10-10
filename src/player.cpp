@@ -1,7 +1,7 @@
 #include "player.hpp"
 
 Player::Player(TextureHandler &textures)
-    : Game_Object{4, textures, 0, 0, 30, 58}, vel_x{0}, vel_y{0}, vel_x_speed{1.8}, on_ground{false}, jumping{false} {
+    : Game_Object{4, textures, 0, 0, 30, 58}, vel_x{0}, vel_y{0}, vel_x_speed{1.8}, on_ground{false}, jumping{false}, can_jump{true}, jump_enabled{true} {
 	
 }
 
@@ -38,12 +38,13 @@ bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
 
 void Player::jump(Chunk_Group &chunks, Camera& camera) {	
 	obj.y += 1;
-    if (on_ground) {
+    if (on_ground && jump_enabled) {
         vel_y = -12;
 		on_ground = false;
     }
     obj.y -= 1;
 	jumping = true;
+	can_jump = false;
 }
 
 void Player::direct_player(int direction, Chunk_Group &chunks, Camera& camera) {
@@ -118,6 +119,15 @@ void Player::update(Chunk_Group &chunks, Camera& camera) {
 		on_ground = false;
 	}
 
+	if (!can_jump && on_ground) {
+		jump_enabled = false;
+	}
+
+	if (can_jump && on_ground) {
+	    jump_enabled = true;
+	}
+
+
 	// Check if jump released
 	if (!on_ground && !jumping) {
 		if (vel_y < -5) {
@@ -126,6 +136,7 @@ void Player::update(Chunk_Group &chunks, Camera& camera) {
 	}
 
 	jumping = false;
+	can_jump = true;
 
     // Update draw position
     src.h = get_height();
