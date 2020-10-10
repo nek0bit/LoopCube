@@ -28,9 +28,9 @@ public:
     virtual double get_width() const;
     virtual double get_height() const;
 
-    virtual const Position* get_obj() const;
+    virtual const Position& get_obj() const;
 
-    bool is_colliding(const Game_Object &obj2, Camera& camera);
+    bool is_colliding(const Game_Object &obj2);
 protected:
     int texture_id;
 

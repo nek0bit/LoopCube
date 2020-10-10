@@ -68,24 +68,15 @@ void Game_Object::render(SDL_Renderer* renderer) {
     SDL_RenderCopy(renderer, textures->get_texture(texture_id), &src, &dest);
 }
 
-const Position* Game_Object::get_obj() const {
-    return &obj;
+const Position& Game_Object::get_obj() const {
+    return obj;
 }
 
-bool Game_Object::is_colliding(const Game_Object &obj2, Camera& camera) {
+bool Game_Object::is_colliding(const Game_Object &obj2) {
     // We are going to get the prefered positions instead of using their object
     // For example, the block class uses tiles, so when get_x is called, it returns the x in its obj and multiplies it by the width
-    Position r1, r2;
-    r1.x = get_x(camera);
-    r1.y = get_y(camera);
-    r1.w = get_width();
-    r1.h = get_height();
-
-    r2.x = obj2.get_x(camera);
-    r2.y = obj2.get_y(camera);
-    r2.w = obj2.get_width();
-    r2.h = obj2.get_height();
-
+    Position r1{get_default_x(), get_default_y(), get_width(), get_height()},
+		r2{obj2.get_default_x(), obj2.get_default_y(), obj2.get_width(), obj2.get_height()};
 
     if (r1.x < r2.x + r2.w &&
         r1.x + r1.w > r2.x &&

@@ -8,7 +8,7 @@ GravityParticle::GravityParticle(int texture_id, TextureHandler& textures, int t
 
 GravityParticle::~GravityParticle() {}
 
-bool GravityParticle::check_block_collision(Chunk_Group& chunks, Camera& camera) {
+bool GravityParticle::check_block_collision(Chunk_Group& chunks) {
     std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 
     // Loop through all chunks
@@ -19,7 +19,7 @@ bool GravityParticle::check_block_collision(Chunk_Group& chunks, Camera& camera)
 
         // Loop through blocks in the chunk
         for (auto &block: chunk) {
-            while (is_colliding(block, camera)) {
+            while (is_colliding(block)) {
                 return true;
             }
         }

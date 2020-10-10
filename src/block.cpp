@@ -15,6 +15,14 @@ Block::Block(int id, TextureHandler &textures, int x, int y)
 
 Block::~Block() {}
 
+double Block::get_default_x() const {
+	return obj.x*obj.w;
+}
+
+double Block::get_default_y() const {
+	return obj.y*obj.h;
+}
+
 double Block::get_x(Camera& camera) const {
     return obj.x*obj.w + (camera.get_x());
 }

@@ -47,33 +47,33 @@ void Play::update() {
 
     for (int i = 0; i < 4; ++i) {
         if (events.get_state()[i]) {
-            player.direct_player(i, chunks, camera);
+            player.direct_player(i, chunks);
         }
     }
 
     // Jump (A)
     if (events.get_button_state()[4]) {
-        player.direct_player(0, chunks, camera);
+        player.direct_player(0, chunks);
     }
 
     // Down
     if (events.get_button_state()[0]) {
-        player.direct_player(2, chunks, camera);
+        player.direct_player(2, chunks);
     }
 
     // Right
     if (events.get_button_state()[1]) {
-        player.direct_player(1, chunks, camera);
+        player.direct_player(1, chunks);
     }
 
     // Left
     if (events.get_button_state()[2]) {
-        player.direct_player(3, chunks, camera);
+        player.direct_player(3, chunks);
     }
 
     // Up
     if (events.get_button_state()[3]) {
-        player.direct_player(0, chunks, camera);
+        player.direct_player(0, chunks);
     }
     
     

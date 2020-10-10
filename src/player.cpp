@@ -9,7 +9,8 @@ Player::~Player() {
 
 }
 
-bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
+// TODO Check if certain block is higher or lower then player
+bool Player::check_block_collision(Chunk_Group& chunks) {
     std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 
 	Chunk* c_behind = chunks.get_chunk_at(obj.x, true);
@@ -27,7 +28,7 @@ bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
 			// Loop through blocks in chunk
 			for (auto &block: chunk) {
 				auto blockinfo = block.get_blockinfo();
-				while (is_colliding(block, camera) && blockinfo->get_no_collision() != true) {
+				while (is_colliding(block) && blockinfo->get_no_collision() != true) {
 					return true;
 				}
 			}
@@ -36,9 +37,9 @@ bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
     return false;
 }
 
-void Player::jump(Chunk_Group &chunks, Camera& camera) {	
+void Player::jump(Chunk_Group &chunks) {	
 	obj.y += 1;
-    if (on_ground && jump_enabled && check_block_collision(chunks, camera)) {
+    if (on_ground && jump_enabled && check_block_collision(chunks)) {
         vel_y = -12;
 		on_ground = false;
     }
@@ -47,10 +48,10 @@ void Player::jump(Chunk_Group &chunks, Camera& camera) {
 	can_jump = false;
 }
 
-void Player::direct_player(int direction, Chunk_Group &chunks, Camera& camera) {
+void Player::direct_player(int direction, Chunk_Group &chunks) {
     switch (direction) {
         case 0: // UP
-            jump(chunks, camera);
+            jump(chunks);
             break;
         case 1: // RIGHT
             if (!on_ground) vel_x += vel_x_speed/6;
@@ -90,7 +91,7 @@ void Player::update(Chunk_Group &chunks, Camera& camera) {
 
 
     // Check X velocity
-    if (check_block_collision(chunks, camera)) {
+    if (check_block_collision(chunks)) {
         if (vel_x == 0) {
             // If player happens to get stuck in the wall then push them out
             if (last_pos == 1) {
@@ -111,7 +112,7 @@ void Player::update(Chunk_Group &chunks, Camera& camera) {
     obj.y += vel_y;
 
     // Check Y velocity
-    if (check_block_collision(chunks, camera)) {
+    if (check_block_collision(chunks)) {
         obj.y += vel_y * -1;
         vel_y = 0;
 		on_ground = true;
