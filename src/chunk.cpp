@@ -69,7 +69,7 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
 
 const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
     for (auto i = chunk.begin(); i < chunk.end(); ++i) {
-        if (get_chunk_x(x) == i->get_default_x() && y == i->get_default_y()) {
+        if (get_chunk_x(x) == i->get_obj().x && y == i->get_obj().y) {
 
             // Get blockinfo
             const BlockInfo* info = i->get_blockinfo();
