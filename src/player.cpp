@@ -38,7 +38,7 @@ bool Player::check_block_collision(Chunk_Group& chunks, Camera& camera) {
 
 void Player::jump(Chunk_Group &chunks, Camera& camera) {	
 	obj.y += 1;
-    if (on_ground && jump_enabled) {
+    if (on_ground && jump_enabled && check_block_collision(chunks, camera)) {
         vel_y = -12;
 		on_ground = false;
     }
@@ -53,14 +53,14 @@ void Player::direct_player(int direction, Chunk_Group &chunks, Camera& camera) {
             jump(chunks, camera);
             break;
         case 1: // RIGHT
-            if (!on_ground) vel_x += vel_x_speed/12;
+            if (!on_ground) vel_x += vel_x_speed/6;
 			else vel_x += vel_x_speed;
             last_pos = 1;
             break;
         case 2: // DOWN
             break;
         case 3: // LEFT
-            if (!on_ground) vel_x -= vel_x_speed/12;
+            if (!on_ground) vel_x -= vel_x_speed/6;
 			else vel_x -= vel_x_speed;
             last_pos = 3;
             break;
