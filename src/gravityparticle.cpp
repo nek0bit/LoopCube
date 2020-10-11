@@ -19,7 +19,7 @@ bool GravityParticle::check_block_collision(Chunk_Group& chunks) {
 
         // Loop through blocks in the chunk
         for (auto &block: chunk) {
-            while (is_colliding(block)) {
+            while (is_colliding(block) == true) {
                 return true;
             }
         }
