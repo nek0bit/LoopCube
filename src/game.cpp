@@ -188,7 +188,7 @@ void Game::free() {
 
 		// Cleanup fonts
 		std::vector<TTF_Font*> fonts = {constants::button_font, constants::item_font, constants::header_font,
-			constants::paragraph_font, constants::options_font};
+			constants::paragraph_font, constants::option_font};
 
 		for(auto i: fonts) {
 			TTF_CloseFont(i);
