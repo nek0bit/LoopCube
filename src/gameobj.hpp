@@ -7,6 +7,7 @@
 #include "constants.hpp"
 #include "position.hpp"
 #include "camera.hpp"
+#include "collisioninfo.hpp"
 
 class Game_Object {
 
@@ -30,7 +31,7 @@ public:
 
     virtual const Position& get_obj() const;
 
-    bool is_colliding(const Game_Object &obj2);
+    CollisionInfo is_colliding(const Game_Object &obj2);
 protected:
     int texture_id;
 

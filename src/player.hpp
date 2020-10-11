@@ -5,6 +5,7 @@
 #include "chunk.hpp"
 #include "block.hpp"
 #include "gameobj.hpp"
+#include "collisioninfo.hpp"
 
 class Player: public Game_Object {
 public:
@@ -13,7 +14,7 @@ public:
     ~Player();
 
     void update(Chunk_Group &chunks, Camera& camera);
-    bool check_block_collision(Chunk_Group &chunks);
+    CollisionInfo check_block_collision(Chunk_Group &chunks);
 
     // Movement
     void jump(Chunk_Group &chunks);
@@ -21,7 +22,10 @@ public:
 
     double get_vel_x() const;
     double get_vel_y() const;
+	double get_x(Camera& camera) const;
+	double get_y(Camera& camera) const;
 private:
+	bool free_move_debug;
     double vel_x;
     double vel_y;
     double vel_x_speed;

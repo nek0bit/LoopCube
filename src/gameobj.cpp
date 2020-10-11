@@ -72,7 +72,7 @@ const Position& Game_Object::get_obj() const {
     return obj;
 }
 
-bool Game_Object::is_colliding(const Game_Object &obj2) {
+CollisionInfo Game_Object::is_colliding(const Game_Object &obj2) {
     // We are going to get the prefered positions instead of using their object
     // For example, the block class uses tiles, so when get_x is called, it returns the x in its obj and multiplies it by the width
     Position r1{get_default_x(), get_default_y(), get_width(), get_height()},
@@ -83,7 +83,32 @@ bool Game_Object::is_colliding(const Game_Object &obj2) {
         r1.x + r1.w > r2.x &&
         r1.y < r2.y + r2.h &&
         r1.y + r1.h > r2.y) {
-		return true;
-        }
-    return false;
+		const double top_calc = (r1.y+r1.h) - r2.y;
+		const double bottom_calc = (r2.y+r2.h) - r1.y;
+		const double left_calc = (r1.x+r1.w) - r2.x;
+		const double right_calc = (r2.x+r2.h) - r1.x;
+
+		CollisionInfo info{-1, -1, -1, -1};
+		// top collision
+		if (top_calc < bottom_calc) {
+			info.top = top_calc;
+		}
+
+		// bottom collision
+		if (top_calc > bottom_calc) {
+			info.bottom = bottom_calc;
+		}
+
+		// left collision
+		if (left_calc < right_calc) {
+			info.left = left_calc;
+		}
+
+		// right collision
+		if (left_calc > right_calc) {
+			info.right = right_calc;
+		}
+		return info;
+	}
+	return CollisionInfo{};
 }
