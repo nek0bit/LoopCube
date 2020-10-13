@@ -42,11 +42,15 @@ public:
     std::vector<Block>& get_chunk();
 	int get_chunk_x(int x);
 private:
+	void debug_chunk_split();
     int get_chunk_max_size();
 	
     int MAX_WIDTH;
     int MAX_HEIGHT;
+	int MAX_SPLIT_COUNT;
+	int MAX_SPLIT_HEIGHT;
     std::vector<Block> chunk;
+	std::vector<std::vector<Block*>> chunk_split;
     int slot;
     PerlinNoise terrain_gen;
 

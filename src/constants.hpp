@@ -41,6 +41,10 @@ namespace constants {
     extern const double block_h;
     
     extern const int chunk_width;
+	extern const int chunk_height;
+
+	extern const int chunk_split_count;
+	extern const int chunk_split_height;
 	
     extern const int load_viewport;
     extern const int load_distance;

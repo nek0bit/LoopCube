@@ -1,14 +1,33 @@
 #include "chunk.hpp"
 
 Chunk::Chunk(unsigned long int seed, int slot, TextureHandler &textures, std::vector<Structure*>& structures)
-    : MAX_WIDTH{8}, MAX_HEIGHT{300}, terrain_gen{seed}, chunk_text{nullptr} {
+    : MAX_WIDTH{constants::chunk_width}, MAX_HEIGHT{constants::chunk_height}, MAX_SPLIT_COUNT{constants::chunk_split_count},
+	  MAX_SPLIT_HEIGHT{constants::chunk_split_height}, terrain_gen{seed}, chunk_text{nullptr} {
     this->textures = &textures;
     this->slot = slot;
+
+	// Setup chunk_split
+	std::vector<Block*> tmp;
+	tmp.resize(MAX_WIDTH*MAX_SPLIT_HEIGHT, nullptr);
+	chunk_split.resize(MAX_SPLIT_COUNT, tmp);
+	
     generate_chunk(seed, structures);
 	
 }
 
 Chunk::~Chunk() {
+}
+
+void Chunk::debug_chunk_split() {
+	std::cout << "======================= Chunk " << get_slot() << " =======================" << std::endl;
+	for (size_t i = 0; i < chunk_split.size(); ++i) {
+		std::cout << ">>> chunksplit " << i << std::endl;
+		for (size_t j = 0; j < chunk_split[i].size(); ++j) {
+			std::cout << chunk_split[i][j] << ", ";
+			if ((j+1)%MAX_WIDTH == 0) std::cout << std::endl;
+		}
+		std::cout << std::endl;
+	}
 }
 
 bool Chunk::operator<(const Chunk &c) const {
@@ -54,7 +73,7 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
             double d_y = (double)y/(double)MAX_HEIGHT;
             if (y == 0) {
                 place_block(BLOCK_GRASS, x, y+temp+offset);
-                //if (dist(rng) == 0) structures.push_back(new Tree(get_chunk_x(x)-8, y+temp+offset));
+                //if (dist(rng) == 0) structures.push_back(new Tree(get_chunk_x(x), y+temp+offset));
             } else if (y >= 1 && y <= 3) {
                 place_block(BLOCK_DIRT, x, y+temp+offset);
             } else {
@@ -108,6 +127,7 @@ void Chunk::update_all(Camera& camera) {
     for(size_t i = 0; i < chunk.size(); i++) {
         chunk[i].update(camera);
     }
+	debug_chunk_split(); // REMOVE ME
 }
 
 
