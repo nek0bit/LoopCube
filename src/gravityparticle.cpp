@@ -8,22 +8,23 @@ GravityParticle::GravityParticle(int texture_id, TextureHandler& textures, int t
 
 GravityParticle::~GravityParticle() {}
 
+// TODO update me
 bool GravityParticle::check_block_collision(Chunk_Group& chunks) {
-    std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
+	//    std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 
     // Loop through all chunks
-    for (auto *&chunk_it: chunkgroup) {
+    //for (auto *&chunk_it: chunkgroup) {
 
         // Then grab the chunk we want
-        std::vector<Block>& chunk = chunk_it->get_chunk();
+	//  std::vector<Block>& chunk = chunk_it->get_chunk();
 
         // Loop through blocks in the chunk
-        for (auto &block: chunk) {
-            while (is_colliding(block) == true) {
-                return true;
-            }
-        }
-    }
+	//  for (auto &block: chunk) {
+	//      while (is_colliding(block) == true) {
+	//          return true;
+	//      }
+	//  }
+    //}
     return false;
 }
 

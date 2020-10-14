@@ -19,6 +19,10 @@ std::vector<Chunk>& Chunk_Group::get_chunks() {
     return group;
 }
 
+int Chunk_Group::get_chunk_y(double y) {
+	return y / (constants::chunk_split_height * constants::block_h);
+}
+
 std::vector<Chunk*>& Chunk_Group::get_viewport_chunks() {
     return viewport_chunks;
 }

@@ -39,8 +39,10 @@ public:
     int get_slot() const;
 
     // Need to be able to view the chunk to do stuff such as collision detection
-    std::vector<Block>& get_chunk();
+    std::vector<std::vector<Block>>& get_chunk();
 	int get_chunk_x(int x);
+	int get_chunk_y(int y);
+	int get_y_split(int y);
 private:
 	void debug_chunk_split();
     int get_chunk_max_size();
@@ -49,8 +51,7 @@ private:
     int MAX_HEIGHT;
 	int MAX_SPLIT_COUNT;
 	int MAX_SPLIT_HEIGHT;
-    std::vector<Block> chunk;
-	std::vector<std::vector<Block*>> chunk_split;
+    std::vector<std::vector<Block>> chunk;
     int slot;
     PerlinNoise terrain_gen;
 

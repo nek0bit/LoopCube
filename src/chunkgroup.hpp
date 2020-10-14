@@ -31,6 +31,8 @@ public:
 
     Chunk* get_chunk_at(double x, bool loaded);
 
+	int get_chunk_y(double y);
+
     std::vector<Chunk>& get_chunks();
     std::vector<Chunk*>& get_viewport_chunks();
     bool chunk_already_generated(int id);

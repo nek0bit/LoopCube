@@ -35,15 +35,14 @@ void Play::update() {
 	// Update camera
     handle_camera();
 
-    // Update player
-    player.update(chunks, camera);
-
 	// Update all chunks
     chunks.update_all_viewport(camera);
     chunks.check_area(textures, player.get_default_x(), structures);
 	
     inv->update();
 
+    // Update player
+    player.update(chunks, camera);
 
     for (int i = 0; i < 4; ++i) {
         if (events.get_state()[i]) {
@@ -75,8 +74,7 @@ void Play::update() {
     if (events.get_button_state()[3]) {
         player.direct_player(0, chunks);
     }
-    
-    
+
 
     // Update animation(s)
     fade.tick();
