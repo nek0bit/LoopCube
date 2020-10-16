@@ -38,6 +38,7 @@ bool Chunk_Group::chunk_already_generated(int id) {
     return check;
 }
 
+// TODO this could be made faster
 void Chunk_Group::generate_chunk(TextureHandler& textures, int id, std::vector<Structure*>& structure) {
     bool check = chunk_already_generated(id);
     // Generate the chunk if it hasn't been generated before
@@ -102,6 +103,7 @@ void Chunk_Group::check_area(TextureHandler& textures, int x, std::vector<Struct
         update_viewport();
     }
 
+	// TODO Only run generate_chunk if needed
     for (int i = load_distance*-1; i < load_distance; ++i) {
         generate_chunk(textures, id+i, structures);
     }

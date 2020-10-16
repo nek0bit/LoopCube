@@ -36,6 +36,10 @@ bool Chunk::operator>(const Chunk &c) const {
     return slot > c.slot;
 }
 
+Position Chunk::get_pos() const {
+	return Position{slot*(MAX_WIDTH*constants::block_w), 0, (MAX_WIDTH*constants::block_w), 0};
+}
+
 int Chunk::get_chunk_x(int x) {
     return x+(slot*MAX_WIDTH);
 }

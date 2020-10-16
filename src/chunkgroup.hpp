@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iostream>
 
+#include "position.hpp"
 #include "chunk.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
