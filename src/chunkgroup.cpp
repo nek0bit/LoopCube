@@ -203,11 +203,23 @@ int Chunk_Group::get_id(Camera& camera, int surrounding) {
 void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: group) {
-			chunk.render_all_shadows(renderer, camera);
+			Position box = chunk.get_pos();
+			if ((box.x+box.w)+camera.get_x() < 0 ||
+				camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
+				continue;
+			} else {
+				chunk.render_all_shadows(renderer, camera);
+			}
 		}
 	}
     for (auto &chunk: group) {
-        chunk.render_all_blocks(renderer, camera);
+		Position box = chunk.get_pos();
+		if ((box.x+box.w)+camera.get_x() < 0 ||
+			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
+			continue;
+		} else {
+			chunk.render_all_blocks(renderer, camera);
+		}
     }
 
 	if (render_chunk_info) {
@@ -220,11 +232,23 @@ void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
 void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: viewport_chunks) {
-			chunk->render_all_shadows(renderer, camera);
+			Position box = chunk->get_pos();
+			if ((box.x+box.w)+camera.get_x() < 0 ||
+				camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
+				continue;
+			} else {
+				chunk->render_all_shadows(renderer, camera);
+			}
 		}
 	}
     for (auto &chunk: viewport_chunks) {
-        chunk->render_all_blocks(renderer, camera);
+		Position box = chunk->get_pos();
+		if ((box.x+box.w)+camera.get_x() < 0 ||
+			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
+			continue;
+		} else {
+			chunk->render_all_blocks(renderer, camera);
+		}
     }
 	if (render_chunk_info) {
 		for (auto &chunk: viewport_chunks) { 
@@ -235,12 +259,24 @@ void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
 
 void Chunk_Group::update_all(Camera& camera) {
     for (auto &chunk: group) {
-        chunk.update_all(camera);
+		Position box = chunk.get_pos();
+		if ((box.x+box.w)+camera.get_x() < 0 ||
+			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
+			continue;
+		} else {
+			chunk.update_all(camera);
+		}
     }
 }
 
 void Chunk_Group::update_all_viewport(Camera& camera) {
     for (auto &chunk: viewport_chunks) {
-        chunk->update_all(camera);
+		Position box = chunk->get_pos();
+		if ((box.x+box.w)+camera.get_x() < 0 ||
+			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
+			continue;
+		} else {
+			chunk->update_all(camera);
+		}
     }
 }

@@ -4,7 +4,7 @@
 namespace constants {
 	// I thought it was funny to reference developer "git" versions
 	// by putting a "x0" at the end of them :)
-	const std::string version_str = "v0.2";
+	const std::string version_str = "v0.3x0";
 	
     const std::string path = "data/img/";
 
@@ -44,8 +44,8 @@ namespace constants {
 	TTF_Font* paragraph_font = nullptr;
 	TTF_Font* option_font = nullptr;
 
-    const double block_w = 36;
-    const double block_h = 36;
+    const double block_w = 42;
+    const double block_h = 42;
     
     const int load_viewport = 16;
     
