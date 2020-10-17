@@ -28,6 +28,7 @@ public:
     void add_item(int id);
     void update();
 private:
+	bool animation;
     int hotbar_slots;
     int max_slots;
     bool visible;
@@ -38,10 +39,10 @@ private:
 
     std::vector<int> slots;
 
-    std::vector<Item*> items;
+    std::vector<Item> items;
     
     // Temporary item slot for holding items
-	Item* item_held;
+	Item item_held;
 
     int* WINDOW_W;
     int* WINDOW_H;

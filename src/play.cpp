@@ -203,7 +203,7 @@ void Play::draw_selection(int* p1, int* p2) {
 
 // Sets camera to player position
 void Play::handle_camera() {
-    double x = ( player.get_default_x() * -1 + (*WINDOW_W/2) ) - player.get_width()/2;
+    double x = player.get_default_x() * -1 + (*WINDOW_W/2) - player.get_width()/2;
     double y = player.get_default_y() * -1  + (*WINDOW_H/2) - player.get_height()/2;
     camera.set_pos(x, y);
 }

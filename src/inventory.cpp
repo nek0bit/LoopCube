@@ -1,64 +1,38 @@
 #include "inventory.hpp"
 
 Inventory::Inventory(SDL_Renderer* renderer,
-        TextureHandler &textures,
-        EventHandler &events,
-        int* WINDOW_W,
-        int* WINDOW_H) : hotbar_slots{10}, max_slots{hotbar_slots*5}, visible{true}, show_inventory_menu{0},
-            hotbar_pos{0}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, item_held{nullptr} {
+					 TextureHandler &textures,
+					 EventHandler &events,
+					 int* WINDOW_W,
+					 int* WINDOW_H) : animation{false}, hotbar_slots{10}, max_slots{hotbar_slots*5}, visible{true}, show_inventory_menu{0},
+									  hotbar_pos{0}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, item_held{} {
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;
-
-    items.resize(max_slots, nullptr);
+	
+    items.resize(max_slots, Item{});
 }
 
-Inventory::~Inventory() {
-	// Delete all pointers in items
-	for (auto &i: items) {
-		delete i;
-	}
-	delete item_held;
-}
+Inventory::~Inventory() {}
 
 void Inventory::add_item(int id) {
     // TODO Optimize this
-    int found = -1;
     int max_count = 99;
-    
-    // Search for slot
-    // This loop just loops through all the items, but in a certain order.
 
-    // For better explanation, it sorts like this
-    //===========
-    //===========  = is future slots to check
-    //===========  # is slot checked
-    //111213=====  (slot count isn't accurate in the example)
-    //12345678910
+	auto found = std::find_if(items.begin(), items.end(), [&](Item item) {
+		if (!item.enabled) return false; 
+		return item.get_block().get_id() == id ? item.get_count() < max_count : false;
+	});
 
-    for (int j = (max_slots/10)-1; j >= 0; --j) {
-        for (int i = 0; i < hotbar_slots; ++i) {
-            if (items[i+(j*hotbar_slots)] != NULL) {
-                if (items[i+(j*hotbar_slots)]->get_block().get_id() == id) {
-                    if (items[i+(j*hotbar_slots)]->get_count() < max_count) {
-                        found = i+(j*hotbar_slots);
-                    }
-                }
-            }
-        }
-    }
-    if (found != -1) {
-        items[found]->add_count();
+    if (found != items.end()) {
+        found->add_count();
     } else {
-        for (int j = (max_slots/10); j >= 0; --j) {
-            for (int i = 0; i < hotbar_slots; ++i) {
-                if (items[i+(j*hotbar_slots)] == nullptr) {
-                    items[i+(j*hotbar_slots)] = new Item(id, *textures, renderer);
-                    goto end;
-                }
-            }
-        }
-        end: return;
+		for (Item& i: items) {
+			if (!i.enabled) {
+				i = Item{id, *textures, renderer};
+				break;
+			}
+		}
     }
 }
 
@@ -70,63 +44,75 @@ void Inventory::update() {
         }
     }
 
-    if (events->get_state()[4]) {
+    if (events->get_state()[4] || events->get_button_state()[8]) {
         show_inventory_menu = !show_inventory_menu;
-    }
-
-    if (events->get_button_state()[8]) {
-        show_inventory_menu = !show_inventory_menu;
+		animation = true;
     }
 }
 
 void Inventory::draw_inventory_menu() {
+	static int num = 0;
+	if (animation == true) {
+		num = *WINDOW_H*-1;
+		animation = false;
+	}
+	if (num < 0.2) {
+		num *= 0.75;
+	} else {
+		num = 0;
+	}
     if (show_inventory_menu) {
         int scale = 3; // TODO Make this work properly
-        const int MAX_X = (*WINDOW_W - (170*scale))/2;
-        const int MAX_Y = (*WINDOW_H - (95*scale))/2;
+
+		const int menu_width = 170;
+		const int menu_height = 90;
+		
+        const int MAX_X = (*WINDOW_W - (menu_width*scale))/2;
+        const int MAX_Y = (*WINDOW_H - (menu_height*scale))/2;
+
         
-        SDL_Rect src{0, 0, 170, 95};
-        SDL_Rect dest{MAX_X, MAX_Y, src.w*scale, src.h*scale};
+        SDL_Rect src{0, 0, menu_width, menu_height};
+        SDL_Rect dest{MAX_X, MAX_Y+num, src.w*scale, src.h*scale};
 
         // First draw BG shadow
-        SDL_Rect shadow{0, 0, *WINDOW_W, *WINDOW_H};
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 160);
+        SDL_Rect shadow{0, 0+num, *WINDOW_W, *WINDOW_H};
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 180);
         SDL_RenderFillRect(renderer, &shadow);
 
         // Render inventory menu
         SDL_RenderCopy(renderer, textures->get_texture(11), &src, &dest);
 
-        std::vector<int> pos = get_hovered_pos(events->get_mouse_pos()[0], events->get_mouse_pos()[1], MAX_X, MAX_Y, true);
+        std::vector<int> pos = get_hovered_pos(events->get_mouse_pos()[0], events->get_mouse_pos()[1], MAX_X, MAX_Y+num, true);
         
         if (events->get_mouse_clicked() == 1 && pos[0] != -1 && pos[1] != -1) {
             auto& it = items[pos[0]+(pos[1]*hotbar_slots)];
-            if (item_held == nullptr) {
-                // move pointer; null out inventory slot
+            if (!item_held.enabled) {
+                // move item; null out inventory slot
                 item_held = it;
-                it = nullptr;
+                it = Item{};
             } else {
-                // Swap pointers
-                auto* tmp = it;
+                // Swap items
+                auto tmp = it;
                 it = item_held;
                 item_held = tmp;
             }
         }
         
         auto mouse_pos = events->get_mouse_pos();
-        if (item_held != nullptr) item_held->draw(mouse_pos[0]-17, mouse_pos[1]-17, 35, 35);
+        if (item_held.enabled) item_held.draw(mouse_pos[0]-17, mouse_pos[1]-17, 35, 35);
     }
 }
 
 // returns std::vector<int>{-1, -1} if nothing is being hovered
 std::vector<int> Inventory::get_hovered_pos(int x, int y, int corner_x, int corner_y, bool draw = false) {
-    const int tile_size = 40;
+    const int tile_size = 42;
 
     // Start gap
-    const int sx_gap = 20;
-    const int sy_gap = 22;
+    const int sx_gap = 18;
+    const int sy_gap = 18;
 
     // Splitter gap
-    const int sp_gap = 8;
+    const int sp_gap = 6;
     int total = max_slots/10;
 
     std::vector<int> returner;
@@ -141,8 +127,8 @@ std::vector<int> Inventory::get_hovered_pos(int x, int y, int corner_x, int corn
             int new_y = corner_y+(j*(tile_size+sp_gap)+sy_gap);
 
             // Draw item
-            if (items[i+(j*hotbar_slots)] != nullptr) {
-                items[i+(j*hotbar_slots)]->draw(new_x+5, new_y+5, tile_size-10, tile_size-10);
+            if (items[i+(j*hotbar_slots)].enabled) {
+                items[i+(j*hotbar_slots)].draw(new_x+3, new_y+3, tile_size-7, tile_size-7);
             }
 
             if (collision(x, y, 1, 1,
@@ -194,8 +180,8 @@ void Inventory::draw_hotbar() {
         SDL_Rect block{i*(BLOCK_S+3)+MAX_X, 2, BLOCK_S, BLOCK_S};
         SDL_RenderCopy(renderer, textures->get_texture(10), &src, &block);
 
-        if (items[(hotbar_slots*4)+i] != nullptr) {
-            items[(hotbar_slots*4)+i]->draw(block.x+5, block.y+5, 30, 30);
+        if (items[i].enabled) {
+            items[i].draw(block.x+5, block.y+5, 30, 30);
         }
     }
 }

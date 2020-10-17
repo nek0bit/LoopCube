@@ -13,7 +13,7 @@
 
 class Item {
 public:
-	Item() = default;
+	Item();
     Item(int id, TextureHandler &textures, SDL_Renderer *renderer);
     ~Item();
 
@@ -21,6 +21,7 @@ public:
     void add_count();
     int get_count();
     BlockInfo get_block();
+	bool enabled;
 private:
 	std::shared_ptr<Text> text;
     std::string id;
