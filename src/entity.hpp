@@ -18,7 +18,7 @@ public:
 		   double x, double y, double width, double height);
 	virtual ~Entity();
 
-	virtual void update(Chunk_Group &chunks, Camera& camera);
+	virtual void update(Chunk_Group& chunks, Camera& camera);
 
 	double get_vel_x() const;
     double get_vel_y() const;

@@ -2,7 +2,7 @@
 
 Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &events, int *WINDOW_W, int *WINDOW_H)
     : WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, show_particles{false}, textures{textures}, events{events},
-	  camera{WINDOW_W, WINDOW_H}, fade{60}, background{}, particles{} {
+	  camera{WINDOW_W, WINDOW_H}, entities{}, fade{60}, particles{}, background{} {
     this->renderer = renderer;
     this->textures = textures;
     this->events = events;
@@ -44,11 +44,21 @@ void Play::update() {
     // Update player
     player.update(chunks, camera);
 
+	for (Entity*& entity: entities) {
+		entity->update(chunks, camera);
+	}
+
     for (int i = 0; i < 4; ++i) {
         if (events.get_state()[i]) {
             player.direct_player(i, chunks);
         }
     }
+
+	// Create entity
+	if (events.get_state()[16]) {
+		std::cout << "Created test entity" << std::endl;
+		entities.push_back(new TestEntity(textures, player.get_default_x(), player.get_default_y()-30));
+	}
 
     // Jump (A)
     if (events.get_button_state()[4]) {
@@ -134,6 +144,10 @@ void Play::render() {
 	
     player.render(renderer);
 
+	for (Entity*& entity: entities) {
+		entity->render(renderer);
+	}
+
     int p1, p2;
     if (!inv->get_inventory_visibility()) draw_selection(&p1, &p2);
 	
@@ -150,7 +164,7 @@ void Play::render() {
                 // Generate particles
 				if (show_particles) {
 					GravityParticle temp{block->get_texture_id(), textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
-						p1*constants::block_w+(constants::block_w/2), p2*constants::block_h, 8, 6};
+						static_cast<int>(p1*constants::block_w+(constants::block_w/2)), static_cast<int>(p2*constants::block_h), 8, 6};
 					particles.push_back(temp);
 				}
             }
@@ -193,7 +207,7 @@ void Play::handle_camera() {
 }
 
 void Play::dead_particles() {
-    for (auto i = 0; i < particles.size(); ++i) {
+    for (size_t i = 0; i < particles.size(); ++i) {
         if (particles[i].is_dead()) particles.erase(particles.begin() + i);
     }
 }

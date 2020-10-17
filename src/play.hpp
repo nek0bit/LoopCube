@@ -15,6 +15,7 @@
 #include "eventhandler.hpp"
 #include "chunkgroup.hpp"
 #include "player.hpp"
+#include "testentity.hpp"
 #include "animation.hpp"
 #include "inventory.hpp"
 #include "text.hpp"
@@ -50,7 +51,10 @@ private:
     Chunk_Group chunks;
 	std::unique_ptr<Inventory> inv;
     Camera camera;
+
+	// Entities
     Player player;
+	std::vector<Entity*> entities;
 
     // Animations
     Animation fade;

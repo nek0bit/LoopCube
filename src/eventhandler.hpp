@@ -45,6 +45,7 @@ private:
       [4] = inventory; default = SDL_SCANCODE_I
       [5...15] = hotbar_slot1...9,0; default = SDL_SCANCODE_1...9,0
       [16] = debug_menu; default = SDL_SCANCODE_F8
+	  [17] = create_entity; default = SDL_SCANCODE_C
     */
     std::vector<SDL_Scancode> keys_set;
     std::vector<int> state;
