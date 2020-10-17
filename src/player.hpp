@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include "entity.hpp"
+#include "position.hpp"
+#include "collisioninfo.hpp"
 
 class Player: public Entity {
 public:
@@ -10,7 +12,7 @@ public:
     Player(TextureHandler &textures);
     ~Player();
 
-    void update(Chunk_Group &chunks, Camera& camera) override;
+    void update(Chunk_Group &chunks, Camera& camera, std::vector<Entity*> entities);
 	
     // Movement
     void jump(Chunk_Group &chunks);

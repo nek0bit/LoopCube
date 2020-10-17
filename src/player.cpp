@@ -9,8 +9,25 @@ Player::~Player() {
 
 }
 
-void Player::update(Chunk_Group& chunks, Camera& camera) {
+void Player::update(Chunk_Group& chunks, Camera& camera, std::vector<Entity*> entities) {
 	update_basic_physics(chunks, camera);
+
+	// See if touching entities
+	for (auto*& entity: entities) {
+	    CollisionInfo info = is_colliding(*entity);
+		const int gap = 5;
+		if (info.colliding) {
+			if (info.bottom >= 0) {
+				vel_y = 0;
+				entity->collision_bottom();
+				entity->update(chunks, camera);
+			}
+			if (info.top >= 0) {
+				obj.y -= info.top;
+				vel_y = 0;
+			}
+		}
+	}
 	
 	// Prevent player from holding jump
 	if (!can_jump && on_ground) {

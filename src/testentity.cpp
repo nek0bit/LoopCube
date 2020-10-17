@@ -16,3 +16,7 @@ void TestEntity::update(Chunk_Group& chunks, Camera& camera) {
 		vel_y = -15;
 	}
 }
+
+void TestEntity::collision_bottom() {
+	vel_y = -5;
+}

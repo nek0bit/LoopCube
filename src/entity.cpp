@@ -28,6 +28,11 @@ double Entity::get_y(Camera& camera) const {
     return obj.y + (camera.get_y());
 }
 
+void Entity::collision_left() {}
+void Entity::collision_right() {}
+void Entity::collision_bottom() {}
+void Entity::collision_top() {}
+
 CollisionInfo Entity::check_block_collision(Chunk_Group& chunks) {
     std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 

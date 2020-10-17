@@ -24,6 +24,12 @@ public:
     double get_vel_y() const;
 	double get_x(Camera& camera) const;
 	double get_y(Camera& camera) const;
+
+	// Collision functions
+	virtual void collision_left();
+	virtual void collision_right();
+	virtual void collision_bottom();
+	virtual void collision_top();
 protected:
 	void update_basic_physics(Chunk_Group& chunks, Camera& camera);
 	CollisionInfo check_block_collision(Chunk_Group &chunks);

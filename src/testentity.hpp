@@ -11,6 +11,8 @@ public:
     ~TestEntity();
 
     void update(Chunk_Group &chunks, Camera& camera) override;
+
+	void collision_bottom() override;
 };
 
 #endif

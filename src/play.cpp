@@ -41,12 +41,14 @@ void Play::update() {
 	
     inv->update();
 
-    // Update player
-    player.update(chunks, camera);
-
+	
 	for (Entity*& entity: entities) {
 		entity->update(chunks, camera);
 	}
+	
+    // Update player
+    player.update(chunks, camera, entities);
+
 
     for (int i = 0; i < 4; ++i) {
         if (events.get_state()[i]) {
