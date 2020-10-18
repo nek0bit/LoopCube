@@ -8,7 +8,7 @@ SRC = $(wildcard src/*.cpp)
 OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
 
 ifeq ($(strip $(DATA_LOCATION)),)
-$(error "Please set DATA_LOCATION as make/env variable to a location containing the 'data' folder. Ex: make DATA_LOCATION=. release")
+CXXFLAGS += -DDATA_LOCATION=\".\"
 else
 CXXFLAGS += -DDATA_LOCATION=\"$(DATA_LOCATION)\"
 endif
