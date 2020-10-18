@@ -1,4 +1,4 @@
-CXX = g++
+CXX ?= g++
 CXXFLAGS = -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
 LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
 SRC_DIR = ./src
@@ -32,9 +32,9 @@ release: $(TARGET)
 
 install:
 	@echo "Installing... Make sure your binary has DATA_LOCATION set to a loopcube folder"
-	install -dm755 $(DATA_LOCATION)
+	mkdir -p $(DATA_LOCATION)
 	cp -r data $(DATA_LOCATION)/data
-	install -Dm755 $(Target) $(PREFIX)/$(TARGET)
+	install -Dm755 $(TARGET) $(PREFIX)/$(TARGET)
 
 uninstall:
 	@echo "Uninstalling... type yes if prompted (be careful)"
