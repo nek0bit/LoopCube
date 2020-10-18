@@ -112,22 +112,16 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
     return nullptr;
 }
 
-void Chunk::place_block(int id, int x, int y) {
+bool Chunk::place_block(int id, int x, int y) {
     Block temp_block{id, *textures, get_chunk_x(x), y};
     // Check if between chunk size
     if (x < MAX_WIDTH+1 && x >= 0 && y < MAX_HEIGHT+1 && y >= 0) {
         // Check if a block has been placed here before
         bool is_duplicate = false;
-		// TODO URGENT UPDATE THIS
-        //for (auto &i: chunk) {
-        //    if (get_chunk_x(x) == i.get_default_x() && y == i.get_default_y()) {
-		//      is_duplicate = true;
-		//      break;
-		//  }
-        //}
+		
 		int i = get_y_split(y);
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
-			if (get_chunk_x(x) == chunk[i][j].get_default_x() && y == chunk[i][j].get_default_y()) {
+			if (get_chunk_x(x)*constants::block_w == chunk[i][j].get_default_x() && y*constants::block_h == chunk[i][j].get_default_y()) {
 				is_duplicate = true;
 				break;
 			}
@@ -137,10 +131,14 @@ void Chunk::place_block(int id, int x, int y) {
             // Place the block
 			int y_split = y / MAX_SPLIT_HEIGHT;
 			chunk[y_split].push_back(temp_block);
-        }
+			return true;
+        } else {
+			return false;
+		}
     } else {
         std::cout << "[ERROR] Block placed too far" << std::endl;
     }
+	return false;
 
 }
 

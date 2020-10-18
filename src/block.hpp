@@ -22,9 +22,6 @@ public:
 private:
     const BlockInfo *blockinfo;
 	SDL_Rect shadow;
-    int calc_pos_x;
-	int calc_pos_y;
-	bool calc;
 };
 
 

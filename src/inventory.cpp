@@ -15,6 +15,10 @@ Inventory::Inventory(SDL_Renderer* renderer,
 
 Inventory::~Inventory() {}
 
+Item& Inventory::get_selected_item() {
+	return items[hotbar_pos];
+}
+
 void Inventory::add_item(int id) {
     // TODO Optimize this
     int max_count = 99;

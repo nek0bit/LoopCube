@@ -18,7 +18,7 @@ public:
     ~Item();
 
     void draw(int x, int y, int width, int height);
-    void add_count();
+    void add_count(int amount = 1);
     int get_count();
     BlockInfo get_block();
 	bool enabled;

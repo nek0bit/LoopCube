@@ -40,6 +40,7 @@ private:
     void print_mouse_pos();
     void dead_particles();
 	void update_config();
+	void mouse_events();
     //void draw_debug_menu();
 
 	// Options

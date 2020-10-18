@@ -28,9 +28,12 @@ BlockInfo Item::get_block() {
     return block;
 }
 
-void Item::add_count() {
-    count++;
-    text->set_text(count == 0 ? "" : std::to_string(count).c_str());
+void Item::add_count(int amount) {
+    count += amount;
+	if (count == -1) {
+		enabled = false;
+	}
+    text->set_text(count == 0 ? "" : std::to_string(count+1).c_str());
 }
 
 void Item::draw(int x, int y, int width = 35, int height = 35) {

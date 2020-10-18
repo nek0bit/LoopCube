@@ -24,10 +24,11 @@ EventHandler::EventHandler()
 	SDL_CONTROLLER_BUTTON_DPAD_DOWN,
 	SDL_CONTROLLER_BUTTON_DPAD_LEFT,
 	SDL_CONTROLLER_BUTTON_X,
-	SDL_CONTROLLER_BUTTON_START,
+	SDL_CONTROLLER_BUTTON_LEFTSTICK,
 	SDL_CONTROLLER_BUTTON_LEFTSHOULDER,
-	SDL_CONTROLLER_BUTTON_RIGHTSHOULDER,
-	SDL_CONTROLLER_BUTTON_Y},
+	SDL_CONTROLLER_BUTTON_START,
+	SDL_CONTROLLER_BUTTON_Y,
+	SDL_CONTROLLER_BUTTON_GUIDE},
 #ifdef __SWITCH__
 	  conID{hidGetHandheldMode() ? CONTROLLER_HANDHELD : CONTROLLER_PLAYER_1},
 #endif
@@ -142,10 +143,6 @@ void EventHandler::listen() {
 			if (!mouse_down) mouse_clicked = true;
 			mouse_down = true;
 		}
-		if (touch_count == 0) {
-			mouse_down = false;
-			mouse_clicked = false;
-		}
 	}
 	#endif
 
@@ -190,8 +187,8 @@ void EventHandler::listen() {
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                mouse_down = 1;
-                mouse_clicked = 1;
+                mouse_down = event.button.button;
+                mouse_clicked = event.button.button;
                 break;
             case SDL_MOUSEBUTTONUP:
                 mouse_down = 0;
@@ -214,6 +211,21 @@ void EventHandler::listen() {
                             mouse_down = 1;
                             mouse_clicked = 1;
                         }
+						switch(i) {
+						case 5:
+							quit = true;
+							break;
+						case 6:
+							mouse_down = 1;
+							mouse_clicked = 1;
+							break;
+						case 7:
+							mouse_down = 3;
+							mouse_clicked = 3;
+							break;
+						default:
+							break;
+						}
                     }
                 }
                 break;
@@ -221,10 +233,15 @@ void EventHandler::listen() {
                 for (auto i = 0; i < buttons_set.size(); ++i) {
                     if (event.jbutton.button == buttons_set[i]) {
                         button_state[i] = 0;
-                        if (i == 6) {
-                            mouse_down = 0;
-                            mouse_clicked = 0;
-                        }
+						switch(i) {
+						case 6:
+						case 7:
+							mouse_down = 0;
+							mouse_clicked = 0;
+							break;
+						default:
+							break;
+						}
                     }
                 }
                 break;

@@ -3,7 +3,7 @@
 Block::Block() {}
 
 Block::Block(int id, TextureHandler &textures, int x, int y)
-    : Game_Object{0, textures, (double)x, (double)y, constants::block_w, constants::block_h}, calc{false} {
+    : Game_Object{0, textures, (double)x, (double)y, constants::block_w, constants::block_h} {
 
 	
     for (auto &i: constants::block_info) {
@@ -17,19 +17,19 @@ Block::Block(int id, TextureHandler &textures, int x, int y)
 Block::~Block() {}
 
 double Block::get_default_x() const {
-	return calc_pos_x;
+	return obj.x*constants::block_w;
 }
 
 double Block::get_default_y() const {
-	return calc_pos_y;
+	return obj.y*constants::block_h;
 }
 
 double Block::get_x(Camera& camera) const {
-    return calc_pos_x + (camera.get_x());
+    return obj.x*constants::block_w + (camera.get_x());
 }
 
 double Block::get_y(Camera& camera) const {
-    return calc_pos_y + (camera.get_y());
+    return obj.y*constants::block_h + (camera.get_y());
 
 }
 
@@ -38,10 +38,6 @@ const BlockInfo* Block::get_blockinfo() {
 }
 
 void Block::update(Camera& camera) {
-	if (!calc) {
-		calc_pos_x = obj.x*constants::block_w;
-		calc_pos_y = obj.y*constants::block_h;
-	}
     src.h = obj.h;
     src.w = obj.w;
     src.x = 0;

@@ -25,6 +25,7 @@ public:
     void draw_hotbar();
     void draw_inventory_menu();
     bool get_inventory_visibility();
+	Item& get_selected_item(); 
     void add_item(int id);
     void update();
 private:

@@ -29,6 +29,8 @@ void Play::print_mouse_pos() {
 }
 
 void Play::update() {
+	mouse_events();
+	
 	// Update background
 	background.update(camera);
 	
@@ -57,8 +59,7 @@ void Play::update() {
     }
 
 	// Create entity
-	if (events.get_state()[16]) {
-		std::cout << "Created test entity" << std::endl;
+	if (events.get_state()[16] || events.get_button_state()[9]) {
 		entities.push_back(new TestEntity(textures, player.get_default_x(), player.get_default_y()-30));
 	}
 
@@ -150,6 +151,15 @@ void Play::render() {
 		entity->render(renderer);
 	}
 
+	int x, y;
+	if (!inv->get_inventory_visibility()) draw_selection(&x, &y);
+
+    if (!inv->get_inventory_visibility()) inv->draw_hotbar();
+
+    inv->draw_inventory_menu();
+}
+
+void Play::mouse_events() {
     int p1, p2;
     if (!inv->get_inventory_visibility()) draw_selection(&p1, &p2);
 	
@@ -158,24 +168,38 @@ void Play::render() {
     if (chunk != nullptr) {
         // Do some math to get the chunk position
         int chunk_pos = std::abs(p1-(chunk->get_slot()*constants::chunk_width));
-        if (events.get_mouse_down()) {
-            const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv.get());
-            
-            // Check if block found
-            if (block != nullptr) {
-                // Generate particles
-				if (show_particles) {
-					GravityParticle temp{block->get_texture_id(), textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
-						static_cast<int>(p1*constants::block_w+(constants::block_w/2)), static_cast<int>(p2*constants::block_h), 8, 6};
-					particles.push_back(temp);
+
+		switch(events.get_mouse_down()) {
+		case 1:
+			{
+				const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv.get());
+
+				// Check if block found
+				if (block != nullptr) {
+					// Generate particles
+					if (show_particles) {
+						GravityParticle temp{block->get_texture_id(), textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
+							static_cast<int>(p1*constants::block_w+(constants::block_w/2)), static_cast<int>(p2*constants::block_h), 8, 6};
+						particles.push_back(temp);
+					}
 				}
-            }
-        }
+			}
+			break;
+		case 3:
+			{
+				Item& item = inv->get_selected_item();
+				if (item.enabled) {
+					BlockInfo b_info = item.get_block();
+					if (chunk->place_block(b_info.get_id(), chunk_pos, p2)) {
+						item.add_count(-1);
+					}
+				}
+			}
+			break;
+		default:
+			break;
+		}
 	}
-
-    if (!inv->get_inventory_visibility()) inv->draw_hotbar();
-
-    inv->draw_inventory_menu();
 }
 
 // Draw a selection box and set p1 and p2 to the position
