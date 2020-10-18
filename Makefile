@@ -8,7 +8,7 @@ SRC = $(wildcard src/*.cpp)
 OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
 
 ifeq ($(strip $(DATA_LOCATION)),)
-$(error "Please set DATA_LOCATION to your data folder location in your environment. export DATA_LOCATION=<path to data/>.")
+$(error "Please set DATA_LOCATION to your data folder location in your environment. export DATA_LOCATION=<path to data/>")
 else
 CXXFLAGS += -DDATA_LOCATION=\"$(DATA_LOCATION)\"
 endif

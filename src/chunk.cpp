@@ -85,6 +85,7 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
             double d_y = (double)y/(double)MAX_HEIGHT;
             if (y == 0) {
                 place_block(BLOCK_GRASS, x, y+temp+offset);
+				structures = {}; // Bypass unused variable for now
                 //if (dist(rng) == 0) structures.push_back(new Tree(get_chunk_x(x), y+temp+offset));
             } else if (y >= 1 && y <= 3) {
                 place_block(BLOCK_DIRT, x, y+temp+offset);

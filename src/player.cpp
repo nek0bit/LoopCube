@@ -15,7 +15,6 @@ void Player::update(Chunk_Group& chunks, Camera& camera, std::vector<Entity*> en
 	// See if touching entities
 	for (auto*& entity: entities) {
 	    CollisionInfo info = is_colliding(*entity);
-		const int gap = 5;
 		if (info.colliding) {
 			if (info.bottom >= 0) {
 				vel_y = 0;

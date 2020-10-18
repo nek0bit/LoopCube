@@ -1,7 +1,7 @@
 #include "checkbox.hpp"
 
 Checkbox::Checkbox(int id, std::string text, int x, int y, int size, bool checked)
-	: changed{false}, id{id}, text{text}, x{x}, y{y}, size{size}, text_render{nullptr}, checked{checked} {
+	: changed{false}, id{id}, text{text}, x{x}, y{y}, size{size}, checked{checked}, text_render{nullptr} {
 }
 
 Checkbox::~Checkbox() {}

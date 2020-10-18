@@ -5,7 +5,7 @@ Inventory::Inventory(SDL_Renderer* renderer,
 					 EventHandler &events,
 					 int* WINDOW_W,
 					 int* WINDOW_H) : animation{false}, hotbar_slots{10}, max_slots{hotbar_slots*5}, visible{true}, show_inventory_menu{0},
-									  hotbar_pos{0}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, item_held{} {
+									  hotbar_pos{0}, item_held{}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H} {
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;

@@ -1,7 +1,7 @@
 #include "chunkgroup.hpp"
 
 // I could probably move the renderer and camera out of the class, but it doesn't take much memory so I think it's fine
-Chunk_Group::Chunk_Group(unsigned long seed) : render_chunk_info{true}, show_shadows{true} {
+Chunk_Group::Chunk_Group(unsigned long seed) : show_shadows{true}, render_chunk_info{true} {
     this->seed = seed;
 	update_config();
 }
@@ -79,7 +79,7 @@ void Chunk_Group::check_area(TextureHandler& textures, int x, std::vector<Struct
 
     // Unload old chunks
     // Warning: This code below is very fragile and can easily break :P
-    if (loaded_chunks.size() > (load_distance*2)+1) {
+    if (static_cast<int>(loaded_chunks.size()) > (load_distance*2)+1) {
         /* We basically just move the chunk from group to group_past
            Since we want to reload these chunks when the screen gets back in view */
         

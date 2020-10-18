@@ -201,7 +201,7 @@ void EventHandler::listen() {
                 quit = true;
                 break;
             case SDL_JOYBUTTONDOWN:
-                for (long unsigned int i = 0; i < buttons_set.size(); ++i) {
+                for (size_t i = 0; i < buttons_set.size(); ++i) {
                     if (event.jbutton.button == buttons_set[i]) {
                         button_state[i] = 1;
                         if (i == 5) {
@@ -230,7 +230,7 @@ void EventHandler::listen() {
                 }
                 break;
             case SDL_JOYBUTTONUP:
-                for (auto i = 0; i < buttons_set.size(); ++i) {
+                for (size_t i = 0; i < buttons_set.size(); ++i) {
                     if (event.jbutton.button == buttons_set[i]) {
                         button_state[i] = 0;
 						switch(i) {

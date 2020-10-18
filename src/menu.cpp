@@ -16,8 +16,8 @@ Menu::Menu(SDL_Renderer* renderer,
         EventHandler &events,
         int* WINDOW_W,
         int* WINDOW_H) : state{0}, BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W},
-												  WINDOW_H{WINDOW_H}, shift{BLOCK_S}, pad_left{180},
-												  header{nullptr} {
+						 WINDOW_H{WINDOW_H}, shift{BLOCK_S},
+						 header{nullptr}, pad_left{180} {
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;
@@ -105,7 +105,6 @@ void Menu::update(bool update_animations) {
     SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 255);
 
 	if (state == MAIN_MENU) {
-		auto mouse_pos = events->get_mouse_pos();
 		for (auto &i: button_group) {
 			i->set_x( (*WINDOW_W/2) + 30 );
 			i->update(*events);
