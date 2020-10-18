@@ -8,7 +8,7 @@ SRC = $(wildcard src/*.cpp)
 OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
 
 ifeq ($(strip $(DATA_LOCATION)),)
-$(error "Please set DATA_LOCATION to your data folder location in your environment. export DATA_LOCATION=<path to data/>")
+$(error "Please set DATA_LOCATION as make/env variable to a location containing the 'data' folder. Ex: make DATA_LOCATION=. release")
 else
 CXXFLAGS += -DDATA_LOCATION=\"$(DATA_LOCATION)\"
 endif
@@ -30,10 +30,21 @@ release: CXXFLAGS += -O2 -ffast-math
 release: setup
 release: $(TARGET)
 
+install:
+	@echo "Installing... Make sure your binary has DATA_LOCATION set to a loopcube folder"
+	mkdir -p $(DATA_LOCATION)
+	cp -r data $(DATA_LOCATION)/data
+	cp $(TARGET) $(PREFIX)
+
+uninstall:
+	@echo "Uninstalling... type yes if prompted (be careful)"
+	rm -Ir $(DATA_LOCATION)
+	rm -ir $(PREFIX)/$(TARGET)
+
 setup:
 	@mkdir -p obj/src/
 
-.PHONY: all clean setup debug release
+.PHONY: all clean setup debug release install
 clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(TARGET)
