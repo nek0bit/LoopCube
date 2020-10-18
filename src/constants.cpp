@@ -5,8 +5,9 @@ namespace constants {
 	// I thought it was funny to reference developer "git" versions
 	// by putting a "x0" at the end of them :)
 	const std::string version_str = "v0.3x0";
-	
-    const std::string path = "data/img/";
+
+	const std::string root_path = DATA_LOCATION "/data";
+    const std::string path = root_path+"/img/";
 
     // Please add comment with index for code readability
     const std::vector<const char*> texture_ids = {

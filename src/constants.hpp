@@ -24,6 +24,8 @@ enum config_enum {
 
 namespace constants {
 	extern const std::string version_str;
+
+	extern const std::string root_path;
     extern const std::string path;
 
     // Please add comment with index for code readability

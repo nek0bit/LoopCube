@@ -150,11 +150,12 @@ void Game::init(bool fullscreen = false) {
 }
 
 void Game::initialize_fonts() {
-    constants::button_font = TTF_OpenFont("data/fonts/liberation-sans/LiberationSans-Regular.ttf", 24);
-    constants::item_font = TTF_OpenFont("data/fonts/liberation-sans/LiberationSans-Regular.ttf", 12);
-	constants::header_font = TTF_OpenFont("data/fonts/liberation-sans/LiberationSans-Regular.ttf", 32);
-	constants::paragraph_font = TTF_OpenFont("data/fonts/liberation-sans/LiberationSans-Regular.ttf", 16);
-	constants::option_font = TTF_OpenFont("data/fonts/liberation-sans/LiberationSans-Regular.ttf", 18);
+	std::string LiberationSansRegular = (constants::root_path+std::string{"/fonts/liberation-sans/LiberationSans-Regular.ttf"});
+    constants::button_font = TTF_OpenFont(LiberationSansRegular.c_str(), 24);
+    constants::item_font = TTF_OpenFont(LiberationSansRegular.c_str(), 12);
+	constants::header_font = TTF_OpenFont(LiberationSansRegular.c_str(), 32);
+	constants::paragraph_font = TTF_OpenFont(LiberationSansRegular.c_str(), 16);
+	constants::option_font = TTF_OpenFont(LiberationSansRegular.c_str(), 18);
 }
 
 // Handles events such as exit, keypresses, mouse

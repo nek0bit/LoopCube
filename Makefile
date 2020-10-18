@@ -1,18 +1,39 @@
-CXXFLAGS=-g -Wall -Wextra -pipe -pedantic -O2 -ffast-math
-LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_ttf
-CXX=g++
-TARGET=bin/LoopCube
+CXX = g++
+CXXFLAGS = -Wall -Wextra -pipe -pedantic
+LDFLAGS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf
+SRC_DIR = ./src
+OBJ_DIR = ./obj
+TARGET = loopcube
+SRC = $(wildcard src/*.cpp)
+OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
 
-SRC=$(shell find src -name '*.cpp')
-OBJ=$(patsubst %.cpp,obj/%.o,$(SRC))
+ifeq ($(strip $(DATA_LOCATION)),)
+$(error "Please set DATA_LOCATION to your data folder location in your environment. export DATA_LOCATION=<path to data/>.")
+else
+CXXFLAGS += -DDATA_LOCATION=\"$(DATA_LOCATION)\"
+endif
 
-$(TARGET): $(OBJ)
-	$(CXX) -o $@ $^ $(CXXFLAGS) $(LDFLAGS)
+all: release
 
 obj/%.o: %.cpp %.hpp
-	@mkdir -p ${shell echo $@ | rev | cut -d '/' -f2- | rev}
-	$(CXX) -c -o $@ $< $(CXXFLAGS) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $< -o $@ 
 
+$(TARGET): $(OBJ)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(TARGET) $^
+
+
+debug: CXXFLAGS += -g
+debug: setup
+debug: $(TARGET)
+
+release: CXXFLAGS += -O2 -ffast-math
+release: setup
+release: $(TARGET)
+
+setup:
+	@mkdir -p obj/src/
+
+.PHONY: all clean setup debug release
 clean:
-	rm -rf obj/*
-	rm $(TARGET)
+	rm -rf $(OBJ_DIR)
+	rm -rf $(TARGET)

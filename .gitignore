@@ -4,6 +4,7 @@
 obj/
 bin/
 .vscode/
+loopcube
 loopcube.elf
 loopcube.rpx
 loopcube.nacp
