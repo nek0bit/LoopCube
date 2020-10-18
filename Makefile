@@ -1,6 +1,6 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -pipe -pedantic
-LDFLAGS = -lm -lSDL2 -lSDL2_image -lSDL2_ttf
+CXXFLAGS = -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
+LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
 SRC_DIR = ./src
 OBJ_DIR = ./obj
 TARGET = loopcube
@@ -16,10 +16,10 @@ endif
 all: release
 
 obj/%.o: %.cpp %.hpp
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $< -o $@ 
+	$(CXX) $(CXXFLAGS) -c $< -o $@ 
 
 $(TARGET): $(OBJ)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $(TARGET) $^
+	$(CXX) -o $(TARGET) $^ $(LDFLAGS) 
 
 
 debug: CXXFLAGS += -g
@@ -32,9 +32,9 @@ release: $(TARGET)
 
 install:
 	@echo "Installing... Make sure your binary has DATA_LOCATION set to a loopcube folder"
-	mkdir -p $(DATA_LOCATION)
+	install -dm755 $(DATA_LOCATION)
 	cp -r data $(DATA_LOCATION)/data
-	cp $(TARGET) $(PREFIX)
+	install -Dm755 $(Target) $(PREFIX)/$(TARGET)
 
 uninstall:
 	@echo "Uninstalling... type yes if prompted (be careful)"
