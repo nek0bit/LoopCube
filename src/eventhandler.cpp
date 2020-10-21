@@ -37,9 +37,9 @@ EventHandler::EventHandler()
     button_state.resize(buttons_set.size());
     
     // Check if on a switch, then use libnx hdl
-    #ifdef __SWITCH__
+#ifdef __SWITCH__
     hiddbgInitialize();
-    #endif
+#endif
 }
 
 void EventHandler::open_controllers() {
@@ -57,9 +57,9 @@ void EventHandler::open_controllers() {
 
 EventHandler::~EventHandler() {
     std::cout << "Closing events..." << std::endl;
-    #ifdef __SWITCH__
+#ifdef __SWITCH__
     hiddbgExit();
-    #endif
+#endif
 }
 
 void EventHandler::listen() {
@@ -92,7 +92,7 @@ void EventHandler::listen() {
      * so it's best we move it all out of the way; same for the keyboard stuff
      */
     if (controller != NULL) {
-        #ifdef __SWITCH__
+#ifdef __SWITCH__
         // Switch doesn't like SDL joysticks (but recognizes buttons fine), instead, let's just use libnx for this
         hidScanInput();
         
@@ -111,7 +111,7 @@ void EventHandler::listen() {
             mouse_x += tmp[0].dx / 2048;
             mouse_y += (tmp[0].dy*-1) / 2048;
         }
-        #else
+#else
         /* Note: This works on the Wii U gamepad, but probably not for other controllers
          * Soon there will be a menu so the user can setup their controller and it's
          * axis's so I don't have to just guess them, which would be a pain.
@@ -128,10 +128,10 @@ void EventHandler::listen() {
             mouse_x += axis_hor / 2048;
             mouse_y += axis_ver / 2048;
         }
-        #endif
+#endif
     }
 
-	#ifdef __SWITCH__
+#ifdef __SWITCH__
 	if (conID == CONTROLLER_HANDHELD) {
 		touchPosition touch;
 		u32 touch_count = hidTouchCount();
@@ -144,7 +144,7 @@ void EventHandler::listen() {
 			mouse_down = true;
 		}
 	}
-	#endif
+#endif
 
     while (SDL_PollEvent(&event)) {
         const Uint8* keystate = SDL_GetKeyboardState(NULL);
@@ -169,84 +169,84 @@ void EventHandler::listen() {
         }
 
         switch(event.type) {
-            case SDL_TEXTINPUT:
-                if (text_mode) {
-                    text_mode_buffer += event.text.text;
-                }
-                break;
-            case SDL_KEYDOWN:
-                for (auto exc: exceptions) {
-                    if (keystate[keys_set[exc]]) {
-                        state[exc] = 1;
-                    }
-                }
-                if (text_mode && event.key.keysym.sym == SDLK_BACKSPACE) {
-                    if (text_mode_buffer.length() != 0) {
-                        text_mode_buffer.pop_back();
-                    }
-                }
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-                mouse_down = event.button.button;
-                mouse_clicked = event.button.button;
-                break;
-            case SDL_MOUSEBUTTONUP:
-                mouse_down = 0;
-                mouse_clicked = 0;
-                break;
-            case SDL_MOUSEMOTION:
-                SDL_GetMouseState(&mouse_x, &mouse_y);
-                break;
-            case SDL_QUIT:
-                quit = true;
-                break;
-            case SDL_JOYBUTTONDOWN:
-                for (size_t i = 0; i < buttons_set.size(); ++i) {
-                    if (event.jbutton.button == buttons_set[i]) {
-                        button_state[i] = 1;
-                        if (i == 5) {
-                            quit = true;
-                        }
-                        if (i == 6) {
-                            mouse_down = 1;
-                            mouse_clicked = 1;
-                        }
-						switch(i) {
-						case 5:
-							quit = true;
-							break;
-						case 6:
-							mouse_down = 1;
-							mouse_clicked = 1;
-							break;
-						case 7:
-							mouse_down = 3;
-							mouse_clicked = 3;
-							break;
-						default:
-							break;
-						}
-                    }
-                }
-                break;
-            case SDL_JOYBUTTONUP:
-                for (size_t i = 0; i < buttons_set.size(); ++i) {
-                    if (event.jbutton.button == buttons_set[i]) {
-                        button_state[i] = 0;
-						switch(i) {
-						case 6:
-						case 7:
-							mouse_down = 0;
-							mouse_clicked = 0;
-							break;
-						default:
-							break;
-						}
-                    }
-                }
-                break;
-            default:
-                break;
+		case SDL_TEXTINPUT:
+			if (text_mode) {
+				text_mode_buffer += event.text.text;
+			}
+			break;
+		case SDL_KEYDOWN:
+			for (auto exc: exceptions) {
+				if (keystate[keys_set[exc]]) {
+					state[exc] = 1;
+				}
+			}
+			if (text_mode && event.key.keysym.sym == SDLK_BACKSPACE) {
+				if (text_mode_buffer.length() != 0) {
+					text_mode_buffer.pop_back();
+				}
+			}
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			mouse_down = event.button.button;
+			mouse_clicked = event.button.button;
+			break;
+		case SDL_MOUSEBUTTONUP:
+			mouse_down = 0;
+			mouse_clicked = 0;
+			break;
+		case SDL_MOUSEMOTION:
+			SDL_GetMouseState(&mouse_x, &mouse_y);
+			break;
+		case SDL_QUIT:
+			quit = true;
+			break;
+		case SDL_JOYBUTTONDOWN:
+			for (size_t i = 0; i < buttons_set.size(); ++i) {
+				if (event.jbutton.button == buttons_set[i]) {
+					button_state[i] = 1;
+					if (i == 5) {
+						quit = true;
+					}
+					if (i == 6) {
+						mouse_down = 1;
+						mouse_clicked = 1;
+					}
+					switch(i) {
+					case 5:
+						quit = true;
+						break;
+					case 6:
+						mouse_down = 1;
+						mouse_clicked = 1;
+						break;
+					case 7:
+						mouse_down = 3;
+						mouse_clicked = 3;
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			break;
+		case SDL_JOYBUTTONUP:
+			for (size_t i = 0; i < buttons_set.size(); ++i) {
+				if (event.jbutton.button == buttons_set[i]) {
+					button_state[i] = 0;
+					switch(i) {
+					case 6:
+					case 7:
+						mouse_down = 0;
+						mouse_clicked = 0;
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			break;
+		default:
+			break;
         }
     }
 }

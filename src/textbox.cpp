@@ -15,7 +15,7 @@ void Textbox::update(EventHandler& events) {
     if (events.get_mouse_clicked()) {
         if (AABB(x, y, width, height, pos[0], pos[1], 1, 1)) {
             focused = true;
-            #ifdef __SWITCH__
+#ifdef __SWITCH__
             rc = swkbdCreate(&kbd, 0);
             char tmp[16] = {0};
             if (R_SUCCEEDED(rc)) {
@@ -29,11 +29,11 @@ void Textbox::update(EventHandler& events) {
                 textbox_text->set_text(text);
             }
             focused = false;
-            #else
+#else
             blink.reset();
             events.set_text_mode_buffer(text);
             events.enable_text_mode();
-            #endif
+#endif
         } else {
             focused = false;
             textbox_text->set_text(text);

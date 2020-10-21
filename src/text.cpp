@@ -1,10 +1,10 @@
 #include "text.hpp"
 
 Text::Text(SDL_Renderer* renderer,
-        std::string text, 
-        SDL_Color color,
-		TTF_Font* font,
-		int wrap_width)
+		   std::string text, 
+		   SDL_Color color,
+		   TTF_Font* font,
+		   int wrap_width)
     :  wrap_width{wrap_width}, text{text}, color{color}, renderer{renderer} {
     this->font = font;
 

@@ -12,12 +12,12 @@ enum CONFIG_ID {
 };
 
 Menu::Menu(SDL_Renderer* renderer,
-        TextureHandler &textures,
-        EventHandler &events,
-        int* WINDOW_W,
-        int* WINDOW_H) : state{0}, BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W},
-						 WINDOW_H{WINDOW_H}, shift{BLOCK_S},
-						 header{nullptr}, pad_left{180} {
+		   TextureHandler &textures,
+		   EventHandler &events,
+		   int* WINDOW_W,
+		   int* WINDOW_H) : state{0}, BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W},
+							WINDOW_H{WINDOW_H}, shift{BLOCK_S},
+							header{nullptr}, pad_left{180} {
     this->renderer = renderer;
     this->textures = &textures;
     this->events = &events;
@@ -158,7 +158,7 @@ void Menu::render_background() {
 
 void Menu::set_state(int state) {
 	update(false); // If we don't update before we change state it thinks that the button is
-	          // forever pressed (or the caller of this function in general)
+	// forever pressed (or the caller of this function in general)
 	this->state = state;
 	// Update again before we render, or else things may looks strange for a frame
 	update(false);

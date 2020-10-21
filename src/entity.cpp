@@ -50,8 +50,8 @@ CollisionInfo Entity::check_block_collision(Chunk_Group& chunks) {
 			std::vector<std::vector<Block>>& chunk = chunk_it->get_chunk();
 
 			std::array<int, 2> player_check = {
-								  chunks.get_chunk_y(obj.y),
-								  chunks.get_chunk_y(obj.y+obj.h)
+				chunks.get_chunk_y(obj.y),
+				chunks.get_chunk_y(obj.y+obj.h)
 			};
 			
 			

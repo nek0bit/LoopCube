@@ -3,7 +3,7 @@
 Game_Object::Game_Object() {}
 
 Game_Object::Game_Object(int texture_id, TextureHandler &textures,
-    double x, double y, double w, double h) {
+						 double x, double y, double w, double h) {
     obj.x = x;
     obj.y = y;
     obj.w = w;

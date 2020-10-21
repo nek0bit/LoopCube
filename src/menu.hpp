@@ -20,10 +20,10 @@
 class Menu {
 public:
     Menu(SDL_Renderer* renderer, 
-        TextureHandler &textures,
-        EventHandler &events,
-        int* WINDOW_W,
-        int* WINDOW_H);
+		 TextureHandler &textures,
+		 EventHandler &events,
+		 int* WINDOW_W,
+		 int* WINDOW_H);
     ~Menu();
 
     void update(bool update_animations = true);

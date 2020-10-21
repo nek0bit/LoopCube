@@ -121,9 +121,9 @@ void Game::init(bool fullscreen = false) {
         flags = SDL_WINDOW_FULLSCREEN;
     }
     flags = flags | SDL_WINDOW_RESIZABLE;
-    #if !defined(__WIIU__)
+#if !defined(__WIIU__)
     flags = flags | SDL_RENDERER_ACCELERATED;
-    #endif
+#endif
     
     SDL_StartTextInput();
     if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {

@@ -8,10 +8,10 @@
 class Text {
 public:
     Text(SDL_Renderer* renderer,
-        std::string text,
-        SDL_Color color,
-		TTF_Font* font,
-		int wrap_width = -1);
+		 std::string text,
+		 SDL_Color color,
+		 TTF_Font* font,
+		 int wrap_width = -1);
     ~Text();
 
 	int get_width();

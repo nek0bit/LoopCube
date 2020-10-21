@@ -136,7 +136,7 @@ std::vector<int> Inventory::get_hovered_pos(int x, int y, int corner_x, int corn
             }
 
             if (collision(x, y, 1, 1,
-                new_x, new_y, tile_size, tile_size)) {
+						  new_x, new_y, tile_size, tile_size)) {
 
                 if (draw) {
                     SDL_Rect rect{new_x, new_y, tile_size, tile_size};
@@ -163,8 +163,8 @@ bool Inventory::collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2
         r1.x + r1.w > r2.x &&
         r1.y < r2.y + r2.h &&
         r1.y + r1.h > r2.y) {
-            return true;
-        }
+		return true;
+	}
     return false;
 }
 

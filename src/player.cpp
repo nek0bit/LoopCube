@@ -62,22 +62,22 @@ void Player::jump(Chunk_Group &chunks) {
 
 void Player::direct_player(int direction, Chunk_Group &chunks) {
     switch (direction) {
-        case 0: // UP
-			jump(chunks);
-            break;
-        case 1: // RIGHT
-			if (!on_ground) vel_x += vel_x_speed/6;
-			else vel_x += vel_x_speed;
-			last_pos = 1;
-            break;
-        case 2: // DOWN
-            break;
-        case 3: // LEFT
-			if (!on_ground) vel_x -= vel_x_speed/6;
-			else vel_x -= vel_x_speed;
-			last_pos = 3;
-            break;
-        default:
-            std::cerr << "[Warning] Invalid direction" << std::endl;
+	case 0: // UP
+		jump(chunks);
+		break;
+	case 1: // RIGHT
+		if (!on_ground) vel_x += vel_x_speed/6;
+		else vel_x += vel_x_speed;
+		last_pos = 1;
+		break;
+	case 2: // DOWN
+		break;
+	case 3: // LEFT
+		if (!on_ground) vel_x -= vel_x_speed/6;
+		else vel_x -= vel_x_speed;
+		last_pos = 3;
+		break;
+	default:
+		std::cerr << "[Warning] Invalid direction" << std::endl;
     }
 }

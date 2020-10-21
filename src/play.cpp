@@ -241,37 +241,37 @@ void Play::dead_particles() {
 // TODO I left this here because I wanted to do something with it...
 // Don't uncomment right now, this code is bad, horribly ugly, and VERY slow
 /*
-void Play::draw_debug_menu() {
-    SDL_version compiled;
-    SDL_GetVersion(&compiled);
+  void Play::draw_debug_menu() {
+  SDL_version compiled;
+  SDL_GetVersion(&compiled);
 
-    std::vector<std::string> dbg_text = {
-        "[[ DEBUG ]]",
-        // Player
-        "Built: At "+ std::string(__TIME__)+" "+std::string(__DATE__)+" C++"+std::to_string(__cplusplus)
-            +" SDL"+std::to_string(compiled.major)+"."+ std::to_string(compiled.minor)+"."+ std::to_string(compiled.patch)
-#ifdef __WIIU__
-        +" For Wii U",
-#else
-        +" for PC",
-#endif
-        "= Player =",
-        "X: " + std::to_string(player.get_default_x() / constants::block_w)
-            + " / Y: " + std::to_string(player.get_default_y() / constants::block_h),
-        // Chunk
-        "= Chunk =",
-        "Pos: " + std::to_string(chunks.get_id()),
-        "Size: " + std::to_string(chunks.get_chunks()->size())
+  std::vector<std::string> dbg_text = {
+  "[[ DEBUG ]]",
+  // Player
+  "Built: At "+ std::string(__TIME__)+" "+std::string(__DATE__)+" C++"+std::to_string(__cplusplus)
+  +" SDL"+std::to_string(compiled.major)+"."+ std::to_string(compiled.minor)+"."+ std::to_string(compiled.patch)
+  #ifdef __WIIU__
+  +" For Wii U",
+  #else
+  +" for PC",
+  #endif
+  "= Player =",
+  "X: " + std::to_string(player.get_default_x() / constants::block_w)
+  + " / Y: " + std::to_string(player.get_default_y() / constants::block_h),
+  // Chunk
+  "= Chunk =",
+  "Pos: " + std::to_string(chunks.get_id()),
+  "Size: " + std::to_string(chunks.get_chunks()->size())
 
         
-    };
-    SDL_Color color;
-    // For some reason it must be setup like this...
-    color.r = 255; color.g = 255; color.b = 255;
-    int size = 14;
-    for (size_t i = 0; i < dbg_text.size(); ++i) {
-        Text dtext{renderer, dbg_text[i], color, };
-        dtext.draw(0,i*size);
-    }
-}
+  };
+  SDL_Color color;
+  // For some reason it must be setup like this...
+  color.r = 255; color.g = 255; color.b = 255;
+  int size = 14;
+  for (size_t i = 0; i < dbg_text.size(); ++i) {
+  Text dtext{renderer, dbg_text[i], color, };
+  dtext.draw(0,i*size);
+  }
+  }
 */

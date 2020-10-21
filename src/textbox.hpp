@@ -36,10 +36,10 @@ private:
     Text* textbox_text;
     Animation blink;
     
-    #ifdef __SWITCH__
+#ifdef __SWITCH__
     Result rc;
     SwkbdConfig kbd;
-    #endif
+#endif
     
     void handle_keyboard(EventHandler& events);
 };

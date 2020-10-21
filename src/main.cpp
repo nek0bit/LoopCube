@@ -1,6 +1,6 @@
 #include "main.hpp"
 int main() {
-    #ifdef __SWITCH__    
+#ifdef __SWITCH__    
     hidScanInput();
     
     Result rc = 0;
@@ -11,38 +11,38 @@ int main() {
     }
     
     while(appletMainLoop()) {
-    romfsInit();
-    #endif
-    const int FPS = 60;
-    const int frame_del = 1000 / FPS;
+		romfsInit();
+#endif
+		const int FPS = 60;
+		const int frame_del = 1000 / FPS;
 
-    Uint32 frame;
-    int frame_time;
+		Uint32 frame;
+		int frame_time;
 
-    Game game{};
+		Game game{};
 
-    game.init(false);
+		game.init(false);
 
-    while(game.running()) {
-        frame = SDL_GetTicks();
+		while(game.running()) {
+			frame = SDL_GetTicks();
 
-        game.update();
-        game.render();
-        game.event_handler();
+			game.update();
+			game.render();
+			game.event_handler();
 
-        frame_time = SDL_GetTicks() - frame;
+			frame_time = SDL_GetTicks() - frame;
 
-        if (frame_time < frame_del) {
-            SDL_Delay(frame_del - frame_time);
-        }
-    }
-    game.free();
-    #ifdef __SWITCH__
-    break;
+			if (frame_time < frame_del) {
+				SDL_Delay(frame_del - frame_time);
+			}
+		}
+		game.free();
+#ifdef __SWITCH__
+		break;
     }
     
     romfsExit();
-    #endif
+#endif
 
     SDL_Quit();
 

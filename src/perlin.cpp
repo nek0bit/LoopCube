@@ -29,13 +29,13 @@ double PerlinNoise::noise(double x, double y, double z) {
         B = permutation[X+1]+Y, BA = permutation[B]+Z, BB = permutation[B+1]+Z;
 
     double result = lerp(w, lerp(v, lerp(u, grad(permutation[AA  ], x, y, z),
-                                    grad(permutation[BA  ], x-1, y, z)),
-                            lerp(u, grad(permutation[AB  ], x, y-1, z),
-                                    grad(permutation[BB  ], x-1, y-1, z))),
-                    lerp(v, lerp(u, grad(permutation[AA+1], x, y, z-1 ),
-                                    grad(permutation[BA+1], x-1, y, z-1 )),
-                            lerp(u, grad(permutation[AB+1], x, y-1, z-1 ),
-                                    grad(permutation[BB+1], x-1, y-1, z-1 ))));
+										 grad(permutation[BA  ], x-1, y, z)),
+								 lerp(u, grad(permutation[AB  ], x, y-1, z),
+									  grad(permutation[BB  ], x-1, y-1, z))),
+						 lerp(v, lerp(u, grad(permutation[AA+1], x, y, z-1 ),
+									  grad(permutation[BA+1], x-1, y, z-1 )),
+							  lerp(u, grad(permutation[AB+1], x, y-1, z-1 ),
+								   grad(permutation[BB+1], x-1, y-1, z-1 ))));
     return result;
 }
 

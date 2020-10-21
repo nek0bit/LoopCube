@@ -57,11 +57,11 @@ namespace constants {
 	const int chunk_split_count = 32; // x
 	const int chunk_split_height = constants::chunk_height/constants::chunk_split_count; // y
 
-    #if defined(__WIIU__) || defined(__SWITCH__)
-        const int load_distance = 8;
-    #else
-        const int load_distance = 12;
-    #endif
+#if defined(__WIIU__) || defined(__SWITCH__)
+	const int load_distance = 8;
+#else
+	const int load_distance = 12;
+#endif
 
 	const std::string header = "LoopCube";
 	const std::vector<std::string> content = {
