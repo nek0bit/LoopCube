@@ -178,8 +178,8 @@ void Play::mouse_events() {
 				if (block != nullptr) {
 					// Generate particles
 					if (show_particles) {
-						GravityParticle temp{block->get_texture_id(), textures, 50, rand() % 2 == 1 ? -2 : 2, -3,
-							static_cast<int>(p1*constants::block_w+(constants::block_w/2)), static_cast<int>(p2*constants::block_h), 8, 6};
+						GravityParticle temp{block->get_texture_id(), textures, 50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
+						    p1*constants::block_w+(constants::block_w/2), p2*constants::block_h, 8, 6};
 						particles.push_back(temp);
 					}
 				}

@@ -1,26 +1,22 @@
 #ifndef GRAVITYPARTICLE_HPP
 #define GRAVITYPARTICLE_HPP
 #include <iostream>
-#include "gameobj.hpp"
-#include "chunkgroup.hpp"
+#include "entity.hpp"
 #include "aabb.hpp"
 
-class GravityParticle: public GameObject {
+class GravityParticle: public Entity {
 public:
 	GravityParticle() = default;
 	GravityParticle(int texture_id, TextureHandler& textures, int time,
-					int start_vel_x, int start_vel_y, int x, int y, int width=10, int height=10);
+					double start_vel_x, double start_vel_y, double x, double y, double width = 10, double height = 10);
 	~GravityParticle();
 	
-	bool check_block_collision(ChunkGroup& chunks);
-	void update(ChunkGroup& chunks, Camera& camera);
+	void update(ChunkGroup &chunks, Camera& camera) override;
 	
 	// Returns true if time reached
 	// Appropriate to destruct or quit rendering when done.
 	bool is_dead() const;
 private:
-	double vel_x;
-	double vel_y;
 	int time;
 	int time_total;
 };

@@ -1,42 +1,19 @@
 #include "gravityparticle.hpp"
 
-GravityParticle::GravityParticle(int texture_id, TextureHandler& textures, int time, int start_vel_x,
-								 int start_vel_y, int x, int y, int width, int height) : GameObject{texture_id,
-	textures, static_cast<double>(x), static_cast<double>(y), static_cast<double>(width), static_cast<double>(height)},
-																						 vel_x{static_cast<double>(start_vel_x)}, vel_y{static_cast<double>(start_vel_y)}, time{0}, time_total{time} {}
+GravityParticle::GravityParticle(int texture_id, TextureHandler& textures, int time,
+								 double start_vel_x, double start_vel_y, double x, double y, double width, double height)
+	: Entity{textures, texture_id, x, y, width, height}, time{0}, time_total{time} {
+	vel_x = start_vel_x;
+	vel_y = start_vel_y;
+}
 
 GravityParticle::~GravityParticle() {}
 
-bool GravityParticle::check_block_collision(ChunkGroup& chunks) { // IGNORE THIS WARNING: I'm going to rewrite GravityParticle to use Entity class soon.
-	(void)chunks;
-	return false;
-}
-
-
-
-// TODO move engine code (as previous comment said) for reusability.
-void GravityParticle::update(ChunkGroup &chunks, Camera& camera) { // IGNORE THIS WARNING: I'm going to rewrite GravityParticle to use Entity class soon.
-	(void)chunks;
+void GravityParticle::update(ChunkGroup& chunks, Camera& camera) {
 	time += 1;
-	
-	vel_x *= 0.95;
-	obj.x += vel_x;
-	
-	vel_y += .5;
-	obj.y += vel_y;
-	
-	// Update draw position
-	src.h = get_height();
-	src.w = get_width();
-	src.x = 0;
-	src.y = 0;
-	
-	dest.h = src.h;
-	dest.w = src.w;
-	dest.x = get_x(camera);
-	dest.y = get_y(camera);
+	update_basic_physics(chunks, camera);
 }
-
+	
 bool GravityParticle::is_dead() const {
 	return time > time_total; 
 }
