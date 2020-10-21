@@ -11,14 +11,14 @@
 #include "gameobj.hpp"
 #include "collisioninfo.hpp"
 
-class Entity: public Game_Object {
+class Entity: public GameObject {
 public:
 	Entity() = default;
 	Entity(TextureHandler& textures, int texture_id,
 		   double x, double y, double width, double height);
 	virtual ~Entity();
 
-	virtual void update(Chunk_Group& chunks, Camera& camera);
+	virtual void update(ChunkGroup& chunks, Camera& camera);
 
 	double get_vel_x() const;
 	double get_vel_y() const;
@@ -31,8 +31,8 @@ public:
 	virtual void collision_bottom();
 	virtual void collision_top();
 protected:
-	void update_basic_physics(Chunk_Group& chunks, Camera& camera);
-	CollisionInfo check_block_collision(Chunk_Group &chunks);
+	void update_basic_physics(ChunkGroup& chunks, Camera& camera);
+	CollisionInfo check_block_collision(ChunkGroup &chunks);
 
 	// Physics
 	double vel_x;

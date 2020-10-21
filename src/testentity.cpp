@@ -9,7 +9,7 @@ TestEntity::~TestEntity() {
 
 }
 
-void TestEntity::update(Chunk_Group& chunks, Camera& camera) {
+void TestEntity::update(ChunkGroup& chunks, Camera& camera) {
 	update_basic_physics(chunks, camera);
 
 	if (on_ground) {

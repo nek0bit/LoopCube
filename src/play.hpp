@@ -49,7 +49,7 @@ private:
 	SDL_Renderer* renderer;
 	TextureHandler& textures;
 	EventHandler& events;
-	Chunk_Group chunks;
+	ChunkGroup chunks;
 	std::unique_ptr<Inventory> inv;
 	Camera camera;
 

@@ -5,15 +5,15 @@
 #include "chunkgroup.hpp"
 #include "aabb.hpp"
 
-class GravityParticle: public Game_Object {
+class GravityParticle: public GameObject {
 public:
 	GravityParticle() = default;
 	GravityParticle(int texture_id, TextureHandler& textures, int time,
 					int start_vel_x, int start_vel_y, int x, int y, int width=10, int height=10);
 	~GravityParticle();
 	
-	bool check_block_collision(Chunk_Group& chunks);
-	void update(Chunk_Group& chunks, Camera& camera);
+	bool check_block_collision(ChunkGroup& chunks);
+	void update(ChunkGroup& chunks, Camera& camera);
 	
 	// Returns true if time reached
 	// Appropriate to destruct or quit rendering when done.

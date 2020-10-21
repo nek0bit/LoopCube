@@ -4,7 +4,7 @@
 #include "constants.hpp"
 #include "blockinfo.hpp"
 
-class Block: public Game_Object {
+class Block: public GameObject {
 
 public:
 	Block();

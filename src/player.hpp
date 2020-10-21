@@ -12,11 +12,11 @@ public:
 	Player(TextureHandler &textures);
 	~Player();
 
-	void update(Chunk_Group &chunks, Camera& camera, std::vector<Entity*> entities);
+	void update(ChunkGroup &chunks, Camera& camera, std::vector<Entity*> entities);
 	
 	// Movement
-	void jump(Chunk_Group &chunks);
-	void direct_player(int direction, Chunk_Group &chunks);
+	void jump(ChunkGroup &chunks);
+	void direct_player(int direction, ChunkGroup &chunks);
 private:
 	// For jumping
 	bool jumping;

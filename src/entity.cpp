@@ -1,13 +1,13 @@
 #include "entity.hpp"
 
 Entity::Entity(TextureHandler& textures, int texture_id, double x, double y, double width, double height)
-	: Game_Object{texture_id, textures, x, y, width, height}, vel_x{0}, vel_y{0}, vel_x_speed{1.8}, on_ground{false}, last_pos{-1} {
+	: GameObject{texture_id, textures, x, y, width, height}, vel_x{0}, vel_y{0}, vel_x_speed{1.8}, on_ground{false}, last_pos{-1} {
 	
 }
 
 Entity::~Entity() {}
 
-void Entity::update(Chunk_Group& chunks, Camera& camera) {
+void Entity::update(ChunkGroup& chunks, Camera& camera) {
 	// Optional; You can use your own physics function
 	update_basic_physics(chunks, camera);
 }
@@ -33,7 +33,7 @@ void Entity::collision_right() {}
 void Entity::collision_bottom() {}
 void Entity::collision_top() {}
 
-CollisionInfo Entity::check_block_collision(Chunk_Group& chunks) {
+CollisionInfo Entity::check_block_collision(ChunkGroup& chunks) {
 	std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 
 	Chunk* c = chunks.get_chunk_at(obj.x, true);
@@ -69,7 +69,7 @@ CollisionInfo Entity::check_block_collision(Chunk_Group& chunks) {
 	return CollisionInfo{};
 }
 
-void Entity::update_basic_physics(Chunk_Group& chunks, Camera& camera) {
+void Entity::update_basic_physics(ChunkGroup& chunks, Camera& camera) {
 	// Update draw position
 	src.h = get_height();
 	src.w = get_width();

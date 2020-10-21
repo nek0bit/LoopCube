@@ -10,7 +10,7 @@ public:
 	TestEntity(TextureHandler &textures, double x, double y);
 	~TestEntity();
 
-	void update(Chunk_Group &chunks, Camera& camera) override;
+	void update(ChunkGroup &chunks, Camera& camera) override;
 
 	void collision_bottom() override;
 };

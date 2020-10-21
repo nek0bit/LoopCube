@@ -9,7 +9,7 @@ Player::~Player() {
 
 }
 
-void Player::update(Chunk_Group& chunks, Camera& camera, std::vector<Entity*> entities) {
+void Player::update(ChunkGroup& chunks, Camera& camera, std::vector<Entity*> entities) {
 	update_basic_physics(chunks, camera);
 
 	// See if touching entities
@@ -49,7 +49,7 @@ void Player::update(Chunk_Group& chunks, Camera& camera, std::vector<Entity*> en
 	can_jump = true;
 }
 
-void Player::jump(Chunk_Group &chunks) {	
+void Player::jump(ChunkGroup &chunks) {	
 	obj.y += 1;
 	if (on_ground && jump_enabled && check_block_collision(chunks).top != -1) {
 		vel_y = -12;
@@ -60,7 +60,7 @@ void Player::jump(Chunk_Group &chunks) {
 	can_jump = false;
 }
 
-void Player::direct_player(int direction, Chunk_Group &chunks) {
+void Player::direct_player(int direction, ChunkGroup &chunks) {
 	switch (direction) {
 	case 0: // UP
 		jump(chunks);

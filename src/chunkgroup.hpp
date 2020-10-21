@@ -13,11 +13,11 @@
 #include "tree.hpp"
 
 // TODO non-important Rename this properly
-class Chunk_Group {
+class ChunkGroup {
 public:
-	Chunk_Group() = default;
-	Chunk_Group(unsigned long int seed);
-	~Chunk_Group();
+	ChunkGroup() = default;
+	ChunkGroup(unsigned long int seed);
+	~ChunkGroup();
 
 	void generate_chunk(TextureHandler& textures, int id, std::vector<Structure*>& structure);
 	void check_area(TextureHandler& textures, int x, std::vector<Structure*>& structure);

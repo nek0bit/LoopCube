@@ -9,12 +9,12 @@
 #include "camera.hpp"
 #include "collisioninfo.hpp"
 
-class Game_Object {
+class GameObject {
 
 public:
-	Game_Object();
-	Game_Object(int texture_id, TextureHandler &textures, double x, double y, double w, double h);
-	virtual ~Game_Object();
+	GameObject();
+	GameObject(int texture_id, TextureHandler &textures, double x, double y, double w, double h);
+	virtual ~GameObject();
 
 	virtual void update(Camera& camera);
 	virtual void render(SDL_Renderer* renderer);
@@ -31,7 +31,7 @@ public:
 
 	virtual const Position& get_obj() const;
 
-	CollisionInfo is_colliding(const Game_Object &obj2);
+	CollisionInfo is_colliding(const GameObject &obj2);
 protected:
 	int texture_id;
 

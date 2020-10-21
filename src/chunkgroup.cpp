@@ -1,33 +1,33 @@
 #include "chunkgroup.hpp"
 
 // I could probably move the renderer and camera out of the class, but it doesn't take much memory so I think it's fine
-Chunk_Group::Chunk_Group(unsigned long seed) : show_shadows{true}, render_chunk_info{true} {
+ChunkGroup::ChunkGroup(unsigned long seed) : show_shadows{true}, render_chunk_info{true} {
 	this->seed = seed;
 	update_config();
 }
 
-Chunk_Group::~Chunk_Group() {
+ChunkGroup::~ChunkGroup() {
 
 }
 
-void Chunk_Group::update_config() {
+void ChunkGroup::update_config() {
 	show_shadows = constants::config.get_int(CONFIG_SHOW_SHADOWS);
 	render_chunk_info = constants::config.get_int(CONFIG_SHOW_CHUNK_DEBUG);
 }
 
-std::vector<Chunk>& Chunk_Group::get_chunks() {
+std::vector<Chunk>& ChunkGroup::get_chunks() {
 	return group;
 }
 
-int Chunk_Group::get_chunk_y(double y) {
+int ChunkGroup::get_chunk_y(double y) {
 	return y / (constants::chunk_split_height * constants::block_h);
 }
 
-std::vector<Chunk*>& Chunk_Group::get_viewport_chunks() {
+std::vector<Chunk*>& ChunkGroup::get_viewport_chunks() {
 	return viewport_chunks;
 }
 
-bool Chunk_Group::chunk_already_generated(int id) {
+bool ChunkGroup::chunk_already_generated(int id) {
 	bool check = false;
 	for (auto &i: past_chunks) {
 		if (i == id) {
@@ -39,7 +39,7 @@ bool Chunk_Group::chunk_already_generated(int id) {
 }
 
 // TODO this could be made faster
-void Chunk_Group::generate_chunk(TextureHandler& textures, int id, std::vector<Structure*>& structure) {
+void ChunkGroup::generate_chunk(TextureHandler& textures, int id, std::vector<Structure*>& structure) {
 	bool check = chunk_already_generated(id);
 	// Generate the chunk if it hasn't been generated before
 	if (std::find(loaded_chunks.begin(), loaded_chunks.end(), id) == loaded_chunks.end() && !check) {
@@ -71,7 +71,7 @@ void Chunk_Group::generate_chunk(TextureHandler& textures, int id, std::vector<S
 	}
 }
 
-void Chunk_Group::check_area(TextureHandler& textures, int x, std::vector<Structure*>& structures) {
+void ChunkGroup::check_area(TextureHandler& textures, int x, std::vector<Structure*>& structures) {
 	const int load_distance = constants::load_distance;
 	
 	// Takes x, and returns the current chunk id the player is in
@@ -110,7 +110,7 @@ void Chunk_Group::check_area(TextureHandler& textures, int x, std::vector<Struct
 }
 
 // This function is just a lazy attempt at debugging
-void Chunk_Group::print_chunks_fancy() {
+void ChunkGroup::print_chunks_fancy() {
 	std::cout << "=========================================================" << std::endl;
 	// Used for debugging sometimes
 	// loaded_chunks
@@ -140,7 +140,7 @@ void Chunk_Group::print_chunks_fancy() {
 	std::cout << "Size[past_chunks]: " << group_past.size() << std::endl;
 }
 
-void Chunk_Group::update_viewport() {
+void ChunkGroup::update_viewport() {
 	const int total_load_dist = constants::load_distance * 2;
 	const int load_dist_midpoint = (total_load_dist / 2) - constants::load_viewport / 2;
 	
@@ -153,14 +153,14 @@ void Chunk_Group::update_viewport() {
 }
 
 // Deprecated Usage: Using sort_all is slow, now we manually sort chunks on the fly
-void Chunk_Group::sort_all() {
+void ChunkGroup::sort_all() {
 	std::sort(loaded_chunks.begin(), loaded_chunks.end());
 	std::sort(group.begin(), group.end());
 	std::sort(group_past.begin(), group_past.end());
 	std::sort(past_chunks.begin(), past_chunks.end());
 }
 
-Chunk* Chunk_Group::get_chunk_at(double x, bool loaded=true) {
+Chunk* ChunkGroup::get_chunk_at(double x, bool loaded=true) {
 	double id_double;
 	if (x >= 0) {
 		id_double = x / (constants::chunk_width * constants::block_w);
@@ -189,7 +189,7 @@ Chunk* Chunk_Group::get_chunk_at(double x, bool loaded=true) {
 	return nullptr;
 }
 
-int Chunk_Group::get_id(Camera& camera, int surrounding) {
+int ChunkGroup::get_id(Camera& camera, int surrounding) {
 	double id = 0;
 	id = ceil((camera.get_x() - (camera.get_width()/2))	 / (surrounding * constants::block_w));
 	if (id > 0) {
@@ -200,7 +200,7 @@ int Chunk_Group::get_id(Camera& camera, int surrounding) {
 	return id;
 }
 
-void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
+void ChunkGroup::render_all(SDL_Renderer* renderer, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: group) {
 			Position box = chunk.get_pos();
@@ -229,7 +229,7 @@ void Chunk_Group::render_all(SDL_Renderer* renderer, Camera& camera) {
 	}
 }
 
-void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
+void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: viewport_chunks) {
 			Position box = chunk->get_pos();
@@ -257,7 +257,7 @@ void Chunk_Group::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
 	}
 }
 
-void Chunk_Group::update_all(Camera& camera) {
+void ChunkGroup::update_all(Camera& camera) {
 	for (auto &chunk: group) {
 		Position box = chunk.get_pos();
 		if ((box.x+box.w)+camera.get_x() < 0 ||
@@ -269,7 +269,7 @@ void Chunk_Group::update_all(Camera& camera) {
 	}
 }
 
-void Chunk_Group::update_all_viewport(Camera& camera) {
+void ChunkGroup::update_all_viewport(Camera& camera) {
 	for (auto &chunk: viewport_chunks) {
 		Position box = chunk->get_pos();
 		if ((box.x+box.w)+camera.get_x() < 0 ||

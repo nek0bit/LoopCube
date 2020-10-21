@@ -13,7 +13,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &event
 	unsigned long int seed = 89478970182;
 	// Configure camera
 	player = Player(textures);
-	chunks = Chunk_Group(seed);
+	chunks = ChunkGroup(seed);
 	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, WINDOW_W, WINDOW_H));
 	update_config();
 }
