@@ -3,17 +3,17 @@
 
 class Animation {
 public:
-    Animation() {};
-    Animation(int maximum);
-    ~Animation();
+	Animation() {};
+	Animation(int maximum);
+	~Animation();
 
-    int tick();
-    int get_frame();
-    int get_max_frames();
-    void reset(int num = 0);
+	int tick();
+	int get_frame();
+	int get_max_frames();
+	void reset(int num = 0);
 private:
-    int frame;
-    int max_frames;
+	int frame;
+	int max_frames;
 };
 
 

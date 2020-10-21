@@ -3,16 +3,16 @@
 
 class State {
 public:
-    State();
-    ~State();
+	State();
+	~State();
 
-    void set(int new_state);
-    int get() const;
-    
-    friend bool operator==(const State &state, const int &compare);
-    friend bool operator!=(const State &state, const int &compare);
+	void set(int new_state);
+	int get() const;
+	
+	friend bool operator==(const State &state, const int &compare);
+	friend bool operator!=(const State &state, const int &compare);
 private:
-    int state;
+	int state;
 
 };
 

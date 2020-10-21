@@ -1,16 +1,16 @@
 #include "main.hpp"
 int main() {
-#ifdef __SWITCH__    
-    hidScanInput();
-    
-    Result rc = 0;
-    rc = hiddbgInitialize();
-    
-    if (R_FAILED(rc)) {
-        std::cout << "hiddbgInitialize(): " << rc << std::endl;
-    }
-    
-    while(appletMainLoop()) {
+#ifdef __SWITCH__	 
+	hidScanInput();
+	
+	Result rc = 0;
+	rc = hiddbgInitialize();
+	
+	if (R_FAILED(rc)) {
+		std::cout << "hiddbgInitialize(): " << rc << std::endl;
+	}
+	
+	while(appletMainLoop()) {
 		romfsInit();
 #endif
 		const int FPS = 60;
@@ -39,12 +39,12 @@ int main() {
 		game.free();
 #ifdef __SWITCH__
 		break;
-    }
-    
-    romfsExit();
+	}
+	
+	romfsExit();
 #endif
 
-    SDL_Quit();
+	SDL_Quit();
 
-    return 0;
+	return 0;
 }

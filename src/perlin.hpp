@@ -11,16 +11,16 @@
 
 class PerlinNoise {
 public:
-    PerlinNoise(unsigned long int seed);
-    ~PerlinNoise();
-    double noise(double x, double y, double z = 0.0);
+	PerlinNoise(unsigned long int seed);
+	~PerlinNoise();
+	double noise(double x, double y, double z = 0.0);
 
 private:
-    double fade(double t);
-    double lerp(double t, double a, double b);
-    double grad(int hash, double x, double y, double z);
+	double fade(double t);
+	double lerp(double t, double a, double b);
+	double grad(int hash, double x, double y, double z);
 
-    std::vector<int> permutation; // Maybe an array would work well too
+	std::vector<int> permutation; // Maybe an array would work well too
 };
 
 

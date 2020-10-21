@@ -9,7 +9,7 @@ GravityParticle::~GravityParticle() {}
 
 bool GravityParticle::check_block_collision(Chunk_Group& chunks) { // IGNORE THIS WARNING: I'm going to rewrite GravityParticle to use Entity class soon.
 	(void)chunks;
-    return false;
+	return false;
 }
 
 
@@ -17,26 +17,26 @@ bool GravityParticle::check_block_collision(Chunk_Group& chunks) { // IGNORE THI
 // TODO move engine code (as previous comment said) for reusability.
 void GravityParticle::update(Chunk_Group &chunks, Camera& camera) { // IGNORE THIS WARNING: I'm going to rewrite GravityParticle to use Entity class soon.
 	(void)chunks;
-    time += 1;
-    
-    vel_x *= 0.95;
-    obj.x += vel_x;
-    
-    vel_y += .5;
-    obj.y += vel_y;
-    
-    // Update draw position
-    src.h = get_height();
-    src.w = get_width();
-    src.x = 0;
-    src.y = 0;
-    
-    dest.h = src.h;
-    dest.w = src.w;
-    dest.x = get_x(camera);
-    dest.y = get_y(camera);
+	time += 1;
+	
+	vel_x *= 0.95;
+	obj.x += vel_x;
+	
+	vel_y += .5;
+	obj.y += vel_y;
+	
+	// Update draw position
+	src.h = get_height();
+	src.w = get_width();
+	src.x = 0;
+	src.y = 0;
+	
+	dest.h = src.h;
+	dest.w = src.w;
+	dest.x = get_x(camera);
+	dest.y = get_y(camera);
 }
 
 bool GravityParticle::is_dead() const {
-    return time > time_total; 
+	return time > time_total; 
 }

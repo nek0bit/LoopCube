@@ -6,8 +6,8 @@
 
 class Tree: public Structure {
 public:
-    Tree(int x, int y);
-    ~Tree();
+	Tree(int x, int y);
+	~Tree();
 };
 
 #endif // TREE_HPP

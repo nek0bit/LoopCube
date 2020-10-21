@@ -26,43 +26,43 @@
 class Play {
 
 public:
-    Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &events, int *WINDOW_W, int *WINDOW_H);
-    ~Play();
+	Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &events, int *WINDOW_W, int *WINDOW_H);
+	~Play();
 
-    void event_handler();
-    void render();
-    void update();
+	void event_handler();
+	void render();
+	void update();
 private:
-    int *WINDOW_W;
-    int *WINDOW_H;
-    void handle_camera();
-    void draw_selection(int* p1, int* p2);
-    void print_mouse_pos();
-    void dead_particles();
+	int *WINDOW_W;
+	int *WINDOW_H;
+	void handle_camera();
+	void draw_selection(int* p1, int* p2);
+	void print_mouse_pos();
+	void dead_particles();
 	void update_config();
 	void mouse_events();
-    //void draw_debug_menu();
+	//void draw_debug_menu();
 
 	// Options
 	bool show_particles;
 	
-    SDL_Renderer* renderer;
-    TextureHandler& textures;
-    EventHandler& events;
-    Chunk_Group chunks;
+	SDL_Renderer* renderer;
+	TextureHandler& textures;
+	EventHandler& events;
+	Chunk_Group chunks;
 	std::unique_ptr<Inventory> inv;
-    Camera camera;
+	Camera camera;
 
 	// Entities
-    Player player;
+	Player player;
 	std::vector<Entity*> entities;
 
-    // Animations
-    Animation fade;
-    std::vector<GravityParticle> particles;
+	// Animations
+	Animation fade;
+	std::vector<GravityParticle> particles;
 
 	Background background;
-    std::vector<Structure*> structures;
+	std::vector<Structure*> structures;
 };
 
 

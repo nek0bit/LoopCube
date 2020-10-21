@@ -1,7 +1,7 @@
 #include "testentity.hpp"
 
 TestEntity::TestEntity(TextureHandler &textures, double x, double y)
-    : Entity{textures, 0, x, y, 50, 50} {
+	: Entity{textures, 0, x, y, 50, 50} {
 	
 }
 

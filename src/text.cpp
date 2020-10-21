@@ -5,19 +5,19 @@ Text::Text(SDL_Renderer* renderer,
 		   SDL_Color color,
 		   TTF_Font* font,
 		   int wrap_width)
-    :  wrap_width{wrap_width}, text{text}, color{color}, renderer{renderer} {
-    this->font = font;
+	:  wrap_width{wrap_width}, text{text}, color{color}, renderer{renderer} {
+	this->font = font;
 
-    if (this->font == NULL) {
-        std::cerr << "[ERROR] TTF_OpenFont: " << TTF_GetError() << std::endl;
-    }
+	if (this->font == NULL) {
+		std::cerr << "[ERROR] TTF_OpenFont: " << TTF_GetError() << std::endl;
+	}
 	update_surface();
 	messageText = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
 Text::~Text() {
-    SDL_FreeSurface(surface);
-    SDL_DestroyTexture(messageText);
+	SDL_FreeSurface(surface);
+	SDL_DestroyTexture(messageText);
 }
 
 void Text::update_surface() {
@@ -29,9 +29,9 @@ void Text::update_surface() {
 }
 
 void Text::set_text(std::string text) {
-    this->text = text;
-    SDL_FreeSurface(surface);
-    SDL_DestroyTexture(messageText);
+	this->text = text;
+	SDL_FreeSurface(surface);
+	SDL_DestroyTexture(messageText);
 	update_surface();
 	messageText = SDL_CreateTextureFromSurface(renderer, surface);
 }
@@ -47,11 +47,11 @@ int Text::get_height() {
 }
 
 void Text::draw(int x, int y) {
-    int w = 0, h = 0;
+	int w = 0, h = 0;
 	if (surface != nullptr) {
 		w = surface->w;
 		h = surface->h;
 	}
 	SDL_Rect pos{x, y, w, h};
-    SDL_RenderCopy(renderer, messageText, NULL, &pos);
+	SDL_RenderCopy(renderer, messageText, NULL, &pos);
 }

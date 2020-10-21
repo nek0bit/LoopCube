@@ -13,11 +13,11 @@ void Entity::update(Chunk_Group& chunks, Camera& camera) {
 }
 
 double Entity::get_vel_x() const {
-    return vel_x;
+	return vel_x;
 }
 
 double Entity::get_vel_y() const {
-    return vel_y;
+	return vel_y;
 }
 
 double Entity::get_x(Camera& camera) const {
@@ -25,7 +25,7 @@ double Entity::get_x(Camera& camera) const {
 }
 
 double Entity::get_y(Camera& camera) const {
-    return obj.y + (camera.get_y());
+	return obj.y + (camera.get_y());
 }
 
 void Entity::collision_left() {}
@@ -34,13 +34,13 @@ void Entity::collision_bottom() {}
 void Entity::collision_top() {}
 
 CollisionInfo Entity::check_block_collision(Chunk_Group& chunks) {
-    std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
+	std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 
 	Chunk* c = chunks.get_chunk_at(obj.x, true);
 	Chunk* c_front = chunks.get_chunk_at(obj.x+obj.w, true);
 
 	// Loop through all chunks
-    for (auto *&chunk_it: chunkgroup) {
+	for (auto *&chunk_it: chunkgroup) {
 		// See if player is within this chunk, if so, move on and handle collision
 		// If not, it's pointless to check the chunk, continue
 		if (chunk_it->get_slot() == c->get_slot() ||
@@ -65,21 +65,21 @@ CollisionInfo Entity::check_block_collision(Chunk_Group& chunks) {
 				}
 			}
 		}
-    }
-    return CollisionInfo{};
+	}
+	return CollisionInfo{};
 }
 
 void Entity::update_basic_physics(Chunk_Group& chunks, Camera& camera) {
 	// Update draw position
-    src.h = get_height();
-    src.w = get_width();
-    src.x = 0;
-    src.y = 0;
+	src.h = get_height();
+	src.w = get_width();
+	src.x = 0;
+	src.y = 0;
 
-    dest.h = src.h;
-    dest.w = src.w;
-    dest.x = get_x(camera);
-    dest.y = get_y(camera);
+	dest.h = src.h;
+	dest.w = src.w;
+	dest.x = get_x(camera);
+	dest.y = get_y(camera);
 	
 	if (on_ground) vel_x *= 0.78;
 

@@ -4,25 +4,25 @@ Animation::Animation(int maximum) : frame{0}, max_frames{maximum} {
 }
 
 int Animation::tick() {
-    frame++;
+	frame++;
 
-    if (frame > max_frames) {
-        frame = 0;
-    }
+	if (frame > max_frames) {
+		frame = 0;
+	}
 
-    return frame;
+	return frame;
 }
 
 int Animation::get_frame() {
-    return frame;
+	return frame;
 }
 
 int Animation::get_max_frames() {
-    return max_frames;
+	return max_frames;
 }
 
 void Animation::reset(int num) {
-    frame = num;
+	frame = num;
 }
 
 Animation::~Animation() {}

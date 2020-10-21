@@ -1,7 +1,7 @@
 #include "player.hpp"
 
 Player::Player(TextureHandler &textures)
-    : Entity{textures, 4, 0, 0, 30, 58}, jumping{false}, can_jump{true}, jump_enabled{true} {
+	: Entity{textures, 4, 0, 0, 30, 58}, jumping{false}, can_jump{true}, jump_enabled{true} {
 	
 }
 
@@ -14,7 +14,7 @@ void Player::update(Chunk_Group& chunks, Camera& camera, std::vector<Entity*> en
 
 	// See if touching entities
 	for (auto*& entity: entities) {
-	    CollisionInfo info = is_colliding(*entity);
+		CollisionInfo info = is_colliding(*entity);
 		if (info.colliding) {
 			if (info.bottom >= 0) {
 				vel_y = 0;
@@ -51,17 +51,17 @@ void Player::update(Chunk_Group& chunks, Camera& camera, std::vector<Entity*> en
 
 void Player::jump(Chunk_Group &chunks) {	
 	obj.y += 1;
-    if (on_ground && jump_enabled && check_block_collision(chunks).top != -1) {
-        vel_y = -12;
+	if (on_ground && jump_enabled && check_block_collision(chunks).top != -1) {
+		vel_y = -12;
 		on_ground = false;
-    }
-    obj.y -= 1;
+	}
+	obj.y -= 1;
 	jumping = true;
 	can_jump = false;
 }
 
 void Player::direct_player(int direction, Chunk_Group &chunks) {
-    switch (direction) {
+	switch (direction) {
 	case 0: // UP
 		jump(chunks);
 		break;
@@ -79,5 +79,5 @@ void Player::direct_player(int direction, Chunk_Group &chunks) {
 		break;
 	default:
 		std::cerr << "[Warning] Invalid direction" << std::endl;
-    }
+	}
 }

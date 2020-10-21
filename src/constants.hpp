@@ -12,7 +12,7 @@ enum block_enum {
 	BLOCK_DIRT,
 	BLOCK_STONE,
 	BLOCK_WOOD,
-    BLOCK_LEAF
+	BLOCK_LEAF
 };
 
 enum config_enum {
@@ -26,30 +26,30 @@ namespace constants {
 	extern const std::string version_str;
 
 	extern const std::string root_path;
-    extern const std::string path;
+	extern const std::string path;
 
-    // Please add comment with index for code readability
-    extern const std::vector<const char*> texture_ids;
+	// Please add comment with index for code readability
+	extern const std::vector<const char*> texture_ids;
 
-    extern const std::vector<BlockInfo> block_info;
+	extern const std::vector<BlockInfo> block_info;
 
-    extern TTF_Font* button_font;
-    extern TTF_Font* item_font;
+	extern TTF_Font* button_font;
+	extern TTF_Font* item_font;
 	extern TTF_Font* header_font;
 	extern TTF_Font* paragraph_font;
 	extern TTF_Font* option_font;
 
-    extern const double block_w;
-    extern const double block_h;
-    
-    extern const int chunk_width;
+	extern const double block_w;
+	extern const double block_h;
+	
+	extern const int chunk_width;
 	extern const int chunk_height;
 
 	extern const int chunk_split_count;
 	extern const int chunk_split_height;
 	
-    extern const int load_viewport;
-    extern const int load_distance;
+	extern const int load_viewport;
+	extern const int load_distance;
 
 	extern const std::string header;
 	extern const std::vector<std::string> content;

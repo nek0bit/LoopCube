@@ -14,14 +14,14 @@
 class Entity: public Game_Object {
 public:
 	Entity() = default;
-    Entity(TextureHandler& textures, int texture_id,
+	Entity(TextureHandler& textures, int texture_id,
 		   double x, double y, double width, double height);
 	virtual ~Entity();
 
 	virtual void update(Chunk_Group& chunks, Camera& camera);
 
 	double get_vel_x() const;
-    double get_vel_y() const;
+	double get_vel_y() const;
 	double get_x(Camera& camera) const;
 	double get_y(Camera& camera) const;
 

@@ -17,37 +17,37 @@
 class Game {
 
 public:
-    Game();
-    ~Game();
+	Game();
+	~Game();
 
-    void init(bool fullscreen);
-    void game_init();
-    void event_handler();
-    void render();
-    void update();
-    bool running();
-    void free();
+	void init(bool fullscreen);
+	void game_init();
+	void event_handler();
+	void render();
+	void update();
+	bool running();
+	void free();
 private:
-    const char* title;
-    void initialize_fonts();
+	const char* title;
+	void initialize_fonts();
 #ifdef __WIIU__
-    int WINDOW_W = 1920;
-    int WINDOW_H = 1080;
+	int WINDOW_W = 1920;
+	int WINDOW_H = 1080;
 #else
-    int WINDOW_W = 800;
-    int WINDOW_H = 600;
+	int WINDOW_W = 800;
+	int WINDOW_H = 600;
 #endif
-    bool has_freed = false;
-    bool is_running = false;
+	bool has_freed = false;
+	bool is_running = false;
 
-    State state;
-    Play* game;
-    Menu* menu;
+	State state;
+	Play* game;
+	Menu* menu;
 
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    TextureHandler textures;
-    EventHandler events;
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+	TextureHandler textures;
+	EventHandler events;
 };
 
 

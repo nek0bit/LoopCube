@@ -7,50 +7,50 @@ namespace constants {
 	const std::string version_str = "v0.3x0";
 
 	const std::string root_path = DATA_LOCATION "/data";
-    const std::string path = root_path+"/img/";
+	const std::string path = root_path+"/img/";
 
-    // Please add comment with index for code readability
-    const std::vector<const char*> texture_ids = {
-        "grass", // 0
-        "dirt", // 1
-        "stone", // 2
-        "wood", // 3
-        "player", // 4
-        "menu_solid", // 5
-        "menu_solid_left", // 6
-        "menu_solid_right", // 7
-        "title_1", // 8
-        "title_2", // 9
-        "hotbar_slot", // 10
-        "inventory_menu", // 11
-        "leaf", // 12
+	// Please add comment with index for code readability
+	const std::vector<const char*> texture_ids = {
+		"grass", // 0
+		"dirt", // 1
+		"stone", // 2
+		"wood", // 3
+		"player", // 4
+		"menu_solid", // 5
+		"menu_solid_left", // 6
+		"menu_solid_right", // 7
+		"title_1", // 8
+		"title_2", // 9
+		"hotbar_slot", // 10
+		"inventory_menu", // 11
+		"leaf", // 12
 		"bg_shine", // 13
 		"bg_cloud_loop", // 14
 		"bg_hills", // 15
 		"bg_hills_hq", // 16
-    };
+	};
 
-    const std::vector<BlockInfo> block_info = {
-        BlockInfo{BLOCK_GRASS, "Grass", 0},
-        BlockInfo{BLOCK_DIRT, "Dirt", 1},
-        BlockInfo{BLOCK_STONE, "Stone", 2},
-        BlockInfo{BLOCK_WOOD, "Wood", 3, true},
-        BlockInfo{BLOCK_LEAF, "Leaf", 12},
-    };
+	const std::vector<BlockInfo> block_info = {
+		BlockInfo{BLOCK_GRASS, "Grass", 0},
+		BlockInfo{BLOCK_DIRT, "Dirt", 1},
+		BlockInfo{BLOCK_STONE, "Stone", 2},
+		BlockInfo{BLOCK_WOOD, "Wood", 3, true},
+		BlockInfo{BLOCK_LEAF, "Leaf", 12},
+	};
 
 	// Assignment in game.cpp
-    TTF_Font* button_font = nullptr;
-    TTF_Font* item_font = nullptr;
+	TTF_Font* button_font = nullptr;
+	TTF_Font* item_font = nullptr;
 	TTF_Font* header_font = nullptr;
 	TTF_Font* paragraph_font = nullptr;
 	TTF_Font* option_font = nullptr;
 
-    const double block_w = 42;
-    const double block_h = 42;
-    
-    const int load_viewport = 16;
-    
-    const int chunk_width = 8;
+	const double block_w = 42;
+	const double block_h = 42;
+	
+	const int load_viewport = 16;
+	
+	const int chunk_width = 8;
 	const int chunk_height = 256;
 
 	// chunk_height/x = integer(y)
@@ -70,7 +70,7 @@ namespace constants {
 		"<><><> Changelog: v0.2 <><><>",
 		"- Beautiful Parallax Backgronds",
 		"- Chunk size increased, performs",
-		"   much better then before",  
+		"	much better then before",  
 		"- Some code restructuring",
 		"- Switch Build",
 		"- Particles",

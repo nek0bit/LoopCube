@@ -14,21 +14,21 @@
 class Item {
 public:
 	Item();
-    Item(int id, TextureHandler &textures, SDL_Renderer *renderer);
-    ~Item();
+	Item(int id, TextureHandler &textures, SDL_Renderer *renderer);
+	~Item();
 
-    void draw(int x, int y, int width, int height);
-    void add_count(int amount = 1);
-    int get_count();
-    BlockInfo get_block();
+	void draw(int x, int y, int width, int height);
+	void add_count(int amount = 1);
+	int get_count();
+	BlockInfo get_block();
 	bool enabled;
 private:
 	std::shared_ptr<Text> text;
-    std::string id;
-    TextureHandler* textures;
-    BlockInfo block;
-    int count;
-    SDL_Renderer *renderer;
+	std::string id;
+	TextureHandler* textures;
+	BlockInfo block;
+	int count;
+	SDL_Renderer *renderer;
 };
 
 #endif // ITEM_HPP

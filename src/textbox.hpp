@@ -18,30 +18,30 @@
 
 class Textbox: public UiElement {
 public:
-    Textbox() = default;
-    Textbox(int id, int x, int y, int width, int height);
-    ~Textbox();
+	Textbox() = default;
+	Textbox(int id, int x, int y, int width, int height);
+	~Textbox();
 
 	// TODO Add set_x, set_y functions
-    void update(EventHandler& events);
-    void render(SDL_Renderer* renderer);
+	void update(EventHandler& events);
+	void render(SDL_Renderer* renderer);
 private:
-    std::string text;
-    int id;
-    int x;
-    int y;
-    int width;
-    int height;
-    bool focused;
-    Text* textbox_text;
-    Animation blink;
-    
+	std::string text;
+	int id;
+	int x;
+	int y;
+	int width;
+	int height;
+	bool focused;
+	Text* textbox_text;
+	Animation blink;
+	
 #ifdef __SWITCH__
-    Result rc;
-    SwkbdConfig kbd;
+	Result rc;
+	SwkbdConfig kbd;
 #endif
-    
-    void handle_keyboard(EventHandler& events);
+	
+	void handle_keyboard(EventHandler& events);
 };
 
 #endif

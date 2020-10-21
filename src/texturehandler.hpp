@@ -11,16 +11,16 @@
 class TextureHandler {
 
 public:
-    TextureHandler() = default;
-    TextureHandler(SDL_Renderer* renderer);
-    ~TextureHandler();
+	TextureHandler() = default;
+	TextureHandler(SDL_Renderer* renderer);
+	~TextureHandler();
 
-    SDL_Texture* get_texture(int id);
-    void free_textures();
+	SDL_Texture* get_texture(int id);
+	void free_textures();
 private:
 
-    SDL_Renderer* renderer;
-    std::vector<std::pair<int, Texture>> textures;
+	SDL_Renderer* renderer;
+	std::vector<std::pair<int, Texture>> textures;
 };
 
 

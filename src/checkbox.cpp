@@ -89,9 +89,9 @@ void Checkbox::render(SDL_Renderer* renderer) {
 
 
 void Checkbox::set_x(int x) {
-    this->x = x;
+	this->x = x;
 }
 
 void Checkbox::set_y(int y) {
-    this->y = y;
+	this->y = y;
 }

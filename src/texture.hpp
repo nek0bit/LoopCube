@@ -6,14 +6,14 @@
 class Texture {
 
 public:
-    Texture(SDL_Renderer* renderer, std::string filename);
-    ~Texture();
+	Texture(SDL_Renderer* renderer, std::string filename);
+	~Texture();
 
-    SDL_Texture* get_texture();
-    void free_texture();
+	SDL_Texture* get_texture();
+	void free_texture();
 
 private:
-    SDL_Texture* texture;
+	SDL_Texture* texture;
 };
 
 

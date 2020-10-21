@@ -18,16 +18,16 @@ Menu::Menu(SDL_Renderer* renderer,
 		   int* WINDOW_H) : state{0}, BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W},
 							WINDOW_H{WINDOW_H}, shift{BLOCK_S},
 							header{nullptr}, pad_left{180} {
-    this->renderer = renderer;
-    this->textures = &textures;
-    this->events = &events;
+	this->renderer = renderer;
+	this->textures = &textures;
+	this->events = &events;
 	
-    //************************************************
-    // Resize option_state to match option_str size
+	//************************************************
+	// Resize option_state to match option_str size
 	//************************************************
 	this->option_str = {"Play", "About", "Config", "Exit"};
-    option_state.resize(option_str.size());
-    button_group.resize(option_str.size());
+	option_state.resize(option_str.size());
+	button_group.resize(option_str.size());
 
 	//************************************************
 	// Setup buttons in main menu
@@ -35,9 +35,9 @@ Menu::Menu(SDL_Renderer* renderer,
 	const int offset_y = 48;
 	
 	for (size_t i = 0; i < button_group.size(); ++i) {
-        button_group[i] = std::unique_ptr<Button>(new Button(i, textures, 0, 30+(offset_y*i), BUTTON_W));
-        button_group[i]->set_text(renderer, option_str[i]);
-    }
+		button_group[i] = std::unique_ptr<Button>(new Button(i, textures, 0, 30+(offset_y*i), BUTTON_W));
+		button_group[i]->set_text(renderer, option_str[i]);
+	}
 
 	//************************************************
 	// Setup options
@@ -101,8 +101,8 @@ void Menu::update_config_elements(int id, int value) {
 }
 
 void Menu::update(bool update_animations) {
-    // Set background
-    SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 255);
+	// Set background
+	SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 255);
 
 	if (state == MAIN_MENU) {
 		for (auto &i: button_group) {
@@ -130,30 +130,30 @@ void Menu::update(bool update_animations) {
 		
 	}
 
-    // Update animation for background
+	// Update animation for background
 	if (update_animations) { // Removes stutter if we must call multiple updates in a single frame
 		shift.tick();
 	}
 }
 
 void Menu::render_background() {
-    // Render the background in a tile manner with animations
-    const int BLOCK_S = 40;
-    const int MAX_X = (*WINDOW_W + BLOCK_S*2)/BLOCK_S;
-    const int MAX_Y = (*WINDOW_H + BLOCK_S*2)/BLOCK_S;
-    // Create a grid of tiles as the background
-    for (int i = -1; i < MAX_X; ++i) {
-        for (int j = -1; j < MAX_Y; ++j) {
-            SDL_Rect block{
-                i*BLOCK_S - shift.get_frame(),
-                j*BLOCK_S - shift.get_frame(),
-                BLOCK_S, BLOCK_S};
-            SDL_Rect src{0, 0, 16, 16};
+	// Render the background in a tile manner with animations
+	const int BLOCK_S = 40;
+	const int MAX_X = (*WINDOW_W + BLOCK_S*2)/BLOCK_S;
+	const int MAX_Y = (*WINDOW_H + BLOCK_S*2)/BLOCK_S;
+	// Create a grid of tiles as the background
+	for (int i = -1; i < MAX_X; ++i) {
+		for (int j = -1; j < MAX_Y; ++j) {
+			SDL_Rect block{
+				i*BLOCK_S - shift.get_frame(),
+				j*BLOCK_S - shift.get_frame(),
+				BLOCK_S, BLOCK_S};
+			SDL_Rect src{0, 0, 16, 16};
 
-            // Draw the tile
-            SDL_RenderCopy(renderer, textures->get_texture(2), &src, &block);
-        }
-    }
+			// Draw the tile
+			SDL_RenderCopy(renderer, textures->get_texture(2), &src, &block);
+		}
+	}
 }
 
 void Menu::set_state(int state) {
@@ -199,12 +199,12 @@ void Menu::render_sidebar() {
 }
 
 int Menu::get_pressed() {
-    for (auto &i: button_group) {
-        if (i->get_pressed()) {
-            return i->get_id();
-        }
-    }
-    return -1;
+	for (auto &i: button_group) {
+		if (i->get_pressed()) {
+			return i->get_id();
+		}
+	}
+	return -1;
 }
 
 
@@ -224,7 +224,7 @@ void Menu::render_config_menu() {
 }
 
 void Menu::render() {
-    render_background();
+	render_background();
 	render_sidebar();
 
 	if (state == MAIN_MENU) {		

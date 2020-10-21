@@ -6,11 +6,11 @@
 
 class TestEntity: public Entity {
 public:
-    TestEntity() = default;
-    TestEntity(TextureHandler &textures, double x, double y);
-    ~TestEntity();
+	TestEntity() = default;
+	TestEntity(TextureHandler &textures, double x, double y);
+	~TestEntity();
 
-    void update(Chunk_Group &chunks, Camera& camera) override;
+	void update(Chunk_Group &chunks, Camera& camera) override;
 
 	void collision_bottom() override;
 };
