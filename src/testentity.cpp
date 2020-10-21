@@ -1,7 +1,7 @@
 #include "testentity.hpp"
 
-TestEntity::TestEntity(TextureHandler &textures, double x, double y)
-	: Entity{textures, 0, x, y, 50, 50} {
+TestEntity::TestEntity(double x, double y)
+	: Entity{0, x, y, 50, 50} {
 	
 }
 
@@ -9,8 +9,8 @@ TestEntity::~TestEntity() {
 
 }
 
-void TestEntity::update(ChunkGroup& chunks, Camera& camera) {
-	update_basic_physics(chunks, camera);
+void TestEntity::update(ChunkGroup& chunks) {
+	update_basic_physics(chunks);
 
 	if (on_ground) {
 		vel_y = -15;

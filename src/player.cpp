@@ -1,7 +1,7 @@
 #include "player.hpp"
 
-Player::Player(TextureHandler &textures)
-	: Entity{textures, 4, 0, 0, 30, 58}, jumping{false}, can_jump{true}, jump_enabled{true} {
+Player::Player()
+	: Entity{4, 0, 0, 30, 58}, jumping{false}, can_jump{true}, jump_enabled{true} {
 	
 }
 
@@ -9,8 +9,8 @@ Player::~Player() {
 
 }
 
-void Player::update(ChunkGroup& chunks, Camera& camera, std::vector<Entity*> entities) {
-	update_basic_physics(chunks, camera);
+void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
+	update_basic_physics(chunks);
 
 	// See if touching entities
 	for (auto*& entity: entities) {
@@ -19,7 +19,7 @@ void Player::update(ChunkGroup& chunks, Camera& camera, std::vector<Entity*> ent
 			if (info.bottom >= 0) {
 				vel_y = 0;
 				entity->collision_bottom();
-				entity->update(chunks, camera);
+				entity->update(chunks);
 			}
 			if (info.top >= 0) {
 				obj.y -= info.top;

@@ -1,9 +1,8 @@
 #include "chunk.hpp"
 
-Chunk::Chunk(unsigned long int seed, int slot, TextureHandler &textures, std::vector<Structure*>& structures)
+Chunk::Chunk(unsigned long int seed, int slot, std::vector<Structure*>& structures)
 	: MAX_WIDTH{constants::chunk_width}, MAX_HEIGHT{constants::chunk_height}, MAX_SPLIT_COUNT{constants::chunk_split_count},
 	  MAX_SPLIT_HEIGHT{constants::chunk_split_height}, terrain_gen{seed}, chunk_text{nullptr} {
-	this->textures = &textures;
 	this->slot = slot;
 
 	// Setup chunks
@@ -114,7 +113,7 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
 }
 
 bool Chunk::place_block(int id, int x, int y) {
-	Block temp_block{id, *textures, get_chunk_x(x), y};
+	Block temp_block{id, get_chunk_x(x), y};
 	// Check if between chunk size
 	if (x < MAX_WIDTH+1 && x >= 0 && y < MAX_HEIGHT+1 && y >= 0) {
 		// Check if a block has been placed here before
@@ -143,11 +142,10 @@ bool Chunk::place_block(int id, int x, int y) {
 
 }
 
-// TODO Update these functions to operate on split chunks properly
-void Chunk::update_all(Camera& camera) {
+void Chunk::update_all() {
 	for(size_t i = 0; i < chunk.size(); ++i) {
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
-			chunk[i][j].update(camera);
+			chunk[i][j].update();
 		}
 	}
 }
@@ -158,18 +156,18 @@ void Chunk::render_all_shadows(SDL_Renderer* renderer, Camera& camera) {
 	for(size_t i = 0; i < chunk.size(); ++i) {
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
 			if (!chunk[i][j].out_of_view(camera)) {
-				chunk[i][j].render_shadow(renderer);
+				chunk[i][j].render_shadow(renderer, camera);
 			}
 		}
 	}
 }
 
-void Chunk::render_all_blocks(SDL_Renderer* renderer, Camera& camera) {
+void Chunk::render_all_blocks(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
 	// Then render blocks
 	for(size_t i = 0; i < chunk.size(); ++i) {
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
 			if (!chunk[i][j].out_of_view(camera)) {
-				chunk[i][j].render(renderer);
+				chunk[i][j].render(renderer, textures, camera);
 			}
 		}
 	}

@@ -1,15 +1,15 @@
 #include "entity.hpp"
 
-Entity::Entity(TextureHandler& textures, int texture_id, double x, double y, double width, double height)
-	: GameObject{texture_id, textures, x, y, width, height}, vel_x{0}, vel_y{0}, vel_x_speed{1.8}, on_ground{false}, last_pos{-1} {
+Entity::Entity(int texture_id, double x, double y, double width, double height)
+	: GameObject{texture_id, x, y, width, height}, vel_x{0}, vel_y{0}, vel_x_speed{1.8}, on_ground{false}, last_pos{-1} {
 	
 }
 
 Entity::~Entity() {}
 
-void Entity::update(ChunkGroup& chunks, Camera& camera) {
+void Entity::update(ChunkGroup& chunks) {
 	// Optional; You can use your own physics function
-	update_basic_physics(chunks, camera);
+	update_basic_physics(chunks);
 }
 
 double Entity::get_vel_x() const {
@@ -18,14 +18,6 @@ double Entity::get_vel_x() const {
 
 double Entity::get_vel_y() const {
 	return vel_y;
-}
-
-double Entity::get_x(Camera& camera) const {
-	return obj.x + (camera.get_x());
-}
-
-double Entity::get_y(Camera& camera) const {
-	return obj.y + (camera.get_y());
 }
 
 void Entity::collision_left() {}
@@ -69,17 +61,12 @@ CollisionInfo Entity::check_block_collision(ChunkGroup& chunks) {
 	return CollisionInfo{};
 }
 
-void Entity::update_basic_physics(ChunkGroup& chunks, Camera& camera) {
+void Entity::update_basic_physics(ChunkGroup& chunks) {
 	// Update draw position
 	src.h = get_height();
 	src.w = get_width();
 	src.x = 0;
 	src.y = 0;
-
-	dest.h = src.h;
-	dest.w = src.w;
-	dest.x = get_x(camera);
-	dest.y = get_y(camera);
 	
 	if (on_ground) vel_x *= 0.78;
 

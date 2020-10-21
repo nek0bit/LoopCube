@@ -2,16 +2,13 @@
 
 GameObject::GameObject() {}
 
-GameObject::GameObject(int texture_id, TextureHandler &textures,
-						 double x, double y, double w, double h) {
+GameObject::GameObject(int texture_id, double x, double y, double w, double h) {
 	obj.x = x;
 	obj.y = y;
 	obj.w = w;
 	obj.h = h;
 
-	this->texture_id = texture_id;
-	
-	this->textures = &textures;
+	this->texture_id = texture_id;	
 }
 
 GameObject::~GameObject() {
@@ -52,20 +49,16 @@ bool GameObject::out_of_view(Camera& camera) {
 	return false;
 }
 
-void GameObject::update(Camera& camera) {
+void GameObject::update() {
 	src.h = get_height();
 	src.w = get_width();
 	src.x = 0;
 	src.y = 0;
-
-	dest.h = src.h;
-	dest.w = src.w;
-	dest.x = get_x(camera);
-	dest.y = get_y(camera);
 }
 
-void GameObject::render(SDL_Renderer* renderer) {
-	SDL_RenderCopy(renderer, textures->get_texture(texture_id), &src, &dest);
+void GameObject::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
+	SDL_Rect dest{static_cast<int>(get_x(camera)), static_cast<int>(get_y(camera)), static_cast<int>(obj.w), static_cast<int>(obj.h)};
+	SDL_RenderCopy(renderer, textures.get_texture(texture_id), &src, &dest);
 }
 
 const Position& GameObject::get_obj() const {

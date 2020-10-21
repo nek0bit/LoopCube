@@ -8,11 +8,10 @@
 
 class Player: public Entity {
 public:
-	Player() = default;
-	Player(TextureHandler &textures);
+	Player();
 	~Player();
 
-	void update(ChunkGroup &chunks, Camera& camera, std::vector<Entity*> entities);
+	void update(ChunkGroup &chunks, std::vector<Entity*> entities);
 	
 	// Movement
 	void jump(ChunkGroup &chunks);

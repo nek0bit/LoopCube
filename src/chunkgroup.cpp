@@ -39,13 +39,13 @@ bool ChunkGroup::chunk_already_generated(int id) {
 }
 
 // TODO this could be made faster
-void ChunkGroup::generate_chunk(TextureHandler& textures, int id, std::vector<Structure*>& structure) {
+void ChunkGroup::generate_chunk(int id, std::vector<Structure*>& structure) {
 	bool check = chunk_already_generated(id);
 	// Generate the chunk if it hasn't been generated before
 	if (std::find(loaded_chunks.begin(), loaded_chunks.end(), id) == loaded_chunks.end() && !check) {
 		//Chunk temp_chunk(seed, id, textures, structure);
 		
-		insert_sorted(group, Chunk{seed, id, textures, structure});
+		insert_sorted(group, Chunk{seed, id, structure});
 		insert_sorted(loaded_chunks, id);
 		
 		update_viewport();
@@ -71,7 +71,7 @@ void ChunkGroup::generate_chunk(TextureHandler& textures, int id, std::vector<St
 	}
 }
 
-void ChunkGroup::check_area(TextureHandler& textures, int x, std::vector<Structure*>& structures) {
+void ChunkGroup::check_area(int x, std::vector<Structure*>& structures) {
 	const int load_distance = constants::load_distance;
 	
 	// Takes x, and returns the current chunk id the player is in
@@ -105,7 +105,7 @@ void ChunkGroup::check_area(TextureHandler& textures, int x, std::vector<Structu
 
 	// TODO Only run generate_chunk if needed
 	for (int i = load_distance*-1; i < load_distance; ++i) {
-		generate_chunk(textures, id+i, structures);
+		generate_chunk(id+i, structures);
 	}
 }
 
@@ -200,7 +200,8 @@ int ChunkGroup::get_id(Camera& camera, int surrounding) {
 	return id;
 }
 
-void ChunkGroup::render_all(SDL_Renderer* renderer, Camera& camera) {
+// Function not recommended: Use render_all_viewport
+void ChunkGroup::render_all(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: group) {
 			Position box = chunk.get_pos();
@@ -218,7 +219,7 @@ void ChunkGroup::render_all(SDL_Renderer* renderer, Camera& camera) {
 			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
 			continue;
 		} else {
-			chunk.render_all_blocks(renderer, camera);
+			chunk.render_all_blocks(renderer, textures, camera);
 		}
 	}
 
@@ -229,7 +230,7 @@ void ChunkGroup::render_all(SDL_Renderer* renderer, Camera& camera) {
 	}
 }
 
-void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
+void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: viewport_chunks) {
 			Position box = chunk->get_pos();
@@ -247,7 +248,7 @@ void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, Camera& camera) {
 			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
 			continue;
 		} else {
-			chunk->render_all_blocks(renderer, camera);
+			chunk->render_all_blocks(renderer, textures, camera);
 		}
 	}
 	if (render_chunk_info) {
@@ -264,7 +265,7 @@ void ChunkGroup::update_all(Camera& camera) {
 			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
 			continue;
 		} else {
-			chunk.update_all(camera);
+			chunk.update_all();
 		}
 	}
 }
@@ -276,7 +277,7 @@ void ChunkGroup::update_all_viewport(Camera& camera) {
 			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
 			continue;
 		} else {
-			chunk->update_all(camera);
+			chunk->update_all();
 		}
 	}
 }

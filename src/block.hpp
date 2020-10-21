@@ -9,11 +9,10 @@ class Block: public GameObject {
 public:
 	Block();
 	~Block();
-	Block(int id, TextureHandler &textures, int x, int y);
+	Block(int id, int x, int y);
 
-	void update(Camera& camera);
-	void render(SDL_Renderer* renderer);
-	void render_shadow(SDL_Renderer* renderer);
+	void update();
+	void render_shadow(SDL_Renderer* renderer, Camera& camera);
 	const BlockInfo* get_blockinfo();
 	double get_default_x() const override;
 	double get_default_y() const override;
@@ -21,7 +20,6 @@ public:
 	double get_y(Camera& camera) const override;
 private:
 	const BlockInfo *blockinfo;
-	SDL_Rect shadow;
 };
 
 

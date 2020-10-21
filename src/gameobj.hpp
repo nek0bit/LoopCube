@@ -1,7 +1,8 @@
 #ifndef GAMEOBJ_HPP
 #define GAMEOBJ_HPP
-#include "SDL2/SDL.h"
 #include <string>
+
+#include "SDL2/SDL.h"
 
 #include "texturehandler.hpp"
 #include "constants.hpp"
@@ -13,11 +14,11 @@ class GameObject {
 
 public:
 	GameObject();
-	GameObject(int texture_id, TextureHandler &textures, double x, double y, double w, double h);
+	GameObject(int texture_id, double x, double y, double w, double h);
 	virtual ~GameObject();
 
-	virtual void update(Camera& camera);
-	virtual void render(SDL_Renderer* renderer);
+	virtual void update();
+	virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
 
 	virtual bool out_of_view(Camera& camera);
 
@@ -36,9 +37,7 @@ protected:
 	int texture_id;
 
 	Position obj;
-	SDL_Rect src, dest;
-	TextureHandler* textures;
-
+	SDL_Rect src;
 };
 
 

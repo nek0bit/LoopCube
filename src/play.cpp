@@ -12,7 +12,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &event
 
 	unsigned long int seed = 89478970182;
 	// Configure camera
-	player = Player(textures);
+	player = Player();
 	chunks = ChunkGroup(seed);
 	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, WINDOW_W, WINDOW_H));
 	update_config();
@@ -35,21 +35,19 @@ void Play::update() {
 	background.update(camera);
 	
 	// Update camera
-	handle_camera();
 
 	// Update all chunks
 	chunks.update_all_viewport(camera);
-	chunks.check_area(textures, player.get_default_x(), structures);
+	chunks.check_area(player.get_default_x(), structures);
 	
 	inv->update();
-
 	
 	for (Entity*& entity: entities) {
-		entity->update(chunks, camera);
+		entity->update(chunks);
 	}
 	
 	// Update player
-	player.update(chunks, camera, entities);
+	player.update(chunks, entities);
 
 
 	for (int i = 0; i < 4; ++i) {
@@ -60,7 +58,7 @@ void Play::update() {
 
 	// Create entity
 	if (events.get_state()[16] || events.get_button_state()[9]) {
-		entities.push_back(new TestEntity(textures, player.get_default_x(), player.get_default_y()-30));
+		entities.push_back(new TestEntity(player.get_default_x(), player.get_default_y()-30));
 	}
 
 	// Jump (A)
@@ -122,9 +120,12 @@ void Play::update() {
 
 	if (show_particles) {
 		for (auto& particle: particles) {
-			particle.update(chunks, camera);
+			particle.update(chunks);
 		}
 	}
+
+	handle_camera();
+
 }
 
 void Play::update_config() {
@@ -137,18 +138,18 @@ void Play::render() {
 	
 	if (show_particles) {
 		for (auto& particle: particles) {
-			particle.render(renderer);
+			particle.render(renderer, textures, camera);
 		}
 	}
 	
-	chunks.render_all_viewport(renderer, camera);
+	chunks.render_all_viewport(renderer, textures, camera);
 
 	SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
 	
-	player.render(renderer);
+	player.render(renderer, textures, camera);
 
 	for (Entity*& entity: entities) {
-		entity->render(renderer);
+		entity->render(renderer, textures, camera);
 	}
 
 	int x, y;
@@ -178,7 +179,7 @@ void Play::mouse_events() {
 				if (block != nullptr) {
 					// Generate particles
 					if (show_particles) {
-						GravityParticle temp{block->get_texture_id(), textures, 50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
+						GravityParticle temp{block->get_texture_id(),50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
 						    p1*constants::block_w+(constants::block_w/2), p2*constants::block_h, 8, 6};
 						particles.push_back(temp);
 					}

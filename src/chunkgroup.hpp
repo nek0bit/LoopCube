@@ -12,31 +12,35 @@
 #include "structure.hpp"
 #include "tree.hpp"
 
-// TODO non-important Rename this properly
 class ChunkGroup {
 public:
 	ChunkGroup() = default;
 	ChunkGroup(unsigned long int seed);
 	~ChunkGroup();
 
-	void generate_chunk(TextureHandler& textures, int id, std::vector<Structure*>& structure);
-	void check_area(TextureHandler& textures, int x, std::vector<Structure*>& structure);
+	// Update
+	void generate_chunk(int id, std::vector<Structure*>& structure);
+	void check_area(int x, std::vector<Structure*>& structure);
+
 	void update_viewport();
-	void render_all(SDL_Renderer* renderer, Camera& camera);
 	void update_all(Camera& camera);
-	void render_all_viewport(SDL_Renderer* renderer, Camera& camera);
 	void update_all_viewport(Camera& camera);
-	void print_chunks_fancy();
 
+	// Render
+	void render_all(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+	void render_all_viewport(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+
+	// Getters
 	int get_id(Camera& camera, int surrounding = 8);
-
 	Chunk* get_chunk_at(double x, bool loaded);
-
 	int get_chunk_y(double y);
-
 	std::vector<Chunk>& get_chunks();
 	std::vector<Chunk*>& get_viewport_chunks();
+	
 	bool chunk_already_generated(int id);
+
+	// Debug
+	void print_chunks_fancy();
 private:
 	void update_config();
 	void sort_all();

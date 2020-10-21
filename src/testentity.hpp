@@ -7,10 +7,10 @@
 class TestEntity: public Entity {
 public:
 	TestEntity() = default;
-	TestEntity(TextureHandler &textures, double x, double y);
+	TestEntity(double x, double y);
 	~TestEntity();
 
-	void update(ChunkGroup &chunks, Camera& camera) override;
+	void update(ChunkGroup &chunks) override;
 
 	void collision_bottom() override;
 };
