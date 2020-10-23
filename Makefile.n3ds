@@ -152,6 +152,11 @@ else
 $(OUTPUT).3dsx	:	$(OUTPUT).elf
 endif
 
+%.elf:
+	$(SILENTMSG) linking $(notdir $@)
+	$(LD) $(LDFLAGS) $(OFILES) $(LIBPATHS) $(LIBS) $(wildcard $(DEVKITPRO)/libctru/lib/*.a) $(wildcard $(DEVKITPRO)/portlibs/3ds/lib/*.a) -o $@
+	$(NM) -CSn $@ > $(notdir $*.lst)
+
 $(OUTPUT).elf	:	$(OFILES)
 
 #---------------------------------------------------------------------------------
