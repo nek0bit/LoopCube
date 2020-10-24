@@ -1,7 +1,16 @@
 #include "player.hpp"
 
+enum Sprites {
+	PLAYER_IDLE,
+	PLAYER_WALK_CYCLE1,
+	PLAYER_WALK_CYCLE2,
+	PLAYER_WALK_CYCLE3,
+	PLAYER_WALK_CYCLE4,
+	PLAYER_JUMP
+};
+
 Player::Player()
-	: Entity{4, 0, 0, 30, 58}, jumping{false}, can_jump{true}, jump_enabled{true} {
+	: Entity{4, 0, 0, 34, 66}, sprite{17, 33}, frame{40}, jumping{false}, can_jump{true}, jump_enabled{true}  {
 	
 }
 
@@ -11,6 +20,41 @@ Player::~Player() {
 
 void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
 	update_basic_physics(chunks);
+	frame.tick();
+
+	// Frame for when the character is looking the other way
+	const int max_frames = 5;
+	int flipped = max_frames;
+
+	int on_frame = ceil((static_cast<double>(frame.get_frame())/static_cast<double>(frame.get_max_frames())
+						 )*(max_frames-1));
+	if (on_frame == 0) on_frame = 1;
+
+	// Where the player is looking
+	static int adder = 0;
+	
+	if ((vel_x < -0.1 || vel_x > 0.1) && on_ground) {
+		if (vel_x < -0.1) {
+			// Walking left
+			sprite.set_x(on_frame + flipped);
+			adder = flipped;
+		} else if (vel_x > 0.1) {
+			// Walking right
+			sprite.set_x(on_frame);
+			adder = 0;
+		}
+	} else if (jumping) {
+		// Jumping
+		sprite.set_x(PLAYER_IDLE + adder);
+	} else {
+		// Idle
+		sprite.set_x(PLAYER_IDLE + adder);
+	}
+
+	src.x = sprite.get_x();
+	src.y = sprite.get_y();
+	src.w = sprite.get_width();
+	src.h = sprite.get_height();
 
 	// See if touching entities
 	for (auto*& entity: entities) {
