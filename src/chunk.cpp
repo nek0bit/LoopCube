@@ -77,7 +77,12 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
 		double d_x = (double)x/(double)MAX_WIDTH;
 
 		// Generate world
-		int temp = floor(terrain_gen.noise((d_x+slot) * .3, 0)*12);
+		double temp_cycle = terrain_gen.noise((d_x+slot) * .2, 0);
+		int passes = 2;
+		for (int i = 0; i < passes; ++i) {
+			temp_cycle = terrain_gen.noise(temp_cycle, 0);
+		}
+	    int temp = floor(temp_cycle*16);
 
 		int offset = 30;
 		for (int y = 0; y < MAX_HEIGHT-temp-offset; ++y) {
