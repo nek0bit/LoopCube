@@ -126,7 +126,7 @@ void Game::init(bool fullscreen = false) {
 #endif
 	
 	SDL_StartTextInput();
-	if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
+	if (SDL_Init(SDL_INIT_VIDEO) == 0) {
 		std::cout << "[SDL] Initialized SDL" << std::endl;
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_W, WINDOW_H, flags);
 		renderer = SDL_CreateRenderer(window, -1, 0);
