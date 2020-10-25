@@ -10,7 +10,7 @@ enum Sprites {
 };
 
 Player::Player()
-	: Entity{4, 0, 0, 34, 66}, sprite{17, 33}, frame{40}, jumping{false}, can_jump{true}, jump_enabled{true}  {
+	: Entity{4, 0, 130*constants::block_h, 34, 66}, sprite{17, 33}, frame{40}, jumping{false}, can_jump{true}, jump_enabled{true}  {
 	
 }
 

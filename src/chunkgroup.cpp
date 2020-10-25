@@ -168,8 +168,7 @@ Chunk* ChunkGroup::get_chunk_at(double x, bool loaded=true) {
 		id_double = floor(x / (constants::chunk_width * constants::block_w));
 	}
 
-	int id = id_double;
-	
+	int id = id_double;	
 	std::vector<int>::iterator hovered_chunk = std::find(loaded_chunks.begin(), loaded_chunks.end(), id);
 
 	if (hovered_chunk != loaded_chunks.end()) {

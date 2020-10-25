@@ -103,11 +103,13 @@ void Play::update() {
 		
 		for (size_t i = 0; i < data.size(); ++i) {
 			// See if the chunk actually exists
-			auto c1 = chunks.get_chunk_at(structures[k]->get_x() + data[i].x, false);
+			auto c1 = chunks.get_chunk_at((structures[k]->get_x()+data[i].x)*constants::block_w, false);
 			
 			if (c1 != nullptr) {
+				int chunk_pos = std::abs(((structures[k]->get_x()+data[i].x))-(c1->get_slot()*constants::chunk_width));
+
 				// Place block in proper chunk
-				c1->place_block(data[i].id, (structures[k]->get_x() + data[i].x)-(c1->get_slot()*constants::chunk_width)+constants::chunk_width, structures[k]->get_y() + data[i].y);
+				c1->place_block(data[i].id, chunk_pos, structures[k]->get_y() + data[i].y);
 				
 				// Erase the data now that we are done using it
 				data.erase(data.begin() + i);
@@ -163,6 +165,7 @@ void Play::render() {
 void Play::mouse_events() {
 	int p1, p2;
 	if (!inv->get_inventory_visibility()) draw_selection(&p1, &p2);
+
 	
 	// Get cursor over chunk
 	Chunk* chunk = chunks.get_chunk_at(p1*constants::block_w, true);
@@ -188,6 +191,7 @@ void Play::mouse_events() {
 			break;
 		case 3:
 			{
+				std::cout << p1*constants::block_w << std::endl;
 				Item& item = inv->get_selected_item();
 				if (item.enabled) {
 					BlockInfo b_info = item.get_block();
