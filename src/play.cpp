@@ -191,7 +191,6 @@ void Play::mouse_events() {
 			break;
 		case 3:
 			{
-				std::cout << p1*constants::block_w << std::endl;
 				Item& item = inv->get_selected_item();
 				if (item.enabled) {
 					BlockInfo b_info = item.get_block();
