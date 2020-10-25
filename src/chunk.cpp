@@ -87,7 +87,8 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
 		
 	    int temp = floor( terrain_gen.GetNoise(static_cast<float>((d_x+slot))*compactness, static_cast<float>(0)) * increase );
 
-		int offset = 30;
+		int offset = 160;
+		int cave_start = 12;
 		for (int y = 0; y < MAX_HEIGHT-temp-offset; ++y) {
 			double d_y = (double)y/(double)MAX_HEIGHT;
 			if (y == 0) {
@@ -97,14 +98,15 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
 			} else if (y >= 1 && y <= 3) {
 				place_block(BLOCK_DIRT, x, y+temp+offset);
 			} else {
-			    double cave_z = 30;
-				double cave_compactness_x = 1;
-				double cave_compactness_y = 30;
-				double cave_increase = 3;
-				double index = 0.6;
+			    double cave_z = 1300;
+				double cave_compactness_x = 5;
+				double cave_compactness_y = 2400;
+				double cave_increase = -.8;
+				double index = 0.3;
 				double cave_noise = terrain_gen.GetNoise((d_x+(slot))*cave_compactness_x, (d_y)*cave_compactness_y, cave_z)*cave_increase;
-				std::cout << cave_noise << std::endl;
-				if (!(cave_noise < index && cave_noise > index*-1)) {
+				if (y <= cave_start) {
+					place_block(BLOCK_STONE, x, y+temp+offset);
+				} else if (cave_noise < index && cave_noise > index*-1) {
 					place_block(BLOCK_STONE, x, y+temp+offset);
 				}
 			}
