@@ -12,6 +12,7 @@
 #include "constants.hpp"
 #include "block.hpp"
 #include "perlin.hpp"
+#include "../libs/FastNoiseLite.h"
 #include "camera.hpp"
 #include "inventory.hpp"
 #include "texturehandler.hpp"
@@ -55,7 +56,8 @@ private:
 	int MAX_SPLIT_HEIGHT;
 	std::vector<std::vector<Block>> chunk;
 	int slot;
-	PerlinNoise terrain_gen;
+	//PerlinNoise terrain_gen;
+	FastNoiseLite terrain_gen;
 
 	std::shared_ptr<Text> chunk_text;
 };

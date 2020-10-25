@@ -2,8 +2,13 @@
 
 Chunk::Chunk(unsigned long int seed, int slot, std::vector<Structure*>& structures)
 	: MAX_WIDTH{constants::chunk_width}, MAX_HEIGHT{constants::chunk_height}, MAX_SPLIT_COUNT{constants::chunk_split_count},
-	  MAX_SPLIT_HEIGHT{constants::chunk_split_height}, terrain_gen{seed}, chunk_text{nullptr} {
+	  MAX_SPLIT_HEIGHT{constants::chunk_split_height}, terrain_gen{}, chunk_text{nullptr} {
 	this->slot = slot;
+
+	terrain_gen.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+	terrain_gen.SetFractalType(FastNoiseLite::FractalType_FBm);
+	terrain_gen.SetSeed(seed);
+	terrain_gen.SetFractalOctaves(6);
 
 	// Setup chunks
 	chunk.resize(MAX_SPLIT_COUNT, std::vector<Block>{});
@@ -77,12 +82,10 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
 		double d_x = (double)x/(double)MAX_WIDTH;
 
 		// Generate world
-		double temp_cycle = terrain_gen.noise((d_x+slot) * .2, 0);
-		int passes = 2;
-		for (int i = 0; i < passes; ++i) {
-			temp_cycle = terrain_gen.noise(temp_cycle, 0);
-		}
-	    int temp = floor(temp_cycle*16);
+		int compactness = 3; // I have no idea what I would've named these variables...
+		int increase = 50;
+		
+	    int temp = floor( terrain_gen.GetNoise(static_cast<float>((d_x+slot))*compactness, static_cast<float>(0)) * increase );
 
 		int offset = 30;
 		for (int y = 0; y < MAX_HEIGHT-temp-offset; ++y) {
@@ -94,8 +97,14 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
 			} else if (y >= 1 && y <= 3) {
 				place_block(BLOCK_DIRT, x, y+temp+offset);
 			} else {
-				int cave_noise = terrain_gen.noise(d_x+(slot), d_y*12)*400;
-				if (cave_noise < 150 && cave_noise > -150) {
+			    double cave_z = 30;
+				double cave_compactness_x = 1;
+				double cave_compactness_y = 30;
+				double cave_increase = 3;
+				double index = 0.6;
+				double cave_noise = terrain_gen.GetNoise((d_x+(slot))*cave_compactness_x, (d_y)*cave_compactness_y, cave_z)*cave_increase;
+				std::cout << cave_noise << std::endl;
+				if (!(cave_noise < index && cave_noise > index*-1)) {
 					place_block(BLOCK_STONE, x, y+temp+offset);
 				}
 			}
