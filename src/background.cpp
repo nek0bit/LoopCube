@@ -36,14 +36,16 @@ void Background::update(Camera& camera) {
 }
 
 void Background::render(SDL_Renderer* renderer, TextureHandler& textures) {
+	int offset = 200;
+	
 	// Render bg_shine
 	SDL_RenderCopy(renderer, textures.get_texture(13), &bg_shine_src, &bg_shine_dest);
 
 	// Render clouds
-	render_repeating(renderer, textures, 14, bg_cloud_offset_x, bg_cloud_offset_y, bg_cloud_w, bg_cloud_h, 60, 50);
+	render_repeating(renderer, textures, 14, bg_cloud_offset_x, bg_cloud_offset_y, bg_cloud_w, bg_cloud_h, 60, 50 + offset);
 
 	// Render hills
-	render_repeating(renderer, textures, 16, bg_hills_offset_x, bg_hills_offset_y, bg_hills_w, bg_hills_h, 0, 300);
+	render_repeating(renderer, textures, 16, bg_hills_offset_x, bg_hills_offset_y, bg_hills_w, bg_hills_h, 0, 300 + offset);
 }
 
 void Background::render_repeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int offset_x, int offset_y, int width,
