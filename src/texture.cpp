@@ -5,6 +5,9 @@ Texture::Texture(SDL_Renderer* renderer, std::string filename) {
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 
+	// Enable opacity
+	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+	
 	this->texture = texture;
 }
 

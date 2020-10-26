@@ -28,6 +28,7 @@ namespace constants {
 		"bg_cloud_loop", // 14
 		"bg_hills", // 15
 		"bg_hills_hq", // 16
+		"cave_bg", // 17
 	};
 
 	const std::vector<BlockInfo> block_info = {

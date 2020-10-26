@@ -17,14 +17,19 @@ public:
 	void render(SDL_Renderer* renderer, TextureHandler& textures);
 private:
 	void render_repeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int offset_x, int offset_y, int width,
-						  int height, int gap, int top);
+						  int height, int gap, int top, bool verticle = false);
 	int win_width;
+	int win_height;
+
+	bool show_cave_background;
 
 	SDL_Rect bg_shine_src, bg_shine_dest;
 	int bg_cloud_offset_x;
 	int bg_cloud_offset_y;
 	int bg_hills_offset_x;
 	int bg_hills_offset_y;
+	int bg_cave_block_x;
+	int bg_cave_block_y;
 	
 	
 	int bg_shine_w;
@@ -33,6 +38,8 @@ private:
 	int bg_cloud_h;
 	int bg_hills_w;
 	int bg_hills_h;
+	int bg_cave_block_w;
+	int bg_cave_block_h;
 };
 
 #endif

@@ -31,11 +31,6 @@ void Play::print_mouse_pos() {
 void Play::update() {
 	mouse_events();
 	
-	// Update background
-	background.update(camera);
-	
-	// Update camera
-
 	// Update all chunks
 	chunks.update_all_viewport(camera);
 	chunks.check_area(player.get_default_x(), structures);
@@ -127,6 +122,9 @@ void Play::update() {
 	}
 
 	handle_camera();
+
+	// Update background (after we handle camera or things get a tiny bit off sync)
+	background.update(camera);
 
 }
 
