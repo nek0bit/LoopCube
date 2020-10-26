@@ -32,8 +32,8 @@ include $(DEVKITPRO)/libnx/switch_rules
 TARGET		:=	loopcube
 BUILD		:=	obj
 SOURCES		:=	src
-DATA		:=	data
-INCLUDES	:=	include
+#DATA		:=	data
+INCLUDES	:=	src libs
 EXEFS_SRC	:=	exefs_src
 
 APP_TITLE   := LoopCube
@@ -47,14 +47,14 @@ ARCH	:=	-march=armv8-a -mtp=soft -fPIE -ftls-model=local-exec
 CFLAGS	:=	-Wall -O2 -ffunction-sections -ffast-math \
 			$(ARCH) $(DEFINES)
 
-CFLAGS	+=	$(INCLUDE) -D__SWITCH__
+CFLAGS	+=	$(INCLUDE) -D__SWITCH__ -DDATA_LOCATION=\".\"
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -std=gnu++11
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:=	-lSDL2_ttf -lfreetype -lpng -lSDL2_gfx -lSDL2_image -lSDL2 -lEGL -lGLESv2 -lglapi -ldrm_nouveau -lbz2 -ljpeg -lwebp -lz -lnx
+LIBS	:=	-lSDL2_ttf -lfreetype -lpng -lSDL2_image -lSDL2 -lEGL -lGLESv2 -lglapi -ldrm_nouveau -lbz2 -ljpeg -lwebp -lz -lnx
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

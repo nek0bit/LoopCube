@@ -132,6 +132,7 @@ void EventHandler::listen() {
 	}
 
 #ifdef __SWITCH__
+	/*
 	if (conID == CONTROLLER_HANDHELD) {
 		touchPosition touch;
 		u32 touch_count = hidTouchCount();
@@ -144,6 +145,7 @@ void EventHandler::listen() {
 			mouse_down = true;
 		}
 	}
+	*/
 #endif
 
 	while (SDL_PollEvent(&event)) {
