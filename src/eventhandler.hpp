@@ -49,8 +49,7 @@ private:
 	*/
 	std::vector<SDL_Scancode> keys_set;
 	std::vector<int> state;
-
-
+	
 	std::vector<SDL_GameControllerButton> buttons_set;
 	std::vector<int> button_state;
 

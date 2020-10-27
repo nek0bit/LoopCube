@@ -1,0 +1,13 @@
+#ifndef BACKENDINCLUDES_HPP
+#define BACKENDINCLUDES_HPP
+
+#ifdef INPUT_BACKEND_SDL2
+#include <SDL2/SDL.h>
+#endif // INPUT_BACKEND_SDL2
+
+#ifdef GRAPHIC_BACKEND_SDL2
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#endif // GRAPHICS_BACKEND_SDL2
+
+#endif // BACKENDINCLUDES_HPP
