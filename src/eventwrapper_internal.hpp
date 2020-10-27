@@ -13,7 +13,7 @@ public:
 
 	virtual void update_controllers();
 	virtual void resize_input_mappings();
-
+	
 	// Dev MUST put all of their event stuff in this function
 	virtual void listen();
 
@@ -34,8 +34,8 @@ public:
 	virtual std::string& get_text_buffer();
 
 	bool get_quit();
-	bool enable_quit();
-	bool disable_quit();
+    void enable_quit();
+    void disable_quit();
 	std::string text_mode_buffer;
 protected:
 	virtual void init(); // Not often used, but useful for seperating API stuff from main.
@@ -69,6 +69,6 @@ protected:
 	 * a very large variable/memory problems. Closing clears this buffer.
 	 */ 
 	bool text_mode;
-}
+};
 
 #endif

@@ -14,6 +14,8 @@ else
 CXXFLAGS += -DDATA_LOCATION=\"$(DATA_LOCATION)\"
 endif
 
+CXXFLAGS += -DINPUT_BACKEND_SDL2 -DGRAPHIC_BACKEND_SDL2
+
 all: debug
 
 obj/%.o: %.cpp %.hpp

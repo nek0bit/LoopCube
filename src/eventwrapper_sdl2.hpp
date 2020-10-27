@@ -1,5 +1,6 @@
 #include "eventwrapper_internal.hpp"
 
+// Only include if enabled
 #ifdef INPUT_BACKEND_SDL2
 #include "backendincludes.hpp"
 
@@ -20,7 +21,8 @@ public:
 	virtual void listen() override;
 private:
 	SDL_Joystick* controller;
-}
+	SDL_Event event;
+};
 
 #endif // EVENTWRAPPER_SDL2_HPP
 #endif // INPUT_BACKEND_SDL2
