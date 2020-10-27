@@ -1,11 +1,10 @@
 #ifndef CHECKBOX_HPP
 #define CHECKBOX_HPP
-
 #include <iostream>
-#include <SDL2/SDL.h>
+
+#include "backendincludes.hpp"
 
 #include "uielement.hpp"
-#include "eventhandler.hpp"
 #include "text.hpp"
 #include "aabb.hpp"
 #include "constants.hpp"
@@ -27,7 +26,7 @@ public:
 
 	void set_x(int x);
 	void set_y(int y);
-	void update(EventHandler& events);
+	void update(EventWrapper*& events);
 	void render(SDL_Renderer* renderer);
 	
 private:

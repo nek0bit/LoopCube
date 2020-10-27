@@ -1,17 +1,16 @@
 #ifndef MENU_HPP
 #define MENU_HPP
 #include <iostream>
-#include <SDL2/SDL.h>
 #include <vector>
 #include <string>
 #include <cmath>
 #include <random>
 #include <memory>
 
+#include "backendincludes.hpp"
 #include "textbox.hpp"
 #include "checkbox.hpp"
 #include "texturehandler.hpp"
-#include "eventhandler.hpp"
 #include "constants.hpp"
 #include "button.hpp"
 #include "animation.hpp"
@@ -20,8 +19,8 @@
 class Menu {
 public:
 	Menu(SDL_Renderer* renderer, 
-		 TextureHandler &textures,
-		 EventHandler &events,
+		 TextureHandler& textures,
+		 EventWrapper*& events,
 		 int* WINDOW_W,
 		 int* WINDOW_H);
 	~Menu();
@@ -57,7 +56,7 @@ private:
 	// Important setup
 	SDL_Renderer* renderer;
 	TextureHandler* textures;
-	EventHandler* events;
+    EventWrapper* events;
 	Animation shift;
 
 	// Content elements for sidebar

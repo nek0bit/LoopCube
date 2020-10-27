@@ -6,12 +6,11 @@
 #ifdef __SWITCH__
 #include <switch.h>
 #endif
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+
+#include "backendincludes.hpp"
 
 #include "uielement.hpp"
 #include "constants.hpp"
-#include "eventhandler.hpp"
 #include "text.hpp"
 #include "aabb.hpp"
 #include "animation.hpp"
@@ -23,7 +22,7 @@ public:
 	~Textbox();
 
 	// TODO Add set_x, set_y functions
-	void update(EventHandler& events);
+	void update(EventWrapper*& events);
 	void render(SDL_Renderer* renderer);
 private:
 	std::string text;
@@ -41,7 +40,7 @@ private:
 	SwkbdConfig kbd;
 #endif
 	
-	void handle_keyboard(EventHandler& events);
+	void handle_keyboard(EventWrapper*& events);
 };
 
 #endif

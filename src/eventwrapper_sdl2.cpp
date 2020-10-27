@@ -2,7 +2,7 @@
 
 #include "eventwrapper_sdl2.hpp"
 
-EventWrapper_SDL2::EventWrapper_SDL2() : EventWrapper{} {
+EventWrapper_SDL2::EventWrapper_SDL2() : EventWrapper{}, controller{nullptr} {
 	key_mapping = {
 		SDL_SCANCODE_W, // UP
 		SDL_SCANCODE_D, // RIGHT
@@ -41,9 +41,7 @@ EventWrapper_SDL2::EventWrapper_SDL2() : EventWrapper{} {
 
 EventWrapper_SDL2::~EventWrapper_SDL2() {}
 
-void EventWrapper_SDL2::init() {
-	update_controllers();
-}
+void EventWrapper_SDL2::init() {}
 
 void EventWrapper_SDL2::update_controllers() {
 	// NOTE this only works with the furthest port priority controller
@@ -89,7 +87,7 @@ void EventWrapper_SDL2::listen() {
 	/* TODO move this bit all into it's own function. Controllers are a seperate thing
 	 * so it's best we move it all out of the way; same for the keyboard stuff
 	 */
-	if (controller != NULL) {
+	if (controller != nullptr) {
 		auto axis_hor = SDL_JoystickGetAxis(controller, 0);
 		auto axis_ver = SDL_JoystickGetAxis(controller, 1);
 

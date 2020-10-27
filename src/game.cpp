@@ -97,8 +97,8 @@ void Game::render() {
 	
 #if defined(__WIIU__) || defined(__SWITCH__)
 	SDL_Rect cursor_hover;
-	cursor_hover.x = events.get_mouse_pos()[0];
-	cursor_hover.y = events.get_mouse_pos()[1];
+	cursor_hover.x = events->get_mouse_pos()[0];
+	cursor_hover.y = events->get_mouse_pos()[1];
 	cursor_hover.w = 10;
 	cursor_hover.h = 10;
 
@@ -125,7 +125,6 @@ void Game::init(bool fullscreen = false) {
 	flags = flags | SDL_RENDERER_ACCELERATED;
 #endif
 	
-	SDL_StartTextInput();
 	if (SDL_Init(SDL_INIT_VIDEO) == 0) {
 		std::cout << "[SDL] Initialized SDL" << std::endl;
 		window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_W, WINDOW_H, flags);
@@ -136,7 +135,11 @@ void Game::init(bool fullscreen = false) {
 		std::cerr << "[SDL] ERROR: Failed to initialize SDL!" << std::endl;
 	}
 
-	events.open_controllers();
+#ifdef INPUT_BACKEND_SDL2
+    events = new EventWrapper_SDL2();
+#endif
+
+	events->update_controllers();
 
 	// Todo check error
 	IMG_Init(IMG_INIT_PNG);
@@ -161,11 +164,11 @@ void Game::initialize_fonts() {
 // Handles events such as exit, keypresses, mouse
 void Game::event_handler() {
 
-	events.listen();
+	events->listen();
 
-	auto eventer = events.get_state();
+	auto eventer = events->get_key_state();
 
-	if (events.get_quit()) {
+	if (events->get_quit()) {
 		is_running = false;
 	}
 }
@@ -181,7 +184,7 @@ void Game::free() {
 		std::cout << "[Game] Cleaning up..." << std::endl;
 		delete game;
 		delete menu;
-		SDL_StopTextInput();
+		delete events;
 
 		// Cleanup textures
 		std::cout << "[Textures] Freeing..." << std::endl;

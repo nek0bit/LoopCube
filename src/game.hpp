@@ -1,15 +1,14 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <string>
 #include <vector>
 
+#include "backendincludes.hpp"
+
 #include "constants.hpp"
 #include "texturehandler.hpp"
-#include "eventhandler.hpp"
 #include "play.hpp"
 #include "menu.hpp"
 #include "state.hpp"
@@ -47,7 +46,7 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	TextureHandler textures;
-	EventHandler events;
+	EventWrapper* events;
 };
 
 

@@ -1,14 +1,15 @@
-#include "eventwrapper_internal.hpp"
-
 // Only include if enabled
 #ifdef INPUT_BACKEND_SDL2
-#include "backendincludes.hpp"
 
 #ifndef EVENTWRAPPER_SDL2_HPP
 #define EVENTWRAPPER_SDL2_HPP
 #include <iostream>
 #include <vector>
 #include <array>
+
+#include "backendincludes.hpp"
+
+#include "eventwrapper_internal.hpp"
 
 class EventWrapper_SDL2: public EventWrapper {
 public:

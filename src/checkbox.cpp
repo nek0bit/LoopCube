@@ -41,12 +41,12 @@ void Checkbox::uncheck() {
 	checked = false;
 }
 
-void Checkbox::update(EventHandler& events) {
+void Checkbox::update(EventWrapper*& events) {
 	// Clear changed
 	changed = false;
 
-	std::array<int, 2> pos = events.get_mouse_pos();
-	if (events.get_mouse_clicked() &&
+	std::array<int, 2> pos = events->get_vmouse_pos();
+	if (events->get_vmouse_clicked() &&
 		AABB(x, y, size, size, pos[0], pos[1], 1, 1)) {
 		toggle();
 		changed = true;

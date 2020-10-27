@@ -1,6 +1,6 @@
 #include "eventwrapper_internal.hpp"
 
-EventWrapper::EventWrapper() : vmouse_down{0}, vmouse_clicked{0}, quit{false} {}
+EventWrapper::EventWrapper() : quit{false}, vmouse_down{0}, vmouse_clicked{0} {}
 EventWrapper::~EventWrapper() {}
 
 void EventWrapper::init() {}

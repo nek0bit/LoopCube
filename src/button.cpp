@@ -13,7 +13,7 @@ Button::Button(int id,
 
 Button::~Button() {}
 
-void Button::update(EventHandler& events) {
+void Button::update(EventWrapper*& events) {
 	src.h = 16;
 	src.w = 16;
 	src.x = 0;
@@ -32,10 +32,10 @@ void Button::update(EventHandler& events) {
 	}
 
 	int calc_width = dest.w + (src.w*2)*2;
-	std::array<int, 2> mouse_pos = events.get_mouse_pos();
+	std::array<int, 2> mouse_pos = events->get_vmouse_pos();
 	if (AABB(mouse_pos[0], mouse_pos[1], 1, 1, x, y, calc_width, dest.h)) {
 		hovered = true;
-		if (events.get_mouse_down() == 1) {
+		if (events->get_vmouse_down() == 1) {
 			dest.y += 5;
 			being_clicked = true;
 		} else {

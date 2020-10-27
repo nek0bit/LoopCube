@@ -7,12 +7,14 @@
 #include <random>
 #include <time.h>
 #include <memory>
-#include <SDL2/SDL.h>
+
+#include "../libs/FastNoiseLite.h"
+
+#include "backendincludes.hpp"
 
 #include "constants.hpp"
 #include "block.hpp"
 #include "perlin.hpp"
-#include "../libs/FastNoiseLite.h"
 #include "camera.hpp"
 #include "inventory.hpp"
 #include "texturehandler.hpp"

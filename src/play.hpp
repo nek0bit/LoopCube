@@ -1,7 +1,5 @@
 #ifndef PLAY_HPP
 #define PLAY_HPP
-
-#include <SDL2/SDL.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,10 +7,11 @@
 #include <cmath>
 #include <ctime>
 
+#include "backendincludes.hpp"
+
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "camera.hpp"
-#include "eventhandler.hpp"
 #include "chunkgroup.hpp"
 #include "player.hpp"
 #include "testentity.hpp"
@@ -26,7 +25,7 @@
 class Play {
 
 public:
-	Play(SDL_Renderer* renderer, TextureHandler &textures, EventHandler &events, int *WINDOW_W, int *WINDOW_H);
+	Play(SDL_Renderer* renderer, TextureHandler &textures, EventWrapper*& events, int *WINDOW_W, int *WINDOW_H);
 	~Play();
 
 	void event_handler();
@@ -48,7 +47,7 @@ private:
 	
 	SDL_Renderer* renderer;
 	TextureHandler& textures;
-	EventHandler& events;
+	EventWrapper*& events;
 	ChunkGroup chunks;
 	std::unique_ptr<Inventory> inv;
 	Camera camera;

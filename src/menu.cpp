@@ -13,14 +13,14 @@ enum CONFIG_ID {
 
 Menu::Menu(SDL_Renderer* renderer,
 		   TextureHandler &textures,
-		   EventHandler &events,
+		   EventWrapper*& events,
 		   int* WINDOW_W,
 		   int* WINDOW_H) : state{0}, BLOCK_S{40}, BUTTON_W{200}, WINDOW_W{WINDOW_W},
 							WINDOW_H{WINDOW_H}, shift{BLOCK_S},
 							header{nullptr}, pad_left{180} {
 	this->renderer = renderer;
 	this->textures = &textures;
-	this->events = &events;
+	this->events = events;
 	
 	//************************************************
 	// Resize option_state to match option_str size
@@ -107,18 +107,18 @@ void Menu::update(bool update_animations) {
 	if (state == MAIN_MENU) {
 		for (auto &i: button_group) {
 			i->set_x( (*WINDOW_W/2) + 30 );
-			i->update(*events);
+			i->update(events);
 		}
 	} else if (state == CONFIG_MENU) {
 		int left = ( (*WINDOW_W/2) + 30 );
 		int top = 80;
 		int gap = 50;
 		back_button->set_x( (*WINDOW_W/2) + 30 );
-		back_button->update(*events);
+		back_button->update(events);
 		for (size_t i = 0; i < c_elements.size(); ++i) {
 			c_elements[i]->set_x(left);
 			c_elements[i]->set_y(top+(gap*i));
-			c_elements[i]->update(*events);
+			c_elements[i]->update(events);
 
 			c_elements[i]->on_change(update_config_elements);
 		}

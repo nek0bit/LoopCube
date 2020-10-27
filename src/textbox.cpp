@@ -10,9 +10,9 @@ Textbox::Textbox(int id, int x, int y, int width, int height)
 
 Textbox::~Textbox() {}
 
-void Textbox::update(EventHandler& events) {
-	std::array<int, 2> pos = events.get_mouse_pos();
-	if (events.get_mouse_clicked()) {
+void Textbox::update(EventWrapper*& events) {
+	std::array<int, 2> pos = events->get_vmouse_pos();
+	if (events->get_vmouse_clicked()) {
 		if (AABB(x, y, width, height, pos[0], pos[1], 1, 1)) {
 			focused = true;
 #ifdef __SWITCH__
@@ -31,14 +31,14 @@ void Textbox::update(EventHandler& events) {
 			focused = false;
 #else
 			blink.reset();
-			events.set_text_mode_buffer(text);
-			events.enable_text_mode();
+			events->set_text_mode_buffer(text);
+			events->enable_text_mode();
 #endif
 		} else {
 			focused = false;
 			textbox_text->set_text(text);
-			events.disable_text_mode();
-			events.clear_text_mode_buffer();
+			events->disable_text_mode();
+			events->clear_text_mode_buffer();
 		}
 	}
 	
@@ -46,9 +46,9 @@ void Textbox::update(EventHandler& events) {
 	if (focused) handle_keyboard(events);
 }
 
-void Textbox::handle_keyboard(EventHandler& events) {
+void Textbox::handle_keyboard(EventWrapper*& events) {
 	bool cursor = false;
-	std::string from_buffer = events.get_text_buffer();
+	std::string from_buffer = events->get_text_buffer();
 	
 	text = from_buffer;
 	

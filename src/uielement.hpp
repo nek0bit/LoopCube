@@ -2,7 +2,7 @@
 #define UIELEMENT_HPP
 
 #include <iostream>
-#include "eventhandler.hpp"
+#include "backendincludes.hpp"
 
 class UiElement {
 public:
@@ -21,8 +21,8 @@ public:
 	virtual void set_y(int y);
 	// Update functions
 	virtual void update();
-	virtual void update(EventHandler& events);
-	virtual void update(EventHandler& events, int x_offset, int y_offset);
+	virtual void update(EventWrapper*& events);
+	virtual void update(EventWrapper*& events, int x_offset, int y_offset);
 	// Render functions
 	virtual void render();
 	virtual void render(SDL_Renderer* renderer);

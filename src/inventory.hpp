@@ -1,23 +1,22 @@
 #ifndef INVENTORY_HPP
 #define INVENTORY_HPP
 #include <iostream>
-#include <SDL2/SDL.h>
-
 #include <vector>
 #include <algorithm>
+
+#include "backendincludes.hpp"
+
 #include "texturehandler.hpp"
-#include "eventhandler.hpp"
 #include "constants.hpp"
 #include "position.hpp"
 #include "item.hpp"
-
 
 class Inventory {
 public:
 	Inventory() = default;
 	Inventory(SDL_Renderer* renderer,
-			  TextureHandler &textures,
-			  EventHandler &events,
+			  TextureHandler& textures,
+			  EventWrapper*& events,
 			  int* WINDOW_W,
 			  int* WINDOW_H);
 	~Inventory();
@@ -50,7 +49,7 @@ private:
 
 	SDL_Renderer* renderer;
 	TextureHandler* textures;
-	EventHandler* events;
+	EventWrapper* events;
 };
 
 #endif // INVENTORY_HPP
