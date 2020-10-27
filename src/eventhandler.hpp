@@ -1,3 +1,5 @@
+// DEPRECATED: DELETE ME WHEN MOVED OVER
+
 #ifndef EVENTHANDLER_HPP
 #define EVENTHANDLER_HPP
 #include <iostream>

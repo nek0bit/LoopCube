@@ -1,3 +1,5 @@
+// DEPRECATED: DELETE ME WHEN MOVED OVER
+
 #include "eventhandler.hpp"
 
 EventHandler::EventHandler()
