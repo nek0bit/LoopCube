@@ -43,9 +43,9 @@ private:
 	Play* game;
 	Menu* menu;
 
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	TextureHandler textures;
+	//SDL_Window* window;
+	//SDL_Renderer* renderer;
+	//TextureHandler textures;
 	EventWrapper* events;
 };
 
