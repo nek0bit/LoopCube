@@ -1,3 +1,5 @@
+// TODO Delete me if not needed anymore for reference
+
 #include "texture.hpp"
 
 Texture::Texture(SDL_Renderer* renderer, std::string filename) {

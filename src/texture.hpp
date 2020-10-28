@@ -1,20 +1,16 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
-#include <SDL2/SDL_image.h>
-#include <string>
 
+// Note: Dev is responsible for initializing get_texture;
+template<class TextureType>
 class Texture {
-
 public:
-	Texture(SDL_Renderer* renderer, std::string filename);
-	~Texture();
+	// Most commonly a string for the filename of the texture will be here
+	Texture() {};
+	virtual ~Texture() {};
 
-	SDL_Texture* get_texture();
-	void free_texture();
-
-private:
-	SDL_Texture* texture;
+	virtual TextureType get_texture() { return TextureType{}; }; // MUST BE DEFINED
+	virtual void free_texture() {};
 };
 
-
-#endif // TEXTURE_HPP
+#endif
