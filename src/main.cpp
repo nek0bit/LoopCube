@@ -41,9 +41,5 @@ int main() {
 	romfsExit();
 #endif
 
-#ifdef GRAPHIC_BACKEND_SDL2
-	SDL_Quit();
-#endif
-
 	return 0;
 }

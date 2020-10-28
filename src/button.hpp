@@ -44,7 +44,7 @@ private:
 	bool clicked;
 
 	SDL_Rect src, dest;
-	std::shared_ptr<Text> button_text;
+	//std::shared_ptr<Text> button_text;
 
 };
 

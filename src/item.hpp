@@ -4,8 +4,6 @@
 #include <string>
 #include <memory>
 
-#include <SDL2/SDL.h>
-
 #include "text.hpp"
 #include "constants.hpp"
 #include "blockinfo.hpp"
@@ -23,7 +21,7 @@ public:
 	BlockInfo get_block();
 	bool enabled;
 private:
-	std::shared_ptr<Text> text;
+	//std::shared_ptr<Text> text;
 	std::string id;
 	TextureHandler* textures;
 	BlockInfo block;

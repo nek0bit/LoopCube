@@ -1,5 +1,8 @@
 #include "text.hpp"
 
+// REWRITE ME TO SUPPORT BITMAP FONTS
+
+/*
 Text::Text(SDL_Renderer* renderer,
 		   std::string text, 
 		   SDL_Color color,
@@ -55,3 +58,4 @@ void Text::draw(int x, int y) {
 	SDL_Rect pos{x, y, w, h};
 	SDL_RenderCopy(renderer, messageText, NULL, &pos);
 }
+*/

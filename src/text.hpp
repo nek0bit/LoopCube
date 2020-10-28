@@ -1,10 +1,8 @@
 #ifndef TEXT_HPP
 #define TEXT_HPP
 #include <iostream>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 #include <string>
-
+/*
 class Text {
 public:
 	Text(SDL_Renderer* renderer,
@@ -30,5 +28,6 @@ private:
 	SDL_Texture* messageText;
 
 };
+*/
 
 #endif // TEXT_HPP

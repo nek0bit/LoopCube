@@ -3,9 +3,9 @@
 #include <vector>
 #include <utility>
 #include <string>
+
 #include "blockinfo.hpp"
 #include "config.hpp"
-#include <SDL2/SDL_ttf.h>
 
 enum block_enum {
 	BLOCK_GRASS,
@@ -32,12 +32,6 @@ namespace constants {
 	extern const std::vector<const char*> texture_ids;
 
 	extern const std::vector<BlockInfo> block_info;
-
-	extern TTF_Font* button_font;
-	extern TTF_Font* item_font;
-	extern TTF_Font* header_font;
-	extern TTF_Font* paragraph_font;
-	extern TTF_Font* option_font;
 
 	extern const double block_w;
 	extern const double block_h;

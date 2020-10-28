@@ -6,7 +6,7 @@ Button::Button(int id,
 			   int y, 
 			   int width, 
 			   int height) 
-	: textures{textures}, id{static_cast<unsigned int>(id)}, width{width}, height{height}, hovered{false}, button_text{nullptr} {
+	: textures{textures}, id{static_cast<unsigned int>(id)}, width{width}, height{height}, hovered{false} {
 	this->x = x;
 	this->y = y;
 }
@@ -66,9 +66,9 @@ void Button::render(SDL_Renderer* renderer) {
 	SDL_RenderCopy(renderer, textures.get_texture(6), &src, &begin);
 	SDL_RenderCopy(renderer, textures.get_texture(5), &src, &dest);
 	SDL_RenderCopy(renderer, textures.get_texture(7), &src, &end);
-	if (button_text != nullptr) {
-		button_text->draw(x+(width/2)-(button_text->get_width()/2)-2, dest.y+(height/2)-(button_text->get_height()/2)-2);
-	}
+	//if (button_text != nullptr) {
+	//	button_text->draw(x+(width/2)-(button_text->get_width()/2)-2, dest.y+(height/2)-(button_text->get_height()/2)-2);
+	//}
 }
 
 void Button::set_text(SDL_Renderer* renderer, std::string text) {
@@ -79,7 +79,7 @@ void Button::set_text(SDL_Renderer* renderer, std::string text) {
 	color.b = 255;
 	color.a = 255;
 	
-	button_text = std::shared_ptr<Text>(new Text(renderer, this->text, color, constants::button_font));
+	//button_text = std::shared_ptr<Text>(new Text(renderer, this->text, color, constants::button_font));
 }
 
 void Button::set_x(int x) {

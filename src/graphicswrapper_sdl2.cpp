@@ -5,10 +5,13 @@ GraphicsWrapper_SDL2::GraphicsWrapper_SDL2(Config config) : GraphicsWrapper{} {
 }
 
 GraphicsWrapper_SDL2::~GraphicsWrapper_SDL2() {
-
+	SDL_DestroyWindow(window);
+	SDL_DestroyRenderer(renderer);
+	SDL_Quit();
 }
 
 void GraphicsWrapper_SDL2::init_screen() {
+	// TODO use config for this
 	int flags = 0;
 	flags = flags | SDL_WINDOW_FULLSCREEN;
 	flags = flags | SDL_WINDOW_RESIZABLE;
@@ -26,16 +29,17 @@ void GraphicsWrapper_SDL2::init_screen() {
 }
 
 void GraphicsWrapper_SDL2::clear_screen() {
+	// Reset render color to black for clearing
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 }
 
 void GraphicsWrapper_SDL2::update_screen() {
-	// Incomplete implementation
+	SDL_RenderPresent(renderer);
 }
 
 void GraphicsWrapper_SDL2::render(Rect src, Rect dest, int texture_index) {
-	// Incomplete implementation
+	SDL_RenderCopy(renderer, textures.get_texture(texture_index)->get_texture(), &src, &dest);
 }
 
 void GraphicsWrapper_SDL2::render_rect(Rect dest, Color color) {
@@ -45,8 +49,9 @@ void GraphicsWrapper_SDL2::render_rect(Rect dest, Color color) {
 }
 
 std::array<2, int> GraphicsWrapper_SDL2::screen_size() {
-	int WINDOW_W;
-	int WINDOW_H;
-	SDL_GetWindowSize(window, &WINDOW_W, &WINDOW_H);
-	return std::array<2, int>{WINDOW_W, WINDOW_H};
+	return std::array<2, int>{SCREEN_W, SCREEN_H};
+}
+
+void GraphicsWrapper_SDL2::fetch_screen_size() {
+	SDL_GetWindowSize(window, &SCREEN_W, &SCREEN_H);
 }

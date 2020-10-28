@@ -11,9 +11,9 @@ Item::Item(int id, TextureHandler &textures, SDL_Renderer *renderer) : enabled{t
 		}
 	}
 
-	SDL_Color color{};
-	color.r = 255; color.g = 255; color.b = 255;
-	text = std::shared_ptr<Text>(new Text(renderer, "", color, constants::item_font));
+	//SDL_Color color{};
+	//color.r = 255; color.g = 255; color.b = 255;
+	//text = std::shared_ptr<Text>(new Text(renderer, "", color, constants::item_font));
 }
 
 Item::~Item() {
@@ -33,7 +33,7 @@ void Item::add_count(int amount) {
 	if (count == -1) {
 		enabled = false;
 	}
-	text->set_text(count == 0 ? "" : std::to_string(count+1).c_str());
+	//text->set_text(count == 0 ? "" : std::to_string(count+1).c_str());
 }
 
 void Item::draw(int x, int y, int width = 35, int height = 35) {
@@ -41,5 +41,5 @@ void Item::draw(int x, int y, int width = 35, int height = 35) {
 	SDL_Rect block{x, y, width, height};
 	SDL_RenderCopy(renderer, textures->get_texture(this->block.get_texture_id()), &src, &block);
 
-	text->draw(x, y+height);
+	//text->draw(x, y+height);
 }

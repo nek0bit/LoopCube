@@ -39,13 +39,6 @@ namespace constants {
 		BlockInfo{BLOCK_LEAF, "Leaf", 12},
 	};
 
-	// Assignment in game.cpp
-	TTF_Font* button_font = nullptr;
-	TTF_Font* item_font = nullptr;
-	TTF_Font* header_font = nullptr;
-	TTF_Font* paragraph_font = nullptr;
-	TTF_Font* option_font = nullptr;
-
 	const double block_w = 42;
 	const double block_h = 42;
 	

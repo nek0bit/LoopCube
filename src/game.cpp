@@ -26,9 +26,7 @@ void Game::game_init() {
 	constants::config.set(CONFIG_LOAD_DISTANCE, 12);
 	constants::config.set(CONFIG_SHOW_CHUNK_DEBUG, 0);
 	
-	textures = TextureHandler(renderer);
-	//game = new Play(renderer, textures, events, WINDOW_W, WINDOW_H);
-	menu = new Menu(renderer, textures, events, &WINDOW_W, &WINDOW_H);
+	menu = new Menu(renderer, events);
 }
 
 // Game related loop stuff
@@ -61,7 +59,7 @@ void Game::update() {
 	case STATE_PLAYING:
 		// Check if the game is nullptr, then create it
 		if (game == nullptr) {
-			game = new Play(renderer, textures, events, &WINDOW_W, &WINDOW_H);
+			game = new Play(renderer, events);
 			// Let's pre-load a frame so everything can generate and render
 			// This may need to change depending on world generation in the future
 			game->update();
@@ -198,9 +196,7 @@ void Game::free() {
 			TTF_CloseFont(i);
 		}
 		
-		SDL_DestroyWindow(window);
-		SDL_DestroyRenderer(renderer);
-		SDL_Quit();
+		
 	}
 
 	has_freed = true;

@@ -3,7 +3,6 @@
 #include <iostream>
 #include <array>
 
-#include "config.hpp"
 #include "rect.hpp"
 #include "color.hpp"
 
@@ -17,7 +16,11 @@ public:
 	virtual void update_screen();
 	virtual void render(Rect, Rect, int);
 	virtual void render_rect(Rect, Color);
+	virtual void fetch_screen_size();
 	virtual std::array<2, int> screen_size();
+protected:
+	int SCREEN_W;
+	int SCREEN_H;
 };
 
 

@@ -25,7 +25,7 @@ public:
 	void update_screen() override;
 	void render(Rect, Rect, int) override;
 	void render_rect(Rect, Color) override;
-	std::array<2, int> screen_size() override;
+    void fetch_screen_size();
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
