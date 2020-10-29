@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <iostream>
 
+#include "backendincludes.hpp"
+
 #include "position.hpp"
 #include "chunk.hpp"
 #include "constants.hpp"
@@ -27,8 +29,8 @@ public:
 	void update_all_viewport(Camera& camera);
 
 	// Render
-	void render_all(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
-	void render_all_viewport(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+	void render_all(GraphicsWrapper* renderer, Camera& camera);
+	void render_all_viewport(GraphicsWrapper* renderer, Camera& camera);
 
 	// Getters
 	int get_id(Camera& camera, int surrounding = 8);

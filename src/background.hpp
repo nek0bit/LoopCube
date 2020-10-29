@@ -2,8 +2,10 @@
 #define BACKGROUND_HPP
 #include <iostream>
 
-#include <SDL2/SDL.h>
+#include "backendincludes.hpp"
 
+#include "rect.hpp"
+#include "color.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "camera.hpp"
@@ -14,16 +16,16 @@ public:
 	~Background();
 	
 	void update(Camera& camera);
-	void render(SDL_Renderer* renderer, TextureHandler& textures);
+	void render(GraphicsWrapper* renderer);
 private:
-	void render_repeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int offset_x, int offset_y, int width,
+	void render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,
 						  int height, int gap, int top, bool verticle = false);
 	int win_width;
 	int win_height;
 
 	bool show_cave_background;
 
-	SDL_Rect bg_shine_src, bg_shine_dest;
+	Rect bg_shine_src, bg_shine_dest;
 	int bg_cloud_offset_x;
 	int bg_cloud_offset_y;
 	int bg_hills_offset_x;

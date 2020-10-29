@@ -44,13 +44,9 @@ void Block::update() {
 	src.y = 0;
 }
 
-void Block::render_shadow(SDL_Renderer* renderer, Camera& camera) {
-	SDL_Rect shadow;
-	shadow.x = get_x(camera) + 10;
-	shadow.y = get_y(camera) + 10;
-	shadow.w = obj.w;
-	shadow.h = obj.h;
+void Block::render_shadow(GraphicsWrapper* renderer, Camera& camera) {
+	Rect shadow{static_cast<int>(get_x(camera) + 10), static_cast<int>(get_y(camera) + 10),
+		static_cast<int>(obj.w), static_cast<int>(obj.h)};
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 40);
-	SDL_RenderFillRect(renderer, &shadow);
+	renderer->render_rect(shadow, Color{0, 0, 0, 40});
 }

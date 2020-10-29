@@ -6,6 +6,7 @@
 
 #include "backendincludes.hpp"
 
+#include "config.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "play.hpp"

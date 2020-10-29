@@ -1,10 +1,11 @@
 #include "play.hpp"
 
-Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventWrapper*& events, int *WINDOW_W, int *WINDOW_H)
-	: WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H}, show_particles{false}, textures{textures}, events{events},
-	  camera{WINDOW_W, WINDOW_H}, entities{}, fade{60}, particles{}, background{} {
+Play::Play(GraphicsWrapper* renderer, EventWrapper*& events)
+	: WINDOW_W{renderer->screen_size()[0]}, WINDOW_H{renderer->screen_size()[1]}, show_particles{false},
+	  camera{&WINDOW_W, &WINDOW_H}, entities{}, fade{60}, particles{}, background{} {
+	WINDOW_W = renderer->screen_size()[0];
+	WINDOW_H = renderer->screen_size()[1];
 	this->renderer = renderer;
-	this->textures = textures;
 	this->events = events;
 
 	camera.set_pos(0, 125);
@@ -14,7 +15,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler &textures, EventWrapper*& even
 	// Configure camera
 	player = Player();
 	chunks = ChunkGroup(seed);
-	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, WINDOW_W, WINDOW_H));
+	inv = std::unique_ptr<Inventory>(new Inventory(renderer, events));
 	update_config();
 }
 
@@ -134,22 +135,20 @@ void Play::update_config() {
 
 void Play::render() {
 	// Render background elements
-	background.render(renderer, textures);
+	background.render(renderer);
 	
 	if (show_particles) {
 		for (auto& particle: particles) {
-			particle.render(renderer, textures, camera);
+			particle.render(renderer, camera);
 		}
 	}
 	
-	chunks.render_all_viewport(renderer, textures, camera);
-
-	SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
+	chunks.render_all_viewport(renderer, camera);
 	
-	player.render(renderer, textures, camera);
+	player.render(renderer, camera);
 
 	for (Entity*& entity: entities) {
-		entity->render(renderer, textures, camera);
+		entity->render(renderer, camera);
 	}
 
 	int x, y;
@@ -215,13 +214,11 @@ void Play::draw_selection(int* p1, int* p2) {
 	const int sel_x = floor((mpos[0] - camera.get_x()) / b_w) * b_w;
 	const int sel_y = floor((mpos[1] - camera.get_y()) / b_h) * b_h;
 
-	SDL_Rect selection{sel_x + static_cast<int>(camera.get_x()), sel_y + static_cast<int>(camera.get_y()), b_w, b_h};
+    Rect selection{sel_x + static_cast<int>(camera.get_x()), sel_y + static_cast<int>(camera.get_y()), b_w, b_h};
 
 	int fade_amount = std::abs(std::sin(static_cast<double>(fade.get_frame())/20))*30+50;
 
-
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, fade_amount);
-	SDL_RenderFillRect(renderer, &selection);
+	renderer->render_rect(selection, Color{255, 255, 255, fade_amount});
 
 	*p1 = sel_x/b_w;
 	*p2 = sel_y/b_h;
@@ -229,8 +226,8 @@ void Play::draw_selection(int* p1, int* p2) {
 
 // Sets camera to player position
 void Play::handle_camera() {
-	double x = std::floor(player.get_default_x()) * -1 + (*WINDOW_W/2) - player.get_width()/2;
-	double y = std::floor(player.get_default_y()) * -1 + (*WINDOW_H/2) - player.get_height()/2;
+	double x = std::floor(player.get_default_x()) * -1 + (WINDOW_W/2) - player.get_width()/2;
+	double y = std::floor(player.get_default_y()) * -1 + (WINDOW_H/2) - player.get_height()/2;
 	camera.set_pos(x, y);
 }
 

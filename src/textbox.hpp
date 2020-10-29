@@ -9,6 +9,8 @@
 
 #include "backendincludes.hpp"
 
+#include "rect.hpp"
+#include "color.hpp"
 #include "uielement.hpp"
 #include "constants.hpp"
 #include "text.hpp"
@@ -23,7 +25,7 @@ public:
 
 	// TODO Add set_x, set_y functions
 	void update(EventWrapper*& events);
-	void render(SDL_Renderer* renderer);
+	void render(GraphicsWrapper* renderer);
 private:
 	std::string text;
 	int id;
@@ -32,7 +34,7 @@ private:
 	int width;
 	int height;
 	bool focused;
-	Text* textbox_text;
+	//Text* textbox_text;
 	Animation blink;
 	
 #ifdef __SWITCH__

@@ -4,6 +4,9 @@
 #include <string>
 #include <memory>
 
+#include "backendincludes.hpp"
+
+#include "rect.hpp"
 #include "text.hpp"
 #include "constants.hpp"
 #include "blockinfo.hpp"
@@ -12,7 +15,7 @@
 class Item {
 public:
 	Item();
-	Item(int id, TextureHandler &textures, SDL_Renderer *renderer);
+	Item(int id, GraphicsWrapper* renderer);
 	~Item();
 
 	void draw(int x, int y, int width, int height);
@@ -23,10 +26,9 @@ public:
 private:
 	//std::shared_ptr<Text> text;
 	std::string id;
-	TextureHandler* textures;
 	BlockInfo block;
 	int count;
-	SDL_Renderer *renderer;
+	GraphicsWrapper *renderer;
 };
 
 #endif // ITEM_HPP

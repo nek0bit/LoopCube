@@ -1,12 +1,11 @@
 #include "button.hpp"
 
 Button::Button(int id,
-			   TextureHandler& textures,
 			   int x,
 			   int y, 
 			   int width, 
 			   int height) 
-	: textures{textures}, id{static_cast<unsigned int>(id)}, width{width}, height{height}, hovered{false} {
+	: id{static_cast<unsigned int>(id)}, width{width}, height{height}, hovered{false} {
 	this->x = x;
 	this->y = y;
 }
@@ -60,24 +59,24 @@ int Button::get_id() {
 	return id;
 }
 
-void Button::render(SDL_Renderer* renderer) {
-	SDL_Rect begin{x, dest.y, src.w*2, dest.h},
+void Button::render(GraphicsWrapper* renderer) {
+	Rect begin{x, dest.y, src.w*2, dest.h},
 		end{dest.x+dest.w, dest.y, src.w*2, dest.h};
-	SDL_RenderCopy(renderer, textures.get_texture(6), &src, &begin);
-	SDL_RenderCopy(renderer, textures.get_texture(5), &src, &dest);
-	SDL_RenderCopy(renderer, textures.get_texture(7), &src, &end);
+	renderer->render(src, begin, 6);
+	renderer->render(src, dest, 5);
+	renderer->render(src, end, 7);
 	//if (button_text != nullptr) {
 	//	button_text->draw(x+(width/2)-(button_text->get_width()/2)-2, dest.y+(height/2)-(button_text->get_height()/2)-2);
 	//}
 }
 
-void Button::set_text(SDL_Renderer* renderer, std::string text) {
+void Button::set_text(GraphicsWrapper* renderer, std::string text) {
 	this->text = text;
-	SDL_Color color;
+	/*SDL_Color color;
 	color.r = 255;
 	color.g = 255;
 	color.b = 255;
-	color.a = 255;
+	color.a = 255;*/
 	
 	//button_text = std::shared_ptr<Text>(new Text(renderer, this->text, color, constants::button_font));
 }

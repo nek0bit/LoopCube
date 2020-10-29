@@ -1,13 +1,9 @@
 #include "inventory.hpp"
 
-Inventory::Inventory(SDL_Renderer* renderer,
-					 TextureHandler &textures,
-					 EventWrapper*& events,
-					 int* WINDOW_W,
-					 int* WINDOW_H) : animation{false}, hotbar_slots{10}, max_slots{hotbar_slots*5}, visible{true}, show_inventory_menu{0},
-									  hotbar_pos{0}, item_held{}, WINDOW_W{WINDOW_W}, WINDOW_H{WINDOW_H} {
+Inventory::Inventory(GraphicsWrapper* renderer,
+					 EventWrapper* events) : animation{false}, hotbar_slots{10}, max_slots{hotbar_slots*5}, visible{true}, show_inventory_menu{false},
+									  hotbar_pos{0}, item_held{} {
 	this->renderer = renderer;
-	this->textures = &textures;
 	this->events = events;
 	
 	items.resize(max_slots, Item{});
@@ -33,7 +29,7 @@ void Inventory::add_item(int id) {
 	} else {
 		for (Item& i: items) {
 			if (!i.enabled) {
-				i = Item{id, *textures, renderer};
+				i = Item{id, renderer};
 				break;
 			}
 		}
@@ -55,9 +51,10 @@ void Inventory::update() {
 }
 
 void Inventory::draw_inventory_menu() {
+	auto win = renderer->screen_size();
 	static int num = 0;
 	if (animation == true) {
-		num = *WINDOW_H*-1;
+		num = renderer->screen_size()[1]*-1;
 		animation = false;
 	}
 	if (num < 0.2) {
@@ -71,20 +68,17 @@ void Inventory::draw_inventory_menu() {
 		const int menu_width = 170;
 		const int menu_height = 90;
 		
-		const int MAX_X = (*WINDOW_W - (menu_width*scale))/2;
-		const int MAX_Y = (*WINDOW_H - (menu_height*scale))/2;
-
-		
-		SDL_Rect src{0, 0, menu_width, menu_height};
-		SDL_Rect dest{MAX_X, MAX_Y+num, src.w*scale, src.h*scale};
+		const int MAX_X = (win[0] - (menu_width*scale))/2;
+		const int MAX_Y = (win[1] - (menu_height*scale))/2;
 
 		// First draw BG shadow
-		SDL_Rect shadow{0, 0+num, *WINDOW_W, *WINDOW_H};
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 180);
-		SDL_RenderFillRect(renderer, &shadow);
+		Rect shadow{0, 0+num, win[0], win[1]};
+		renderer->render_rect(shadow, Color{0, 0, 0, 180});
 
 		// Render inventory menu
-		SDL_RenderCopy(renderer, textures->get_texture(11), &src, &dest);
+		Rect src{0, 0, menu_width, menu_height};
+	    Rect dest{MAX_X, MAX_Y+num, src.w*scale, src.h*scale};
+		renderer->render(src, dest, 11);
 
 		std::vector<int> pos = get_hovered_pos(events->get_vmouse_pos()[0], events->get_vmouse_pos()[1], MAX_X, MAX_Y+num, true);
 		
@@ -120,7 +114,6 @@ std::vector<int> Inventory::get_hovered_pos(int x, int y, int corner_x, int corn
 	int total = max_slots/10;
 
 	std::vector<int> returner;
-
 	
 	// Loop through slots
 	for (int i = 0; i < hotbar_slots; ++i) {
@@ -139,9 +132,8 @@ std::vector<int> Inventory::get_hovered_pos(int x, int y, int corner_x, int corn
 						  new_x, new_y, tile_size, tile_size)) {
 
 				if (draw) {
-					SDL_Rect rect{new_x, new_y, tile_size, tile_size};
-					SDL_SetRenderDrawColor(renderer, 255, 255, 255, 40);
-					SDL_RenderFillRect(renderer, &rect);
+				    Rect rect{new_x, new_y, tile_size, tile_size};
+					renderer->render_rect(rect, Color{255, 255, 255, 40});
 				}
 
 				returner = {i, j};
@@ -157,7 +149,7 @@ std::vector<int> Inventory::get_hovered_pos(int x, int y, int corner_x, int corn
 }
 
 bool Inventory::collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
-	SDL_Rect r1{x1, y1, w1, h1}, r2{x2, y2, w2, h2};
+	Rect r1{x1, y1, w1, h1}, r2{x2, y2, w2, h2};
 
 	if (r1.x < r2.x + r2.w &&
 		r1.x + r1.w > r2.x &&
@@ -174,15 +166,15 @@ bool Inventory::get_inventory_visibility() {
 
 void Inventory::draw_hotbar() {
 	const int BLOCK_S = 40;
-	const int MAX_X = (*WINDOW_W - ((hotbar_slots+1)*BLOCK_S+3))/2;
+	const int MAX_X = (renderer->screen_size()[0] - ((hotbar_slots+1)*BLOCK_S+3))/2;
 
 	for (int i = 0; i < hotbar_slots; ++i) {
-		SDL_Rect src{0, 0, 16, 16};
+	    Rect src{0, 0, 16, 16};
 		if (hotbar_pos == i) {
 			src.y = 16;
 		}
-		SDL_Rect block{i*(BLOCK_S+3)+MAX_X, 2, BLOCK_S, BLOCK_S};
-		SDL_RenderCopy(renderer, textures->get_texture(10), &src, &block);
+	    Rect block{i*(BLOCK_S+3)+MAX_X, 2, BLOCK_S, BLOCK_S};
+		renderer->render(src, block, 10);
 
 		if (items[i].enabled) {
 			items[i].draw(block.x+5, block.y+5, 30, 30);

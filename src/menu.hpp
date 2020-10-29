@@ -8,9 +8,10 @@
 #include <memory>
 
 #include "backendincludes.hpp"
+
+#include "rect.hpp"
 #include "textbox.hpp"
 #include "checkbox.hpp"
-#include "texturehandler.hpp"
 #include "constants.hpp"
 #include "button.hpp"
 #include "animation.hpp"
@@ -18,11 +19,7 @@
 
 class Menu {
 public:
-	Menu(SDL_Renderer* renderer, 
-		 TextureHandler& textures,
-		 EventWrapper*& events,
-		 int* WINDOW_W,
-		 int* WINDOW_H);
+	Menu(GraphicsWrapper* renderer, EventWrapper*& events);
 	~Menu();
 
 	void update(bool update_animations = true);
@@ -46,23 +43,20 @@ private:
 	// MISC
 	const int BLOCK_S;
 	const int BUTTON_W;
-	int* WINDOW_W;
-	int* WINDOW_H;
 
 	// Config stuff
 	std::unique_ptr<Button> back_button;
 	std::vector<UiElement*> c_elements;
 	
 	// Important setup
-	SDL_Renderer* renderer;
-	TextureHandler* textures;
+	GraphicsWrapper* renderer;
     EventWrapper* events;
 	Animation shift;
 
 	// Content elements for sidebar
 	Item random_block;
-	std::unique_ptr<Text> header;
-	std::unique_ptr<Text> paragraph;
+	//std::unique_ptr<Text> header;
+	//std::unique_ptr<Text> paragraph;
 	std::string p_string;
 	const int pad_left;
 };

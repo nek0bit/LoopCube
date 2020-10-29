@@ -200,7 +200,7 @@ int ChunkGroup::get_id(Camera& camera, int surrounding) {
 }
 
 // Function not recommended: Use render_all_viewport
-void ChunkGroup::render_all(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
+void ChunkGroup::render_all(GraphicsWrapper* renderer, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: group) {
 			Position box = chunk.get_pos();
@@ -218,7 +218,7 @@ void ChunkGroup::render_all(SDL_Renderer* renderer, TextureHandler& textures, Ca
 			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
 			continue;
 		} else {
-			chunk.render_all_blocks(renderer, textures, camera);
+			chunk.render_all_blocks(renderer, camera);
 		}
 	}
 
@@ -229,7 +229,7 @@ void ChunkGroup::render_all(SDL_Renderer* renderer, TextureHandler& textures, Ca
 	}
 }
 
-void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
+void ChunkGroup::render_all_viewport(GraphicsWrapper* renderer, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: viewport_chunks) {
 			Position box = chunk->get_pos();
@@ -247,7 +247,7 @@ void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler& tex
 			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
 			continue;
 		} else {
-			chunk->render_all_blocks(renderer, textures, camera);
+			chunk->render_all_blocks(renderer, camera);
 		}
 	}
 	if (render_chunk_info) {

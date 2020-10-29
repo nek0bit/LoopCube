@@ -4,6 +4,8 @@
 
 #include "backendincludes.hpp"
 
+#include "rect.hpp"
+#include "color.hpp"
 #include "uielement.hpp"
 #include "text.hpp"
 #include "aabb.hpp"
@@ -27,7 +29,7 @@ public:
 	void set_x(int x);
 	void set_y(int y);
 	void update(EventWrapper*& events);
-	void render(SDL_Renderer* renderer);
+	void render(GraphicsWrapper* renderer);
 	
 private:
 	bool changed;
@@ -38,9 +40,9 @@ private:
 	int size;
 	bool checked;
 
-	Text* text_render;
+	//Text* text_render;
 
-	SDL_Rect dest;
+    Rect dest;
 };
 
 #endif

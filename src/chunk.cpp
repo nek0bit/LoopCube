@@ -2,7 +2,7 @@
 
 Chunk::Chunk(unsigned long int seed, int slot, std::vector<Structure*>& structures)
 	: MAX_WIDTH{constants::chunk_width}, MAX_HEIGHT{constants::chunk_height}, MAX_SPLIT_COUNT{constants::chunk_split_count},
-	  MAX_SPLIT_HEIGHT{constants::chunk_split_height}, terrain_gen{}, chunk_text{nullptr} {
+	  MAX_SPLIT_HEIGHT{constants::chunk_split_height}, terrain_gen{} {
 	this->slot = slot;
 
 	terrain_gen.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
@@ -164,7 +164,7 @@ void Chunk::update_all() {
 }
 
 
-void Chunk::render_all_shadows(SDL_Renderer* renderer, Camera& camera) {
+void Chunk::render_all_shadows(GraphicsWrapper* renderer, Camera& camera) {
 	// Then render blocks
 	for(size_t i = 0; i < chunk.size(); ++i) {
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
@@ -175,20 +175,20 @@ void Chunk::render_all_shadows(SDL_Renderer* renderer, Camera& camera) {
 	}
 }
 
-void Chunk::render_all_blocks(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
+void Chunk::render_all_blocks(GraphicsWrapper* renderer, Camera& camera) {
 	// Then render blocks
 	for(size_t i = 0; i < chunk.size(); ++i) {
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
 			if (!chunk[i][j].out_of_view(camera)) {
-				chunk[i][j].render(renderer, textures, camera);
+				chunk[i][j].render(renderer, camera);
 			}
 		}
 	}
 }
 
-void Chunk::render_info(SDL_Renderer* renderer, Camera& camera) {
+void Chunk::render_info(GraphicsWrapper* renderer, Camera& camera) {
 	int pos = get_chunk_x(0)*constants::block_w;
-	if (chunk_text == nullptr) {
+	/*if (chunk_text == nullptr) {
 		SDL_Color color;
 		color.r = 100; color.g = 100; color.b = 100; color.a = 255;
 		// Note: chunk_text was nullptr before of course, so this is fine
@@ -196,10 +196,9 @@ void Chunk::render_info(SDL_Renderer* renderer, Camera& camera) {
 		chunk_text = std::shared_ptr<Text>(new Text(renderer, tmp, color, constants::header_font));
 	} else {
 		chunk_text->draw(pos+20+camera.get_x(), 70);
-	}
+	}*/
 
 	// Draw gap
-	SDL_Rect block_line{static_cast<int>(pos+camera.get_x()), 0, 2, camera.get_height()};
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderFillRect(renderer, &block_line);
+	Rect block_line{static_cast<int>(pos+camera.get_x()), 0, 2, camera.get_height()};
+	renderer->render_rect(block_line, Color{0, 0, 0, 255});
 }

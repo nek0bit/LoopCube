@@ -1,7 +1,7 @@
 #include "checkbox.hpp"
 
 Checkbox::Checkbox(int id, std::string text, int x, int y, int size, bool checked)
-	: changed{false}, id{id}, text{text}, x{x}, y{y}, size{size}, checked{checked}, text_render{nullptr} {
+	: changed{false}, id{id}, text{text}, x{x}, y{y}, size{size}, checked{checked} {
 }
 
 Checkbox::~Checkbox() {}
@@ -58,33 +58,27 @@ void Checkbox::update(EventWrapper*& events) {
 	dest.h = size;
 }
 
-void Checkbox::render(SDL_Renderer* renderer) {
+void Checkbox::render(GraphicsWrapper* renderer) {
 	// Draw box behind check
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-	SDL_RenderFillRect(renderer, &dest);
+	renderer->render_rect(dest, Color{0, 0, 0, 200});
 
 	// Draw check
 	if (checked) {
-		SDL_Rect check;
-		check.x = dest.x+10;
-		check.y = dest.y+10;
-		check.w = dest.w-20;
-		check.h = dest.h-20;
+	    Rect check{dest.x+10, dest.y+10, dest.w-20, dest.h-20};
 
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderFillRect(renderer, &check);
+		renderer->render_rect(check, Color{255, 255, 255, 255});
 	}
 
 	
 
-	if (text_render == nullptr) {
+	/*if (text_render == nullptr) {
 		SDL_Color color;
 		color.r = 255; color.g = 255; color.b = 255; color.a = 255;
 		text_render = new Text(renderer, text, color, constants::option_font); 
 	} else {
 		text_render->draw((dest.x+size+10), (dest.y+5));
-	}
+		}*/
 }
 
 

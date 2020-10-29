@@ -1,7 +1,7 @@
 #include "textbox.hpp"
 
 Textbox::Textbox(int id, int x, int y, int width, int height)
-	: text{}, id{id}, x{x}, y{y}, width{width}, height{height}, focused{false}, textbox_text{nullptr}, blink{20}
+	: text{}, id{id}, x{x}, y{y}, width{width}, height{height}, focused{false}, /*textbox_text{nullptr},*/ blink{20}
 #ifdef __SWITCH__
 	, rc{0}, kbd{}
 #endif
@@ -25,9 +25,9 @@ void Textbox::update(EventWrapper*& events) {
 			}
 			
 			text = std::string(tmp);
-			if (textbox_text != nullptr) {
-				textbox_text->set_text(text);
-			}
+			//if (textbox_text != nullptr) {
+			//	textbox_text->set_text(text);
+			//}
 			focused = false;
 #else
 			blink.reset();
@@ -36,7 +36,7 @@ void Textbox::update(EventWrapper*& events) {
 #endif
 		} else {
 			focused = false;
-			textbox_text->set_text(text);
+			//textbox_text->set_text(text);
 			events->disable_text_mode();
 			events->clear_text_mode_buffer();
 		}
@@ -57,26 +57,25 @@ void Textbox::handle_keyboard(EventWrapper*& events) {
 	}
 	
 	
-	if (textbox_text != nullptr) {
-		textbox_text->set_text(text + (cursor ? "_" : ""));
-	}
+	//if (textbox_text != nullptr) {
+	//	textbox_text->set_text(text + (cursor ? "_" : ""));
+	//}
 }
 
-void Textbox::render(SDL_Renderer* renderer) {
-	SDL_Rect box;
+void Textbox::render(GraphicsWrapper* renderer) {
+    Rect box;
 	box.x = x;
 	box.y = y;
 	box.w = width;
 	box.h = height;
 	
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-	SDL_RenderFillRect(renderer, &box);
+	renderer->render_rect(box, Color{0, 0, 0, 200});
 	
-	if (textbox_text == nullptr) {
+	/*if (textbox_text == nullptr) {
 		SDL_Color color;
 		color.r = 255; color.g = 255; color.b = 255; color.a = 255;
 		textbox_text = new Text(renderer, text, color, constants::button_font);
 	} else {
 		textbox_text->draw(x+10, y+((height/2)-20 ));
-	}
+		}*/
 }

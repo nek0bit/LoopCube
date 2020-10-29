@@ -72,15 +72,14 @@ void Game::update() {
 	}
 
 	// Update screen size
-	SDL_GetWindowSize(window, &WINDOW_W, &WINDOW_H);
+	renderer->fetch_screen_size();
 }
 
 
 
 // Draw objects to screen
 void Game::render() {
-	SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
-	SDL_RenderClear(renderer);
+	renderer->clear_screen();
 
 	switch(state.get()) {
 	case STATE_MAIN_MENU:
@@ -94,74 +93,46 @@ void Game::render() {
 	}
 	
 #if defined(__WIIU__) || defined(__SWITCH__)
-	SDL_Rect cursor_hover;
-	cursor_hover.x = events->get_mouse_pos()[0];
-	cursor_hover.y = events->get_mouse_pos()[1];
-	cursor_hover.w = 10;
-	cursor_hover.h = 10;
+	Rect cursor_hover{events->get_mouse_pos()[0], events->get_mouse_pos()[1], 10, 10};
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
 	SDL_RenderFillRect(renderer, &cursor_hover);
+	Color cursor_color{255, 255, 255, 200};
+	renderer->render_rect(cursor_hover, cursor_color);
 #endif
 
-	SDL_RenderPresent(renderer);
+	renderer->update_screen();
 }
 
 // SDL2 related stuff below
 // Initiates Window/Game Loop
 void Game::init(bool fullscreen = false) {
-	// Handle flags
-	int flags = 0;
-#if defined(__WIIU__) || defined(__SWITCH__)
-	fullscreen = true;
-#endif
-	if (fullscreen) {
-		flags = SDL_WINDOW_FULLSCREEN;
-	}
-	flags = flags | SDL_WINDOW_RESIZABLE;
-#if !defined(__WIIU__)
-	flags = flags | SDL_RENDERER_ACCELERATED;
-#endif
+	fullscreen = true; // Bypass unused variable temporarily
 	
-	if (SDL_Init(SDL_INIT_VIDEO) == 0) {
-		std::cout << "[SDL] Initialized SDL" << std::endl;
-		window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_W, WINDOW_H, flags);
-		renderer = SDL_CreateRenderer(window, -1, 0);
-		SDL_SetRenderDrawColor(renderer, 0x79, 0xae, 0xd9, 255);
-		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	} else {
-		std::cerr << "[SDL] ERROR: Failed to initialize SDL!" << std::endl;
-	}
+#ifdef GRAPHIC_BACKEND_SDL2
+	renderer = new GraphicsWrapper_SDL2(Config{});
+#endif
 
 #ifdef INPUT_BACKEND_SDL2
     events = new EventWrapper_SDL2();
 #endif
 
+	try {
+		renderer->init_screen();
+	} catch(std::runtime_error& e) {
+		std::cout << "[Error] " << e.what() << std::endl;
+	    exit(1);
+	}
+
 	events->update_controllers();
-
-	// Todo check error
-	IMG_Init(IMG_INIT_PNG);
-	TTF_Init();
-
-	initialize_fonts();
 
 	game_init();
 
 	is_running = true;
 }
 
-void Game::initialize_fonts() {
-	std::string LiberationSansRegular = (constants::root_path+std::string{"/fonts/liberation-sans/LiberationSans-Regular.ttf"});
-	constants::button_font = TTF_OpenFont(LiberationSansRegular.c_str(), 24);
-	constants::item_font = TTF_OpenFont(LiberationSansRegular.c_str(), 12);
-	constants::header_font = TTF_OpenFont(LiberationSansRegular.c_str(), 32);
-	constants::paragraph_font = TTF_OpenFont(LiberationSansRegular.c_str(), 16);
-	constants::option_font = TTF_OpenFont(LiberationSansRegular.c_str(), 18);
-}
-
 // Handles events such as exit, keypresses, mouse
 void Game::event_handler() {
-
 	events->listen();
 
 	auto eventer = events->get_key_state();
@@ -179,24 +150,10 @@ void Game::free() {
 	// Incase user manually runs this method and then the destructor calls this afterwards
 	if (has_freed == false) {
 		// Cleanup core game stuff
-		std::cout << "[Game] Cleaning up..." << std::endl;
 		delete game;
 		delete menu;
 		delete events;
-
-		// Cleanup textures
-		std::cout << "[Textures] Freeing..." << std::endl;
-		textures.free_textures();
-
-		// Cleanup fonts
-		std::vector<TTF_Font*> fonts = {constants::button_font, constants::item_font, constants::header_font,
-			constants::paragraph_font, constants::option_font};
-
-		for(auto i: fonts) {
-			TTF_CloseFont(i);
-		}
-		
-		
+		delete renderer;
 	}
 
 	has_freed = true;

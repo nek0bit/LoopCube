@@ -14,6 +14,6 @@ void UiElement::update() {}
 void UiElement::update(EventWrapper*&) {}
 void UiElement::update(EventWrapper*&, int, int) {}
 void UiElement::render() {}
-void UiElement::render(SDL_Renderer*) {}
-void UiElement::render(SDL_Renderer*, int, int) {}
+void UiElement::render(GraphicsWrapper*) {}
+void UiElement::render(GraphicsWrapper*, int, int) {}
 

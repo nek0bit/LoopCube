@@ -9,6 +9,8 @@
 
 #include "backendincludes.hpp"
 
+#include "rect.hpp"
+#include "color.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "camera.hpp"
@@ -25,29 +27,27 @@
 class Play {
 
 public:
-	Play(SDL_Renderer* renderer, TextureHandler &textures, EventWrapper*& events, int *WINDOW_W, int *WINDOW_H);
+	Play(GraphicsWrapper* renderer, EventWrapper*& events);
 	~Play();
 
 	void event_handler();
 	void render();
 	void update();
 private:
-	int *WINDOW_W;
-	int *WINDOW_H;
+	int WINDOW_W;
+	int WINDOW_H;
 	void handle_camera();
 	void draw_selection(int* p1, int* p2);
 	void print_mouse_pos();
 	void dead_particles();
 	void update_config();
 	void mouse_events();
-	//void draw_debug_menu();
 
 	// Options
 	bool show_particles;
 	
-	SDL_Renderer* renderer;
-	TextureHandler& textures;
-	EventWrapper*& events;
+	GraphicsWrapper* renderer;
+	EventWrapper* events;
 	ChunkGroup chunks;
 	std::unique_ptr<Inventory> inv;
 	Camera camera;

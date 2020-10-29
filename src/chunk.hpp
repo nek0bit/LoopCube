@@ -12,6 +12,8 @@
 
 #include "backendincludes.hpp"
 
+#include "rect.hpp"
+#include "color.hpp"
 #include "constants.hpp"
 #include "block.hpp"
 #include "perlin.hpp"
@@ -33,9 +35,9 @@ public:
 	bool operator>(const Chunk &c) const;
 
 	void update_all();
-	void render_info(SDL_Renderer* renderer, Camera& camera);
-	void render_all_shadows(SDL_Renderer* renderer, Camera& camera);
-	void render_all_blocks(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+	void render_info(GraphicsWrapper* renderer, Camera& camera);
+	void render_all_shadows(GraphicsWrapper* renderer, Camera& camera);
+	void render_all_blocks(GraphicsWrapper* renderer, Camera& camera);
 	bool place_block(int id, int x, int y);
 	const BlockInfo* destroy_block(int x, int y, Inventory *inv);
 	void generate_chunk(unsigned long int seed, std::vector<Structure*>& structure);
@@ -61,7 +63,7 @@ private:
 	//PerlinNoise terrain_gen;
 	FastNoiseLite terrain_gen;
 
-	std::shared_ptr<Text> chunk_text;
+	//std::shared_ptr<Text> chunk_text;
 };
 
 #endif // CHUNK_HPP

@@ -6,6 +6,8 @@
 
 #include "backendincludes.hpp"
 
+#include "rect.hpp"
+#include "color.hpp"
 #include "uielement.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
@@ -15,22 +17,20 @@
 class Button: public UiElement {
 public:
 	Button() = default;
-	Button(int id, TextureHandler& textures, int x, int y, int width, int height = 32);
+	Button(int id, int x, int y, int width, int height = 32);
 	~Button();
 
 	void set_x(int x);
 	void set_y(int y);
 	void update(EventWrapper*& events);
-	void render(SDL_Renderer* renderer);
+	void render(GraphicsWrapper* renderer);
 
 	// Text
-	void set_text(SDL_Renderer* renderer, std::string text);
+	void set_text(GraphicsWrapper* renderer, std::string text);
 	std::string get_text();
 	bool get_pressed();
 	int get_id();
-private:
-	TextureHandler& textures;
-	
+private:	
 	std::string text;
 	unsigned int id;
 	int x;
@@ -43,7 +43,7 @@ private:
 	bool being_clicked;
 	bool clicked;
 
-	SDL_Rect src, dest;
+	Rect src, dest;
 	//std::shared_ptr<Text> button_text;
 
 };

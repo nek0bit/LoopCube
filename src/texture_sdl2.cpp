@@ -1,6 +1,5 @@
 #include "texture_sdl2.hpp"
 
-
 Texture_SDL2::Texture_SDL2(SDL_Renderer* renderer, std::string filename) : Texture<SDL_Texture*>{} {
 	SDL_Surface* surface = IMG_Load(filename.c_str());
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);

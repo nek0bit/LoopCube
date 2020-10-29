@@ -6,7 +6,8 @@
 
 #include "backendincludes.hpp"
 
-#include "texturehandler.hpp"
+#include "rect.hpp"
+#include "color.hpp"
 #include "constants.hpp"
 #include "position.hpp"
 #include "item.hpp"
@@ -14,11 +15,8 @@
 class Inventory {
 public:
 	Inventory() = default;
-	Inventory(SDL_Renderer* renderer,
-			  TextureHandler& textures,
-			  EventWrapper*& events,
-			  int* WINDOW_W,
-			  int* WINDOW_H);
+	Inventory(GraphicsWrapper* renderer,
+			  EventWrapper* events);
 	~Inventory();
 
 	void draw_hotbar();
@@ -44,11 +42,7 @@ private:
 	// Temporary item slot for holding items
 	Item item_held;
 
-	int* WINDOW_W;
-	int* WINDOW_H;
-
-	SDL_Renderer* renderer;
-	TextureHandler* textures;
+	GraphicsWrapper* renderer;
 	EventWrapper* events;
 };
 

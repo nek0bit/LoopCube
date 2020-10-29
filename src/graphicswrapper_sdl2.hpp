@@ -7,9 +7,12 @@
 #include <array>
 #include <stdexcept>
 #include <cstring>
+#include <functional>
 
 #include "backendincludes.hpp"
 
+#include "texture.hpp"
+#include "texture_sdl2.hpp"
 #include "graphicswrapper_internal.hpp"
 #include "texturehandler.hpp"
 #include "rect.hpp"
@@ -23,15 +26,15 @@ public:
     void init_screen() override;
 	void clear_screen() override;
 	void update_screen() override;
-	void render(Rect, Rect, int) override;
-	void render_rect(Rect, Color) override;
+	void render(Rect&, Rect&, int) override;
+	void render_rect(Rect&, Color) override;
     void fetch_screen_size();
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	TextureHandler* textures;
+	TextureHandler<Texture_SDL2*, std::function<Texture_SDL2*(std::string)>>* textures;
 	Config config;
-}
+};
 
 
 #endif // GRAPHICSWRAPPER_SDL2_HPP

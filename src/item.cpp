@@ -2,9 +2,9 @@
 
 Item::Item() : enabled{false} {}
 
-Item::Item(int id, TextureHandler &textures, SDL_Renderer *renderer) : enabled{true}, count{} {
-	this->textures = &textures;
+Item::Item(int id, GraphicsWrapper* renderer) : enabled{true}, count{} {
 	this->renderer = renderer;
+	
 	for (auto &i: constants::block_info) {
 		if (i.get_id() == id) {
 			block = i;
@@ -37,9 +37,9 @@ void Item::add_count(int amount) {
 }
 
 void Item::draw(int x, int y, int width = 35, int height = 35) {
-	SDL_Rect src{0, 0, width, height};
-	SDL_Rect block{x, y, width, height};
-	SDL_RenderCopy(renderer, textures->get_texture(this->block.get_texture_id()), &src, &block);
+	Rect src{0, 0, width, height};
+	Rect block{x, y, width, height};
+	renderer->render(src, block, this->block.get_texture_id());
 
 	//text->draw(x, y+height);
 }

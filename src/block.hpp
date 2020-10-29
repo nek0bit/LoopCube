@@ -1,5 +1,9 @@
 #ifndef BLOCK_HPP
 #define BLOCK_HPP
+#include "backendincludes.hpp"
+
+#include "rect.hpp"
+#include "color.hpp"
 #include "gameobj.hpp"
 #include "constants.hpp"
 #include "blockinfo.hpp"
@@ -12,7 +16,7 @@ public:
 	Block(int id, int x, int y);
 
 	void update();
-	void render_shadow(SDL_Renderer* renderer, Camera& camera);
+	void render_shadow(GraphicsWrapper* renderer, Camera& camera);
 	const BlockInfo* get_blockinfo();
 	double get_default_x() const override;
 	double get_default_y() const override;

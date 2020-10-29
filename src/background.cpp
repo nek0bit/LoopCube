@@ -46,7 +46,7 @@ void Background::update(Camera& camera) {
 	bg_cave_block_y = camera.get_y()/10;
 }
 
-void Background::render(SDL_Renderer* renderer, TextureHandler& textures) {
+void Background::render(GraphicsWrapper* renderer) {
 	static double cavebg_opacity = 1;
 	
 	const double transition = 255;
@@ -61,44 +61,45 @@ void Background::render(SDL_Renderer* renderer, TextureHandler& textures) {
 	int offset = 200;
 	
 	// Render bg_shine
-	SDL_RenderCopy(renderer, textures.get_texture(13), &bg_shine_src, &bg_shine_dest);
+	renderer->render(bg_shine_src, bg_shine_dest, 13);
 
 	// Render clouds
-	render_repeating(renderer, textures, 14, bg_cloud_offset_x, bg_cloud_offset_y,
+	render_repeating(renderer, 14, bg_cloud_offset_x, bg_cloud_offset_y,
 					 bg_cloud_w, bg_cloud_h, 60, 40 + offset);
 
 	// Render hills
-	render_repeating(renderer, textures, 16, bg_hills_offset_x, bg_hills_offset_y,
+	render_repeating(renderer, 16, bg_hills_offset_x, bg_hills_offset_y,
 					 bg_hills_w, bg_hills_h, 0, 300 + offset);
 
 	if (cavebg_opacity > 2) {
 		// Set opacity
 		int texture = 17;
-		SDL_Texture* mod_texture = textures.get_texture(texture);
-		SDL_SetTextureAlphaMod(mod_texture, static_cast<int>(cavebg_opacity));
+		// TODO Enable alpha support for textures
+		//SDL_Texture* mod_texture = textures.get_texture(texture);
+		//SDL_SetTextureAlphaMod(mod_texture, static_cast<int>(cavebg_opacity));
 		
-		render_repeating(renderer, textures, texture, bg_cave_block_x, bg_cave_block_y,
+		render_repeating(renderer, texture, bg_cave_block_x, bg_cave_block_y,
 						 bg_cave_block_w, bg_cave_block_h, 0, 0, true);
 
 		// Reset opacity
-		SDL_SetTextureAlphaMod(mod_texture, 255);
+		//SDL_SetTextureAlphaMod(mod_texture, 255);
 	}
 }
 
-void Background::render_repeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int offset_x, int offset_y, int width,
+void Background::render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,
 										 int height, int gap, int top, bool verticle) {
 	const int MAX_X = win_width;
 	const int MAX_Y = win_height;
 	// Create a grid of tiles as the background
 	for (int i = -1; (width+gap)*i < MAX_X+(width+gap); i++) {
 		for (int j = -1; verticle ? (height+gap)*j < MAX_Y+(height+gap) : j < 0; j++) {
-			SDL_Rect block{(offset_x % (width+gap))+((width+gap)*i),
+			Rect src{0, 0, width, height};
+		    Rect block{(offset_x % (width+gap))+((width+gap)*i),
 				verticle ? ((offset_y % (height+gap)) + top)+((height+gap)*j) : top+offset_y,
 				width, height};
-			SDL_Rect src{0, 0, width, height};
 
 			// Draw the tile
-			SDL_RenderCopy(renderer, textures.get_texture(texture), &src, &block);
+			renderer->render(src, block, texture);
 		}
 	}
 }
