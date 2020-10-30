@@ -26,7 +26,7 @@ public:
 	void render(GraphicsWrapper* renderer);
 
 	// Text
-	void set_text(GraphicsWrapper* renderer, std::string text);
+	void set_text(std::string text);
 	std::string get_text();
 	bool get_pressed();
 	int get_id();
@@ -44,7 +44,7 @@ private:
 	bool clicked;
 
 	Rect src, dest;
-	//std::shared_ptr<Text> button_text;
+	Text button_text;
 
 };
 

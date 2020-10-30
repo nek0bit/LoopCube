@@ -11,9 +11,7 @@ Item::Item(int id, GraphicsWrapper* renderer) : enabled{true}, count{} {
 		}
 	}
 
-	//SDL_Color color{};
-	//color.r = 255; color.g = 255; color.b = 255;
-	//text = std::shared_ptr<Text>(new Text(renderer, "", color, constants::item_font));
+	text = Text{};
 }
 
 Item::~Item() {
@@ -33,13 +31,16 @@ void Item::add_count(int amount) {
 	if (count == -1) {
 		enabled = false;
 	}
-	//text->set_text(count == 0 ? "" : std::to_string(count+1).c_str());
+
+	text = count == 0 ? "" : std::to_string(count+1);
 }
 
+// TODO move renderer here
 void Item::draw(int x, int y, int width = 35, int height = 35) {
+	int offset_y = -10;
 	Rect src{0, 0, width, height};
 	Rect block{x, y, width, height};
 	renderer->render(src, block, this->block.get_texture_id());
 
-	//text->draw(x, y+height);
+	text.render(renderer, x, y+height+offset_y);
 }

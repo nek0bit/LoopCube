@@ -1,7 +1,7 @@
 #include "checkbox.hpp"
 
 Checkbox::Checkbox(int id, std::string text, int x, int y, int size, bool checked)
-	: changed{false}, id{id}, text{text}, x{x}, y{y}, size{size}, checked{checked} {
+	: changed{false}, id{id}, text{text}, x{x}, y{y}, size{size}, checked{checked}, text_render{text} {
 }
 
 Checkbox::~Checkbox() {}
@@ -60,25 +60,15 @@ void Checkbox::update(EventWrapper*& events) {
 
 void Checkbox::render(GraphicsWrapper* renderer) {
 	// Draw box behind check
-
 	renderer->render_rect(dest, Color{0, 0, 0, 200});
 
 	// Draw check
 	if (checked) {
 	    Rect check{dest.x+10, dest.y+10, dest.w-20, dest.h-20};
-
 		renderer->render_rect(check, Color{255, 255, 255, 255});
 	}
 
-	
-
-	/*if (text_render == nullptr) {
-		SDL_Color color;
-		color.r = 255; color.g = 255; color.b = 255; color.a = 255;
-		text_render = new Text(renderer, text, color, constants::option_font); 
-	} else {
-		text_render->draw((dest.x+size+10), (dest.y+5));
-		}*/
+	text_render.render(renderer, dest.x+size+10, dest.y+5, 10);
 }
 
 

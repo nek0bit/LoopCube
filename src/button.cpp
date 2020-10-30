@@ -65,20 +65,15 @@ void Button::render(GraphicsWrapper* renderer) {
 	renderer->render(src, begin, 6);
 	renderer->render(src, dest, 5);
 	renderer->render(src, end, 7);
-	//if (button_text != nullptr) {
-	//	button_text->draw(x+(width/2)-(button_text->get_width()/2)-2, dest.y+(height/2)-(button_text->get_height()/2)-2);
-	//}
+
+	button_text.render(renderer, x+(width/2)-(button_text.get_width()/2)-2,
+					   dest.y+(height/2)-(button_text.get_height()/2)-2, 20, true);
 }
 
-void Button::set_text(GraphicsWrapper* renderer, std::string text) {
+void Button::set_text(std::string text) {
 	this->text = text;
-	/*SDL_Color color;
-	color.r = 255;
-	color.g = 255;
-	color.b = 255;
-	color.a = 255;*/
 	
-	//button_text = std::shared_ptr<Text>(new Text(renderer, this->text, color, constants::button_font));
+	button_text = Text{text};
 }
 
 void Button::set_x(int x) {

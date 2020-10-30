@@ -30,14 +30,14 @@ Menu::Menu(GraphicsWrapper* renderer,
 	
 	for (size_t i = 0; i < button_group.size(); ++i) {
 		button_group[i] = std::unique_ptr<Button>(new Button(i, 0, 30+(offset_y*i), BUTTON_W));
-		button_group[i]->set_text(renderer, option_str[i]);
+		button_group[i]->set_text(option_str[i]);
 	}
 
 	//************************************************
 	// Setup options
 	//************************************************
 	back_button = std::unique_ptr<Button>(new Button(-1, 0, 30, 150));
-	back_button->set_text(renderer, "<- Back");
+	back_button->set_text("<- Back");
 
 	// Setup checkboxes
 	Checkbox* show_shadows = new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 30);
@@ -68,6 +68,8 @@ Menu::Menu(GraphicsWrapper* renderer,
 	for (auto &i: constants::content) {
 		p_string += i + "\n";
 	}
+	header = Text{constants::header};
+	paragraph = Text{p_string};
 }
 
 Menu::~Menu() {
@@ -174,17 +176,9 @@ void Menu::render_sidebar() {
     Color color;
 	color.r = 255; color.g = 255; color.b = 255; color.a = 255;
 	
-	//if (header == nullptr) {
-		//header = std::unique_ptr<Text>(new Text(renderer, constants::header, color, constants::header_font));  
-	//} else {
-		//header->draw(content_left+70, 40);
-	//}
+	header.render(renderer, content_left+70, 45, 32, true);
 
-	//if (paragraph == nullptr) {
-		//paragraph = std::unique_ptr<Text>(new Text(renderer, p_string, color, constants::paragraph_font, 400));
-	//} else {
-		//paragraph->draw(content_left+5, 120);
-	//}
+	paragraph.render(renderer, content_left+5, 120, 20, true);
 }
 
 int Menu::get_pressed() {

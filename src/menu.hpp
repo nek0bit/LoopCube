@@ -10,6 +10,7 @@
 #include "backendincludes.hpp"
 
 #include "rect.hpp"
+#include "text.hpp"
 #include "textbox.hpp"
 #include "checkbox.hpp"
 #include "constants.hpp"
@@ -55,8 +56,8 @@ private:
 
 	// Content elements for sidebar
 	Item random_block;
-	//std::unique_ptr<Text> header;
-	//std::unique_ptr<Text> paragraph;
+	Text header;
+	Text paragraph;
 	std::string p_string;
 	const int pad_left;
 };

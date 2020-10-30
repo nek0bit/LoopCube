@@ -2,32 +2,29 @@
 #define TEXT_HPP
 #include <iostream>
 #include <string>
-/*
+#include <array>
+
+#include "backendincludes.hpp"
+
+#include "rect.hpp"
+
 class Text {
 public:
-	Text(SDL_Renderer* renderer,
-		 std::string text,
-		 SDL_Color color,
-		 TTF_Font* font,
-		 int wrap_width = -1);
+	Text(std::string text = "");
 	~Text();
+
+	void render(GraphicsWrapper* renderer, int x, int y, int size = 10, bool high_quality = false);
+	void operator=(const std::string& value);
+	void set_text(std::string& text);
 
 	int get_width();
 	int get_height();
-	void draw(int x, int y);
-	void set_text(std::string text);
 private:
-	void update_surface();
-	int wrap_width;
+	std::vector<int> char_width;
 	std::string text;
 
-	SDL_Color color;
-	SDL_Renderer* renderer;
-	TTF_Font* font;
-	SDL_Surface* surface;
-	SDL_Texture* messageText;
-
+	int text_width;
+	int text_height;
 };
-*/
 
 #endif // TEXT_HPP

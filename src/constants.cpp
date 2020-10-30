@@ -29,6 +29,8 @@ namespace constants {
 		"bg_hills", // 15
 		"bg_hills_hq", // 16
 		"cave_bg", // 17
+		"font_bitmap", // 18
+		"font_bitmap_x2" // 19
 	};
 
 	const std::vector<BlockInfo> block_info = {
@@ -60,18 +62,16 @@ namespace constants {
 	const std::string header = "LoopCube";
 	const std::vector<std::string> content = {
 		"Welcome to LoopCube!\n",
-		"The current version is " + version_str + "\n",
-		"<><><> Changelog: v0.2 <><><>",
-		"- Beautiful Parallax Backgronds",
-		"- Chunk size increased, performs",
-		"	much better then before",  
-		"- Some code restructuring",
-		"- Switch Build",
-		"- Particles",
-		"- Menu progress",
-		"- Config options",
-		"- Inventory",
-		"- Lots of bugs fixed",
+		"Current Version: " + version_str + "\n",
+		"Changelog:",
+		"-Verticle chunks",
+		"-Fast chunk rendering",
+		"-Bigger chunks",
+		"-Better chunk generation",
+		"-Wacky Bitmap fonts",
+		"-Less memory usage",
+		"-Portable API's for\n rendering & events\n",
+		"  And much more..."
 	};
 
 	Config config;

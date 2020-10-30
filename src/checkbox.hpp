@@ -40,7 +40,7 @@ private:
 	int size;
 	bool checked;
 
-	//Text* text_render;
+	Text text_render;
 
     Rect dest;
 };

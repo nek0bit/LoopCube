@@ -13,15 +13,17 @@ GraphicsWrapper_SDL2::~GraphicsWrapper_SDL2() {
 
 void GraphicsWrapper_SDL2::init_screen() {
 	// TODO use config for this
-	int flags = 0;
+	int win_flags = 0;
+	int rend_flags = 0;
 	//flags = flags | SDL_WINDOW_FULLSCREEN;
-	flags = flags | SDL_WINDOW_RESIZABLE;
-	flags = flags | SDL_RENDERER_ACCELERATED;
-	flags = flags | SDL_RENDERER_PRESENTVSYNC;
+	win_flags = win_flags | SDL_WINDOW_RESIZABLE;
+
+	rend_flags = rend_flags | SDL_RENDERER_ACCELERATED;
+	rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
 
 	if (SDL_Init(SDL_INIT_VIDEO) == 0) {
-		window = SDL_CreateWindow("SDL2 Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, flags);
-		renderer = SDL_CreateRenderer(window, -1, 0);
+		window = SDL_CreateWindow("SDL2 Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, win_flags);
+		renderer = SDL_CreateRenderer(window, -1, rend_flags);
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	} else {
@@ -30,8 +32,8 @@ void GraphicsWrapper_SDL2::init_screen() {
 		throw std::runtime_error(error);
 	}
 
-	flags = IMG_INIT_PNG;
-	if ((IMG_Init(flags)&flags) != flags) {
+	int img_flags = IMG_INIT_PNG;
+	if ((IMG_Init(img_flags)&img_flags) != img_flags) {
 		char error[] = "IMG_Init failed: ";
 		strcat(error, IMG_GetError());
 		throw std::runtime_error(error);
