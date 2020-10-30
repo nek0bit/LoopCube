@@ -48,7 +48,7 @@ private:
 	
 	GraphicsWrapper* renderer;
 	EventWrapper* events;
-	ChunkGroup chunks;
+	ChunkGroup* chunks;
 	std::unique_ptr<Inventory> inv;
 	Camera camera;
 

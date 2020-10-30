@@ -115,6 +115,9 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
 
 const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
 	int i = get_y_split(y);
+	if (!(i < static_cast<int>(chunk.size()-1) && i >= 0)) {
+		return nullptr;
+	}
 	for (size_t j = 0; j < chunk[i].size(); ++j) {
 		if (get_chunk_x(x) == chunk[i][j].get_obj().x && y == chunk[i][j].get_obj().y) {
 			const BlockInfo* info = chunk[i][j].get_blockinfo();
@@ -135,6 +138,9 @@ bool Chunk::place_block(int id, int x, int y) {
 		bool is_duplicate = false;
 		
 		int i = get_y_split(y);
+		if (!(i < static_cast<int>(chunk.size()-1) && i >= 0)) {
+		    return false;
+		}
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
 			if (get_chunk_x(x)*constants::block_w == chunk[i][j].get_default_x() && y*constants::block_h == chunk[i][j].get_default_y()) {
 				is_duplicate = true;
