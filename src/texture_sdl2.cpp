@@ -1,3 +1,4 @@
+#ifdef GRAPHIC_BACKEND_SDL2
 #include "texture_sdl2.hpp"
 
 Texture_SDL2::Texture_SDL2(SDL_Renderer* renderer, std::string filename) : Texture<SDL_Texture*>{} {
@@ -23,3 +24,4 @@ SDL_Texture* Texture_SDL2::get_texture() {
 void Texture_SDL2::free_texture() {
 	SDL_DestroyTexture(texture);
 }
+#endif

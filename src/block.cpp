@@ -38,8 +38,8 @@ const BlockInfo* Block::get_blockinfo() {
 }
 
 void Block::update() {
-	src.h = obj.h;
-	src.w = obj.w;
+	src.h = constants::block_img_size;
+	src.w = constants::block_img_size;
 	src.x = 0;
 	src.y = 0;
 }

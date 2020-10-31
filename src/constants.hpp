@@ -35,6 +35,8 @@ namespace constants {
 
 	extern const double block_w;
 	extern const double block_h;
+
+	extern const int block_img_size;
 	
 	extern const int chunk_width;
 	extern const int chunk_height;

@@ -2,9 +2,7 @@
 
 Item::Item() : enabled{false} {}
 
-Item::Item(int id, GraphicsWrapper* renderer) : enabled{true}, count{} {
-	this->renderer = renderer;
-	
+Item::Item(int id) : enabled{true}, count{} {
 	for (auto &i: constants::block_info) {
 		if (i.get_id() == id) {
 			block = i;
@@ -36,9 +34,9 @@ void Item::add_count(int amount) {
 }
 
 // TODO move renderer here
-void Item::draw(int x, int y, int width = 35, int height = 35) {
+void Item::draw(GraphicsWrapper* renderer, int x, int y, int width = 35, int height = 35) {
 	int offset_y = -10;
-	Rect src{0, 0, width, height};
+	Rect src{0, 0, constants::block_img_size, constants::block_img_size};
 	Rect block{x, y, width, height};
 	renderer->render(src, block, this->block.get_texture_id());
 

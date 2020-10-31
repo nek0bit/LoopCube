@@ -1,3 +1,5 @@
+#ifdef GRAPHIC_BACKEND_SDL2
+
 #include "graphicswrapper_sdl2.hpp"
 
 GraphicsWrapper_SDL2::GraphicsWrapper_SDL2(Config config) : GraphicsWrapper{} {
@@ -72,3 +74,4 @@ void GraphicsWrapper_SDL2::render_rect(Rect& dest, Color color) {
 void GraphicsWrapper_SDL2::fetch_screen_size() {
 	SDL_GetWindowSize(window, &SCREEN_W, &SCREEN_H);
 }
+#endif

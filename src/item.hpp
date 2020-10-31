@@ -15,10 +15,10 @@
 class Item {
 public:
 	Item();
-	Item(int id, GraphicsWrapper* renderer);
+	Item(int id);
 	~Item();
 
-	void draw(int x, int y, int width, int height);
+	void draw(GraphicsWrapper* renderer, int x, int y, int width, int height);
 	void add_count(int amount = 1);
 	int get_count();
 	BlockInfo get_block();
@@ -28,7 +28,6 @@ private:
 	std::string id;
 	BlockInfo block;
 	int count;
-	GraphicsWrapper *renderer;
 };
 
 #endif // ITEM_HPP

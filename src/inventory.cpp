@@ -29,7 +29,7 @@ void Inventory::add_item(int id) {
 	} else {
 		for (Item& i: items) {
 			if (!i.enabled) {
-				i = Item{id, renderer};
+				i = Item{id};
 				break;
 			}
 		}
@@ -97,7 +97,7 @@ void Inventory::draw_inventory_menu() {
 		}
 		
 		auto mouse_pos = events->get_vmouse_pos();
-		if (item_held.enabled) item_held.draw(mouse_pos[0]-17, mouse_pos[1]-17, 35, 35);
+		if (item_held.enabled) item_held.draw(renderer, mouse_pos[0]-17, mouse_pos[1]-17, 35, 35);
 	}
 }
 
@@ -125,7 +125,7 @@ std::vector<int> Inventory::get_hovered_pos(int x, int y, int corner_x, int corn
 
 			// Draw item
 			if (items[i+(j*hotbar_slots)].enabled) {
-				items[i+(j*hotbar_slots)].draw(new_x+3, new_y+3, tile_size-7, tile_size-7);
+				items[i+(j*hotbar_slots)].draw(renderer, new_x+3, new_y+3, tile_size-7, tile_size-7);
 			}
 
 			if (collision(x, y, 1, 1,
@@ -177,7 +177,7 @@ void Inventory::draw_hotbar() {
 		renderer->render(src, block, 10);
 
 		if (items[i].enabled) {
-			items[i].draw(block.x+5, block.y+5, 30, 30);
+			items[i].draw(renderer, block.x+5, block.y+5, 30, 30);
 		}
 	}
 }

@@ -20,4 +20,13 @@
 #include "texture_sdl2.hpp"
 #endif // GRAPHICS_BACKEND_SDL2
 
+//********************************
+//  SFML
+//********************************
+#ifdef GRAPHIC_BACKEND_SFML
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+#include "graphicswrapper_sfml.hpp"
+#endif // GRAPHIC_BACKEND_SFML
+
 #endif // BACKENDINCLUDES_HPP

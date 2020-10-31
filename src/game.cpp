@@ -113,8 +113,16 @@ void Game::init(bool fullscreen = false) {
 	renderer = new GraphicsWrapper_SDL2(Config{});
 #endif
 
+#ifdef GRAPHIC_BACKEND_SFML
+	renderer = new GraphicsWrapper_SFML(Config{});
+#endif
+
 #ifdef INPUT_BACKEND_SDL2
     events = new EventWrapper_SDL2();
+#endif
+
+#ifdef INPUT_BACKEND_SFML
+	events = new EventWrapper();
 #endif
 
 	try {

@@ -60,7 +60,7 @@ Menu::Menu(GraphicsWrapper* renderer,
 	std::uniform_int_distribution<std::mt19937::result_type> dist(0, constants::block_info.size()-1);
 
 	int rand_id = constants::block_info.at(dist(rng)).get_id();
-	random_block = Item(rand_id, renderer);
+	random_block = Item(rand_id);
 
 	//************************************************
 	// Setup paragraph string
@@ -170,7 +170,7 @@ void Menu::render_sidebar() {
 	renderer->render_rect(line, Color{200, 200, 200, 255});
 
 	// Lets render a random block and some text
-	random_block.draw(content_left, 35, 60, 60);
+	random_block.draw(renderer, content_left, 35, 60, 60);
 
 	// White color
     Color color;

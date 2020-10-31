@@ -9,8 +9,10 @@ public:
 	Texture() {};
 	virtual ~Texture() {};
 
-	virtual TextureType get_texture() { return TextureType{}; }; // MUST BE DEFINED
+	virtual TextureType& get_texture() { return texture; }; // MUST BE DEFINED
 	virtual void free_texture() {};
+protected:
+	TextureType texture;
 };
 
 #endif
