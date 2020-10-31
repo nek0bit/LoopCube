@@ -25,7 +25,7 @@ void GraphicsWrapper_Citro2D::init_screen() {
 }
 void GraphicsWrapper_Citro2D::clear_screen() {
 	C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
-	C2D_TargetClear(screen, C2D_Color32f(0.0f, 0.0f, 0.0f, 1.0f));
+	C2D_TargetClear(screen, C2D_Color32f(0.3f, 0.5f, 0.0f, 1.0f));
 	C2D_SceneBegin(screen);
 }
 
@@ -34,11 +34,11 @@ void GraphicsWrapper_Citro2D::update_screen() {
 }
 
 void GraphicsWrapper_Citro2D::render(Rect& src, Rect& dest, int) {
-	C2D_DrawRectangle(dest.x, dest.y, 0, dest.w, dest.h, 255, 0, 0, 255);
+	C2D_DrawRectSolid(dest.x, dest.y, 0, dest.w, dest.h, C2D_Color32f(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
 void GraphicsWrapper_Citro2D::render_rect(Rect& dest, Color color) {
-	C2D_DrawRectangle(dest.x, dest.y, 0, dest.w, dest.h, color.r, color.g, color.b, color.a); 
+	C2D_DrawRectSolid(dest.x, dest.y, 0, dest.w, dest.h, 0xFF0000); 
 }
 
 void GraphicsWrapper_Citro2D::fetch_screen_size() {
