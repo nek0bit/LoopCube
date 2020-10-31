@@ -2,8 +2,6 @@
 #define ENTITY_HPP
 #include <iostream>
 
-#include <SDL2/SDL.h>
-
 #include "chunkgroup.hpp"
 #include "camera.hpp"
 #include "chunk.hpp"

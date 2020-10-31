@@ -4,9 +4,6 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
-#include <future>
-#include <thread>
-#include <chrono>
 
 #include "backendincludes.hpp"
 
@@ -16,8 +13,6 @@
 #include "texturehandler.hpp"
 #include "structure.hpp"
 #include "tree.hpp"
-
-using namespace std::chrono_literals;
 
 class ChunkGroup {
 public:
@@ -67,8 +62,6 @@ private:
 	std::vector<int> past_chunks; // group_past ids
 	std::vector<Chunk*> viewport_chunks; // Chunks that should be focused on
 	unsigned long seed;
-
-	std::vector<std::future<Chunk>> chunk_async_loading;
 };
 
 

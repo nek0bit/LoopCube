@@ -1,4 +1,5 @@
 #include "texture_sdl2.hpp"
+#ifdef GRAPHIC_BACKEND_SDL2
 
 Texture_SDL2::Texture_SDL2(SDL_Renderer* renderer, std::string filename) : Texture<SDL_Texture*>{} {
 	SDL_Surface* surface = IMG_Load(filename.c_str());
@@ -23,3 +24,4 @@ SDL_Texture* Texture_SDL2::get_texture() {
 void Texture_SDL2::free_texture() {
 	SDL_DestroyTexture(texture);
 }
+#endif
