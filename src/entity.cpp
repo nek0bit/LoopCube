@@ -47,10 +47,7 @@ CollisionInfo Entity::check_block_collision(ChunkGroup& chunks) {
 			};
 			
 			
-			for (auto &i: player_check) {
-				if (i == -1) {
-					continue;
-				}
+			for (auto &i: player_check) { 
 				for (auto &block: chunk[i]) {
 					auto blockinfo = block.get_blockinfo();
 					CollisionInfo info = is_colliding(block);
