@@ -20,7 +20,9 @@ std::vector<Chunk>& ChunkGroup::get_chunks() {
 }
 
 int ChunkGroup::get_chunk_y(double y) {
-	return y / (constants::chunk_split_height * constants::block_h);
+	int value = y / (constants::chunk_split_height * constants::block_h);
+	if (!(constants::chunk_split_count-1 > value && value >= 0)) return -1;
+	return value;
 }
 
 std::vector<Chunk*>& ChunkGroup::get_viewport_chunks() {
@@ -38,14 +40,14 @@ bool ChunkGroup::chunk_already_generated(int id) {
 	return check;
 }
 
-// TODO this could be made faster
 void ChunkGroup::generate_chunk(int id, std::vector<Structure*>& structure) {
 	bool check = chunk_already_generated(id);
 	// Generate the chunk if it hasn't been generated before
 	if (std::find(loaded_chunks.begin(), loaded_chunks.end(), id) == loaded_chunks.end() && !check) {
-		//Chunk temp_chunk(seed, id, textures, structure);
+		Chunk temp_chunk(seed, id, structure);
+		//chunk_async_loading(std::async(std::launch::async, build_chunk, seed, id, structures));
 		
-		insert_sorted(group, Chunk{seed, id, structure});
+		insert_sorted(group, temp_chunk);
 		insert_sorted(loaded_chunks, id);
 		
 		update_viewport();
@@ -82,25 +84,28 @@ void ChunkGroup::check_area(int x, std::vector<Structure*>& structures) {
 	if (static_cast<int>(loaded_chunks.size()) > (load_distance*2)+1) {
 		/* We basically just move the chunk from group to group_past
 		   Since we want to reload these chunks when the screen gets back in view */
-		
-		if (id-load_distance-1 < loaded_chunks[0]) {
-			insert_sorted(group_past, *(group.end()-1));
-			insert_sorted(past_chunks, *(loaded_chunks.end()-1));
-			
-			loaded_chunks.erase(loaded_chunks.end()-1);
-			group.erase(group.end()-1);
-			
-		}
 
-		if (id+load_distance > loaded_chunks[loaded_chunks.size()-1]) {
-			insert_sorted(group_past, group[0]);
-			insert_sorted(past_chunks, loaded_chunks[0]);
+		try {
+			if (id-load_distance-1 < loaded_chunks.at(0)) {
+				insert_sorted(group_past, *(group.end()-1));
+				insert_sorted(past_chunks, *(loaded_chunks.end()-1));
+				
+				loaded_chunks.erase(loaded_chunks.end()-1);
+				group.erase(group.end()-1);	
+			}
 
-			loaded_chunks.erase(loaded_chunks.begin());
-			group.erase(group.begin());
-		}
+			if (id+load_distance > loaded_chunks.at(loaded_chunks.size()-1)) {
+				insert_sorted(group_past, group[0]);
+				insert_sorted(past_chunks, loaded_chunks[0]);
+				
+				loaded_chunks.erase(loaded_chunks.begin());
+				group.erase(group.begin());
+			}
 		
-		update_viewport();
+			update_viewport();
+		} catch(std::out_of_range& err) {
+			std::cout << "Out of bounds..." << std::endl;
+		}
 	}
 
 	// TODO Only run generate_chunk if needed
@@ -171,20 +176,23 @@ Chunk* ChunkGroup::get_chunk_at(double x, bool loaded=true) {
 	int id = id_double;	
 	std::vector<int>::iterator hovered_chunk = std::find(loaded_chunks.begin(), loaded_chunks.end(), id);
 
-	if (hovered_chunk != loaded_chunks.end()) {
-		int chunk_index = std::distance(loaded_chunks.begin(), hovered_chunk);
-		return &group[chunk_index];
-	}
-	
-	// Failed to find chunk in loaded chunks, lets search for past chunks if requested
-	if (!loaded) {
-		std::vector<int>::iterator hovered_chunk_past = std::find(past_chunks.begin(), past_chunks.end(), id);
-
-		if (hovered_chunk_past != past_chunks.end()) {
-			int chunk_index = std::distance(past_chunks.begin(), hovered_chunk_past);
-			return &group_past[chunk_index];
+	try {
+		if (hovered_chunk != loaded_chunks.end()) {
+			int chunk_index = std::distance(loaded_chunks.begin(), hovered_chunk);
+			return &group.at(chunk_index);
 		}
-	}
+	
+		// Failed to find chunk in loaded chunks, lets search for past chunks if requested
+		if (!loaded) {
+			std::vector<int>::iterator hovered_chunk_past = std::find(past_chunks.begin(), past_chunks.end(), id);
+
+			if (hovered_chunk_past != past_chunks.end()) {
+				int chunk_index = std::distance(past_chunks.begin(), hovered_chunk_past);
+				return &group_past.at(chunk_index);
+			}
+		}
+	} catch(std::out_of_range& err) { return nullptr; }
+	
 	return nullptr;
 }
 
