@@ -112,16 +112,9 @@ void Game::init(bool fullscreen = false) {
 #ifdef GRAPHIC_BACKEND_SDL2
 	renderer = new GraphicsWrapper_SDL2(Config{});
 #endif
-#ifdef GRAPHIC_BACKEND_CITRO2D
-	renderer = new GraphicsWrapper_Citro2D(Config{});
-#endif
-	
+
 #ifdef INPUT_BACKEND_SDL2
     events = new EventWrapper_SDL2();
-#endif
-
-#ifdef INPUT_BACKEND_3DS
-	events = new EventWrapper();
 #endif
 
 	try {

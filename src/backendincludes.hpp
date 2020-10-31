@@ -20,17 +20,4 @@
 #include "texture_sdl2.hpp"
 #endif // GRAPHICS_BACKEND_SDL2
 
-//********************************
-//  Citro2D
-//********************************
-#ifdef INPUT_BACKEND_CITRO2D
-//#include "eventwrapper_citro2d.hpp"
-#endif
-
-#ifdef GRAPHIC_BACKEND_CITRO2D
-#include <citro2d.h>
-#include "graphicswrapper_citro2d.hpp"
-#include "texture_citro2d.hpp"
-#endif
-
 #endif // BACKENDINCLUDES_HPP
