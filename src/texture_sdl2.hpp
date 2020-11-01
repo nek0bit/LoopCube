@@ -13,7 +13,7 @@ public:
 	Texture_SDL2(SDL_Renderer* renderer, std::string filename);
 	~Texture_SDL2();
 
-    SDL_Texture* get_texture();
+    SDL_Texture*& get_texture();
 	void free_texture() override;
 private:
 	SDL_Texture* texture;

@@ -23,6 +23,7 @@ public:
 	void render(Rect&, Rect&, int) override;
 	void render_rect(Rect&, Color) override;
 	void fetch_screen_size();
+	sf::RenderWindow* get_screen();
 private:
 	sf::RenderWindow* screen;
 	TextureHandler<Texture_SFML*, std::function<Texture_SFML*(std::string)>>* textures;

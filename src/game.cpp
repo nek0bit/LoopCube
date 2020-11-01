@@ -114,15 +114,8 @@ void Game::init(bool fullscreen = false) {
 #endif
 
 #ifdef GRAPHIC_BACKEND_SFML
-	renderer = new GraphicsWrapper_SFML(Config{});
-#endif
-
-#ifdef INPUT_BACKEND_SDL2
-    events = new EventWrapper_SDL2();
-#endif
-
-#ifdef INPUT_BACKEND_SFML
-	events = new EventWrapper();
+	GraphicsWrapper_SFML* graphics = new GraphicsWrapper_SFML(Config{});
+	renderer = graphics;
 #endif
 
 	try {
@@ -131,6 +124,17 @@ void Game::init(bool fullscreen = false) {
 		std::cout << "[Error] " << e.what() << std::endl;
 	    exit(1);
 	}
+
+#ifdef INPUT_BACKEND_SDL2
+    events = new EventWrapper_SDL2();
+#endif
+
+#ifdef INPUT_BACKEND_SFML
+	EventWrapper_SFML* event = new EventWrapper_SFML(graphics->get_screen());
+	events = event;
+#endif
+
+	
 
 	events->update_controllers();
 

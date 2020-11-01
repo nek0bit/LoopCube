@@ -55,4 +55,8 @@ void GraphicsWrapper_SFML::fetch_screen_size() {
     SCREEN_H = size.y;
 }
 
+sf::RenderWindow* GraphicsWrapper_SFML::get_screen() {
+	return screen;
+}
+
 #endif

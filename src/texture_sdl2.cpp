@@ -17,7 +17,7 @@ Texture_SDL2::~Texture_SDL2() {
 	free_texture();
 }
 
-SDL_Texture* Texture_SDL2::get_texture() {
+SDL_Texture*& Texture_SDL2::get_texture() {
 	return texture;
 }
 

@@ -23,6 +23,12 @@
 //********************************
 //  SFML
 //********************************
+#ifdef INPUT_BACKEND_SFML
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+#include "eventwrapper_sfml.hpp"
+#endif // INPUT_BACKEND_SFML
+
 #ifdef GRAPHIC_BACKEND_SFML
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
