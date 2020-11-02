@@ -18,9 +18,11 @@ public:
 	virtual void render_rect(Rect&, Color);
 	virtual void fetch_screen_size();
 	virtual std::array<int, 2> screen_size();
+	virtual void set_opacity(int opacity, int texture = -1 /* Not all renderers modify the texture opacity directly */);
 protected:
 	int SCREEN_W;
 	int SCREEN_H;
+	int opacity;
 };
 
 

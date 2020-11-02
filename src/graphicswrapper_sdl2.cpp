@@ -71,6 +71,16 @@ void GraphicsWrapper_SDL2::render_rect(Rect& dest, Color color) {
 	SDL_RenderFillRect(renderer, &dest_sdl);
 }
 
+void GraphicsWrapper_SDL2::set_opacity(int opacity, int texture) {
+	if (opacity < 0) {
+	    opacity = 0;
+	} else if (opacity > 255) {
+		opacity = 255;
+	}
+	SDL_Texture* mod_texture = textures->get_texture(texture)->get_texture();
+	SDL_SetTextureAlphaMod(mod_texture, opacity);
+}
+
 void GraphicsWrapper_SDL2::fetch_screen_size() {
 	SDL_GetWindowSize(window, &SCREEN_W, &SCREEN_H);
 }

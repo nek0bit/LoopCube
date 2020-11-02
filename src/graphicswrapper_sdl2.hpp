@@ -28,6 +28,7 @@ public:
 	void update_screen() override;
 	void render(Rect&, Rect&, int) override;
 	void render_rect(Rect&, Color) override;
+	void set_opacity(int opacity, int texture) override;
     void fetch_screen_size();
 private:
 	SDL_Window* window;

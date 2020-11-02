@@ -72,17 +72,14 @@ void Background::render(GraphicsWrapper* renderer) {
 					 bg_hills_w, bg_hills_h, 0, 300 + offset);
 
 	if (cavebg_opacity > 2) {
-		// Set opacity
 		int texture = 17;
-		// TODO Enable alpha support for textures
-		//SDL_Texture* mod_texture = textures.get_texture(texture);
-		//SDL_SetTextureAlphaMod(mod_texture, static_cast<int>(cavebg_opacity));
+		renderer->set_opacity(static_cast<int>(cavebg_opacity), texture);
 		
 		render_repeating(renderer, texture, bg_cave_block_x, bg_cave_block_y,
 						 bg_cave_block_w, bg_cave_block_h, 0, 0, true);
 
-		// Reset opacity
-		//SDL_SetTextureAlphaMod(mod_texture, 255);
+		// Reset opacity for future objects
+		renderer->set_opacity(255, texture);
 	}
 }
 
