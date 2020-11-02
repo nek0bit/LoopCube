@@ -93,7 +93,7 @@ void Background::render_repeating(GraphicsWrapper* renderer, int texture, int of
 	// Create a grid of tiles as the background
 	for (int i = -1; (width+gap)*i < MAX_X+(width+gap); i++) {
 		for (int j = -1; verticle ? (height+gap)*j < MAX_Y+(height+gap) : j < 0; j++) {
-			Rect src{0, 0, width, height};
+			Rect src{0, 0, src_w, src_h};
 		    Rect block{(offset_x % (width+gap))+((width+gap)*i),
 				verticle ? ((offset_y % (height+gap)) + top)+((height+gap)*j) : top+offset_y,
 				width, height};
