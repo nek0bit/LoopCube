@@ -76,7 +76,7 @@ void Background::render(GraphicsWrapper* renderer) {
 		renderer->set_opacity(static_cast<int>(cavebg_opacity), texture);
 		
 		render_repeating(renderer, texture, bg_cave_block_x, bg_cave_block_y,
-						 bg_cave_block_w, bg_cave_block_h, 0, 0, true);
+						 bg_cave_block_w, bg_cave_block_h, 0, 0, true, constants::block_img_size, constants::block_img_size);
 
 		// Reset opacity for future objects
 		renderer->set_opacity(255, texture);
@@ -84,7 +84,10 @@ void Background::render(GraphicsWrapper* renderer) {
 }
 
 void Background::render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,
-										 int height, int gap, int top, bool verticle) {
+								  int height, int gap, int top, bool verticle, int src_w, int src_h) {
+	if (src_w == -1) src_w = width;
+	if (src_h == -1) src_h = height;
+	
 	const int MAX_X = win_width;
 	const int MAX_Y = win_height;
 	// Create a grid of tiles as the background

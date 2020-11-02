@@ -19,7 +19,7 @@ public:
 	void render(GraphicsWrapper* renderer);
 private:
 	void render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,
-						  int height, int gap, int top, bool verticle = false);
+						  int height, int gap, int top, bool verticle = false, int src_w = -1, int src_h = -1);
 	int win_width;
 	int win_height;
 
