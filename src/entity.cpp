@@ -107,6 +107,12 @@ void Entity::update_basic_physics(ChunkGroup& chunks) {
 	vel_y += .5;
 	obj.y += vel_y;
 
+	// Cap +Y velocity
+	const int cap = 36;
+	if (vel_y > cap) {
+		vel_y = cap;
+	}
+
 	CollisionInfo info_y = check_block_collision(chunks);
 		
 	// Check Y velocity

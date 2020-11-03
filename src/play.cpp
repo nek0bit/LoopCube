@@ -154,7 +154,7 @@ void Play::render() {
 	int x, y;
 	if (!inv->get_inventory_visibility()) draw_selection(&x, &y);
 
-	if (!inv->get_inventory_visibility()) inv->draw_hotbar();
+	inv->draw_hotbar();
 
 	inv->draw_inventory_menu();
 }
@@ -228,7 +228,14 @@ void Play::draw_selection(int* p1, int* p2) {
 void Play::handle_camera() {
 	double x = std::floor(player.get_default_x()) * -1 + (WINDOW_W/2) - player.get_width()/2;
 	double y = std::floor(player.get_default_y()) * -1 + (WINDOW_H/2) - player.get_height()/2;
-	camera.set_pos(x, y);
+	
+	static double move_x = x;
+	static double move_y = y;
+
+	float amount = 0.28;
+	move_x += (x - move_x)*amount;
+	move_y += (y - move_y)*amount;
+	camera.set_pos(move_x, move_y);
 }
 
 void Play::dead_particles() {

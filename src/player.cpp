@@ -110,14 +110,14 @@ void Player::direct_player(int direction, ChunkGroup &chunks) {
 		jump(chunks);
 		break;
 	case 1: // RIGHT
-		if (!on_ground) vel_x += vel_x_speed/6;
+		if (!on_ground) vel_x += vel_x_speed/3;
 		else vel_x += vel_x_speed;
 		last_pos = 1;
 		break;
 	case 2: // DOWN
 		break;
 	case 3: // LEFT
-		if (!on_ground) vel_x -= vel_x_speed/6;
+		if (!on_ground) vel_x -= vel_x_speed/3;
 		else vel_x -= vel_x_speed;
 		last_pos = 3;
 		break;

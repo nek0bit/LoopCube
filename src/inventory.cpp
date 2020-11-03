@@ -16,7 +16,6 @@ Item& Inventory::get_selected_item() {
 }
 
 void Inventory::add_item(int id) {
-	// TODO Optimize this
 	int max_count = 99;
 
 	auto found = std::find_if(items.begin(), items.end(), [&](Item item) {
@@ -46,59 +45,59 @@ void Inventory::update() {
 
 	if (events->get_key_state()[4] || events->get_button_state()[8]) {
 		show_inventory_menu = !show_inventory_menu;
-		animation = true;
+		animation = show_inventory_menu;
 	}
 }
 
 void Inventory::draw_inventory_menu() {
 	auto win = renderer->screen_size();
-	static int num = 0;
-	if (animation == true) {
-		num = renderer->screen_size()[1]*-1;
-		animation = false;
-	}
-	if (num < 0.2) {
-		num *= 0.75;
+
+	// Sliding Animation
+	static double num = 0;
+	const int offset = 2;
+    static int to = renderer->screen_size()[1] + offset;
+	if (animation) {
+		to = 0;
 	} else {
-		num = 0;
+		to = renderer->screen_size()[1] + offset;
 	}
-	if (show_inventory_menu) {
-		int scale = 3; // TODO Make this work properly
+	num += (to - num)*0.20;
 
-		const int menu_width = 170;
-		const int menu_height = 90;
+	int scale = 3; // Fix with hovered position
+
+	const int menu_width = 170;
+	const int menu_height = 90;
 		
-		const int MAX_X = (win[0] - (menu_width*scale))/2;
-		const int MAX_Y = (win[1] - (menu_height*scale))/2;
+	const int MAX_X = (win[0] - (menu_width*scale))/2;
+	const int MAX_Y = (win[1] - (menu_height*scale))/2;
 
-		// First draw BG shadow
-		Rect shadow{0, 0+num, win[0], win[1]};
-		renderer->render_rect(shadow, Color{0, 0, 0, 180});
+	// First draw BG shadow
+	Rect shadow{0, static_cast<int>(num), win[0], win[1]};
+	renderer->render_rect(shadow, Color{0, 0, 0, 180});
 
-		// Render inventory menu
-		Rect src{0, 0, menu_width, menu_height};
-	    Rect dest{MAX_X, MAX_Y+num, src.w*scale, src.h*scale};
-		renderer->render(src, dest, 11);
+	// Render inventory menu
+	Rect src{0, 0, menu_width, menu_height};
+	Rect dest{MAX_X, MAX_Y+static_cast<int>(num), src.w*scale, src.h*scale};
+	renderer->render(src, dest, 11);
 
-		std::vector<int> pos = get_hovered_pos(events->get_vmouse_pos()[0], events->get_vmouse_pos()[1], MAX_X, MAX_Y+num, true);
+	std::vector<int> pos = get_hovered_pos(events->get_vmouse_pos()[0], events->get_vmouse_pos()[1], MAX_X, MAX_Y+num, true);
 		
-		if (events->get_vmouse_clicked() == 1 && pos[0] != -1 && pos[1] != -1) {
-			auto& it = items[pos[0]+(pos[1]*hotbar_slots)];
-			if (!item_held.enabled) {
-				// move item; null out inventory slot
-				item_held = it;
-				it = Item{};
-			} else {
-				// Swap items
-				auto tmp = it;
-				it = item_held;
-				item_held = tmp;
-			}
+	if (events->get_vmouse_clicked() == 1 && pos[0] != -1 && pos[1] != -1) {
+		auto& it = items[pos[0]+(pos[1]*hotbar_slots)];
+		if (!item_held.enabled) {
+			// move item; null out inventory slot
+			item_held = it;
+			it = Item{};
+		} else {
+			// Swap items
+			auto tmp = it;
+			it = item_held;
+			item_held = tmp;
 		}
-		
-		auto mouse_pos = events->get_vmouse_pos();
-		if (item_held.enabled) item_held.draw(renderer, mouse_pos[0]-17, mouse_pos[1]-17, 35, 35);
 	}
+		
+	auto mouse_pos = events->get_vmouse_pos();
+	if (item_held.enabled) item_held.draw(renderer, mouse_pos[0]-17, mouse_pos[1]-17, 35, 35);
 }
 
 // returns std::vector<int>{-1, -1} if nothing is being hovered
@@ -168,16 +167,27 @@ void Inventory::draw_hotbar() {
 	const int BLOCK_S = 40;
 	const int MAX_X = (renderer->screen_size()[0] - ((hotbar_slots+1)*BLOCK_S+3))/2;
 
+	// Animation
+	static double num = 0;
+	const int offset = 2;
+    static int to = (BLOCK_S*-1) - offset;
+	if (animation) {
+		to = (BLOCK_S*-1) - offset;
+	} else {
+		to = 0;
+	}
+	num += (to - num)*0.20;
+	
 	for (int i = 0; i < hotbar_slots; ++i) {
 	    Rect src{0, 0, 16, 16};
 		if (hotbar_pos == i) {
 			src.y = 16;
 		}
-	    Rect block{i*(BLOCK_S+3)+MAX_X, 2, BLOCK_S, BLOCK_S};
+	    Rect block{i*(BLOCK_S+3)+MAX_X, num, BLOCK_S, BLOCK_S};
 		renderer->render(src, block, 10);
 
 		if (items[i].enabled) {
-			items[i].draw(renderer, block.x+5, block.y+5, 30, 30);
+			items[i].draw(renderer, block.x+5, num+block.y+5, 30, 30);
 		}
 	}
 }

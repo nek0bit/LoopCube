@@ -52,6 +52,7 @@ void Background::render(GraphicsWrapper* renderer) {
 	const double transition = 255;
 
 	if (show_cave_background) {
+		                  // to         value          divider
 		cavebg_opacity += ((transition-cavebg_opacity)/4);
 	} else {
 		cavebg_opacity += ((0-cavebg_opacity)/4);
