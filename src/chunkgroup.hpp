@@ -30,11 +30,9 @@ public:
 	void check_area(int x, std::vector<Structure*>& structure);
 
 	void update_viewport();
-	void update_all(Camera& camera);
 	void update_all_viewport(Camera& camera);
 
 	// Render
-	void render_all(GraphicsWrapper* renderer, Camera& camera);
 	void render_all_viewport(GraphicsWrapper* renderer, Camera& camera);
 
 	// Getters

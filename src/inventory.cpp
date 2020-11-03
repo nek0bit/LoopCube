@@ -53,8 +53,8 @@ void Inventory::draw_inventory_menu() {
 	auto win = renderer->screen_size();
 
 	// Sliding Animation
-	static double num = 0;
 	const int offset = 2;
+	static double num = renderer->screen_size()[1] + offset;
     static int to = renderer->screen_size()[1] + offset;
 	if (animation) {
 		to = 0;

@@ -1,27 +1,18 @@
 #include "play.hpp"
 
 Play::Play(GraphicsWrapper* renderer, EventWrapper*& events)
-	: WINDOW_W{renderer->screen_size()[0]}, WINDOW_H{renderer->screen_size()[1]}, show_particles{false},
-	  camera{&WINDOW_W, &WINDOW_H}, entities{}, fade{60}, particles{}, background{} {
-	WINDOW_W = renderer->screen_size()[0];
-	WINDOW_H = renderer->screen_size()[1];
+	: window_w{renderer->screen_size()[0]}, window_h{renderer->screen_size()[1]}, show_particles{false}, chunks{0}, 
+	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, background{} {
 	this->renderer = renderer;
 	this->events = events;
 
-	camera.set_pos(0, 125);
+	camera.set_pos(0, 0);
 
-
-	unsigned long int seed = 89478970182;
-	// Configure camera
-	player = Player();
-	chunks = new ChunkGroup(seed);
 	inv = std::unique_ptr<Inventory>(new Inventory(renderer, events));
 	update_config();
 }
 
-Play::~Play() {
-	delete chunks;
-}
+Play::~Play() {}
 
 void Play::print_mouse_pos() {
 	// Just for debugging
@@ -30,25 +21,29 @@ void Play::print_mouse_pos() {
 }
 
 void Play::update() {
+	// Update screen size for camera
+	window_w = renderer->screen_size()[0];
+	window_h = renderer->screen_size()[1];
+	
 	mouse_events();
 	
 	// Update all chunks
-	chunks->update_all_viewport(camera);
-	chunks->check_area(player.get_default_x(), structures);
+	chunks.update_all_viewport(camera);
+	chunks.check_area(player.get_default_x(), structures);
 	
 	inv->update();
 	
 	for (Entity*& entity: entities) {
-		entity->update(*chunks);
+		entity->update(chunks);
 	}
 	
 	// Update player
-	player.update(*chunks, entities);
+	player.update(chunks, entities);
 
 
 	for (int i = 0; i < 4; ++i) {
 		if (events->get_key_state()[i]) {
-			player.direct_player(i, *chunks);
+			player.direct_player(i, chunks);
 		}
 	}
 
@@ -59,27 +54,27 @@ void Play::update() {
 
 	// Jump (A)
 	if (events->get_button_state()[4]) {
-		player.direct_player(0, *chunks);
+		player.direct_player(0, chunks);
 	}
 
 	// Down
 	if (events->get_button_state()[0]) {
-		player.direct_player(2, *chunks);
+		player.direct_player(2, chunks);
 	}
 
 	// Right
 	if (events->get_button_state()[1]) {
-		player.direct_player(1, *chunks);
+		player.direct_player(1, chunks);
 	}
 
 	// Left
 	if (events->get_button_state()[2]) {
-		player.direct_player(3, *chunks);
+		player.direct_player(3, chunks);
 	}
 
 	// Up
 	if (events->get_button_state()[3]) {
-		player.direct_player(0, *chunks);
+		player.direct_player(0, chunks);
 	}
 
 
@@ -99,7 +94,7 @@ void Play::update() {
 		
 		for (size_t i = 0; i < data.size(); ++i) {
 			// See if the chunk actually exists
-			auto c1 = chunks->get_chunk_at((structures[k]->get_x()+data[i].x)*constants::block_w, false);
+			auto c1 = chunks.get_chunk_at((structures[k]->get_x()+data[i].x)*constants::block_w, false);
 			
 			if (c1 != nullptr) {
 				int chunk_pos = std::abs(((structures[k]->get_x()+data[i].x))-(c1->get_slot()*constants::chunk_width));
@@ -118,7 +113,7 @@ void Play::update() {
 
 	if (show_particles) {
 		for (auto& particle: particles) {
-			particle.update(*chunks);
+			particle.update(chunks);
 		}
 	}
 
@@ -143,7 +138,7 @@ void Play::render() {
 		}
 	}
 	
-	chunks->render_all_viewport(renderer, camera);
+	chunks.render_all_viewport(renderer, camera);
 	
 	player.render(renderer, camera);
 
@@ -165,7 +160,7 @@ void Play::mouse_events() {
 
 	
 	// Get cursor over chunk
-	Chunk* chunk = chunks->get_chunk_at(p1*constants::block_w, true);
+	Chunk* chunk = chunks.get_chunk_at(p1*constants::block_w, true);
 	if (chunk != nullptr) {
 		// Do some math to get the chunk position
 		int chunk_pos = std::abs(p1-(chunk->get_slot()*constants::chunk_width));
@@ -226,15 +221,16 @@ void Play::draw_selection(int* p1, int* p2) {
 
 // Sets camera to player position
 void Play::handle_camera() {
-	double x = std::floor(player.get_default_x()) * -1 + (WINDOW_W/2) - player.get_width()/2;
-	double y = std::floor(player.get_default_y()) * -1 + (WINDOW_H/2) - player.get_height()/2;
+	double x = std::floor(player.get_default_x()) * -1 + (window_w/2) - player.get_width()/2;
+	double y = std::floor(player.get_default_y()) * -1 + (window_h/2) - player.get_height()/2;
 	
 	static double move_x = x;
 	static double move_y = y;
 
-	float amount = 0.28;
+	float amount = 0.25;
 	move_x += (x - move_x)*amount;
 	move_y += (y - move_y)*amount;
+	
 	camera.set_pos(move_x, move_y);
 }
 

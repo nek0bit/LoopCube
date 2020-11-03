@@ -7,6 +7,7 @@
 #include <random>
 #include <time.h>
 #include <memory>
+#include <functional>
 
 #include "../libs/FastNoiseLite.h"
 
@@ -34,7 +35,7 @@ public:
 	bool operator<(const Chunk &c) const;
 	bool operator>(const Chunk &c) const;
 
-	void update_all();
+	void update_all(Camera& camera);
 	void render_info(GraphicsWrapper* renderer, Camera& camera);
 	void render_all_shadows(GraphicsWrapper* renderer, Camera& camera);
 	void render_all_blocks(GraphicsWrapper* renderer, Camera& camera);
@@ -49,8 +50,9 @@ public:
 	std::vector<std::vector<Block>>& get_chunk();
 	int get_chunk_x(int x);
 	int get_chunk_y(int y);
-	int get_y_split(int y);
+	int get_y_split(double y);
 private:
+	void render_all_functor(Camera& camera, std::function<void(Block&)> call);
 	void debug_chunk_split();
 	int get_chunk_max_size();
 	

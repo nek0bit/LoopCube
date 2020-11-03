@@ -16,7 +16,6 @@ public:
 
 	int get_width();
 	int get_height();
-
 private:
 
 	double x_pos;

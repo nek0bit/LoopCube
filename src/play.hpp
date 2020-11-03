@@ -34,8 +34,8 @@ public:
 	void render();
 	void update();
 private:
-	int WINDOW_W;
-	int WINDOW_H;
+	int window_w;
+	int window_h;
 	void handle_camera();
 	void draw_selection(int* p1, int* p2);
 	void print_mouse_pos();
@@ -48,7 +48,7 @@ private:
 	
 	GraphicsWrapper* renderer;
 	EventWrapper* events;
-	ChunkGroup* chunks;
+	ChunkGroup chunks;
 	std::unique_ptr<Inventory> inv;
 	Camera camera;
 

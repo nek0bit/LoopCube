@@ -52,7 +52,7 @@ namespace constants {
 	const int chunk_height = 630;
 
 	// chunk_height/x = integer(y)
-	const int chunk_split_count = 7; // x
+	const int chunk_split_count = 90; // x
 	const int chunk_split_height = constants::chunk_height/constants::chunk_split_count; // y
 
 #if defined(__WIIU__) || defined(__SWITCH__)

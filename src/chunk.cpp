@@ -53,7 +53,7 @@ int Chunk::get_chunk_y(int y) {
 	return y - (y_split*MAX_SPLIT_HEIGHT);
 }
 
-int Chunk::get_y_split(int y) {
+int Chunk::get_y_split(double y) {
 	return y / MAX_SPLIT_HEIGHT;
 }
 
@@ -161,35 +161,44 @@ bool Chunk::place_block(int id, int x, int y) {
 
 }
 
-void Chunk::update_all() {
-	for(size_t i = 0; i < chunk.size(); ++i) {
-		for (size_t j = 0; j < chunk[i].size(); ++j) {
-			chunk[i][j].update();
-		}
-	}
+void Chunk::update_all(Camera& camera) {
+	render_all_functor(camera, [&](Block& blk) {
+		blk.update();
+	});
 }
 
 
 void Chunk::render_all_shadows(GraphicsWrapper* renderer, Camera& camera) {
-	// Then render blocks
+	render_all_functor(camera, [&](Block& blk) {
+		blk.render_shadow(renderer, camera);
+	});
+}
+
+void Chunk::render_all_functor(Camera& camera, std::function<void(Block&)> call) {
+	const int offset = 10;
+	const int flipped_camera = camera.get_y()*-1;
+	const int chunk_pixel_height = constants::chunk_split_height*constants::block_h;
+	
 	for(size_t i = 0; i < chunk.size(); ++i) {
+		const int min = get_y_split(flipped_camera - chunk_pixel_height - offset);
+		const int max = get_y_split(flipped_camera + camera.get_height() + offset);
+		const int check = get_y_split(i*chunk_pixel_height);
+		
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
+			if (!(min < check && max > check)) {
+				break;
+			}
 			if (!chunk[i][j].out_of_view(camera)) {
-				chunk[i][j].render_shadow(renderer, camera);
+				call(chunk[i][j]);
 			}
 		}
 	}
 }
 
 void Chunk::render_all_blocks(GraphicsWrapper* renderer, Camera& camera) {
-	// Then render blocks
-	for(size_t i = 0; i < chunk.size(); ++i) {
-		for (size_t j = 0; j < chunk[i].size(); ++j) {
-			if (!chunk[i][j].out_of_view(camera)) {
-				chunk[i][j].render(renderer, camera);
-			}
-		}
-	}
+	render_all_functor(camera, [&](Block& blk) {
+		blk.render(renderer, camera);
+	});
 }
 
 void Chunk::render_info(GraphicsWrapper* renderer, Camera& camera) {
