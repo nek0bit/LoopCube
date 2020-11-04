@@ -23,6 +23,7 @@
 #include "gravityparticle.hpp"
 #include "tree.hpp"
 #include "background.hpp"
+#include "time.hpp"
 
 class Play {
 
@@ -59,6 +60,8 @@ private:
 	// Animations
 	Animation fade;
 	std::vector<GravityParticle> particles;
+
+	Time time;
 
 	Background background;
 	std::vector<Structure*> structures;

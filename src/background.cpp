@@ -14,12 +14,19 @@ Background::Background()
 
 	bg_cave_block_w = 60;
 	bg_cave_block_h = 60;
+
+	bg_light_w = 100;
+	bg_light_h = 100;
 }
 
 Background::~Background() {}
 
-void Background::update(Camera& camera) {
+void Background::update(Camera& camera, Time& time) {
+	const int light_width = bg_light_w*2;
+	const int light_height = bg_light_h*2;
 	const int cave_background_offset = -7269;
+	const int light_cam_left = (camera.get_width()-(light_width))/2;
+	const int light_cam_top = (camera.get_height()-(light_height))/2;
 	
 	win_width = camera.get_width();
 	win_height = camera.get_height();
@@ -34,9 +41,11 @@ void Background::update(Camera& camera) {
 	bg_shine_dest.w = camera.get_width();
 	bg_shine_dest.h = camera.get_height();
 
+	// Update bg_cloud
 	bg_cloud_offset_x = camera.get_x()/10;
 	bg_cloud_offset_y = camera.get_y()/30;
 
+	// Update hills
 	bg_hills_offset_x = camera.get_x()/15;
 	bg_hills_offset_y = camera.get_y()/30;
 
@@ -44,6 +53,26 @@ void Background::update(Camera& camera) {
 	show_cave_background = camera.get_y() < cave_background_offset;
 	bg_cave_block_x = camera.get_x()/10;
 	bg_cave_block_y = camera.get_y()/10;
+
+	// Time
+	const int max_time = time.max_time;
+	const double time_over_max = static_cast<double>(time.time) / static_cast<double>(time.max_time);
+	const int hor_circle = camera.get_width()*.35;
+	const int vert_circle = 300;
+	const int vert_offset = 100;
+
+	std::cout << time.time << std::endl;
+
+	// Update sun/moon
+	bg_light_src.x = 0;
+	bg_light_src.y = 0;
+	bg_light_src.w = bg_light_w;
+	bg_light_src.h = bg_light_h;
+
+	bg_light_dest.x = light_cam_left+(sin(time_over_max * (M_PI*2))*-1)*hor_circle;
+	bg_light_dest.y = vert_offset+light_cam_top+cos(time_over_max * (M_PI*2))*vert_circle;
+	bg_light_dest.w = light_width;
+	bg_light_dest.h = light_height;
 }
 
 void Background::render(GraphicsWrapper* renderer) {
@@ -64,6 +93,9 @@ void Background::render(GraphicsWrapper* renderer) {
 	// Render bg_shine
 	renderer->render(bg_shine_src, bg_shine_dest, 13);
 
+	// Render sun/moon
+	renderer->render(bg_light_src, bg_light_dest, 20);
+
 	// Render clouds
 	render_repeating(renderer, 14, bg_cloud_offset_x, bg_cloud_offset_y,
 					 bg_cloud_w, bg_cloud_h, 60, 40 + offset);
@@ -82,6 +114,12 @@ void Background::render(GraphicsWrapper* renderer) {
 		// Reset opacity for future objects
 		renderer->set_opacity(255, texture);
 	}
+}
+
+void Background::render_light(GraphicsWrapper* renderer) {
+	// Animation here
+	Rect box{0, 0, 0, darkness};
+	renderer->render_rect();
 }
 
 void Background::render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,

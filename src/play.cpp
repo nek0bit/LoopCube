@@ -2,7 +2,8 @@
 
 Play::Play(GraphicsWrapper* renderer, EventWrapper*& events)
 	: window_w{renderer->screen_size()[0]}, window_h{renderer->screen_size()[1]}, show_particles{false}, chunks{0}, 
-	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, background{} {
+	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, time{300, 1000, 300, 600},
+	  background{} {
 	this->renderer = renderer;
 	this->events = events;
 
@@ -120,8 +121,9 @@ void Play::update() {
 	handle_camera();
 
 	// Update background (after we handle camera or things get a tiny bit off sync)
-	background.update(camera);
+	background.update(camera, time);
 
+	time.tick();
 }
 
 void Play::update_config() {

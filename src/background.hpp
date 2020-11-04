@@ -1,6 +1,8 @@
 #ifndef BACKGROUND_HPP
 #define BACKGROUND_HPP
+#define _USE_MATH_DEFINES
 #include <iostream>
+#include <cmath>
 
 #include "backendincludes.hpp"
 
@@ -9,13 +11,14 @@
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "camera.hpp"
+#include "time.hpp"
 
 class Background {
 public:
 	Background();
 	~Background();
 	
-	void update(Camera& camera);
+	void update(Camera& camera, Time& time);
 	void render(GraphicsWrapper* renderer);
 private:
 	void render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,
@@ -32,7 +35,8 @@ private:
 	int bg_hills_offset_y;
 	int bg_cave_block_x;
 	int bg_cave_block_y;
-	
+
+	Rect bg_light_src, bg_light_dest;	
 	
 	int bg_shine_w;
 	int bg_shine_h;
@@ -42,6 +46,8 @@ private:
 	int bg_hills_h;
 	int bg_cave_block_w;
 	int bg_cave_block_h;
+	int bg_light_w;
+	int bg_light_h;
 };
 
 #endif

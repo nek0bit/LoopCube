@@ -30,7 +30,8 @@ namespace constants {
 		"bg_hills_hq", // 16
 		"cave_bg", // 17
 		"font_bitmap", // 18
-		"font_bitmap_x2" // 19
+		"font_bitmap_x2", // 19
+		"sun" // 20
 	};
 
 	const std::vector<BlockInfo> block_info = {
