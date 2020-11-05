@@ -2,7 +2,7 @@
 
 Play::Play(GraphicsWrapper* renderer, EventWrapper*& events)
 	: window_w{renderer->screen_size()[0]}, window_h{renderer->screen_size()[1]}, show_particles{false}, chunks{0}, 
-	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, time{6000, 28500, 9300, 21000, 1700, 1700},
+	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, time{9300, 28500, 9300, 21000, 1700, 1700},
 	  background{} {
 	this->renderer = renderer;
 	this->events = events;
@@ -14,12 +14,6 @@ Play::Play(GraphicsWrapper* renderer, EventWrapper*& events)
 }
 
 Play::~Play() {}
-
-void Play::print_mouse_pos() {
-	// Just for debugging
-	auto pos = events->get_vmouse_pos();
-	std::cout << "x: " << pos[0] << " / y: " << pos[1] << " / down: " << events->get_vmouse_down() << std::endl;
-}
 
 void Play::update() {
 	// Update screen size for camera
@@ -33,14 +27,14 @@ void Play::update() {
 	chunks.check_area(player.get_default_x(), structures);
 	
 	inv->update();
-	
+
+	// Update all entities
 	for (Entity*& entity: entities) {
 		entity->update(chunks);
 	}
 	
 	// Update player
 	player.update(chunks, entities);
-
 
 	for (int i = 0; i < 4; ++i) {
 		if (events->get_key_state()[i]) {
@@ -150,8 +144,7 @@ void Play::render() {
 
 	background.render_light(renderer, camera);
 
-	int x, y;
-	if (!inv->get_inventory_visibility()) draw_selection(&x, &y);
+	if (!inv->get_inventory_visibility()) draw_selection(nullptr, nullptr);
 
 	inv->draw_hotbar();
 
@@ -219,8 +212,8 @@ void Play::draw_selection(int* p1, int* p2) {
 
 	renderer->render_rect(selection, Color{255, 255, 255, fade_amount});
 
-	*p1 = sel_x/b_w;
-	*p2 = sel_y/b_h;
+	if (p1 != nullptr) *p1 = sel_x/b_w;
+	if (p2 != nullptr) *p2 = sel_y/b_h;
 }
 
 // Sets camera to player position

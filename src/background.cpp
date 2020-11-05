@@ -1,7 +1,7 @@
 #include "background.hpp"
 
 Background::Background()
-	: win_width{0}, show_cave_background{false}, bg_shine_src{}, bg_shine_dest{}, bg_cloud_offset_x{0}, bg_cloud_offset_y{0}, bg_cave_block_x{0}, bg_cave_block_y{0}, darkness{0} {
+	: win_width{0}, show_cave_background{false}, bg_shine_src{}, bg_shine_dest{}, bg_cloud_offset_x{0}, bg_cloud_offset_y{0}, bg_cave_block_x{0}, bg_cave_block_y{0}, dark{0, .25}, darkness{0} {
 	// Set size for objects
 	bg_shine_w = 10; //px
 	bg_shine_h = 150;
@@ -22,11 +22,16 @@ Background::Background()
 Background::~Background() {}
 
 void Background::update(Camera& camera, Time& time) {
-	const int light_width = bg_light_w*2;
-	const int light_height = bg_light_h*2;
-	const int cave_background_offset = -7269;
+	const int light_width = bg_light_w;
+	const int light_height = bg_light_h;
+	const int cave_background_offset = -7269; // How deep down until the cave background shows
 	const int light_cam_left = (camera.get_width()-(light_width))/2;
 	const int light_cam_top = (camera.get_height()-(light_height))/2;
+	const double time_over_max = static_cast<double>(time.time) / static_cast<double>(time.max_time);
+	const int hor_circle = camera.get_width()*.35;
+	const int vert_circle = 300;
+	const int vert_offset = 100;
+	const int darkness_amount = 180;
 	
 	win_width = camera.get_width();
 	win_height = camera.get_height();
@@ -54,16 +59,10 @@ void Background::update(Camera& camera, Time& time) {
 	bg_cave_block_x = camera.get_x()/10;
 	bg_cave_block_y = camera.get_y()/10;
 
-	// Time
-	const double time_over_max = static_cast<double>(time.time) / static_cast<double>(time.max_time);
-	const int hor_circle = camera.get_width()*.35;
-	const int vert_circle = 300;
-	const int vert_offset = 100;
-
-    static Transition dark{0, .25};
+	//********************************
+	//  Handle time
+	//********************************
 	dark.update();
-
-	const int darkness_amount = 180;
 
 	// Transition to Morning
 	// Else if, transition to night
@@ -93,7 +92,6 @@ void Background::update(Camera& camera, Time& time) {
 	}
 
 	darkness = dark.get();
-
 	
 	// Update sun/moon
 	bg_light_src.x = 0;
@@ -122,6 +120,10 @@ void Background::render(GraphicsWrapper* renderer) {
 	if (cavebg_opacity > transition-1) cavebg_opacity = 255;
 	
 	int offset = 200;
+
+	// Render sky
+	Rect dest{0, 0, win_width, win_height};
+	renderer->render_rect(dest, Color{106, 164, 222, 255});
 	
 	// Render bg_shine
 	renderer->render(bg_shine_src, bg_shine_dest, 13);

@@ -39,7 +39,6 @@ private:
 	int window_h;
 	void handle_camera();
 	void draw_selection(int* p1, int* p2);
-	void print_mouse_pos();
 	void dead_particles();
 	void update_config();
 	void mouse_events();

@@ -51,6 +51,7 @@ private:
 	int bg_light_w;
 	int bg_light_h;
 
+	Transition dark;
 	int darkness;
 };
 
