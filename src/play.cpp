@@ -2,7 +2,7 @@
 
 Play::Play(GraphicsWrapper* renderer, EventWrapper*& events)
 	: window_w{renderer->screen_size()[0]}, window_h{renderer->screen_size()[1]}, show_particles{false}, chunks{0}, 
-	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, time{300, 1000, 300, 600},
+	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, time{6000, 28500, 9300, 21000, 1700, 1700},
 	  background{} {
 	this->renderer = renderer;
 	this->events = events;
@@ -147,6 +147,8 @@ void Play::render() {
 	for (Entity*& entity: entities) {
 		entity->render(renderer, camera);
 	}
+
+	background.render_light(renderer, camera);
 
 	int x, y;
 	if (!inv->get_inventory_visibility()) draw_selection(&x, &y);

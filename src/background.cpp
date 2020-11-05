@@ -1,7 +1,7 @@
 #include "background.hpp"
 
 Background::Background()
-	: win_width{0}, show_cave_background{false}, bg_shine_src{}, bg_shine_dest{}, bg_cloud_offset_x{0}, bg_cloud_offset_y{0}, bg_cave_block_x{0}, bg_cave_block_y{0} {
+	: win_width{0}, show_cave_background{false}, bg_shine_src{}, bg_shine_dest{}, bg_cloud_offset_x{0}, bg_cloud_offset_y{0}, bg_cave_block_x{0}, bg_cave_block_y{0}, darkness{0} {
 	// Set size for objects
 	bg_shine_w = 10; //px
 	bg_shine_h = 150;
@@ -55,14 +55,46 @@ void Background::update(Camera& camera, Time& time) {
 	bg_cave_block_y = camera.get_y()/10;
 
 	// Time
-	const int max_time = time.max_time;
 	const double time_over_max = static_cast<double>(time.time) / static_cast<double>(time.max_time);
 	const int hor_circle = camera.get_width()*.35;
 	const int vert_circle = 300;
 	const int vert_offset = 100;
 
-	std::cout << time.time << std::endl;
+    static Transition dark{0, .25};
+	dark.update();
 
+	const int darkness_amount = 180;
+
+	// Transition to Morning
+	// Else if, transition to night
+	// Else (switch-case), set brightness to time state 
+	if (time.time > time.morning_time - time.morning_offset &&
+		time.time <= time.morning_time) {
+	    double distance = abs(static_cast<double>(time.time) -
+						   static_cast<double>(time.morning_time)) / time.morning_offset;
+	    dark.value = distance*darkness_amount;
+	} else if (time.time > time.night_time - time.night_offset &&
+		time.time <= time.night_time) {
+	    double distance = (static_cast<double>(time.time) -
+						   static_cast<double>(time.night_time) +
+						   static_cast<double>(time.night_offset)) / time.night_offset;
+	    dark.value = distance*darkness_amount;
+	} else {
+		switch(time.state) {
+		case TIME_DAY:
+			dark.value = 0;
+			break;
+		case TIME_NIGHT:
+			dark.value = darkness_amount;
+			break;
+		default:
+			break;
+		}
+	}
+
+	darkness = dark.get();
+
+	
 	// Update sun/moon
 	bg_light_src.x = 0;
 	bg_light_src.y = 0;
@@ -73,6 +105,7 @@ void Background::update(Camera& camera, Time& time) {
 	bg_light_dest.y = vert_offset+light_cam_top+cos(time_over_max * (M_PI*2))*vert_circle;
 	bg_light_dest.w = light_width;
 	bg_light_dest.h = light_height;
+
 }
 
 void Background::render(GraphicsWrapper* renderer) {
@@ -116,10 +149,10 @@ void Background::render(GraphicsWrapper* renderer) {
 	}
 }
 
-void Background::render_light(GraphicsWrapper* renderer) {
-	// Animation here
-	Rect box{0, 0, 0, darkness};
-	renderer->render_rect();
+void Background::render_light(GraphicsWrapper* renderer, Camera& camera) {
+	Rect box{0, 0, camera.get_width(), camera.get_height()};
+	Color color{10, 10, 10, darkness};
+	renderer->render_rect(box, color);
 }
 
 void Background::render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,

@@ -3,13 +3,16 @@
 
 class Transition {
 public:
+	Transition(double value, double threshold);
+	~Transition();
 
-	// WORK ON REWRITE FOR ANIMATION
+	void update();
+	double get();
 	
-	double get_value;
-private:
-    double transition_to;
+	double value;
 	double threshold;
+private:
+    double at;
 };
 
 #endif

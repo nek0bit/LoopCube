@@ -12,6 +12,7 @@
 #include "texturehandler.hpp"
 #include "camera.hpp"
 #include "time.hpp"
+#include "transition.hpp"
 
 class Background {
 public:
@@ -20,6 +21,7 @@ public:
 	
 	void update(Camera& camera, Time& time);
 	void render(GraphicsWrapper* renderer);
+	void render_light(GraphicsWrapper* renderer, Camera& camera);
 private:
 	void render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,
 						  int height, int gap, int top, bool verticle = false, int src_w = -1, int src_h = -1);
@@ -48,6 +50,8 @@ private:
 	int bg_cave_block_h;
 	int bg_light_w;
 	int bg_light_h;
+
+	int darkness;
 };
 
 #endif

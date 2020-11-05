@@ -6,7 +6,7 @@ enum time_state {
 };
 
 struct Time {
-	Time(int start_time, int max_time, int morning_time, int night_time);
+	Time(int start_time, int max_time, int morning_time, int night_time, int morning_offset, int night_offset);
 	~Time();
 
 	void tick(int amount = 1);
@@ -17,6 +17,8 @@ struct Time {
 	const int max_time;
 	const int morning_time;
 	const int night_time;
+	const int morning_offset;
+	const int night_offset;
 };
 
 #endif
