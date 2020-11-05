@@ -2,7 +2,7 @@
 
 Play::Play(GraphicsWrapper* renderer, EventWrapper*& events)
 	: window_w{renderer->screen_size()[0]}, window_h{renderer->screen_size()[1]}, show_particles{false}, chunks{0}, 
-	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, time{9300, 28500, 9300, 21000, 1700, 1700},
+	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, time{8600, 28500, 8600, 22000, 1700, 1700},
 	  background{} {
 	this->renderer = renderer;
 	this->events = events;

@@ -35,10 +35,12 @@ private:
 	int bg_cloud_offset_y;
 	int bg_hills_offset_x;
 	int bg_hills_offset_y;
+	Color bg_hills_extend;
 	int bg_cave_block_x;
 	int bg_cave_block_y;
 
-	Rect bg_light_src, bg_light_dest;	
+	Rect bg_light_src, bg_light_dest;
+	Rect bg_moon_src, bg_moon_dest;
 	
 	int bg_shine_w;
 	int bg_shine_h;
@@ -51,8 +53,14 @@ private:
 	int bg_light_w;
 	int bg_light_h;
 
+	// Sky
+	
 	Transition dark;
 	int darkness;
+
+	int r;
+	int g;
+	int b;
 };
 
 #endif

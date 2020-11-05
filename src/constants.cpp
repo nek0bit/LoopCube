@@ -31,7 +31,8 @@ namespace constants {
 		"cave_bg", // 17
 		"font_bitmap", // 18
 		"font_bitmap_x2", // 19
-		"sun" // 20
+		"sun", // 20
+		"moon", // 21
 	};
 
 	const std::vector<BlockInfo> block_info = {
