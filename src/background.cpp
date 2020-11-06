@@ -26,11 +26,11 @@ void Background::update(Camera& camera, Time& time) {
 	const int light_height = bg_light_h;
 	const int cave_background_offset = -7269; // How deep down until the cave background shows
 	const int light_cam_left = (camera.get_width()-(light_width))/2;
-	const int light_cam_top = (camera.get_height()-(light_height))/2;
+	const int light_cam_top = 20;
+	const int hills_offset = -100;
 	const double time_over_max = static_cast<double>(time.time) / static_cast<double>(time.max_time);
 	const int hor_circle = camera.get_width()*.35;
-	const int vert_circle = 300;
-	const int vert_offset = 32;
+	const int vert_circle = camera.get_height()/4;
 	const int darkness_amount = 180;
 	const int day_color_r = 106, day_color_g = 164, day_color_b = 222;
 	
@@ -53,7 +53,7 @@ void Background::update(Camera& camera, Time& time) {
 
 	// Update hills
 	bg_hills_offset_x = camera.get_x()/15;
-	bg_hills_offset_y = camera.get_y()/30;
+	bg_hills_offset_y = (camera.get_height()/2)+hills_offset;
 
 	// Enable the cave background is camera is low enough
 	show_cave_background = camera.get_y() < cave_background_offset;
@@ -119,7 +119,7 @@ void Background::update(Camera& camera, Time& time) {
 	bg_light_src.h = bg_light_h;
 
 	bg_light_dest.x = light_cam_left+(sin(time_over_max * (M_PI*2))*-1)*hor_circle;
-	bg_light_dest.y = vert_offset+light_cam_top+cos(time_over_max * (M_PI*2))*vert_circle;
+	bg_light_dest.y = bg_hills_offset_y+light_cam_top+cos(time_over_max * (M_PI*2))*vert_circle;
 	bg_light_dest.w = light_width;
 	bg_light_dest.h = light_height;
 
@@ -129,7 +129,7 @@ void Background::update(Camera& camera, Time& time) {
 	bg_moon_src.h = bg_light_h;
 
 	bg_moon_dest.x = light_cam_left+(sin((time_over_max+.50) * (M_PI*2))*-1)*hor_circle;
-	bg_moon_dest.y = vert_offset+light_cam_top+cos((time_over_max+.50) * (M_PI*2))*vert_circle;
+	bg_moon_dest.y = bg_hills_offset_y+light_cam_top+cos((time_over_max+.50) * (M_PI*2))*vert_circle;
 	bg_moon_dest.w = light_width;
 	bg_moon_dest.h = light_height;
 }
@@ -164,7 +164,7 @@ void Background::render(GraphicsWrapper* renderer) {
 	render_repeating(renderer, 14, bg_cloud_offset_x, bg_cloud_offset_y,
 					 bg_cloud_w, bg_cloud_h, 60, 40 + offset);
 
-	const int hill_offset = 300+offset;
+	const int hill_offset = 0;
 	
 	// Render hills
 	render_repeating(renderer, 15, bg_hills_offset_x, bg_hills_offset_y,
