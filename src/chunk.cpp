@@ -71,13 +71,6 @@ std::vector<std::vector<Block>>& Chunk::get_chunk() {
 }
 
 void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& structures) {
-	// Start rng for structures
-	std::random_device dev;
-	std::mt19937 rng(seed);
-	std::uniform_int_distribution<std::mt19937::result_type> dist(-5,5);
-	
-	for (auto i = 0; i < std::abs(slot); ++i) dist(rng);
-
 	for (int x = 0; x < MAX_WIDTH; ++x) {
 		double d_x = (double)x/(double)MAX_WIDTH;
 
@@ -93,7 +86,9 @@ void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& stru
 			double d_y = (double)y/(double)MAX_HEIGHT;
 			if (y == 0) {
 				place_block(BLOCK_GRASS, x, y+temp+offset);
-				if (x == 0) structures.push_back(new Tree(get_chunk_x(x), y+temp+offset));
+				int tree_amount = 15;
+			    int tree_generate = (terrain_gen.GetNoise(static_cast<double>(d_x*slot), d_y)*10)*tree_amount;
+				if (x == 1) structures.push_back(new Tree(get_chunk_x(x), y+temp+offset));
 			} else if (y >= 1 && y <= 3) {
 				place_block(BLOCK_DIRT, x, y+temp+offset);
 			} else {
