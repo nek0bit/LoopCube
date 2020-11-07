@@ -31,6 +31,10 @@ CollisionInfo Entity::check_block_collision(ChunkGroup& chunks) {
 	Chunk* c = chunks.get_chunk_at(obj.x, true);
 	Chunk* c_front = chunks.get_chunk_at(obj.x+obj.w, true);
 
+	if (c == nullptr || c_front == nullptr) {
+		return CollisionInfo{};
+	}
+
 	// Loop through all chunks
 	for (auto *&chunk_it: chunkgroup) {
 		// See if player is within this chunk, if so, move on and handle collision

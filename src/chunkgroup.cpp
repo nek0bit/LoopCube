@@ -73,11 +73,11 @@ void ChunkGroup::generate_chunk(int id, std::vector<Structure*>& structure) {
 	}
 }
 
-void ChunkGroup::check_area(int x, std::vector<Structure*>& structures) {
+void ChunkGroup::check_area(long long int x, std::vector<Structure*>& structures) {
 	const int load_distance = constants::load_distance;
 	
 	// Takes x, and returns the current chunk id the player is in
-	int id = ceil(x / (constants::chunk_width * constants::block_w));
+	long int id = ceil(x / (constants::chunk_width * constants::block_w));
 
 	// Unload old chunks
 	// Warning: This code below is very fragile and can easily break :P

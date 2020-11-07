@@ -27,7 +27,7 @@ public:
 
 	// Update
 	void generate_chunk(int id, std::vector<Structure*>& structure);
-	void check_area(int x, std::vector<Structure*>& structure);
+	void check_area(long long int x, std::vector<Structure*>& structure);
 
 	void update_viewport();
 	void update_all_viewport(Camera& camera);
