@@ -3,6 +3,7 @@
 
 class Transition {
 public:
+	Transition() = default;
 	Transition(double value, double threshold);
 	~Transition();
 

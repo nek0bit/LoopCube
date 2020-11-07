@@ -6,6 +6,7 @@
 
 #include "backendincludes.hpp"
 
+#include "transition.hpp"
 #include "rect.hpp"
 #include "color.hpp"
 #include "constants.hpp"
@@ -44,6 +45,9 @@ private:
 
 	GraphicsWrapper* renderer;
 	EventWrapper* events;
+
+    Transition inventory_slide;
+	Transition hotbar_slide;
 };
 
 #endif // INVENTORY_HPP
