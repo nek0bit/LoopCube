@@ -89,10 +89,24 @@ void EventWrapper_SFML::listen() {
 		}
 		
 		switch (event.type) {
+		// Window
 		case sf::Event::Closed:
 			screen->close();
 		    quit = true;
 			break;
+		case sf::Event::Resized:
+			{
+				sf::View view = screen->getDefaultView();
+
+				view.setSize({
+						static_cast<float>(event.size.width),
+						static_cast<float>(event.size.height)
+					});
+				view.setCenter(event.size.width/2, event.size.height/2);
+				screen->setView(view);
+				break;
+			}
+		// Key/button press
 		case sf::Event::KeyPressed:
 			for (size_t i = 0; i < key_mapping.size(); ++i) {
 				if (event.key.code == key_mapping[i]) {
