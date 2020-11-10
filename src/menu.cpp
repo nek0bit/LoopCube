@@ -106,7 +106,7 @@ void Menu::update(bool update_animations) {
 	auto win = renderer->screen_size();
 	
 	offset_x = 0;
-	offset_y = (win[1]/2) - (box_height/2) - 25;
+	offset_y = (win[1]/2) - ((box_height+4)/2) - 26;
 
 	const int left = (win[0]/2) + 30;
 	constexpr int top = 80;
