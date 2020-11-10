@@ -23,23 +23,22 @@ void Box::update_pair() {
 
 void Box::set_x(int x) {
 	this->x = x;
-	update_pair();
 }
 void Box::set_y(int y) {
 	this->y = y;
-	update_pair();
 }
 void Box::set_width(int w) {
 	this->w = w;
-	update_pair();
 }
 void Box::set_height(int h) {
 	this->h = h;
-	update_pair();
 }
 
-void Box::render(GraphicsWrapper* renderer) {
+void Box::render(GraphicsWrapper* renderer, int offset_x, int offset_y) {
 	for (auto& p: pos) {
-		renderer->render(src, p.second, p.first);
+		Rect mod = p.second;
+		mod.x += offset_x;
+		mod.y += offset_y;
+		renderer->render(src, mod, p.first);
 	}
 }

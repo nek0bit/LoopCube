@@ -37,6 +37,10 @@ private:
 	static void update_config_elements(int id, int value);
 	
 	int state;
+
+	
+	int offset_x;
+	int offset_y;
 	// Main Menu Stuff
 	std::vector<std::string> option_str;
 	std::vector<int> option_state; 
@@ -55,8 +59,15 @@ private:
     EventWrapper* events;
 	Animation shift;
 
-	// Content elements for sidebar
 	Box back;
+	const int box_width;
+	const int box_height;
+	
+	// Content elements for sidebar
+	int prev_mid_left;
+	int mid_left;
+	int content_left;
+	
 	Item random_block;
 	Text header;
 	Text paragraph;

@@ -12,8 +12,10 @@ enum CONFIG_ID {
 };
 
 Menu::Menu(GraphicsWrapper* renderer,
-		   EventWrapper*& events) : state{0}, BLOCK_S{40}, BUTTON_W{200}, shift{BLOCK_S},
-									back{40, 40, 400, 400}, pad_left{180} {
+		   EventWrapper*& events) : state{0}, offset_x{0}, offset_y{0}, BLOCK_S{40}, BUTTON_W{200}, shift{BLOCK_S}, back{40, 40, 400, 400},
+									box_width{620}, box_height{415}, prev_mid_left{0}, mid_left{0}, content_left{0},
+									pad_left{180} {
+	
 	this->renderer = renderer;
 	this->events = events;
 	
@@ -71,6 +73,9 @@ Menu::Menu(GraphicsWrapper* renderer,
 	}
 	header = Text{constants::header};
 	paragraph = Text{p_string};
+
+	// Ensure all elements are properly updated (ex: offsets)
+	update();
 }
 
 Menu::~Menu() {
@@ -99,22 +104,41 @@ void Menu::update_config_elements(int id, int value) {
 
 void Menu::update(bool update_animations) {
 	auto win = renderer->screen_size();
+	
+	offset_x = 0;
+	offset_y = (win[1]/2) - (box_height/2) - 25;
+
+	const int left = (win[0]/2) + 30;
+	constexpr int top = 80;
+	constexpr int gap = 50;
+	
+	prev_mid_left = mid_left;
+	mid_left = (win[0]/2)-pad_left;
+	content_left = mid_left-100;
+	
+	if (prev_mid_left != mid_left) {
+	    back.set_x(content_left-50);
+	    back.set_y(5);
+		back.set_width(box_width);
+		back.set_height(box_height);
+		back.update_pair();
+	}
+
+	
+	
 	// Set background
 	if (state == MAIN_MENU) {
 		for (auto &i: button_group) {
 			i->set_x( (win[0]/2) + 30 );
-			i->update(events);
+			i->update(events, offset_x, offset_y);
 		}
 	} else if (state == CONFIG_MENU) {
-		int left = ( (win[0]/2) + 30 );
-		int top = 80;
-		int gap = 50;
 		back_button->set_x( (win[0]/2) + 30 );
-		back_button->update(events);
+		back_button->update(events, offset_x, offset_y);
 		for (size_t i = 0; i < c_elements.size(); ++i) {
 			c_elements[i]->set_x(left);
 			c_elements[i]->set_y(top+(gap*i));
-			c_elements[i]->update(events);
+			c_elements[i]->update(events, offset_x, offset_y);
 
 			c_elements[i]->on_change(update_config_elements);
 		}
@@ -152,7 +176,7 @@ void Menu::render_background() {
 		}
 	}
 
-	back.render(renderer);
+	back.render(renderer, offset_x, offset_y);
 }
 
 void Menu::set_state(int state) {
@@ -163,25 +187,22 @@ void Menu::set_state(int state) {
 	update(false);
 }
 
-void Menu::render_sidebar() {
-	const int mid_left = (renderer->screen_size()[0]/2)-pad_left;
-	const int content_left = mid_left-100;
-	
+void Menu::render_sidebar() {	
 	// Draw line
-    Rect line{mid_left+pad_left, 30, 2, 400};
+    Rect line{offset_x+mid_left+pad_left, offset_y+30, 2, box_height - 15};
 
 	renderer->render_rect(line, Color{200, 200, 200, 255});
 
 	// Lets render a random block and some text
-	random_block.draw(renderer, content_left, 35, 60, 60);
+	random_block.draw(renderer, offset_x+content_left, offset_y+35, 60, 60);
 
 	// White color
     Color color;
 	color.r = 255; color.g = 255; color.b = 255; color.a = 255;
 	
-	header.render(renderer, content_left+70, 45, 32, true);
+	header.render(renderer, offset_x+content_left+70, offset_y+45, 32, true);
 
-	paragraph.render(renderer, content_left+5, 120, 20, true);
+	paragraph.render(renderer, offset_x+content_left+5, offset_y+120, 20, true);
 }
 
 int Menu::get_pressed() {
@@ -197,15 +218,15 @@ int Menu::get_pressed() {
 void Menu::render_main_menu() {
 	// Render all buttons
 	for (auto &i: button_group) {
-		i->render(renderer);
+		i->render(renderer, offset_x, offset_y);
 	}
 }
 
 void Menu::render_config_menu() {
-	back_button->render(renderer);
+	back_button->render(renderer, offset_x, offset_y);
 	// Render all elements, no matter the type
 	for (auto &i: c_elements) {
-		i->render(renderer);
+		i->render(renderer, offset_x, offset_y);
 	}
 }
 

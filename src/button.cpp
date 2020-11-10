@@ -12,7 +12,7 @@ Button::Button(int id,
 
 Button::~Button() {}
 
-void Button::update(EventWrapper*& events) {
+void Button::update(EventWrapper*& events, int offset_x, int offset_y) {
 	src.h = 16;
 	src.w = 16;
 	src.x = 0;
@@ -32,7 +32,7 @@ void Button::update(EventWrapper*& events) {
 
 	int calc_width = dest.w + (src.w*2)*2;
 	std::array<int, 2> mouse_pos = events->get_vmouse_pos();
-	if (AABB(mouse_pos[0], mouse_pos[1], 1, 1, x, y, calc_width, dest.h)) {
+	if (AABB(mouse_pos[0], mouse_pos[1], 1, 1, offset_x+x, offset_y+y, calc_width, dest.h)) {
 		hovered = true;
 		if (events->get_vmouse_down() == 1) {
 			dest.y += 5;
@@ -59,15 +59,16 @@ int Button::get_id() {
 	return id;
 }
 
-void Button::render(GraphicsWrapper* renderer) {
-	Rect begin{x, dest.y, src.w*2, dest.h},
-		end{dest.x+dest.w, dest.y, src.w*2, dest.h};
+void Button::render(GraphicsWrapper* renderer, int offset_x, int offset_y) {
+	Rect begin{offset_x+x, offset_y+dest.y, src.w*2, dest.h},
+		end{offset_x+dest.x+dest.w, offset_y+dest.y, src.w*2, dest.h};
+	Rect mod_dest{offset_x+dest.x, offset_y+dest.y, dest.w, dest.h};
 	renderer->render(src, begin, 6);
-	renderer->render(src, dest, 5);
+	renderer->render(src, mod_dest, 5);
 	renderer->render(src, end, 7);
 
 	button_text.render(renderer, x+(width/2)-(button_text.get_width()/2)-2,
-					   dest.y+(height/2)-(button_text.get_height()/2)-2, 20, true);
+					   mod_dest.y+(height/2)-(button_text.get_height()/2)-2, 20, true);
 }
 
 void Button::set_text(std::string text) {

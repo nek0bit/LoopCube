@@ -20,7 +20,7 @@ public:
 	void set_height(int h);
 
 	void update_pair();
-	void render(GraphicsWrapper* renderer);
+	void render(GraphicsWrapper* renderer, int offset_x = 0, int offset_y = 0);
 private:
     int x;
 	int y;
