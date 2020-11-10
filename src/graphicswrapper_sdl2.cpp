@@ -21,7 +21,7 @@ void GraphicsWrapper_SDL2::init_screen() {
 	win_flags = win_flags | SDL_WINDOW_RESIZABLE;
 
 	rend_flags = rend_flags | SDL_RENDERER_ACCELERATED;
-	rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
+	//rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
 
 	if (SDL_Init(SDL_INIT_VIDEO) == 0) {
 		window = SDL_CreateWindow("SDL2 Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, win_flags);
