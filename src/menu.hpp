@@ -9,6 +9,7 @@
 
 #include "backendincludes.hpp"
 
+#include "box.hpp"
 #include "rect.hpp"
 #include "text.hpp"
 #include "textbox.hpp"
@@ -55,6 +56,7 @@ private:
 	Animation shift;
 
 	// Content elements for sidebar
+	Box back;
 	Item random_block;
 	Text header;
 	Text paragraph;

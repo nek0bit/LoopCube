@@ -2,9 +2,8 @@
 
 // Texture stuff
 namespace constants {
-	// I thought it was funny to reference developer "git" versions
-	// by putting a "x0" at the end of them :)
-	const std::string version_str = "v0.3x0";
+	// TODO add enum for texture indexes
+	const std::string version_str = "v0.3-git";
 
 	const std::string root_path = DATA_LOCATION "/data";
 	const std::string path = root_path+"/img/";
@@ -33,6 +32,15 @@ namespace constants {
 		"font_bitmap_x2", // 19
 		"sun", // 20
 		"moon", // 21
+		"box1", // 22
+		"box2", // 23
+		"box3", // 24
+		"box4", // 25
+		"box5", // 26
+		"box6", // 27
+		"box7", // 28
+		"box8", // 29
+		"box9", // 30
 	};
 
 	const std::vector<BlockInfo> block_info = {

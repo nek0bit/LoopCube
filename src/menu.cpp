@@ -12,7 +12,8 @@ enum CONFIG_ID {
 };
 
 Menu::Menu(GraphicsWrapper* renderer,
-		   EventWrapper*& events) : state{0}, BLOCK_S{40}, BUTTON_W{200}, shift{BLOCK_S}, pad_left{180} {
+		   EventWrapper*& events) : state{0}, BLOCK_S{40}, BUTTON_W{200}, shift{BLOCK_S},
+									back{40, 40, 400, 400}, pad_left{180} {
 	this->renderer = renderer;
 	this->events = events;
 	
@@ -150,6 +151,8 @@ void Menu::render_background() {
 			renderer->render(src, block, 2);
 		}
 	}
+
+	back.render(renderer);
 }
 
 void Menu::set_state(int state) {
