@@ -30,7 +30,9 @@ void Play::update() {
 
 	// Update all entities
 	for (Entity*& entity: entities) {
-		entity->update(chunks);
+		if (!entity->out_of_view(camera)) {
+			entity->update(chunks);
+		}
 	}
 	
 	// Update player
