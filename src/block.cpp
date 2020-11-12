@@ -30,7 +30,6 @@ double Block::get_x(Camera& camera) const {
 
 double Block::get_y(Camera& camera) const {
 	return obj.y*constants::block_h + (camera.get_y());
-
 }
 
 const BlockInfo* Block::get_blockinfo() {
@@ -44,7 +43,7 @@ void Block::update() {
 	src.y = 0;
 }
 
-void Block::render_shadow(GraphicsWrapper* renderer, Camera& camera) {
+void Block::render_shadow(GraphicsWrapper* renderer, Camera& camera) const {
 	Rect shadow{static_cast<int>(get_x(camera) + 10), static_cast<int>(get_y(camera) + 10),
 		static_cast<int>(obj.w), static_cast<int>(obj.h)};
 

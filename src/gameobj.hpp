@@ -20,7 +20,7 @@ public:
 	virtual ~GameObject();
 
 	virtual void update();
-	virtual void render(GraphicsWrapper* renderer, Camera& camera);
+    virtual void render(GraphicsWrapper* renderer, Camera& camera);
 
 	virtual bool out_of_view(Camera& camera);
 

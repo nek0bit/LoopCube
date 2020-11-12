@@ -72,36 +72,36 @@ std::vector<std::vector<Block>>& Chunk::get_chunk() {
 
 void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& structures) {
 	for (int x = 0; x < MAX_WIDTH; ++x) {
-		double d_x = (double)x/(double)MAX_WIDTH;
+		double d_x = static_cast<double>(x)/static_cast<double>(MAX_WIDTH);
 
 		// Generate world
-		int compactness = 3; // I have no idea what I would've named these variables...
-		int increase = 50;
+		constexpr int compactness = 3; // I have no idea what I would've named these variables...
+		constexpr int increase = 50;
+		constexpr double cave_z = 1300;
+		constexpr double cave_compactness_x = 5;
+		constexpr double cave_compactness_y = 2400;
+		constexpr double cave_increase = -.8;
+		constexpr double index = 0.3;
+		constexpr int offset = 160;
+		constexpr int cave_start = 12;
 		
 	    int temp = floor( terrain_gen.GetNoise(static_cast<float>((d_x+slot))*compactness, static_cast<float>(0)) * increase );
 
-		int offset = 160;
-		int cave_start = 12;
-		for (int y = 0; y < MAX_HEIGHT-temp-offset; ++y) {
-			double d_y = (double)y/(double)MAX_HEIGHT;
+		for (int y = 0; y < MAX_HEIGHT-temp-offset-MAX_SPLIT_HEIGHT; ++y) {
+			double d_y = static_cast<double>(y)/static_cast<double>(MAX_HEIGHT);
 			if (y == 0) {
-				place_block(BLOCK_GRASS, x, y+temp+offset);
-				int tree_amount = 15;
+				place_block_raw(BLOCK_GRASS, x, y+temp+offset);
+				constexpr int tree_amount = 15;
 			    int tree_generate = (terrain_gen.GetNoise(static_cast<double>(d_x*slot), d_y)*10)*tree_amount;
-				if (x == 1) structures.push_back(new Tree(get_chunk_x(x), y+temp+offset));
+				if (x == 1) structures.push_back(new Tree(get_chunk_x(x), y+temp+offset-1));
 			} else if (y >= 1 && y <= 3) {
-				place_block(BLOCK_DIRT, x, y+temp+offset);
+				place_block_raw(BLOCK_DIRT, x, y+temp+offset);
 			} else {
-			    double cave_z = 1300;
-				double cave_compactness_x = 5;
-				double cave_compactness_y = 2400;
-				double cave_increase = -.8;
-				double index = 0.3;
-				double cave_noise = terrain_gen.GetNoise((d_x+(slot))*cave_compactness_x, (d_y)*cave_compactness_y, cave_z)*cave_increase;
+			    double cave_noise = terrain_gen.GetNoise((d_x+(slot))*cave_compactness_x, (d_y)*cave_compactness_y, cave_z)*cave_increase;
 				if (y <= cave_start) {
-					place_block(BLOCK_STONE, x, y+temp+offset);
+					place_block_raw(BLOCK_STONE, x, y+temp+offset);
 				} else if (cave_noise < index && cave_noise > index*-1) {
-					place_block(BLOCK_STONE, x, y+temp+offset);
+					place_block_raw(BLOCK_STONE, x, y+temp+offset);
 				}
 			}
 		}
@@ -125,8 +125,8 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
 	return nullptr;
 }
 
+// Similar to place_block_raw but does the checks for us, slow but safe
 bool Chunk::place_block(int id, int x, int y) {
-	Block temp_block{id, get_chunk_x(x), y};
 	// Check if between chunk size
 	if (x < MAX_WIDTH+1 && x >= 0 && y < MAX_HEIGHT+1 && y >= 0) {
 		// Check if a block has been placed here before
@@ -144,16 +144,20 @@ bool Chunk::place_block(int id, int x, int y) {
 		}
 		
 		if (!is_duplicate) {
-			// Place the block
-			int y_split = y / MAX_SPLIT_HEIGHT;
-			chunk[y_split].push_back(temp_block);
+			// It's safe to place the block			
+			place_block_raw(id, x, y);
+			
 			return true;
 		} else {
 			return false;
 		}
 	}
 	return false;
+}
 
+// Places a block in a position, unsafe but fast
+void Chunk::place_block_raw(int id, int x, int y) {
+	chunk[get_y_split(y)].push_back(Block{id, get_chunk_x(x), y});
 }
 
 void Chunk::update_all(Camera& camera) {
