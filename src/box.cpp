@@ -9,15 +9,15 @@ Box::~Box() {}
 
 void Box::update_pair() {
 	pos = std::array<std::pair<int, Rect>, 9>{
-		std::make_pair(22, Rect{x, y, src.w, src.h}),
-		std::make_pair(23, Rect{x+src.w, y, w-src.w, src.h}),
-		std::make_pair(24, Rect{x+w, y, src.w, src.h}),
-		std::make_pair(25, Rect{x, y+src.h, src.w, h-src.h}),
-		std::make_pair(26, Rect{x+src.w, y+src.h, w-src.w, h-src.h}),
-		std::make_pair(27, Rect{x+w, y+src.h, src.w, h-src.h}),
-		std::make_pair(28, Rect{x, y+h, src.w, src.h}),
-		std::make_pair(29, Rect{x+src.w, y+h, w-src.w, src.h}),
-		std::make_pair(30, Rect{x+w, y+h, src.w, src.h})
+		std::make_pair(22, Rect{x, y, src.w, src.h}), // Top left
+		std::make_pair(23, Rect{x+src.w, y, w-(src.w*2), src.h}), // Top middle
+		std::make_pair(24, Rect{x+w-src.w, y, src.w, src.h}), // Top right
+		std::make_pair(25, Rect{x, y+src.h, src.w, h-(src.h*2)}), // Middle left
+		std::make_pair(26, Rect{x+src.w, y+src.h, w-(src.w*2), h-(src.h*2)}), // Center
+		std::make_pair(27, Rect{x+w-src.w, y+src.h, src.w, h-(src.h*2)}), // Middle right
+		std::make_pair(28, Rect{x, y+h-src.h, src.w, src.h}), // Bottom left
+		std::make_pair(29, Rect{x+src.w, y+h-src.h, w-(src.w*2), src.h}), // Bottom middle
+		std::make_pair(30, Rect{x+w-src.w, y+h-src.h, src.w, src.h}) // Bottom right
 	};
 }
 

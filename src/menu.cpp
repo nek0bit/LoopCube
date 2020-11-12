@@ -13,7 +13,7 @@ enum CONFIG_ID {
 
 Menu::Menu(GraphicsWrapper* renderer,
 		   EventWrapper*& events) : state{0}, offset_x{0}, offset_y{0}, BLOCK_S{40}, BUTTON_W{200}, shift{BLOCK_S}, back{40, 40, 400, 400},
-									box_width{620}, box_height{415}, prev_mid_left{0}, mid_left{0}, content_left{0},
+									box_width{660}, box_height{460}, prev_mid_left{0}, mid_left{0}, content_left{0},
 									pad_left{180} {
 	
 	this->renderer = renderer;
@@ -79,7 +79,6 @@ Menu::Menu(GraphicsWrapper* renderer,
 }
 
 Menu::~Menu() {
-	std::cout << "[Menu] Clearing config elements" << std::endl;
 	// Delete all config elements
 	for (auto i: c_elements) {
 		delete i;
@@ -106,7 +105,7 @@ void Menu::update(bool update_animations) {
 	auto win = renderer->screen_size();
 	
 	offset_x = 0;
-	offset_y = (win[1]/2) - ((box_height+4)/2) - 26;
+	offset_y = (win[1]/2) - ((box_height)/2);
 
 	const int left = (win[0]/2) + 30;
 	constexpr int top = 80;
@@ -118,7 +117,7 @@ void Menu::update(bool update_animations) {
 	
 	if (prev_mid_left != mid_left) {
 	    back.set_x(content_left-50);
-	    back.set_y(5);
+	    back.set_y(0);
 		back.set_width(box_width);
 		back.set_height(box_height);
 		back.update_pair();
@@ -189,7 +188,8 @@ void Menu::set_state(int state) {
 
 void Menu::render_sidebar() {	
 	// Draw line
-    Rect line{offset_x+mid_left+pad_left, offset_y+30, 2, box_height - 15};
+	constexpr int vert_gap = 30;
+    Rect line{offset_x+mid_left+pad_left, offset_y+vert_gap, 2, box_height-(vert_gap*2)};
 
 	renderer->render_rect(line, Color{200, 200, 200, 255});
 
