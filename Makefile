@@ -1,4 +1,4 @@
-
+# -*- mode: makefile -*-
 CXX ?= g++
 CXXFLAGS = -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
 LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
@@ -14,7 +14,7 @@ else
 CXXFLAGS += -DDATA_LOCATION=\"$(DATA_LOCATION)\"
 endif
 
-CXXFLAGS += -DINPUT_BACKEND_SDL2 -DGRAPHIC_BACKEND_SDL2
+CXXFLAGS += -DINPUT_BACKEND_SDL2 -DGRAPHIC_BACKEND_SDL2 -D_SDL2
 
 all: debug
 
