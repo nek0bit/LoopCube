@@ -1,7 +1,9 @@
 # -*- mode: makefile -*-
+LIB_DIR ?= /mingw64
+
 CXX ?= g++
 CXXFLAGS = -Wall -Wextra -pipe -pedantic -Dmain=SDL_main -I/mingw64/include
-LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
+LDFLAGS = -static -static-libgcc -static-libstdc++ $(LIB_DIR)/lib/libSDL2.a $(LIB_DIR)/lib/libSDL2_image.a -lmingw32 -lSDL2main -lSDL2 -lpng -ltiff -llzma -lzstd -lwebp -ljpeg -lz $(shell sdl2-config --static-libs)
 SRC_DIR = ./src
 OBJ_DIR = ./obj
 TARGET = loopcube
@@ -23,7 +25,6 @@ obj/%.o: %.cpp %.hpp
 
 $(TARGET): $(OBJ)
 	$(CXX) -o $(TARGET) $^ $(LDFLAGS) 
-
 
 debug: CXXFLAGS += -g
 debug: setup
@@ -47,7 +48,7 @@ uninstall:
 setup:
 	@mkdir -p obj/src/
 
-.PHONY: all clean setup debug release install
+.PHONY: all clean setup debug release install 
 clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(TARGET)
