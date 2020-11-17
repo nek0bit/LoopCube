@@ -1,5 +1,3 @@
-#ifdef TEXT_BITMAP
-
 #ifndef TEXT_BITMAP_HPP
 #define TEXT_BITMAP_HPP
 #include <iostream>
@@ -17,8 +15,6 @@ public:
 	void render(GraphicsWrapper* renderer, int x, int y, int size = 10) override;
 private:
 	std::vector<int> char_width;
-}
-
-#endif
+};
 
 #endif

@@ -2,6 +2,7 @@
 
 // Texture stuff
 namespace constants {
+	
 	// TODO add enum for texture indexes
 	const std::string version_str = "v0.3-git";
 

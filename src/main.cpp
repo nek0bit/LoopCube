@@ -48,6 +48,8 @@ void game_loop() {
 }
 
 int main(int argc, char* argv[]) {
+	
+		std::cout << "da" << std::endl;
 // Main applet loop for nintendo switch
 #ifdef __SWITCH__	 
 	hidScanInput();

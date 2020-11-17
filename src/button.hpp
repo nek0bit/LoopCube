@@ -6,6 +6,7 @@
 
 #include "backendincludes.hpp"
 
+#include "text_full.hpp"
 #include "rect.hpp"
 #include "color.hpp"
 #include "uielement.hpp"
@@ -43,7 +44,7 @@ private:
 	bool clicked;
 
 	Rect src, dest;
-	Text button_text;
+	Text* button_text;
 
 };
 

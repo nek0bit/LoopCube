@@ -22,7 +22,11 @@ enum config_enum {
 	CONFIG_SHOW_CHUNK_DEBUG,
 };
 
+
 namespace constants {
+	// Functions
+	
+	// Variables
 	extern const std::string version_str;
 
 	extern const std::string root_path;

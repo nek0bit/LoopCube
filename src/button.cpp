@@ -5,7 +5,7 @@ Button::Button(int id,
 			   int y, 
 			   int width, 
 			   int height) 
-	: id{static_cast<unsigned int>(id)}, width{width}, height{height}, hovered{false} {
+	: id{static_cast<unsigned int>(id)}, width{width}, height{height}, hovered{false}, button_text{nullptr} {
 	this->x = x;
 	this->y = y;
 }
@@ -67,14 +67,16 @@ void Button::render(GraphicsWrapper* renderer, int offset_x, int offset_y) {
 	renderer->render(src, mod_dest, 5);
 	renderer->render(src, end, 7);
 
-	button_text.render(renderer, x+(width/2)-(button_text.get_width()/2)-2,
-					   mod_dest.y+(height/2)-(button_text.get_height()/2)-2, 20);
+	if (button_text != nullptr)
+		button_text->render(renderer, x+(width/2)-(button_text->get_width()/2)-2,
+							mod_dest.y+(height/2)-(button_text->get_height()/2)-2, 20);
 }
 
 void Button::set_text(std::string text) {
 	this->text = text;
-	
-	button_text = Text{text};
+
+    delete button_text;
+	button_text = GENERATE_TEXT(text);
 }
 
 void Button::set_x(int x) {

@@ -1,7 +1,6 @@
-#ifdef TEXT_BITMAP
 #include "text_bitmap.hpp"
 
-Text_Bitmap::Text_Bitmap(std::string text = "") : Text{text} {
+Text_Bitmap::Text_Bitmap(std::string text) : Text{text} {
 	char_width = {
 	    5, // SPACE
 		3, // !
@@ -107,9 +106,9 @@ Text_Bitmap::~Text_Bitmap() {}
 void Text_Bitmap::render(GraphicsWrapper* renderer, int x, int y, int size) {
 	const int height = size;
 	
-	constexpr int ascii_start = 32;
-	constexpr int columns = 16;
-	constexpr int char_gap = 0;
+	int ascii_start = 32;
+	int columns = 16;
+	int char_gap = 0;
 
 	int char_multiplier = height/10;
 
@@ -138,5 +137,3 @@ void Text_Bitmap::render(GraphicsWrapper* renderer, int x, int y, int size) {
 	text_width = render_x;
 	text_height = render_y;
 }
-
-#endif
