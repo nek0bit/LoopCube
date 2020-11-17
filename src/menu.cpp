@@ -200,9 +200,9 @@ void Menu::render_sidebar() {
     Color color;
 	color.r = 255; color.g = 255; color.b = 255; color.a = 255;
 	
-	header.render(renderer, offset_x+content_left+70, offset_y+45, 32, true);
+	header.render(renderer, offset_x+content_left+70, offset_y+45, 32);
 
-	paragraph.render(renderer, offset_x+content_left+5, offset_y+120, 20, true);
+	paragraph.render(renderer, offset_x+content_left+5, offset_y+120, 20);
 }
 
 int Menu::get_pressed() {

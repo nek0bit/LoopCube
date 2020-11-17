@@ -11,15 +11,15 @@
 class Text {
 public:
 	Text(std::string text = "");
-	~Text();
+	virtual ~Text();
 
-	void render(GraphicsWrapper* renderer, int x, int y, int size = 10, bool high_quality = false);
-	void operator=(const std::string& value);
-	void set_text(std::string& text);
+	virtual void render(GraphicsWrapper* renderer, int x, int y, int size = 10);
+	virtual void operator=(const std::string& value);
+	virtual void set_text(std::string& text);
 
 	int get_width();
-	int get_height();
-private:
+    int get_height();
+protected:
 	std::vector<int> char_width;
 	std::string text;
 

@@ -68,7 +68,7 @@ void Button::render(GraphicsWrapper* renderer, int offset_x, int offset_y) {
 	renderer->render(src, end, 7);
 
 	button_text.render(renderer, x+(width/2)-(button_text.get_width()/2)-2,
-					   mod_dest.y+(height/2)-(button_text.get_height()/2)-2, 20, true);
+					   mod_dest.y+(height/2)-(button_text.get_height()/2)-2, 20);
 }
 
 void Button::set_text(std::string text) {
