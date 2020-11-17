@@ -104,13 +104,12 @@ Text_Bitmap::Text_Bitmap(std::string text) : Text{text} {
 Text_Bitmap::~Text_Bitmap() {}
 
 void Text_Bitmap::render(GraphicsWrapper* renderer, int x, int y, int size) {
-	const int height = size;
+	// TODO Size is ignored at the moment
+	const int height = 10;
 	
-	int ascii_start = 32;
-	int columns = 16;
-	int char_gap = 0;
-
-	int char_multiplier = height/10;
+	constexpr int ascii_start = 32;
+	constexpr int columns = 16;
+	constexpr int char_gap = 0;
 
 	int render_x = 0;
 	int render_y = 0;
@@ -126,10 +125,10 @@ void Text_Bitmap::render(GraphicsWrapper* renderer, int x, int y, int size) {
 			render_x = 0;
 			break;
 		default:
-			Rect src{col_mod*height, row*height, (char_width[index]*char_multiplier), height};
-			Rect dest{x+render_x, y+render_y, (char_width[index]*char_multiplier)+char_gap, size};
+			Rect src{col_mod*height, row*height, (char_width[index]), height};
+			Rect dest{x+render_x, y+render_y, (char_width[index])+char_gap, height};
 
-			render_x += (char_width[index]*char_multiplier);
+			render_x += (char_width[index]);
 			renderer->render(src, dest, 18);
 			break;
 		}
