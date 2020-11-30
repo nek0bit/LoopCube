@@ -53,14 +53,17 @@ Run `make -f Makefile.sfml DATA_LOCATION=/usr/local/share/loopcube release`
 On macOS, LoopCube requires GCC to build. Using the regular Xcode development tools will not work.
 
 If you use Homebrew, you can satisfy the dependencies with this command:
+
 `brew install gcc sdl2 sdl2_image sdl2_ttf`
 
 The instructions for building vary depending on which shell you use.
 
 If you use bash (default on 10.14 and below), run:
+
 `CXX=g++-n make -f Makefile.macos DATA_LOCATION=/usr/local/share/loopcube`
 
 If you use zsh (default on 10.15 and later), run:
+
 `CXX=g++-n; make -f Makefile.macos DATA_LOCATION=/usr/local/share/loopcube`
 
 where *n* is the version of GCC installed by Homebrew.
