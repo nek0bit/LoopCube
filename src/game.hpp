@@ -1,10 +1,11 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 #include "config.hpp"
 #include "constants.hpp"
@@ -12,6 +13,8 @@
 #include "play.hpp"
 #include "menu.hpp"
 #include "state.hpp"
+#include "winsize.hpp"
+#include "eventwrapper.hpp"
 
 class Game {
 
@@ -36,9 +39,8 @@ private:
 	Play* game;
 	Menu* menu;
 
-	GraphicsWrapper* renderer;
-	EventWrapper* events;
+    WinSize winSize;
+
+    SDL_Window* window;
+	SDL_Renderer* renderer;
 };
-
-
-#endif // GAME_HPP

@@ -8,7 +8,7 @@ enum GAME_STATE {
 	STATE_PLAYING,
 } STATE;
 
-Game::Game() : title{"LoopCube"}, state{}, game{nullptr} {
+Game::Game() : title{"LoopCube"}, state{}, game{nullptr}, menu{nullptr}, winSize{} {
 
 }
 
@@ -59,7 +59,7 @@ void Game::update() {
 	case STATE_PLAYING:
 		// Check if the game is nullptr, then create it
 		if (game == nullptr) {
-			game = new Play(renderer, events);
+			game = new Play(renderer);
 			// Let's pre-load a frame so everything can generate and render
 			// This may need to change depending on world generation in the future
 			game->update();
@@ -72,14 +72,16 @@ void Game::update() {
 	}
 
 	// Update screen size
-	renderer->fetch_screen_size();
+    SDL_GetWindowSize(window, &winSize.w, &winSize.h);
 }
 
 
 
 // Draw objects to screen
 void Game::render() {
-	renderer->clear_screen();
+    // Clear screen
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
 	switch(state.get()) {
 	case STATE_MAIN_MENU:
@@ -91,50 +93,54 @@ void Game::render() {
 	default:
 		break;
 	}
-	
+
+    // TODO clean me up
 #if defined(__WIIU__) || defined(__SWITCH__)
-	Rect cursor_hover{events->get_mouse_pos()[0], events->get_mouse_pos()[1], 10, 10};
+	SDL_Rect cursor_hover{events->get_mouse_pos()[0], events->get_mouse_pos()[1], 10, 10};
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
 	SDL_RenderFillRect(renderer, &cursor_hover);
-	Color cursor_color{255, 255, 255, 200};
-	renderer->render_rect(cursor_hover, cursor_color);
 #endif
 
-	renderer->update_screen();
+    SDL_RenderPresent(renderer);
 }
 
 // SDL2 related stuff below
 // Initiates Window/Game Loop
 void Game::init(bool fullscreen = false) {
-	fullscreen = true; // Bypass unused variable temporarily
-	
-#ifdef GRAPHIC_BACKEND_SDL2
-	renderer = new GraphicsWrapper_SDL2(Config{});
-#endif
+	int win_flags = 0;
+	int rend_flags = 0;
+    
+	if (fullscreen) flags = flags | SDL_WINDOW_FULLSCREEN;
+	win_flags = win_flags | SDL_WINDOW_RESIZABLE;
 
-#ifdef GRAPHIC_BACKEND_SFML
-	GraphicsWrapper_SFML* graphics = new GraphicsWrapper_SFML(Config{});
-	renderer = graphics;
-#endif
+	rend_flags = rend_flags | SDL_RENDERER_ACCELERATED;
+	//rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
 
-	try {
-		renderer->init_screen();
-	} catch(std::runtime_error& e) {
-		std::cout << "[Error] " << e.what() << std::endl;
-	    exit(1);
+	if (SDL_Init(SDL_INIT_VIDEO) == 0) {
+		window = SDL_CreateWindow(title,
+                                  SDL_WINDOWPOS_UNDEFINED,
+                                  SDL_WINDOWPOS_UNDEFINED,
+                                  800, 600, win_flags);
+		renderer = SDL_CreateRenderer(window, -1, rend_flags);
+
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+        // Enable alpha blending
+		SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	} else {
+		char error[] = "SDL_Init failed: ";
+		strcat(error, SDL_GetError());
+		throw std::runtime_error(error);
 	}
 
-#ifdef INPUT_BACKEND_SDL2
-    events = new EventWrapper_SDL2();
-#endif
-
-#ifdef INPUT_BACKEND_SFML
-	EventWrapper_SFML* event = new EventWrapper_SFML(graphics->get_screen());
-	events = event;
-#endif
-
-	
+    // Enable images
+	int img_flags = IMG_INIT_PNG;
+	if ((IMG_Init(img_flags) & img_flags) != img_flags) {
+		char error[] = "IMG_Init failed: ";
+		strcat(error, IMG_GetError());
+		throw std::runtime_error(error);
+	}
 
 	events->update_controllers();
 
@@ -164,8 +170,11 @@ void Game::free() {
 		// Cleanup core game stuff
 		delete game;
 		delete menu;
-		delete events;
-		delete renderer;
+
+        // SDL2 Cleanup
+        SDL_DestroyWindow(window);
+        SDL_DestroyRenderer(renderer);
+        SDL_Quit();
 	}
 
 	has_freed = true;
