@@ -12,7 +12,7 @@ struct VMouse
     int y;
     int down;
     int clicked;
-}
+};
 
 struct EventWrapper
 {
