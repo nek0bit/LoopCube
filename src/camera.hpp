@@ -14,10 +14,8 @@ public:
 	double get_x();
 	double get_y();
 
-	int get_width();
 	int get_height();
 private:
-
 	double x_pos;
 	double y_pos;
 
