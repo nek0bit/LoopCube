@@ -4,9 +4,8 @@
 #include <string>
 #include <memory>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
 
-#include "rect.hpp"
 #include "text.hpp"
 #include "constants.hpp"
 #include "blockinfo.hpp"
@@ -18,7 +17,7 @@ public:
 	Item(int id);
 	~Item();
 
-	void draw(GraphicsWrapper* renderer, int x, int y, int width, int height);
+	void render(SDL_Renderer* renderer, int x, int y, int width, int height);
 	void add_count(int amount = 1);
 	int get_count();
 	BlockInfo get_block();

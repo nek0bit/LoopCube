@@ -4,11 +4,10 @@
 #include <vector>
 #include <algorithm>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
 
+#include "winsize.hpp"
 #include "transition.hpp"
-#include "rect.hpp"
-#include "color.hpp"
 #include "constants.hpp"
 #include "position.hpp"
 #include "item.hpp"
@@ -16,8 +15,8 @@
 class Inventory {
 public:
 	Inventory() = default;
-	Inventory(GraphicsWrapper* renderer,
-			  EventWrapper* events);
+	Inventory(SDL_Renderer* renderer,
+			  EventWrapper& events);
 	~Inventory();
 
 	void draw_hotbar();
@@ -27,6 +26,7 @@ public:
 	void add_item(int id);
 	void update();
 private:
+    WinSize& winSize;
 	bool animation;
 	int hotbar_slots;
 	int max_slots;
