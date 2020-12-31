@@ -1,11 +1,10 @@
-#ifndef GAMEOBJ_HPP
-#define GAMEOBJ_HPP
+#pragma once
+
 #include <string>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
-#include "rect.hpp"
-#include "color.hpp"
 #include "texturehandler.hpp"
 #include "constants.hpp"
 #include "position.hpp"
@@ -20,7 +19,7 @@ public:
 	virtual ~GameObject();
 
 	virtual void update();
-    virtual void render(GraphicsWrapper* renderer, Camera& camera);
+    virtual void render(SDL_Renderer* renderer, Camera& camera);
 
 	virtual bool out_of_view(Camera& camera);
 
@@ -39,8 +38,5 @@ protected:
 	int texture_id;
 
 	Position obj;
-    Rect src;
+    SDL_Rect src;
 };
-
-
-#endif // GAMEOBJ_HPP

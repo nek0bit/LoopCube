@@ -1,8 +1,15 @@
 #include "play.hpp"
 
-Play::Play(GraphicsWrapper* renderer, EventWrapper*& events)
-	: window_w{renderer->screen_size()[0]}, window_h{renderer->screen_size()[1]}, show_particles{false}, chunks{0}, 
-	  camera{&window_w, &window_h}, player{}, entities{}, fade{60}, particles{}, time{8600, 28500, 8600, 22000, 1700, 1700},
+Play::Play(SDL_Renderer* renderer, EventWrapper* events, WinSize& winSize)
+	: winSize{winSize},
+      show_particles{false},
+      chunks{0}, 
+	  camera{&winSize.w, &winSize.h},
+      player{},
+      entities{},
+      fade{60},
+      particles{},
+      time{8600, 28500, 8600, 22000, 1700, 1700},
 	  background{} {
 	this->renderer = renderer;
 	this->events = events;
@@ -15,11 +22,7 @@ Play::Play(GraphicsWrapper* renderer, EventWrapper*& events)
 
 Play::~Play() {}
 
-void Play::update() {
-	// Update screen size for camera
-	window_w = renderer->screen_size()[0];
-	window_h = renderer->screen_size()[1];
-	
+void Play::update() {	
 	mouse_events();
 	
 	// Update all chunks
@@ -208,11 +211,12 @@ void Play::draw_selection(int* p1, int* p2) {
 	const int sel_x = floor((mpos[0] - camera.get_x()) / b_w) * b_w;
 	const int sel_y = floor((mpos[1] - camera.get_y()) / b_h) * b_h;
 
-    Rect selection{sel_x + static_cast<int>(camera.get_x()), sel_y + static_cast<int>(camera.get_y()), b_w, b_h};
+    SDL_Rect selection{sel_x + static_cast<int>(camera.get_x()), sel_y + static_cast<int>(camera.get_y()), b_w, b_h};
 
 	int fade_amount = std::abs(std::sin(static_cast<double>(fade.get_frame())/20))*30+50;
 
-	renderer->render_rect(selection, Color{255, 255, 255, fade_amount});
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, fade_amount);
+    SDL_RenderFillRect(renderer, &selection);
 
 	if (p1 != nullptr) *p1 = sel_x/b_w;
 	if (p2 != nullptr) *p2 = sel_y/b_h;
@@ -238,41 +242,3 @@ void Play::dead_particles() {
 		if (particles[i].is_dead()) particles.erase(particles.begin() + i);
 	}
 }
-
-// TODO I left this here because I wanted to do something with it...
-// Don't uncomment right now, this code is bad, horribly ugly, and VERY slow
-/*
-  void Play::draw_debug_menu() {
-  SDL_version compiled;
-  SDL_GetVersion(&compiled);
-
-  std::vector<std::string> dbg_text = {
-  "[[ DEBUG ]]",
-  // Player
-  "Built: At "+ std::string(__TIME__)+" "+std::string(__DATE__)+" C++"+std::to_string(__cplusplus)
-  +" SDL"+std::to_string(compiled.major)+"."+ std::to_string(compiled.minor)+"."+ std::to_string(compiled.patch)
-  #ifdef __WIIU__
-  +" For Wii U",
-  #else
-  +" for PC",
-  #endif
-  "= Player =",
-  "X: " + std::to_string(player.get_default_x() / constants::block_w)
-  + " / Y: " + std::to_string(player.get_default_y() / constants::block_h),
-  // Chunk
-  "= Chunk =",
-  "Pos: " + std::to_string(chunks.get_id()),
-  "Size: " + std::to_string(chunks.get_chunks()->size())
-
-		
-  };
-  SDL_Color color;
-  // For some reason it must be setup like this...
-  color.r = 255; color.g = 255; color.b = 255;
-  int size = 14;
-  for (size_t i = 0; i < dbg_text.size(); ++i) {
-  Text dtext{renderer, dbg_text[i], color, };
-  dtext.draw(0,i*size);
-  }
-  }
-*/

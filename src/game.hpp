@@ -15,6 +15,7 @@
 #include "state.hpp"
 #include "winsize.hpp"
 #include "eventwrapper.hpp"
+#include "textures.hpp"
 
 class Game {
 
@@ -41,6 +42,8 @@ private:
 
     WinSize winSize;
 
+    EventWrapper events;
     SDL_Window* window;
 	SDL_Renderer* renderer;
+    TextureHandler textures;
 };

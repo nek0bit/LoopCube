@@ -1,5 +1,4 @@
-#ifndef PLAY_HPP
-#define PLAY_HPP
+#pragma once
 #include <iostream>
 #include <string>
 #include <vector>
@@ -7,10 +6,11 @@
 #include <cmath>
 #include <ctime>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
-#include "rect.hpp"
-#include "color.hpp"
+#include "winsize.hpp"
+#include "eventwrapper.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "camera.hpp"
@@ -25,18 +25,16 @@
 #include "background.hpp"
 #include "time.hpp"
 
-class Play {
-
-public:
-	Play(GraphicsWrapper* renderer, EventWrapper*& events);
+struct Play
+{
+	Play(SDL_Renderer* renderer, EventWrapper* events, WinSize& winSize);
 	~Play();
 
 	void event_handler();
 	void render();
 	void update();
 private:
-	int window_w;
-	int window_h;
+    WinSize& winSize;
 	void handle_camera();
 	void draw_selection(int* p1, int* p2);
 	void dead_particles();
@@ -46,7 +44,7 @@ private:
 	// Options
 	bool show_particles;
 	
-	GraphicsWrapper* renderer;
+    SDL_Renderer* renderer;
 	EventWrapper* events;
 	ChunkGroup chunks;
 	std::unique_ptr<Inventory> inv;
@@ -65,6 +63,3 @@ private:
 	Background background;
 	std::vector<Structure*> structures;
 };
-
-
-#endif // PLAY_HPP
