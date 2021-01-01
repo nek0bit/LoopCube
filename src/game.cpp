@@ -8,7 +8,7 @@ enum GAME_STATE {
 	STATE_PLAYING,
 } STATE;
 
-Game::Game() : title{"LoopCube"}, state{}, game{nullptr}, menu{nullptr}, winSize{} {
+Game::Game() : title{"LoopCube"}, state{}, game{nullptr}, menu{nullptr}, winSize{}, textures{nullptr} {
 
 }
 
@@ -26,7 +26,7 @@ void Game::game_init() {
 	constants::config.set(CONFIG_LOAD_DISTANCE, 12);
 	constants::config.set(CONFIG_SHOW_CHUNK_DEBUG, 0);
 	
-	menu = new Menu(renderer, events);
+	menu = new Menu(renderer, textures, events);
 }
 
 // Game related loop stuff
@@ -59,7 +59,7 @@ void Game::update() {
 	case STATE_PLAYING:
 		// Check if the game is nullptr, then create it
 		if (game == nullptr) {
-			game = new Play(renderer, &events, winSize);
+			game = new Play(renderer, textures, &events, winSize);
 			// Let's pre-load a frame so everything can generate and render
 			// This may need to change depending on world generation in the future
 			game->update();
@@ -133,6 +133,8 @@ void Game::init(bool fullscreen = false) {
 		strcat(error, SDL_GetError());
 		throw std::runtime_error(error);
 	}
+
+    textures = new TextureHandler(renderer); 
 
     // Enable images
 	int img_flags = IMG_INIT_PNG;

@@ -1,9 +1,9 @@
 #include "texturehandler.hpp"
 
-TextureHandler::TextureHandler()
+TextureHandler::TextureHandler(SDL_Renderer* renderer)
 {
     for (size_t i = 0; i < constants::texture_ids.size(); ++i) {
-        textures.push_back(std::make_pair(i, func(constants::path + constants::texture_ids[i] + ".png")));	
+        textures.push_back(std::make_pair(i, new Texture{renderer, constants::path + constants::texture_ids[i] + ".png"}));	
     }
 }
 

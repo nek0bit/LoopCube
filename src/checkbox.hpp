@@ -2,10 +2,8 @@
 #define CHECKBOX_HPP
 #include <iostream>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
 
-#include "rect.hpp"
-#include "color.hpp"
 #include "uielement.hpp"
 #include "text.hpp"
 #include "aabb.hpp"
@@ -29,7 +27,7 @@ public:
 	void set_x(int x);
 	void set_y(int y);
 	void update(EventWrapper*& events, int offset_x = 0, int offset_y = 0);
-	void render(GraphicsWrapper* renderer, int offset_x = 0, int offset_y = 0);
+	void render(SDL_Renderer* renderer, int offset_x = 0, int offset_y = 0);
 	
 private:
 	bool changed;
@@ -42,7 +40,7 @@ private:
 
 	Text text_render;
 
-    Rect dest;
+    SDL_Rect dest;
 };
 
 #endif

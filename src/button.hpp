@@ -1,11 +1,13 @@
-#ifndef BUTTON_HPP
-#define BUTTON_HPP
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <memory>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
 
+#include "eventwrapper.hpp"
+#include "texturehandler.hpp"
 #include "text_full.hpp"
 #include "rect.hpp"
 #include "color.hpp"
@@ -23,7 +25,7 @@ public:
 	void set_x(int x);
 	void set_y(int y);
 	void update(EventWrapper*& events, int offset_x = 0, int offset_y = 0);
-	void render(GraphicsWrapper* renderer, int offset_x = 0, int offset_y = 0);
+	void render(SDL_Renderer* renderer, TextureHandler* textures, int offset_x = 0, int offset_y = 0);
 
 	// Text
 	void set_text(std::string text);
@@ -43,9 +45,7 @@ private:
 	bool being_clicked;
 	bool clicked;
 
-	Rect src, dest;
+	SDL_Rect src, dest;
 	Text* button_text;
 
 };
-
-#endif // BUTTON_HPP

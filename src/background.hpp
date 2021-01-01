@@ -4,10 +4,8 @@
 #include <iostream>
 #include <cmath>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
 
-#include "rect.hpp"
-#include "color.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "camera.hpp"
@@ -20,10 +18,10 @@ public:
 	~Background();
 	
 	void update(Camera& camera, Time& time);
-	void render(GraphicsWrapper* renderer);
-	void render_light(GraphicsWrapper* renderer, Camera& camera);
+	void render(SDL_Renderer* renderer, TextureHandler* textures);
+	void render_light(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera);
 private:
-	void render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,
+	void render_repeating(SDL_Renderer* renderer, TextureHandler* textures,  int texture, int offset_x, int offset_y, int width,
 						  int height, int gap, int top, bool verticle = false, int src_w = -1, int src_h = -1);
 	int win_width;
 	int win_height;
@@ -35,7 +33,6 @@ private:
 	int bg_cloud_offset_y;
 	int bg_hills_offset_x;
 	int bg_hills_offset_y;
-	Color bg_hills_extend;
 	int bg_cave_block_x;
 	int bg_cave_block_y;
 

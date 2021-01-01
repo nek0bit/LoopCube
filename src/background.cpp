@@ -1,7 +1,16 @@
 #include "background.hpp"
 
 Background::Background()
-	: win_width{0}, show_cave_background{false}, bg_shine_src{}, bg_shine_dest{}, bg_cloud_offset_x{0}, bg_cloud_offset_y{0}, bg_hills_extend{131, 131, 131, 255}, bg_cave_block_x{0}, bg_cave_block_y{0}, dark{0, .25}, darkness{0} {
+	: win_width{0},
+      show_cave_background{false},
+      bg_shine_src{},
+      bg_shine_dest{},
+      bg_cloud_offset_x{0},
+      bg_cloud_offset_y{0},
+      bg_cave_block_x{0},
+      bg_cave_block_y{0},
+      dark{0, .25},
+      darkness{0} {
 	// Set size for objects
 	bg_shine_w = 10; //px
 	bg_shine_h = 150;
@@ -134,11 +143,12 @@ void Background::update(Camera& camera, Time& time) {
 	bg_moon_dest.h = light_height;
 }
 
-void Background::render(GraphicsWrapper* renderer) {
+void Background::render(SDL_Renderer* renderer, TextureHandler* textures) {
 	static double cavebg_opacity = 1;
 	
 	const double transition = 255;
 
+    // TODO use transition Object
 	if (show_cave_background) {
 		                  // to         value          divider
 		cavebg_opacity += ((transition-cavebg_opacity)/4);
@@ -150,49 +160,53 @@ void Background::render(GraphicsWrapper* renderer) {
 	int offset = 200;
 
 	// Render sky
-	Rect sky{0, 0, win_width, win_height};
-	renderer->render_rect(sky, Color{r, g, b, 255});
+	SDL_Rect sky{0, 0, win_width, win_height};
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+    SDL_RenderFillRect(renderer, &sky);
 	
 	// Render bg_shine
-	renderer->render(bg_shine_src, bg_shine_dest, 13);
+    SDL_RenderCopy(renderer, textures->get_texture(13), &bg_shine_src, &bg_shine_dest);
 
 	// Render sun/moon
-	renderer->render(bg_light_src, bg_light_dest, 20);
-	renderer->render(bg_moon_src, bg_moon_dest, 21);
+    SDL_RenderCopy(renderer, textures->get_texture(20), &bg_light_src, &bg_light_dest);
+    SDL_RenderCopy(renderer, textures->get_texture(21), &bg_moon_src, &bg_moon_dest);
 
 	// Render clouds
-	render_repeating(renderer, 14, bg_cloud_offset_x, bg_cloud_offset_y,
+	render_repeating(renderer, textures, 14, bg_cloud_offset_x, bg_cloud_offset_y,
 					 bg_cloud_w, bg_cloud_h, 60, 40 + offset);
 
 	const int hill_offset = 0;
 	
 	// Render hills
-	render_repeating(renderer, 15, bg_hills_offset_x, bg_hills_offset_y,
+	render_repeating(renderer, textures, 15, bg_hills_offset_x, bg_hills_offset_y,
 					 bg_hills_w, bg_hills_h, 0, hill_offset);
 
 	const int after_hills_top = bg_hills_offset_y+bg_hills_h+hill_offset;
-	Rect after{0, after_hills_top, win_width, win_height-after_hills_top};
-	renderer->render_rect(after, bg_hills_extend);
+	SDL_Rect after{0, after_hills_top, win_width, win_height-after_hills_top};
+    SDL_SetRenderDrawColor(renderer, 131, 131, 131, 255);
+    SDL_RenderFillRect(renderer, &after);
+    
 
 	if (cavebg_opacity > 2) {
-		int texture = 17;
-		renderer->set_opacity(static_cast<int>(cavebg_opacity), texture);
+        SDL_Texture* tex = textures->get_texture(17);
+        SDL_SetTextureAlphaMod(tex, static_cast<int>(cavebg_opacity));
+
 		
-		render_repeating(renderer, texture, bg_cave_block_x, bg_cave_block_y,
+		render_repeating(renderer, textures, bg_cave_block_x, bg_cave_block_y,
 						 bg_cave_block_w, bg_cave_block_h, 0, 0, true, constants::block_img_size, constants::block_img_size);
 
 		// Reset opacity for future objects
-		renderer->set_opacity(255, texture);
+        SDL_SetTextureAlphaMod(tex, 255);
 	}
 }
 
-void Background::render_light(GraphicsWrapper* renderer, Camera& camera) {
-	Rect box{0, 0, camera.get_width(), camera.get_height()};
-	Color color{10, 10, 10, darkness};
-	renderer->render_rect(box, color);
+void Background::render_light(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera) {
+	SDL_Rect box{0, 0, camera.get_width(), camera.get_height()};
+    SDL_SetRenderDrawColor(renderer, 10, 10, 10, darkness);
+    SDL_RenderFillRect(renderer, &box);
 }
 
-void Background::render_repeating(GraphicsWrapper* renderer, int texture, int offset_x, int offset_y, int width,
+void Background::render_repeating(SDL_Renderer* renderer, TextureHandler* textures, int texture, int offset_x, int offset_y, int width,
 								  int height, int gap, int top, bool verticle, int src_w, int src_h) {
 	if (src_w == -1) src_w = width;
 	if (src_h == -1) src_h = height;
@@ -202,13 +216,13 @@ void Background::render_repeating(GraphicsWrapper* renderer, int texture, int of
 	// Create a grid of tiles as the background
 	for (int i = -1; (width+gap)*i < MAX_X+(width+gap); i++) {
 		for (int j = -1; verticle ? (height+gap)*j < MAX_Y+(height+gap) : j < 0; j++) {
-			Rect src{0, 0, src_w, src_h};
-		    Rect block{(offset_x % (width+gap))+((width+gap)*i),
+			SDL_Rect src{0, 0, src_w, src_h};
+		    SDL_Rect block{(offset_x % (width+gap))+((width+gap)*i),
 				verticle ? ((offset_y % (height+gap)) + top)+((height+gap)*j) : top+offset_y,
 				width, height};
 
 			// Draw the tile
-			renderer->render(src, block, texture);
+            SDL_RenderCopy(renderer, texture->get_texture(texture), &src, &block);
 		}
 	}
 }

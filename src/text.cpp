@@ -15,11 +15,3 @@ void Text::operator=(const std::string& value) {
 }
 
 void Text::render(GraphicsWrapper* renderer, int x, int y, int size) {}
-
-int Text::get_width() {
-	return text_width;
-}
-
-int Text::get_height() {
-	return text_height;
-}

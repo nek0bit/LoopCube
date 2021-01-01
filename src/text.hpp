@@ -4,27 +4,23 @@
 #include <string>
 #include <array>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
 
-#include "rect.hpp"
-
-class Text {
-public:
+struct Text
+{
 	Text(std::string text = "");
-	virtual ~Text();
+	~Text();
 
-	virtual void render(GraphicsWrapper* renderer, int x, int y, int size = 10);
-	virtual void operator=(const std::string& value);
-	virtual void set_text(std::string& text);
-
-	int get_width();
-    int get_height();
-protected:
+	void render(SDL_Renderer* renderer, int x, int y, int size = 10);
+	void operator=(const std::string& value);
+	void set_text(std::string& text);
+    
+	int width;
+	int height;
+private:
 	std::vector<int> char_width;
 	std::string text;
 
-	int text_width;
-	int text_height;
 };
 
 #endif // TEXT_HPP

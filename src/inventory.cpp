@@ -1,9 +1,20 @@
 #include "inventory.hpp"
 
 Inventory::Inventory(SDL_Renderer* renderer,
+                     TextureHandler* textures,
 					 EventWrapper& events,
-                     WinSize& winSize) : winSize{winSize}, animation{false}, hotbar_slots{10}, max_slots{hotbar_slots*5}, visible{true}, show_inventory_menu{false},
-											 hotbar_pos{0}, item_held{}, renderer{renderer}, events{events} {	
+                     WinSize& winSize)
+    : winSize{winSize},
+      animation{false},
+      hotbar_slots{10},
+      max_slots{hotbar_slots*5},
+      visible{true},
+      show_inventory_menu{false},
+      hotbar_pos{0},
+      item_held{},
+      renderer{renderer},
+      textures{textures},
+      events{events} {	
 	items.resize(max_slots, Item{});
 
 	inventory_slide = Transition{static_cast<double>(winSize.h), 0.30};

@@ -1,8 +1,11 @@
 #include "play.hpp"
 
-Play::Play(SDL_Renderer* renderer, EventWrapper* events, WinSize& winSize)
+Play::Play(SDL_Renderer* renderer, TextureHandler* textures, EventWrapper* events, WinSize& winSize)
 	: winSize{winSize},
       show_particles{false},
+      renderer{renderer},
+      textures{textures},
+      events{events},
       chunks{0}, 
 	  camera{&winSize.w, &winSize.h},
       player{},
@@ -11,12 +14,9 @@ Play::Play(SDL_Renderer* renderer, EventWrapper* events, WinSize& winSize)
       particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
 	  background{} {
-	this->renderer = renderer;
-	this->events = events;
-
 	camera.set_pos(0, 0);
 
-	inv = std::unique_ptr<Inventory>(new Inventory(renderer, events));
+	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events));
 	update_config();
 }
 

@@ -6,6 +6,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "texturehandler.hpp"
 #include "winsize.hpp"
 #include "transition.hpp"
 #include "constants.hpp"
@@ -16,6 +17,7 @@ class Inventory {
 public:
 	Inventory() = default;
 	Inventory(SDL_Renderer* renderer,
+              TextureHandler* textures,
 			  EventWrapper& events);
 	~Inventory();
 
@@ -44,6 +46,7 @@ private:
 	Item item_held;
 
 	GraphicsWrapper* renderer;
+    TextureHandler* textures;
 	EventWrapper* events;
 
     Transition inventory_slide;

@@ -76,14 +76,14 @@ namespace constants {
 	const std::vector<std::string> content = {
 		"Welcome to LoopCube!\n",
 		"Current Version: " + version_str + "\n",
+        "Happy new year edition\n",
 		"Changelog:",
-		"-Verticle chunks",
-		"-Fast chunk rendering",
+		"-Semi-Verticle chunks",
+		"-Faster chunk rendering",
 		"-Bigger chunks",
 		"-Better chunk generation",
-		"-Wacky Bitmap fonts",
 		"-Less memory usage",
-		"-Portable API's for\n rendering & events\n",
+        "-Codebase changes",
 		"  And much more..."
 	};
 

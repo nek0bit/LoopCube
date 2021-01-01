@@ -2,10 +2,9 @@
 #define BOX_HPP
 #include <iostream>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
 
-#include "rect.hpp"
-#include "color.hpp"
+#include "texturehandler.hpp"
 #include "constants.hpp"
 #include "position.hpp"
 
@@ -20,15 +19,15 @@ public:
 	void set_height(int h);
 
 	void update_pair();
-	void render(GraphicsWrapper* renderer, int offset_x = 0, int offset_y = 0);
+	void render(SDL_Renderer* renderer, TextureHandler* textures, int offset_x = 0, int offset_y = 0);
 private:
     int x;
 	int y;
 	int w;
 	int h;
 
-	std::array<std::pair<int, Rect>, 9> pos;
-	Rect src;
+	std::array<std::pair<int, SDL_Rect>, 9> pos;
+	SDL_Rect src;
 };
 
 #endif

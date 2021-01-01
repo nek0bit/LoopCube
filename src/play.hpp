@@ -27,7 +27,7 @@
 
 struct Play
 {
-	Play(SDL_Renderer* renderer, EventWrapper* events, WinSize& winSize);
+	Play(SDL_Renderer* renderer, TextureHandler* textures, EventWrapper* events, WinSize& winSize);
 	~Play();
 
 	void event_handler();
@@ -45,6 +45,7 @@ private:
 	bool show_particles;
 	
     SDL_Renderer* renderer;
+    TextureHandler* textures;
 	EventWrapper* events;
 	ChunkGroup chunks;
 	std::unique_ptr<Inventory> inv;

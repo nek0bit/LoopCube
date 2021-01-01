@@ -45,8 +45,7 @@ void Checkbox::update(EventWrapper*& events, int offset_x, int offset_y) {
 	// Clear changed
 	changed = false;
 
-	std::array<int, 2> pos = events->get_vmouse_pos();
-	if (events->get_vmouse_clicked() &&
+	if (events->mouse.clicked &&
 		AABB(offset_x+x, offset_y+y, size, size, pos[0], pos[1], 1, 1)) {
 		toggle();
 		changed = true;
@@ -59,14 +58,16 @@ void Checkbox::update(EventWrapper*& events, int offset_x, int offset_y) {
 }
 
 void Checkbox::render(GraphicsWrapper* renderer, int offset_x, int offset_y) {
-	Rect mod_dest{offset_x+dest.x, offset_y+dest.y, dest.w, dest.h};
+	SDL_Rect mod_dest{offset_x+dest.x, offset_y+dest.y, dest.w, dest.h};
 	// Draw box behind check
-	renderer->render_rect(mod_dest, Color{0, 0, 0, 200});
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
+    SDL_RenderFillRect(renderer, &mod_dest);
 
 	// Draw check
 	if (checked) {
-	    Rect check{mod_dest.x+10, mod_dest.y+10, mod_dest.w-20, mod_dest.h-20};
-		renderer->render_rect(check, Color{255, 255, 255, 255});
+	    SDL_Rect check{mod_dest.x+10, mod_dest.y+10, mod_dest.w-20, mod_dest.h-20};
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_RenderFillRect(renderer, &check);
 	}
 
 	text_render.render(renderer, mod_dest.x+size+10, mod_dest.y+5, 10);

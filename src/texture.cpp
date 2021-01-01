@@ -2,7 +2,7 @@
 
 Texture::Texture(SDL_Renderer* renderer, std::string filename)
 {
-    DL_Surface* surface = IMG_Load(filename.c_str());
+    SDL_Surface* surface = IMG_Load(filename.c_str());
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 

@@ -45,5 +45,5 @@ private:
     EventWrapper events;
     SDL_Window* window;
 	SDL_Renderer* renderer;
-    TextureHandler textures;
+    TextureHandler* textures;
 };
