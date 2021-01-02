@@ -6,8 +6,8 @@ namespace constants {
 	// TODO add enum for texture indexes
 	const std::string version_str = "v0.3-git";
 
-	const std::string root_path = DATA_LOCATION "/data";
-	const std::string path = root_path+"/img/";
+	const std::string root_path = DATA_LOCATION "/data/";
+	const std::string path = root_path+"img/";
 
 	// Please add comment with index for code readability
 	const std::vector<const char*> texture_ids = {
@@ -87,5 +87,6 @@ namespace constants {
 		"  And much more..."
 	};
 
-	Config config;
+	Config config{};
+    Font fontHandler{};
 }

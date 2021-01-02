@@ -25,6 +25,10 @@ void Game::game_init() {
 	constants::config.set(CONFIG_SHOW_PARTICLES, 1);
 	constants::config.set(CONFIG_LOAD_DISTANCE, 12);
 	constants::config.set(CONFIG_SHOW_CHUNK_DEBUG, 0);
+
+    // Setup fonts
+    constants::fontHandler.addFontByFilename(constants::root_path+"fonts/FreeMono.ttf",
+                                             {10, 12, 14, 16, 18, 20});
 	
 	menu = new Menu(renderer, textures, events);
 }

@@ -71,6 +71,7 @@ std::vector<std::vector<Block>>& Chunk::get_chunk() {
 }
 
 void Chunk::generate_chunk(unsigned long int seed, std::vector<Structure*>& structures) {
+    // TODO use polymorphism for world generation for features such as multiple dimensions
 	for (int x = 0; x < MAX_WIDTH; ++x) {
 		double d_x = static_cast<double>(x)/static_cast<double>(MAX_WIDTH);
 
@@ -113,6 +114,7 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
 	if (!(i < static_cast<int>(chunk.size()-1) && i >= 0)) {
 		return nullptr;
 	}
+    // Search for block, destroy it, and add it to the inventory
 	for (size_t j = 0; j < chunk[i].size(); ++j) {
 		if (get_chunk_x(x) == chunk[i][j].get_obj().x && y == chunk[i][j].get_obj().y) {
 			const BlockInfo* info = chunk[i][j].get_blockinfo();
@@ -167,7 +169,7 @@ void Chunk::update_all(Camera& camera) {
 }
 
 
-void Chunk::render_all_shadows(GraphicsWrapper* renderer, Camera& camera) {
+void Chunk::render_all_shadows(SDL_Renderer* renderer, Camera& camera) {
 	render_all_functor(camera, [&](Block& blk) {
 		blk.render_shadow(renderer, camera);
 	});
@@ -194,13 +196,13 @@ void Chunk::render_all_functor(Camera& camera, std::function<void(Block&)> call)
 	}
 }
 
-void Chunk::render_all_blocks(GraphicsWrapper* renderer, Camera& camera) {
+void Chunk::render_all_blocks(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera) {
 	render_all_functor(camera, [&](Block& blk) {
-		blk.render(renderer, camera);
-	});
+                                   blk.render(renderer, textures, camera);
+                               });
 }
 
-void Chunk::render_info(GraphicsWrapper* renderer, Camera& camera) {
+void Chunk::render_info(SDL_Renderer* renderer, Camera& camera) {
 	int pos = get_chunk_x(0)*constants::block_w;
 	/*if (chunk_text == nullptr) {
 		SDL_Color color;
@@ -213,6 +215,8 @@ void Chunk::render_info(GraphicsWrapper* renderer, Camera& camera) {
 	}*/
 
 	// Draw gap
-	Rect block_line{static_cast<int>(pos+camera.get_x()), 0, 2, camera.get_height()};
-	renderer->render_rect(block_line, Color{0, 0, 0, 255});
+	SDL_Rect block_line{static_cast<int>(pos+camera.get_x()), 0, 2, camera.get_height()};
+    
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &block_line);
 }

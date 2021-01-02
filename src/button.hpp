@@ -8,9 +8,7 @@
 
 #include "eventwrapper.hpp"
 #include "texturehandler.hpp"
-#include "text_full.hpp"
-#include "rect.hpp"
-#include "color.hpp"
+#include "text.hpp"
 #include "uielement.hpp"
 #include "constants.hpp"
 #include "text.hpp"
@@ -28,7 +26,7 @@ public:
 	void render(SDL_Renderer* renderer, TextureHandler* textures, int offset_x = 0, int offset_y = 0);
 
 	// Text
-	void set_text(std::string text);
+	void set_text(SDL_Renderer* renderer, std::string text);
 	std::string get_text();
 	bool get_pressed();
 	int get_id();

@@ -37,7 +37,7 @@ void Button::update(EventWrapper*& events, int offset_x, int offset_y) {
 			dest.y += 5;
 			being_clicked = true;
 		} else {
-			if (being_clicked == true) {
+			if (being_clicked) {
 				clicked = true;
 				being_clicked = false;
 			}
@@ -72,11 +72,12 @@ void Button::render(SDL_Renderer* renderer, TextureHandler* textures, int offset
 							mod_dest.y+(height/2)-(button_text->get_height()/2)-2, 20);
 }
 
-void Button::set_text(std::string text) {
+void Button::set_text(SDL_Renderer* renderer, std::string text) {
 	this->text = text;
 
     delete button_text;
-	button_text = GENERATE_TEXT(text);
+    SDL_color color{255, 255, 255, 255};
+	button_text = new Text(renderer, text, color, constants::fontHandler.getFont(1));
 }
 
 void Button::set_x(int x) {

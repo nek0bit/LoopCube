@@ -207,7 +207,7 @@ int ChunkGroup::get_id(Camera& camera, int surrounding) {
 	return id;
 }
 
-void ChunkGroup::render_all_viewport(GraphicsWrapper* renderer, Camera& camera) {
+void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: viewport_chunks) {
 			Position box = chunk->get_pos();
@@ -225,7 +225,7 @@ void ChunkGroup::render_all_viewport(GraphicsWrapper* renderer, Camera& camera) 
 			camera.get_width() < ((box.x+box.w)+camera.get_x())-(constants::chunk_width*constants::block_w)) {
 			continue;
 		} else {
-			chunk->render_all_blocks(renderer, camera);
+			chunk->render_all_blocks(renderer, textures, camera);
 		}
 	}
 	if (render_chunk_info) {

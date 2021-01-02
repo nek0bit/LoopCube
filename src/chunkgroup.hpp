@@ -8,6 +8,8 @@
 #include <thread>
 #include <chrono>
 
+#include <SDL2/SDL.h>
+
 #include "position.hpp"
 #include "chunk.hpp"
 #include "constants.hpp"
@@ -17,6 +19,7 @@
 
 using namespace std::chrono_literals;
 
+// Need to rewrite this ugly shit when verticle chunks are properly implemented, it's very complicated
 class ChunkGroup {
 public:
 	ChunkGroup() = default;
@@ -31,7 +34,7 @@ public:
 	void update_all_viewport(Camera& camera);
 
 	// Render
-	void render_all_viewport(GraphicsWrapper* renderer, Camera& camera);
+	void render_all_viewport(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera);
 
 	// Getters
 	int get_id(Camera& camera, int surrounding = 8);
@@ -56,7 +59,7 @@ private:
 	// Config
 	bool show_shadows;
 	bool render_chunk_info;
-	
+
 	std::vector<Chunk> group; // Chunks the game works with in place
 	std::vector<int> loaded_chunks; // group ids
 	std::vector<Chunk> group_past; // Unloaded chunks, gets moved into group when loaded again

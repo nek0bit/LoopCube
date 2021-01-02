@@ -9,13 +9,13 @@
 #include <memory>
 #include <functional>
 
+#include <SDL2/SDL.h>
+
 #include "../libs/FastNoiseLite.h"
 
-#include "rect.hpp"
-#include "color.hpp"
+#include "texturehandler.hpp"
 #include "constants.hpp"
 #include "block.hpp"
-#include "perlin.hpp"
 #include "camera.hpp"
 #include "inventory.hpp"
 #include "texturehandler.hpp"
@@ -34,9 +34,9 @@ public:
 	bool operator>(const Chunk &c) const;
 
 	void update_all(Camera& camera);
-	void render_info(GraphicsWrapper* renderer, Camera& camera);
-	void render_all_shadows(GraphicsWrapper* renderer, Camera& camera);
-	void render_all_blocks(GraphicsWrapper* renderer, Camera& camera);
+	void render_info(SDL_Renderer* renderer, Camera& camera);
+	void render_all_shadows(SDL_Renderer* renderer, Camera& camera);
+	void render_all_blocks(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera);
 	bool place_block(int id, int x, int y);
 	void place_block_raw(int id, int x, int y);
 	const BlockInfo* destroy_block(int x, int y, Inventory *inv);

@@ -6,6 +6,7 @@
 
 #include "blockinfo.hpp"
 #include "config.hpp"
+#include "fonthandler.hpp"
 
 enum block_enum {
 	BLOCK_GRASS,
@@ -54,7 +55,9 @@ namespace constants {
 	extern const std::string header;
 	extern const std::vector<std::string> content;
 
+    // Public stuff
 	extern Config config;
+    extern FontHandler fontHandler;
 }
 
 #endif // CONSTANTS
