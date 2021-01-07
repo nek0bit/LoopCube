@@ -30,7 +30,7 @@ void Game::game_init() {
     constants::fontHandler.addFontByFilename(constants::root_path+"fonts/FreeMono.ttf",
                                              {10, 12, 14, 16, 18, 20});
 	
-	menu = new Menu(renderer, textures, events);
+	menu = new Menu(renderer, textures, events, winSize);
 }
 
 // Game related loop stuff
@@ -100,7 +100,7 @@ void Game::render() {
 
     // TODO clean me up
 #if defined(__WIIU__) || defined(__SWITCH__)
-	SDL_Rect cursor_hover{events->get_mouse_pos()[0], events->get_mouse_pos()[1], 10, 10};
+	SDL_Rect cursor_hover{events.vmouse.x, events.vmouse.y, 10, 10};
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
 	SDL_RenderFillRect(renderer, &cursor_hover);
@@ -115,7 +115,7 @@ void Game::init(bool fullscreen = false) {
 	int win_flags = 0;
 	int rend_flags = 0;
     
-	if (fullscreen) flags = flags | SDL_WINDOW_FULLSCREEN;
+	if (fullscreen) win_flags = win_flags | SDL_WINDOW_FULLSCREEN;
 	win_flags = win_flags | SDL_WINDOW_RESIZABLE;
 
 	rend_flags = rend_flags | SDL_RENDERER_ACCELERATED;
@@ -148,7 +148,7 @@ void Game::init(bool fullscreen = false) {
 		throw std::runtime_error(error);
 	}
 
-	events->update_controllers();
+	events.update_controllers();
 
 	game_init();
 
@@ -157,11 +157,11 @@ void Game::init(bool fullscreen = false) {
 
 // Handles events such as exit, keypresses, mouse
 void Game::event_handler() {
-	events->listen();
+	events.listen();
 
-	auto eventer = events->get_key_state();
+	auto eventer = events.get_key_state();
 
-	if (events->get_quit()) {
+	if (events.quit) {
 		is_running = false;
 	}
 }

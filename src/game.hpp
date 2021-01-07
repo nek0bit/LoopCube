@@ -15,7 +15,6 @@
 #include "state.hpp"
 #include "winsize.hpp"
 #include "eventwrapper.hpp"
-#include "textures.hpp"
 
 class Game {
 
