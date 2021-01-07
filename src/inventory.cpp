@@ -50,12 +50,12 @@ void Inventory::add_item(int id) {
 void Inventory::update() {
 	// hotbar_slot keys
 	for (int i = 5; i < 15; ++i) {
-		if (events->get_key_state()[i]) {
+		if (events.get_key_state()[i]) {
 			hotbar_pos = i-5;
 		}
 	}
 
-	if (events->get_key_state()[4] || events->get_button_state()[8]) {
+	if (events.get_key_state()[4] || events.get_button_state()[8]) {
 		show_inventory_menu = !show_inventory_menu;
 		animation = show_inventory_menu;
 	}
@@ -94,9 +94,9 @@ void Inventory::draw_inventory_menu() {
 		SDL_Rect dest{MAX_X, MAX_Y+static_cast<int>(slide), src.w*scale, src.h*scale};
         SDL_RenderCopy(renderer, textures->get_texture(11), &src, &dest);
 
-		std::vector<int> pos = get_hovered_pos(events->get_vmouse_pos()[0], events->get_vmouse_pos()[1], MAX_X, MAX_Y+slide, true);
+		std::vector<int> pos = get_hovered_pos(events.vmouse.x, events.vmouse.y, MAX_X, MAX_Y+slide, true);
 		
-		if (events->get_vmouse_clicked() == 1 && pos[0] != -1 && pos[1] != -1) {
+		if (events.vmouse.clicked == 1 && pos[0] != -1 && pos[1] != -1) {
 			auto& it = items[pos[0]+(pos[1]*hotbar_slots)];
 			if (!item_held.enabled) {
 				// move item; null out inventory slot
@@ -110,8 +110,7 @@ void Inventory::draw_inventory_menu() {
 			}
 		}
 		
-		auto mouse_pos = events->get_vmouse_pos();
-		if (item_held.enabled) item_held.render(renderer, mouse_pos[0]-17, mouse_pos[1]-17, 35, 35);
+		if (item_held.enabled) item_held.render(renderer, events.vmouse.x-17, events.vmouse.y-17, 35, 35);
 	}
 }
 
@@ -200,7 +199,6 @@ void Inventory::draw_hotbar() {
 			src.y = 16;
 		}
 	    SDL_Rect block{i*(BLOCK_S+3)+MAX_X, slide, BLOCK_S, BLOCK_S};
-		renderer->render(src, block, 10);
         SDL_RenderCopy(renderer, textures->get_texture(10), &src, &block);
 
 		if (items[i].enabled) {

@@ -11,15 +11,16 @@ enum CONFIG_ID {
 	CB_SHOW_CHUNK_DEBUG,
 };
 
-Menu::Menu(SDL_Renderer* renderer,
-		   EventWrapper*& events,
-           WinSize& winSize)
+Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize)
     : state{0},
-      winSize{winSize}
+      winSize{winSize},
       offset_x{0},
       offset_y{0},
       BLOCK_S{40},
       BUTTON_W{200},
+      renderer{renderer},
+      textures{textures},
+      events{events},
       shift{BLOCK_S},
       back{40, 40, 400, 400},
       box_width{660},
@@ -27,11 +28,10 @@ Menu::Menu(SDL_Renderer* renderer,
       prev_mid_left{0},
       mid_left{0},
       content_left{0},
-      pad_left{180} {
-	
-	this->renderer = renderer;
-	this->events = events;
-	
+      pad_left{180},
+      header{nullptr},
+      paragraph{nullptr}
+{		
 	//************************************************
 	// Resize option_state to match option_str size
 	//************************************************
@@ -46,19 +46,19 @@ Menu::Menu(SDL_Renderer* renderer,
 	
 	for (size_t i = 0; i < button_group.size(); ++i) {
 		button_group[i] = std::unique_ptr<Button>(new Button(i, 0, 30+(offset_y*i), BUTTON_W));
-		button_group[i]->set_text(option_str[i]);
+		button_group[i]->set_text(renderer, option_str[i]);
 	}
 
 	//************************************************
 	// Setup options
 	//************************************************
 	back_button = std::unique_ptr<Button>(new Button(-1, 0, 30, 150));
-	back_button->set_text("<- Back");
+	back_button->set_text(renderer, "<- Back");
 
 	// Setup checkboxes
-	Checkbox* show_shadows = new Checkbox(CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 30);
-	Checkbox* show_particles = new Checkbox(CB_RENDER_PARTICLES, "Show Particles", 0, 0, 30);
-	Checkbox* show_info = new Checkbox(CB_SHOW_CHUNK_DEBUG, "Show Chunk Debug Info", 0, 0, 30);
+	Checkbox* show_shadows = new Checkbox(renderer, CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 30);
+	Checkbox* show_particles = new Checkbox(renderer, CB_RENDER_PARTICLES, "Show Particles", 0, 0, 30);
+	Checkbox* show_info = new Checkbox(renderer, CB_SHOW_CHUNK_DEBUG, "Show Chunk Debug Info", 0, 0, 30);
 	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) show_shadows->check();
 	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) show_particles->check();
 	if (constants::config.get_int(CONFIG_SHOW_CHUNK_DEBUG) == 1) show_info->check();
@@ -75,7 +75,7 @@ Menu::Menu(SDL_Renderer* renderer,
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(0, constants::block_info.size()-1);
 
-	int rand_id = constants::block_info.at(dist(rng)).get_id();
+	int rand_id = constants::block_info[dist(rng)].get_id();
 	random_block = Item(rand_id);
 
 	//************************************************

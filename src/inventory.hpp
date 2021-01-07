@@ -16,10 +16,10 @@
 
 class Inventory {
 public:
-	Inventory() = default;
 	Inventory(SDL_Renderer* renderer,
               TextureHandler* textures,
-			  EventWrapper& events);
+			  EventWrapper& events,
+              WinSize& winSize);
 	~Inventory();
 
 	void draw_hotbar();
@@ -48,7 +48,7 @@ private:
 
 	SDL_Renderer* renderer;
     TextureHandler* textures;
-	EventWrapper* events;
+	EventWrapper& events;
 
     Transition inventory_slide;
 	Transition hotbar_slide;

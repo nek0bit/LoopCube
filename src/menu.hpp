@@ -20,7 +20,7 @@
 
 class Menu {
 public:
-	Menu(SDL_Renderer* renderer, TextureHandler* textures, EventWrapper*& events, WinSize& winSize);
+	Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize);
 	~Menu();
 
 	void update(bool update_animations = true);
@@ -56,8 +56,8 @@ private:
 	
 	// Important setup
 	SDL_Renderer* renderer;
-    TextureHandler* textures;
-    EventWrapper* events;
+    TextureHandler& textures;
+    EventWrapper& events;
 	Animation shift;
 
 	Box back;
@@ -70,8 +70,8 @@ private:
 	int content_left;
 	
 	Item random_block;
-	Text header;
-	Text paragraph;
+	Text* header;
+	Text* paragraph;
 	std::string p_string;
 	const int pad_left;
 };
