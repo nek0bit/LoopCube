@@ -31,9 +31,9 @@ void Button::update(EventWrapper*& events, int offset_x, int offset_y) {
 	}
 
 	int calc_width = dest.w + (src.w*2)*2;
-	if (AABB(events->mouse.x, events->mouse.y, 1, 1, offset_x+x, offset_y+y, calc_width, dest.h)) {
+	if (AABB(events->vmouse.x, events->vmouse.y, 1, 1, offset_x+x, offset_y+y, calc_width, dest.h)) {
 		hovered = true;
-		if (events->mouse.down == 1) {
+		if (events->vmouse.down == 1) {
 			dest.y += 5;
 			being_clicked = true;
 		} else {
@@ -68,15 +68,15 @@ void Button::render(SDL_Renderer* renderer, TextureHandler* textures, int offset
     SDL_RenderCopy(renderer, textures->get_texture(7), &src, &end);
 
 	if (button_text != nullptr)
-		button_text->render(renderer, x+(width/2)-(button_text->get_width()/2)-2,
-							mod_dest.y+(height/2)-(button_text->get_height()/2)-2, 20);
+		button_text->draw(x+(width/2)-(button_text->get_width()/2)-2,
+							mod_dest.y+(height/2)-(button_text->get_height()/2)-2);
 }
 
 void Button::set_text(SDL_Renderer* renderer, std::string text) {
 	this->text = text;
 
     delete button_text;
-    SDL_color color{255, 255, 255, 255};
+    SDL_Color color{255, 255, 255, 255};
 	button_text = new Text(renderer, text, color, constants::fontHandler.getFont(1));
 }
 

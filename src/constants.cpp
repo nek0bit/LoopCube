@@ -88,5 +88,5 @@ namespace constants {
 	};
 
 	Config config{};
-    Font fontHandler{};
+    FontHandler fontHandler{};
 }

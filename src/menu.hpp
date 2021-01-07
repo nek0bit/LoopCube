@@ -7,10 +7,9 @@
 #include <random>
 #include <memory>
 
-#include "backendincludes.hpp"
-
 #include "box.hpp"
-#include "rect.hpp"
+#include "texturehandler.hpp"
+#include "winsize.hpp"
 #include "text.hpp"
 #include "textbox.hpp"
 #include "checkbox.hpp"
@@ -21,7 +20,7 @@
 
 class Menu {
 public:
-	Menu(GraphicsWrapper* renderer, EventWrapper*& events);
+	Menu(SDL_Renderer* renderer, TextureHandler* textures, EventWrapper*& events, WinSize& winSize);
 	~Menu();
 
 	void update(bool update_animations = true);
@@ -38,6 +37,7 @@ private:
 	
 	int state;
 
+    WinSize& winSize;
 	
 	int offset_x;
 	int offset_y;
@@ -55,7 +55,8 @@ private:
 	std::vector<UiElement*> c_elements;
 	
 	// Important setup
-	GraphicsWrapper* renderer;
+	SDL_Renderer* renderer;
+    TextureHandler* textures;
     EventWrapper* events;
 	Animation shift;
 

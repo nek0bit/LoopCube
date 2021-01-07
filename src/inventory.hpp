@@ -6,6 +6,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "eventwrapper.hpp"
 #include "texturehandler.hpp"
 #include "winsize.hpp"
 #include "transition.hpp"
@@ -45,7 +46,7 @@ private:
 	// Temporary item slot for holding items
 	Item item_held;
 
-	GraphicsWrapper* renderer;
+	SDL_Renderer* renderer;
     TextureHandler* textures;
 	EventWrapper* events;
 

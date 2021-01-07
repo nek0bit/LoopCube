@@ -19,7 +19,7 @@ public:
 	
 	void update(Camera& camera, Time& time);
 	void render(SDL_Renderer* renderer, TextureHandler* textures);
-	void render_light(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera);
+	void render_light(SDL_Renderer* renderer, Camera& camera);
 private:
 	void render_repeating(SDL_Renderer* renderer, TextureHandler* textures,  int texture, int offset_x, int offset_y, int width,
 						  int height, int gap, int top, bool verticle = false, int src_w = -1, int src_h = -1);
@@ -28,7 +28,7 @@ private:
 
 	bool show_cave_background;
 
-	Rect bg_shine_src, bg_shine_dest;
+	SDL_Rect bg_shine_src, bg_shine_dest;
 	int bg_cloud_offset_x;
 	int bg_cloud_offset_y;
 	int bg_hills_offset_x;
@@ -36,8 +36,8 @@ private:
 	int bg_cave_block_x;
 	int bg_cave_block_y;
 
-	Rect bg_light_src, bg_light_dest;
-	Rect bg_moon_src, bg_moon_dest;
+	SDL_Rect bg_light_src, bg_light_dest;
+	SDL_Rect bg_moon_src, bg_moon_dest;
 	
 	int bg_shine_w;
 	int bg_shine_h;

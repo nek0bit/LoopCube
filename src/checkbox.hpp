@@ -9,10 +9,10 @@
 #include "aabb.hpp"
 #include "constants.hpp"
 
-class Checkbox: public UiElement {
-public:
+struct Checkbox: public UiElement
+{
 	Checkbox() = default;
-	Checkbox(int id, std::string text, int x, int y, int size, bool checked=false);
+	Checkbox(SDL_Renderer* renderer, int id, std::string text, int x, int y, int size, bool checked=false);
 	~Checkbox();
 
 	void on_change(void (*function)(int, int));
@@ -27,8 +27,7 @@ public:
 	void set_x(int x);
 	void set_y(int y);
 	void update(EventWrapper*& events, int offset_x = 0, int offset_y = 0);
-	void render(SDL_Renderer* renderer, int offset_x = 0, int offset_y = 0);
-	
+	void render(SDL_Renderer* renderer, TextureHandler* textures, int offset_x = 0, int offset_y = 0);
 private:
 	bool changed;
 	int id;
@@ -38,7 +37,7 @@ private:
 	int size;
 	bool checked;
 
-	Text text_render;
+	Text* text_render;
 
     SDL_Rect dest;
 };

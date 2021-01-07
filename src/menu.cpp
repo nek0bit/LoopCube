@@ -11,10 +11,23 @@ enum CONFIG_ID {
 	CB_SHOW_CHUNK_DEBUG,
 };
 
-Menu::Menu(GraphicsWrapper* renderer,
-		   EventWrapper*& events) : state{0}, offset_x{0}, offset_y{0}, BLOCK_S{40}, BUTTON_W{200}, shift{BLOCK_S}, back{40, 40, 400, 400},
-									box_width{660}, box_height{460}, prev_mid_left{0}, mid_left{0}, content_left{0},
-									pad_left{180} {
+Menu::Menu(SDL_Renderer* renderer,
+		   EventWrapper*& events,
+           WinSize& winSize)
+    : state{0},
+      winSize{winSize}
+      offset_x{0},
+      offset_y{0},
+      BLOCK_S{40},
+      BUTTON_W{200},
+      shift{BLOCK_S},
+      back{40, 40, 400, 400},
+      box_width{660},
+      box_height{460},
+      prev_mid_left{0},
+      mid_left{0},
+      content_left{0},
+      pad_left{180} {
 	
 	this->renderer = renderer;
 	this->events = events;
@@ -101,18 +114,16 @@ void Menu::update_config_elements(int id, int value) {
 	}
 }
 
-void Menu::update(bool update_animations) {
-	auto win = renderer->screen_size();
-	
+void Menu::update(bool update_animations) {	
 	offset_x = 0;
-	offset_y = (win[1]/2) - ((box_height)/2);
+	offset_y = (winSize.h/2) - ((box_height)/2);
 
-	const int left = (win[0]/2) + 30;
+	const int left = (winSize.w/2) + 30;
 	constexpr int top = 80;
 	constexpr int gap = 50;
 	
 	prev_mid_left = mid_left;
-	mid_left = (win[0]/2)-pad_left;
+	mid_left = (winSize.w/2)-pad_left;
 	content_left = mid_left-100;
 	
 	if (prev_mid_left != mid_left) {
@@ -123,16 +134,14 @@ void Menu::update(bool update_animations) {
 		back.update_pair();
 	}
 
-	
-	
 	// Set background
 	if (state == MAIN_MENU) {
 		for (auto &i: button_group) {
-			i->set_x( (win[0]/2) + 30 );
+			i->set_x( (winSize.w/2) + 30 );
 			i->update(events, offset_x, offset_y);
 		}
 	} else if (state == CONFIG_MENU) {
-		back_button->set_x( (win[0]/2) + 30 );
+		back_button->set_x( (winSize.w/2) + 30 );
 		back_button->update(events, offset_x, offset_y);
 		for (size_t i = 0; i < c_elements.size(); ++i) {
 			c_elements[i]->set_x(left);
@@ -156,22 +165,22 @@ void Menu::update(bool update_animations) {
 }
 
 void Menu::render_background() {
-	auto win = renderer->screen_size();
 	// Render the background in a tile manner with animations
 	const int BLOCK_S = 40;
-	const int MAX_X = (win[0] + BLOCK_S*2)/BLOCK_S;
-	const int MAX_Y = (win[1] + BLOCK_S*2)/BLOCK_S;
+	const int MAX_X = (winSize.w + BLOCK_S*2)/BLOCK_S;
+	const int MAX_Y = (winSize.h + BLOCK_S*2)/BLOCK_S;
 	// Create a grid of tiles as the background
 	for (int i = -1; i < MAX_X; ++i) {
 		for (int j = -1; j < MAX_Y; ++j) {
-		    Rect block{
+		    SDL_Rect block{
 				i*BLOCK_S - shift.get_frame(),
 				j*BLOCK_S - shift.get_frame(),
 				BLOCK_S, BLOCK_S};
-			Rect src{0, 0, 16, 16};
+			SDL_Rect src{0, 0, 16, 16};
 
 			// Draw the tile
-			renderer->render(src, block, 2);
+            SDL_RenderCopy(renderer, textures->get_texture(2), &src, &block);
+            
 		}
 	}
 
@@ -189,20 +198,17 @@ void Menu::set_state(int state) {
 void Menu::render_sidebar() {	
 	// Draw line
 	constexpr int vert_gap = 30;
-    Rect line{offset_x+mid_left+pad_left, offset_y+vert_gap, 2, box_height-(vert_gap*2)};
+    SDL_Rect line{offset_x+mid_left+pad_left, offset_y+vert_gap, 2, box_height-(vert_gap*2)};
 
-	renderer->render_rect(line, Color{200, 200, 200, 255});
+    SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
+    SDL_RenderFillRect(renderer, &line);
 
 	// Lets render a random block and some text
 	random_block.draw(renderer, offset_x+content_left, offset_y+35, 60, 60);
 
-	// White color
-    Color color;
-	color.r = 255; color.g = 255; color.b = 255; color.a = 255;
-	
-	header.render(renderer, offset_x+content_left+70, offset_y+45, 32);
+	header.render(offset_x+content_left+70, offset_y+45);
 
-	paragraph.render(renderer, offset_x+content_left+5, offset_y+120, 20);
+	paragraph.render(offset_x+content_left+5, offset_y+120);
 }
 
 int Menu::get_pressed() {

@@ -24,7 +24,7 @@ void FontHandler::addFontByFilename(std::string filename, std::vector<size_t> si
 
 TTF_Font* FontHandler::getFont(size_t index)
 {
-    if (index > fonts.size()-1 || index < 0)
+    if (index > fonts.size()-1)
         return nullptr;
     
     return fonts[index];

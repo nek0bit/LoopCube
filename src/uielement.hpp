@@ -3,7 +3,10 @@
 
 #include <iostream>
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
+
+#include "texturehandler.hpp"
+#include "eventwrapper.hpp"
 
 class UiElement {
 public:
@@ -26,8 +29,8 @@ public:
 	virtual void update(EventWrapper*& events, int x_offset, int y_offset);
 	// Render functions
 	virtual void render();
-	virtual void render(GraphicsWrapper* renderer);
-	virtual void render(GraphicsWrapper* renderer, int x_offset, int y_offset);
+	virtual void render(SDL_Renderer* renderer, TextureHandler* textures);
+	virtual void render(SDL_Renderer* renderer, TextureHandler* textures, int x_offset, int y_offset);
 };
 
 #endif

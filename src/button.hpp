@@ -8,7 +8,6 @@
 
 #include "eventwrapper.hpp"
 #include "texturehandler.hpp"
-#include "text.hpp"
 #include "uielement.hpp"
 #include "constants.hpp"
 #include "text.hpp"

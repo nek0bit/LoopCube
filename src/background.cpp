@@ -200,7 +200,7 @@ void Background::render(SDL_Renderer* renderer, TextureHandler* textures) {
 	}
 }
 
-void Background::render_light(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera) {
+void Background::render_light(SDL_Renderer* renderer, Camera& camera) {
 	SDL_Rect box{0, 0, camera.get_width(), camera.get_height()};
     SDL_SetRenderDrawColor(renderer, 10, 10, 10, darkness);
     SDL_RenderFillRect(renderer, &box);
@@ -222,7 +222,7 @@ void Background::render_repeating(SDL_Renderer* renderer, TextureHandler* textur
 				width, height};
 
 			// Draw the tile
-            SDL_RenderCopy(renderer, texture->get_texture(texture), &src, &block);
+            SDL_RenderCopy(renderer, textures->get_texture(texture), &src, &block);
 		}
 	}
 }
