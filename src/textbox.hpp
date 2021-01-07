@@ -7,10 +7,8 @@
 #include <switch.h>
 #endif
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
 
-#include "rect.hpp"
-#include "color.hpp"
 #include "uielement.hpp"
 #include "constants.hpp"
 #include "text.hpp"
@@ -23,18 +21,18 @@ public:
 	Textbox(int id, int x, int y, int width, int height);
 	~Textbox();
 
-	// TODO Add set_x, set_y functions
 	void update(EventWrapper*& events);
-	void render(GraphicsWrapper* renderer);
+	void render(SDL_Renderer* renderer);
+    
+	int x;
+	int y;
 private:
 	std::string text;
 	int id;
-	int x;
-	int y;
 	int width;
 	int height;
 	bool focused;
-	//Text* textbox_text;
+	Text* textbox_text;
 	Animation blink;
 	
 #ifdef __SWITCH__

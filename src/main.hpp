@@ -7,7 +7,7 @@
 #include <switch.h>
 #endif
 
-#include "backendincludes.hpp"
+#include <SDL2/SDL.h>
 
 #include "game.hpp"
 

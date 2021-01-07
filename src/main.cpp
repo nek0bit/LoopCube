@@ -32,7 +32,7 @@ void game_loop() {
 	game.free();
 }
 
-int main(int argc, char* argv[]) {
+int main(/* int argc, char* argv[] */) {
 // Main applet loop for nintendo switch
 #ifdef __SWITCH__	 
 	hidScanInput();
