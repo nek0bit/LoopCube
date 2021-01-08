@@ -16,7 +16,7 @@ public:
     TextureHandler(SDL_Renderer* renderer);
 	~TextureHandler();
 
-    SDL_Texture*& get_texture(int id);
+    SDL_Texture* get_texture(int id);
 	void free_textures();
 private:
 	std::vector<std::pair<int, Texture*>> textures;

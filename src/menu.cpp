@@ -207,7 +207,7 @@ void Menu::render_sidebar() {
     SDL_RenderFillRect(renderer, &line);
 
 	// Lets render a random block and some text
-	random_block.render(renderer, &textures, offset_x+content_left, offset_y+35, 60, 60);
+	random_block.render(renderer, textures, offset_x+content_left, offset_y+35, 60, 60);
 
 	header->draw(offset_x+content_left+70, offset_y+45);
 

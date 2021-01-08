@@ -17,7 +17,7 @@
 class Inventory {
 public:
 	Inventory(SDL_Renderer* renderer,
-              TextureHandler* textures,
+              TextureHandler& textures,
 			  EventWrapper& events,
               WinSize& winSize);
 	~Inventory();
@@ -47,7 +47,7 @@ private:
 	Item item_held;
 
 	SDL_Renderer* renderer;
-    TextureHandler* textures;
+    TextureHandler& textures;
 	EventWrapper& events;
 
     Transition inventory_slide;

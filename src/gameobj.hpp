@@ -18,7 +18,7 @@ public:
 	virtual ~GameObject();
 
 	virtual void update();
-    virtual void render(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera);
+    virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
 
 	virtual bool out_of_view(Camera& camera);
 

@@ -143,7 +143,7 @@ void Background::update(Camera& camera, Time& time) {
 	bg_moon_dest.h = light_height;
 }
 
-void Background::render(SDL_Renderer* renderer, TextureHandler* textures) {
+void Background::render(SDL_Renderer* renderer, TextureHandler& textures) {
 	static double cavebg_opacity = 1;
 	
 	const double transition = 255;
@@ -165,11 +165,11 @@ void Background::render(SDL_Renderer* renderer, TextureHandler* textures) {
     SDL_RenderFillRect(renderer, &sky);
 	
 	// Render bg_shine
-    SDL_RenderCopy(renderer, textures->get_texture(13), &bg_shine_src, &bg_shine_dest);
+    SDL_RenderCopy(renderer, textures.get_texture(13), &bg_shine_src, &bg_shine_dest);
 
 	// Render sun/moon
-    SDL_RenderCopy(renderer, textures->get_texture(20), &bg_light_src, &bg_light_dest);
-    SDL_RenderCopy(renderer, textures->get_texture(21), &bg_moon_src, &bg_moon_dest);
+    SDL_RenderCopy(renderer, textures.get_texture(20), &bg_light_src, &bg_light_dest);
+    SDL_RenderCopy(renderer, textures.get_texture(21), &bg_moon_src, &bg_moon_dest);
 
 	// Render clouds
 	render_repeating(renderer, textures, 14, bg_cloud_offset_x, bg_cloud_offset_y,
@@ -188,7 +188,7 @@ void Background::render(SDL_Renderer* renderer, TextureHandler* textures) {
     
 
 	if (cavebg_opacity > 2) {
-        SDL_Texture* tex = textures->get_texture(17);
+        SDL_Texture* tex = textures.get_texture(17);
         SDL_SetTextureAlphaMod(tex, static_cast<int>(cavebg_opacity));
 
 		
@@ -206,7 +206,7 @@ void Background::render_light(SDL_Renderer* renderer, Camera& camera) {
     SDL_RenderFillRect(renderer, &box);
 }
 
-void Background::render_repeating(SDL_Renderer* renderer, TextureHandler* textures, int texture, int offset_x, int offset_y, int width,
+void Background::render_repeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int offset_x, int offset_y, int width,
 								  int height, int gap, int top, bool verticle, int src_w, int src_h) {
 	if (src_w == -1) src_w = width;
 	if (src_h == -1) src_h = height;
@@ -222,7 +222,7 @@ void Background::render_repeating(SDL_Renderer* renderer, TextureHandler* textur
 				width, height};
 
 			// Draw the tile
-            SDL_RenderCopy(renderer, textures->get_texture(texture), &src, &block);
+            SDL_RenderCopy(renderer, textures.get_texture(texture), &src, &block);
 		}
 	}
 }

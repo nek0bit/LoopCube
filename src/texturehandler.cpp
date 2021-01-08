@@ -12,11 +12,11 @@ TextureHandler::~TextureHandler()
     free_textures();
 }
 
-SDL_Texture*& TextureHandler::get_texture(int id)
+SDL_Texture* TextureHandler::get_texture(int id)
 {
     for (auto &i: textures) {
         if (id == i.first) {
-            return i.second.get_texture();
+            return i.second->get_texture();
         }
     }
     return nullptr;
@@ -25,7 +25,7 @@ SDL_Texture*& TextureHandler::get_texture(int id)
 void TextureHandler::free_textures()
 {
     for (auto &i: textures) {
-        i.second.free_texture();
+        i.second->free_texture();
         delete i.second;
     }
 }

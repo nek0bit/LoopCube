@@ -11,9 +11,8 @@ Textbox::Textbox(int id, int x, int y, int width, int height)
 Textbox::~Textbox() {}
 
 void Textbox::update(EventWrapper*& events) {
-	std::array<int, 2> pos = events->get_vmouse_pos();
-	if (events->get_vmouse_clicked()) {
-		if (AABB(x, y, width, height, pos[0], pos[1], 1, 1)) {
+	if (events->vmouse.clicked) {
+		if (AABB(x, y, width, height, events->vmouse.x, events->vmouse.y, 1, 1)) {
 			focused = true;
             // TODO clean this up
 #ifdef __SWITCH__
@@ -48,14 +47,13 @@ void Textbox::update(EventWrapper*& events) {
 
 void Textbox::handle_keyboard(EventWrapper*& events) {
 	bool cursor = false;
-	std::string from_buffer = events->get_text_buffer();
+	std::string from_buffer = events->text_mode_buffer;
 	
 	text = from_buffer;
 	
 	if (blink.get_frame() < (blink.get_max_frames()/2)) {
 		cursor = true;
-	}
-	
+	}	
 	
 	if (textbox_text != nullptr) {
 		textbox_text->set_text(text + (cursor ? "_" : ""));
@@ -70,7 +68,7 @@ void Textbox::render(SDL_Renderer* renderer) {
 	
 	if (textbox_text == nullptr) {
 		SDL_Color color{255, 255, 255, 255};
-		textbox_text = new Text(renderer, text, color, constants::button_font);
+		textbox_text = new Text(renderer, text, color, constants::fontHandler.getFont(0));
 	} else {
 		textbox_text->draw(x+10, y+((height/2)-20 ));
 	}

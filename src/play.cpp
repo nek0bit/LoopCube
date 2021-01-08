@@ -1,6 +1,6 @@
 #include "play.hpp"
 
-Play::Play(SDL_Renderer* renderer, TextureHandler* textures, EventWrapper* events, WinSize& winSize)
+Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize)
 	: winSize{winSize},
       show_particles{false},
       renderer{renderer},
@@ -16,7 +16,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler* textures, EventWrapper* event
 	  background{} {
 	camera.set_pos(0, 0);
 
-	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events));
+	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, winSize));
 	update_config();
 }
 
@@ -42,38 +42,38 @@ void Play::update() {
 	player.update(chunks, entities);
 
 	for (int i = 0; i < 4; ++i) {
-		if (events->get_key_state()[i]) {
+		if (events.key_state[i]) {
 			player.direct_player(i, chunks);
 		}
 	}
 
 	// Create entity
-	if (events->get_key_state()[16] || events->get_button_state()[9]) {
+	if (events.key_state[16] || events.button_state[9]) {
 		entities.push_back(new TestEntity(player.get_default_x(), player.get_default_y()-30));
 	}
 
 	// Jump (A)
-	if (events->get_button_state()[4]) {
+	if (events.button_state[4]) {
 		player.direct_player(0, chunks);
 	}
 
 	// Down
-	if (events->get_button_state()[0]) {
+	if (events.button_state[0]) {
 		player.direct_player(2, chunks);
 	}
 
 	// Right
-	if (events->get_button_state()[1]) {
+	if (events.button_state[1]) {
 		player.direct_player(1, chunks);
 	}
 
 	// Left
-	if (events->get_button_state()[2]) {
+	if (events.button_state[2]) {
 		player.direct_player(3, chunks);
 	}
 
 	// Up
-	if (events->get_button_state()[3]) {
+	if (events.button_state[3]) {
 		player.direct_player(0, chunks);
 	}
 
@@ -131,20 +131,20 @@ void Play::update_config() {
 
 void Play::render() {
 	// Render background elements
-	background.render(renderer);
+	background.render(renderer, textures);
 	
 	if (show_particles) {
 		for (auto& particle: particles) {
-			particle.render(renderer, camera);
+			particle.render(renderer, textures, camera);
 		}
 	}
 	
-	chunks.render_all_viewport(renderer, camera);
+	chunks.render_all_viewport(renderer, textures, camera);
 	
-	player.render(renderer, camera);
+	player.render(renderer, textures, camera);
 
 	for (Entity*& entity: entities) {
-		entity->render(renderer, camera);
+		entity->render(renderer, textures, camera);
 	}
 
 	background.render_light(renderer, camera);
@@ -167,7 +167,7 @@ void Play::mouse_events() {
 		// Do some math to get the chunk position
 		int chunk_pos = std::abs(p1-(chunk->get_slot()*constants::chunk_width));
 
-		switch(events->get_vmouse_down()) {
+		switch(events.vmouse.down) {
 		case 1:
 			{
 				const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv.get());
@@ -206,10 +206,8 @@ void Play::draw_selection(int* p1, int* p2) {
 	int b_w = static_cast<int>(constants::block_w);
 	int b_h = static_cast<int>(constants::block_h);
 
-	auto mpos = events->get_vmouse_pos();
-
-	const int sel_x = floor((mpos[0] - camera.get_x()) / b_w) * b_w;
-	const int sel_y = floor((mpos[1] - camera.get_y()) / b_h) * b_h;
+	const int sel_x = floor((events.vmouse.x - camera.get_x()) / b_w) * b_w;
+	const int sel_y = floor((events.vmouse.y - camera.get_y()) / b_h) * b_h;
 
     SDL_Rect selection{sel_x + static_cast<int>(camera.get_x()), sel_y + static_cast<int>(camera.get_y()), b_w, b_h};
 
@@ -224,8 +222,8 @@ void Play::draw_selection(int* p1, int* p2) {
 
 // Sets camera to player position
 void Play::handle_camera() {
-	double x = std::floor(player.get_default_x()) * -1 + (window_w/2) - player.get_width()/2;
-	double y = std::floor(player.get_default_y()) * -1 + (window_h/2) - player.get_height()/2;
+	double x = std::floor(player.get_default_x()) * -1 + (winSize.w/2) - player.get_width()/2;
+	double y = std::floor(player.get_default_y()) * -1 + (winSize.h/2) - player.get_height()/2;
 	
 	static double move_x = x;
 	static double move_y = y;

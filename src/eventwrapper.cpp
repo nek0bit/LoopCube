@@ -33,7 +33,7 @@ EventWrapper::EventWrapper() : controller{nullptr} {
 		SDL_CONTROLLER_BUTTON_GUIDE
 	};
 
-	resize_input_mappings();
+	//resize_input_mappings();
 }
 
 EventWrapper::~EventWrapper() {}

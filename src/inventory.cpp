@@ -1,7 +1,7 @@
 #include "inventory.hpp"
 
 Inventory::Inventory(SDL_Renderer* renderer,
-                     TextureHandler* textures,
+                     TextureHandler& textures,
 					 EventWrapper& events,
                      WinSize& winSize)
     : winSize{winSize},
@@ -40,7 +40,7 @@ void Inventory::add_item(int id) {
 	} else {
 		for (Item& i: items) {
 			if (!i.enabled) {
-				i = Item{id};
+				i = Item{renderer, id};
 				break;
 			}
 		}
@@ -50,12 +50,12 @@ void Inventory::add_item(int id) {
 void Inventory::update() {
 	// hotbar_slot keys
 	for (int i = 5; i < 15; ++i) {
-		if (events.get_key_state()[i]) {
+		if (events.key_state[i]) {
 			hotbar_pos = i-5;
 		}
 	}
 
-	if (events.get_key_state()[4] || events.get_button_state()[8]) {
+	if (events.key_state[4] || events.button_state[8]) {
 		show_inventory_menu = !show_inventory_menu;
 		animation = show_inventory_menu;
 	}
@@ -92,7 +92,7 @@ void Inventory::draw_inventory_menu() {
 		// Render inventory menu
 		SDL_Rect src{0, 0, menu_width, menu_height};
 		SDL_Rect dest{MAX_X, MAX_Y+static_cast<int>(slide), src.w*scale, src.h*scale};
-        SDL_RenderCopy(renderer, textures->get_texture(11), &src, &dest);
+        SDL_RenderCopy(renderer, textures.get_texture(11), &src, &dest);
 
 		std::vector<int> pos = get_hovered_pos(events.vmouse.x, events.vmouse.y, MAX_X, MAX_Y+slide, true);
 		
@@ -110,7 +110,7 @@ void Inventory::draw_inventory_menu() {
 			}
 		}
 		
-		if (item_held.enabled) item_held.render(renderer, events.vmouse.x-17, events.vmouse.y-17, 35, 35);
+		if (item_held.enabled) item_held.render(renderer, textures, events.vmouse.x-17, events.vmouse.y-17, 35, 35);
 	}
 }
 
@@ -138,7 +138,7 @@ std::vector<int> Inventory::get_hovered_pos(int x, int y, int corner_x, int corn
 
 			// Draw item
 			if (items[i+(j*hotbar_slots)].enabled) {
-				items[i+(j*hotbar_slots)].render(renderer, new_x+3, new_y+3, tile_size-7, tile_size-7);
+				items[i+(j*hotbar_slots)].render(renderer, textures, new_x+3, new_y+3, tile_size-7, tile_size-7);
 			}
 
 			if (collision(x, y, 1, 1,
@@ -199,10 +199,10 @@ void Inventory::draw_hotbar() {
 			src.y = 16;
 		}
 	    SDL_Rect block{i*(BLOCK_S+3)+MAX_X, slide, BLOCK_S, BLOCK_S};
-        SDL_RenderCopy(renderer, textures->get_texture(10), &src, &block);
+        SDL_RenderCopy(renderer, textures.get_texture(10), &src, &block);
 
 		if (items[i].enabled) {
-			items[i].render(renderer, block.x+5, slide+block.y+5, 30, 30);
+			items[i].render(renderer, textures, block.x+5, slide+block.y+5, 30, 30);
 		}
 	}
 }

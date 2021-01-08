@@ -36,11 +36,11 @@ void Item::add_count(int amount) {
 
 }
 
-void Item::render(SDL_Renderer* renderer, TextureHandler* textures, int x, int y, int width = 35, int height = 35) {
+void Item::render(SDL_Renderer* renderer, TextureHandler& textures, int x, int y, int width = 35, int height = 35) {
 	int offset_y = -10;
 	SDL_Rect src{0, 0, constants::block_img_size, constants::block_img_size};
     SDL_Rect block{x, y, width, height};
-    SDL_RenderCopy(renderer, textures->get_texture(this->block.get_texture_id()), &src, &block);
+    SDL_RenderCopy(renderer, textures.get_texture(this->block.get_texture_id()), &src, &block);
     
 	text->draw(x, y+height+offset_y);
 }

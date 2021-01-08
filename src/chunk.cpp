@@ -196,7 +196,7 @@ void Chunk::render_all_functor(Camera& camera, std::function<void(Block&)> call)
 	}
 }
 
-void Chunk::render_all_blocks(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera) {
+void Chunk::render_all_blocks(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
 	render_all_functor(camera, [&](Block& blk) {
                                    blk.render(renderer, textures, camera);
                                });

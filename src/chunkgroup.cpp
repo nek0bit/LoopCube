@@ -207,7 +207,7 @@ int ChunkGroup::get_id(Camera& camera, int surrounding) {
 	return id;
 }
 
-void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera) {
+void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
 	if (show_shadows) {
 		for (auto &chunk: viewport_chunks) {
 			Position box = chunk->get_pos();

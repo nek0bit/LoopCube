@@ -17,7 +17,7 @@ public:
 	Item(SDL_Renderer* renderer, int id);
 	~Item();
 
-	void render(SDL_Renderer* renderer, TextureHandler* textures, int x, int y, int width, int height);
+	void render(SDL_Renderer* renderer, TextureHandler& textures, int x, int y, int width, int height);
 	void add_count(int amount = 1);
 	int get_count();
 	BlockInfo get_block();

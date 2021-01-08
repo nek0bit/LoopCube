@@ -30,7 +30,7 @@ void Game::game_init() {
     constants::fontHandler.addFontByFilename(constants::root_path+"fonts/FreeMono.ttf",
                                              {10, 12, 14, 16, 18, 20});
 	
-	menu = new Menu(renderer, textures, events, winSize);
+	menu = new Menu(renderer, *textures, events, winSize);
 }
 
 // Game related loop stuff
@@ -63,7 +63,7 @@ void Game::update() {
 	case STATE_PLAYING:
 		// Check if the game is nullptr, then create it
 		if (game == nullptr) {
-			game = new Play(renderer, textures, &events, winSize);
+			game = new Play(renderer, *textures, events, winSize);
 			// Let's pre-load a frame so everything can generate and render
 			// This may need to change depending on world generation in the future
 			game->update();
@@ -158,8 +158,6 @@ void Game::init(bool fullscreen = false) {
 // Handles events such as exit, keypresses, mouse
 void Game::event_handler() {
 	events.listen();
-
-	auto eventer = events.get_key_state();
 
 	if (events.quit) {
 		is_running = false;

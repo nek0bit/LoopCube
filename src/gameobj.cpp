@@ -56,9 +56,9 @@ void GameObject::update() {
 	src.y = 0;
 }
 
-void GameObject::render(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera) {
+void GameObject::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
 	SDL_Rect dest{static_cast<int>(get_x(camera)), static_cast<int>(get_y(camera)), static_cast<int>(obj.w), static_cast<int>(obj.h)};
-    SDL_RenderCopy(renderer, textures->get_texture(texture_id), &src, &dest);
+    SDL_RenderCopy(renderer, textures.get_texture(texture_id), &src, &dest);
 }
 
 const Position& GameObject::get_obj() const {

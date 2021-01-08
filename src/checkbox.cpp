@@ -80,7 +80,7 @@ void Checkbox::update(EventWrapper*& events, int offset_x, int offset_y)
 	dest.h = size;
 }
 
-void Checkbox::render(SDL_Renderer* renderer, TextureHandler* textures, int offset_x, int offset_y)
+void Checkbox::render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y)
 {
 	SDL_Rect mod_dest{offset_x+dest.x, offset_y+dest.y, dest.w, dest.h};
 	// Draw box behind check

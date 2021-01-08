@@ -36,7 +36,7 @@ public:
 	void update_all(Camera& camera);
 	void render_info(SDL_Renderer* renderer, Camera& camera);
 	void render_all_shadows(SDL_Renderer* renderer, Camera& camera);
-	void render_all_blocks(SDL_Renderer* renderer, TextureHandler* textures, Camera& camera);
+	void render_all_blocks(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
 	bool place_block(int id, int x, int y);
 	void place_block_raw(int id, int x, int y);
 	const BlockInfo* destroy_block(int x, int y, Inventory *inv);

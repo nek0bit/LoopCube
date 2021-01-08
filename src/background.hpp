@@ -18,10 +18,10 @@ public:
 	~Background();
 	
 	void update(Camera& camera, Time& time);
-	void render(SDL_Renderer* renderer, TextureHandler* textures);
+	void render(SDL_Renderer* renderer, TextureHandler& textures);
 	void render_light(SDL_Renderer* renderer, Camera& camera);
 private:
-	void render_repeating(SDL_Renderer* renderer, TextureHandler* textures,  int texture, int offset_x, int offset_y, int width,
+	void render_repeating(SDL_Renderer* renderer, TextureHandler& textures,  int texture, int offset_x, int offset_y, int width,
 						  int height, int gap, int top, bool verticle = false, int src_w = -1, int src_h = -1);
 	int win_width;
 	int win_height;
