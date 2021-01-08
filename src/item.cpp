@@ -9,9 +9,9 @@ Item::Item(SDL_Renderer* renderer, int id) : enabled{true}, count{} {
 		}
 	}
 
-    delete text;
     SDL_Color t_Color{255, 255, 255, 255};
-    text = new Text(renderer, "", t_Color, constants::fontHandler.getFont(1));
+    text = new Text(renderer, "", t_Color, constants::fontHandler.getFont(0));
+    
 }
 
 Item::~Item() {

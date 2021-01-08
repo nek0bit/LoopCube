@@ -85,8 +85,8 @@ Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
 		p_string += i + "\n";
 	}
     SDL_Color textColor{255, 255, 255, 255};
-	header = new Text(renderer, constants::header, textColor, constants::fontHandler.getFont(0));
-	paragraph = new Text(renderer, p_string, textColor, constants::fontHandler.getFont(0));
+	header = new Text(renderer, constants::header, textColor, constants::fontHandler.getFont(5));
+	paragraph = new Text(renderer, p_string, textColor, constants::fontHandler.getFont(3), 240);
 
 	// Ensure all elements are properly updated (ex: offsets)
 	update();

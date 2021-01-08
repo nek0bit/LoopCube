@@ -9,7 +9,7 @@ Text::Text(SDL_Renderer* renderer,
 	this->font = font;
 
 	if (this->font == NULL) {
-		std::cerr << "[ERROR] TTF_OpenFont: " << TTF_GetError() << std::endl;
+		std::cerr << "[Error] TTF_OpenFont: " << TTF_GetError() << ".. expect dragons and segfaults" << std::endl;
 	}
 	update_surface();
 	messageText = SDL_CreateTextureFromSurface(renderer, surface);

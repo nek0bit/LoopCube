@@ -37,16 +37,15 @@ struct EventWrapper
 	std::vector<int> key_state;
 
     bool quit; // If true, game should quit entirely
+    
 	// vmouse = virtual mouse; Could be a real mouse, could be emulated (via a controller or touch screen)
+    // Also, vmouse_down/vmouse_clicked must have 0: none; 1: left click; 2: middle click; 3: right click
     VMouse vmouse;
 private:
+    void resizeInputStates();
+    
 	SDL_Joystick* controller;
 	SDL_Event event;
-
-    
-
-
-	// Also, vmouse_down/vmouse_clicked must have 0: none; 1: left click; 2: middle click; 3: right click
     
 	bool text_mode;
 };

@@ -1,6 +1,11 @@
 #include "eventwrapper.hpp"
 
-EventWrapper::EventWrapper() : controller{nullptr} {
+EventWrapper::EventWrapper()
+    : quit{false},
+      vmouse{0, 0, 0, 0},
+      controller{nullptr},
+      text_mode{false}
+{
 	key_mapping = {
 		SDL_SCANCODE_W, // UP
 		SDL_SCANCODE_D, // RIGHT
@@ -33,10 +38,16 @@ EventWrapper::EventWrapper() : controller{nullptr} {
 		SDL_CONTROLLER_BUTTON_GUIDE
 	};
 
-	//resize_input_mappings();
+    resizeInputStates();
 }
 
 EventWrapper::~EventWrapper() {}
+
+void EventWrapper::resizeInputStates()
+{
+    key_state.resize(key_mapping.size());
+    button_state.resize(button_mapping.size());
+}
 
 void EventWrapper::update_controllers() {
 	// NOTE this only works with the furthest port priority controller

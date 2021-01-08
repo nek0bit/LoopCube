@@ -28,7 +28,7 @@ void Game::game_init() {
 
     // Setup fonts
     constants::fontHandler.addFontByFilename(constants::root_path+"fonts/FreeMono.ttf",
-                                             {10, 12, 14, 16, 18, 20});
+                                             {10, 12, 14, 16, 18, 32});
 	
 	menu = new Menu(renderer, *textures, events, winSize);
 }
@@ -147,6 +147,8 @@ void Game::init(bool fullscreen = false) {
 		strcat(error, IMG_GetError());
 		throw std::runtime_error(error);
 	}
+
+    TTF_Init();
 
 	events.update_controllers();
 
