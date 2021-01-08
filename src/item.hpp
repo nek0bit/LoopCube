@@ -23,7 +23,7 @@ public:
 	BlockInfo get_block();
 	bool enabled;
 private:
-	Text* text;
+    std::shared_ptr<Text> text;
 	std::string id;
 	BlockInfo block;
 	int count;

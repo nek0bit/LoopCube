@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#
+
 class Text {
 public:
 	Text(SDL_Renderer* renderer,

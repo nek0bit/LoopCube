@@ -70,9 +70,10 @@ private:
 	int content_left;
 	
 	Item random_block;
+    std::string p_string;
+
 	Text* header;
 	Text* paragraph;
-	std::string p_string;
 	const int pad_left;
 };
 
