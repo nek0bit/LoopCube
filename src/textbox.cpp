@@ -10,9 +10,9 @@ Textbox::Textbox(int id, int x, int y, int width, int height)
 
 Textbox::~Textbox() {}
 
-void Textbox::update(EventWrapper*& events) {
-	if (events->vmouse.clicked) {
-		if (AABB(x, y, width, height, events->vmouse.x, events->vmouse.y, 1, 1)) {
+void Textbox::update(EventWrapper& events, int offset_x, int offset_y) {
+	if (events.vmouse.clicked) {
+		if (AABB(x+offset_x, y+offset_y, width, height, events.vmouse.x, events.vmouse.y, 1, 1)) {
 			focused = true;
             // TODO clean this up
 #ifdef __SWITCH__
@@ -30,14 +30,14 @@ void Textbox::update(EventWrapper*& events) {
 			focused = false;
 #else
 			blink.reset();
-			events->set_text_mode_buffer(text);
-			events->enable_text_mode();
+			events.set_text_mode_buffer(text);
+			events.enable_text_mode();
 #endif
 		} else {
 			focused = false;
 			textbox_text->set_text(text);
-			events->disable_text_mode();
-			events->clear_text_mode_buffer();
+			events.disable_text_mode();
+			events.clear_text_mode_buffer();
 		}
 	}
 	
@@ -45,11 +45,10 @@ void Textbox::update(EventWrapper*& events) {
 	if (focused) handle_keyboard(events);
 }
 
-void Textbox::handle_keyboard(EventWrapper*& events) {
+void Textbox::handle_keyboard(EventWrapper& events) {
 	bool cursor = false;
-	std::string from_buffer = events->text_mode_buffer;
-	
-	text = from_buffer;
+    
+	text = events.text_mode_buffer;
 	
 	if (blink.get_frame() < (blink.get_max_frames()/2)) {
 		cursor = true;
@@ -60,8 +59,8 @@ void Textbox::handle_keyboard(EventWrapper*& events) {
 	}
 }
 
-void Textbox::render(SDL_Renderer* renderer) {
-    SDL_Rect box{x, y, width, height};
+void Textbox::render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y) {
+    SDL_Rect box{x+offset_x, y+offset_y, width, height};
 	
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
     SDL_RenderFillRect(renderer, &box);

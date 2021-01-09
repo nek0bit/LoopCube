@@ -34,11 +34,11 @@ void Box::set_height(int h) {
 	this->h = h;
 }
 
-void Box::render(SDL_Renderer* renderer, TextureHandler* textures, int offset_x, int offset_y) {
+void Box::render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y) {
 	for (auto& p: pos) {
 		SDL_Rect mod = p.second;
 		mod.x += offset_x;
 		mod.y += offset_y;
-        SDL_RenderCopy(renderer, textures->get_texture(p.first), &src, &mod);
+        SDL_RenderCopy(renderer, textures.get_texture(p.first), &src, &mod);
 	}
 }

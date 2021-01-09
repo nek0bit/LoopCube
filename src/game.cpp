@@ -27,7 +27,7 @@ void Game::game_init() {
 	constants::config.set(CONFIG_SHOW_CHUNK_DEBUG, 0);
 
     // Setup fonts
-    constants::fontHandler.addFontByFilename(constants::root_path+"fonts/FreeMono.ttf",
+    constants::fontHandler.addFontByFilename(constants::root_path+"fonts/liberation-sans/LiberationSans-Regular.ttf",
                                              {10, 12, 14, 16, 18, 32});
 	
 	menu = new Menu(renderer, *textures, events, winSize);

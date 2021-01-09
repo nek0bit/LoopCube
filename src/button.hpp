@@ -21,8 +21,8 @@ public:
 
 	void set_x(int x);
 	void set_y(int y);
-	void update(EventWrapper*& events, int offset_x = 0, int offset_y = 0);
-	void render(SDL_Renderer* renderer, TextureHandler* textures, int offset_x = 0, int offset_y = 0);
+	void update(EventWrapper& events, int offset_x = 0, int offset_y = 0);
+	void render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x = 0, int offset_y = 0);
 
 	// Text
 	void set_text(SDL_Renderer* renderer, std::string text);

@@ -19,7 +19,7 @@ public:
 	void set_height(int h);
 
 	void update_pair();
-	void render(SDL_Renderer* renderer, TextureHandler* textures, int offset_x = 0, int offset_y = 0);
+	void render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x = 0, int offset_y = 0);
 private:
     int x;
 	int y;

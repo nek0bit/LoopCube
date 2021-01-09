@@ -11,7 +11,7 @@ Checkbox::Checkbox(SDL_Renderer* renderer, int id, std::string text, int x, int 
       text_render{nullptr}
 {
     SDL_Color color{255, 255, 255, 255};
-    text_render = new Text{renderer, text, color, constants::fontHandler.getFont(1)};
+    text_render = new Text{renderer, text, color, constants::fontHandler.getFont(2)};
 }
 
 Checkbox::~Checkbox()
@@ -62,13 +62,13 @@ void Checkbox::uncheck()
 	checked = false;
 }
 
-void Checkbox::update(EventWrapper*& events, int offset_x, int offset_y)
+void Checkbox::update(EventWrapper& events, int offset_x, int offset_y)
 {
 	// Clear changed
 	changed = false;
 
-	if (events->vmouse.clicked &&
-		AABB(offset_x+x, offset_y+y, size, size, events->vmouse.x, events->vmouse.y, 1, 1))
+	if (events.vmouse.clicked &&
+		AABB(offset_x+x, offset_y+y, size, size, events.vmouse.x, events.vmouse.y, 1, 1))
     {
 		toggle();
 		changed = true;

@@ -12,7 +12,7 @@ Button::Button(int id,
 
 Button::~Button() {}
 
-void Button::update(EventWrapper*& events, int offset_x, int offset_y) {
+void Button::update(EventWrapper& events, int offset_x, int offset_y) {
 	src.h = 16;
 	src.w = 16;
 	src.x = 0;
@@ -31,9 +31,9 @@ void Button::update(EventWrapper*& events, int offset_x, int offset_y) {
 	}
 
 	int calc_width = dest.w + (src.w*2)*2;
-	if (AABB(events->vmouse.x, events->vmouse.y, 1, 1, offset_x+x, offset_y+y, calc_width, dest.h)) {
+	if (AABB(events.vmouse.x, events.vmouse.y, 1, 1, offset_x+x, offset_y+y, calc_width, dest.h)) {
 		hovered = true;
-		if (events->vmouse.down == 1) {
+		if (events.vmouse.down == 1) {
 			dest.y += 5;
 			being_clicked = true;
 		} else {
@@ -58,14 +58,14 @@ int Button::get_id() {
 	return id;
 }
 
-void Button::render(SDL_Renderer* renderer, TextureHandler* textures, int offset_x, int offset_y) {
+void Button::render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y) {
 	SDL_Rect begin{offset_x+x, offset_y+dest.y, src.w*2, dest.h},
 		end{offset_x+dest.x+dest.w, offset_y+dest.y, src.w*2, dest.h};
 	SDL_Rect mod_dest{offset_x+dest.x, offset_y+dest.y, dest.w, dest.h};
 
-    SDL_RenderCopy(renderer, textures->get_texture(6), &src, &begin);
-    SDL_RenderCopy(renderer, textures->get_texture(5), &src, &mod_dest);
-    SDL_RenderCopy(renderer, textures->get_texture(7), &src, &end);
+    SDL_RenderCopy(renderer, textures.get_texture(6), &src, &begin);
+    SDL_RenderCopy(renderer, textures.get_texture(5), &src, &mod_dest);
+    SDL_RenderCopy(renderer, textures.get_texture(7), &src, &end);
 
 	if (button_text != nullptr)
 		button_text->draw(x+(width/2)-(button_text->get_width()/2)-2,
@@ -77,7 +77,7 @@ void Button::set_text(SDL_Renderer* renderer, std::string text) {
 
     delete button_text;
     SDL_Color color{255, 255, 255, 255};
-	button_text = new Text(renderer, text, color, constants::fontHandler.getFont(1));
+	button_text = new Text(renderer, text, color, constants::fontHandler.getFont(4));
 }
 
 void Button::set_x(int x) {

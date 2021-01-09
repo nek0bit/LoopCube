@@ -11,9 +11,9 @@ void UiElement::get_value(bool&) {}
 void UiElement::set_x(int) {}
 void UiElement::set_y(int) {}
 void UiElement::update() {}
-void UiElement::update(EventWrapper*&) {}
-void UiElement::update(EventWrapper*&, int, int) {}
+void UiElement::update(EventWrapper&) {}
+void UiElement::update(EventWrapper&, int, int) {}
 void UiElement::render() {}
-void UiElement::render(SDL_Renderer*, TextureHandler*) {}
-void UiElement::render(SDL_Renderer*, TextureHandler*, int, int) {}
+void UiElement::render(SDL_Renderer*, TextureHandler&) {}
+void UiElement::render(SDL_Renderer*, TextureHandler&, int, int) {}
 

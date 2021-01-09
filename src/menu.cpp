@@ -136,20 +136,19 @@ void Menu::update(bool update_animations) {
 	}
 
 	// Set background
-    auto fixme = &events; // remove me
 	if (state == MAIN_MENU) {
 		for (auto &i: button_group) {
 			i->set_x( (winSize.w/2) + 30 );
             // TODO IMPORTANT dont reference events
-			i->update(fixme, offset_x, offset_y);
+			i->update(events, offset_x, offset_y);
 		}
 	} else if (state == CONFIG_MENU) {
 		back_button->set_x( (winSize.w/2) + 30 );
-		back_button->update(fixme, offset_x, offset_y);
+		back_button->update(events, offset_x, offset_y);
 		for (size_t i = 0; i < c_elements.size(); ++i) {
 			c_elements[i]->set_x(left);
 			c_elements[i]->set_y(top+(gap*i));
-			c_elements[i]->update(fixme, offset_x, offset_y);
+			c_elements[i]->update(events, offset_x, offset_y);
 
 			c_elements[i]->on_change(update_config_elements);
 		}
@@ -187,7 +186,7 @@ void Menu::render_background() {
 		}
 	}
 
-	back.render(renderer, &textures, offset_x, offset_y);
+	back.render(renderer, textures, offset_x, offset_y);
 }
 
 void Menu::set_state(int state) {
@@ -227,15 +226,16 @@ int Menu::get_pressed() {
 void Menu::render_main_menu() {
 	// Render all buttons
 	for (auto &i: button_group) {
-		i->render(renderer, &textures, offset_x, offset_y);
+		i->render(renderer, textures, offset_x, offset_y);
 	}
 }
 
 void Menu::render_config_menu() {
-	back_button->render(renderer, &textures, offset_x, offset_y);
+	back_button->render(renderer, textures, offset_x, offset_y);
 	// Render all elements, no matter the type
 	for (auto &i: c_elements) {
-		i->render(renderer, &textures, offset_x, offset_y);
+		i->render(renderer, textures, offset_x, offset_y);
+        
 	}
 }
 

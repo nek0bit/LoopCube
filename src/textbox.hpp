@@ -1,5 +1,5 @@
-#ifndef TEXTBOX_HPP
-#define TEXTBOX_HPP
+// TODO for v0.4, clean me up a lot
+#pragma once
 #include <iostream>
 #include <string>
 
@@ -9,6 +9,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "eventwrapper.hpp"
 #include "uielement.hpp"
 #include "constants.hpp"
 #include "text.hpp"
@@ -21,8 +22,8 @@ public:
 	Textbox(int id, int x, int y, int width, int height);
 	~Textbox();
 
-	void update(EventWrapper*& events);
-	void render(SDL_Renderer* renderer);
+	void update(EventWrapper& events, int offset_x, int offset_y);
+	void render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y);
     
 	int x;
 	int y;
@@ -40,7 +41,5 @@ private:
 	SwkbdConfig kbd;
 #endif
 	
-	void handle_keyboard(EventWrapper*& events);
+	void handle_keyboard(EventWrapper& events);
 };
-
-#endif

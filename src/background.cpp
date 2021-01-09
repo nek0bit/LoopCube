@@ -192,7 +192,7 @@ void Background::render(SDL_Renderer* renderer, TextureHandler& textures) {
         SDL_SetTextureAlphaMod(tex, static_cast<int>(cavebg_opacity));
 
 		
-		render_repeating(renderer, textures, bg_cave_block_x, bg_cave_block_y,
+		render_repeating(renderer, textures, 17, bg_cave_block_x, bg_cave_block_y,
 						 bg_cave_block_w, bg_cave_block_h, 0, 0, true, constants::block_img_size, constants::block_img_size);
 
 		// Reset opacity for future objects
@@ -217,6 +217,7 @@ void Background::render_repeating(SDL_Renderer* renderer, TextureHandler& textur
 	for (int i = -1; (width+gap)*i < MAX_X+(width+gap); i++) {
 		for (int j = -1; verticle ? (height+gap)*j < MAX_Y+(height+gap) : j < 0; j++) {
 			SDL_Rect src{0, 0, src_w, src_h};
+            
 		    SDL_Rect block{(offset_x % (width+gap))+((width+gap)*i),
 				verticle ? ((offset_y % (height+gap)) + top)+((height+gap)*j) : top+offset_y,
 				width, height};
