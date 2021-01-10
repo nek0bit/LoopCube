@@ -1,20 +1,12 @@
-#ifndef ANIMATION_HPP
-#define ANIMATION_HPP
+#pragma once
 
-class Animation {
-public:
-	Animation() {};
+struct Animation
+{
+	Animation() = default;
 	Animation(int maximum);
-	~Animation();
 
 	int tick();
-	int get_frame();
-	int get_max_frames();
-	void reset(int num = 0);
-private:
+    
 	int frame;
-	int max_frames;
+	int maxFrames;
 };
-
-
-#endif // ANIMATION_HPP

@@ -211,7 +211,7 @@ void Play::draw_selection(int* p1, int* p2) {
 
     SDL_Rect selection{sel_x + static_cast<int>(camera.get_x()), sel_y + static_cast<int>(camera.get_y()), b_w, b_h};
 
-	int fade_amount = std::abs(std::sin(static_cast<double>(fade.get_frame())/20))*30+50;
+	int fade_amount = std::abs(std::sin(static_cast<double>(fade.frame)/20))*30+50;
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, fade_amount);
     SDL_RenderFillRect(renderer, &selection);

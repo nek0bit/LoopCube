@@ -26,7 +26,7 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
 	const int max_frames = 5;
 	int flipped = max_frames;
 
-	int on_frame = ceil((static_cast<double>(frame.get_frame())/static_cast<double>(frame.get_max_frames())
+	int on_frame = ceil((static_cast<double>(frame.frame)/static_cast<double>(frame.maxFrames)
 						 )*(max_frames-1));
 	if (on_frame == 0) on_frame = 1;
 

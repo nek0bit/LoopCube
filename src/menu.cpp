@@ -175,8 +175,8 @@ void Menu::render_background() {
 	for (int i = -1; i < MAX_X; ++i) {
 		for (int j = -1; j < MAX_Y; ++j) {
 		    SDL_Rect block{
-				i*BLOCK_S - shift.get_frame(),
-				j*BLOCK_S - shift.get_frame(),
+				i*BLOCK_S - shift.frame,
+				j*BLOCK_S - shift.frame,
 				BLOCK_S, BLOCK_S};
 			SDL_Rect src{0, 0, 16, 16};
 

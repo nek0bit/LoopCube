@@ -29,7 +29,7 @@ void Textbox::update(EventWrapper& events, int offset_x, int offset_y) {
 			}
 			focused = false;
 #else
-			blink.reset();
+			blink.frame = 0;
 			events.set_text_mode_buffer(text);
 			events.enable_text_mode();
 #endif
@@ -50,7 +50,7 @@ void Textbox::handle_keyboard(EventWrapper& events) {
     
 	text = events.text_mode_buffer;
 	
-	if (blink.get_frame() < (blink.get_max_frames()/2)) {
+	if (blink.frame < (blink.maxFrames/2)) {
 		cursor = true;
 	}	
 	
