@@ -1,8 +1,6 @@
-#ifndef GRAVITYPARTICLE_HPP
-#define GRAVITYPARTICLE_HPP
+#pragma once
 #include <iostream>
 #include "entity.hpp"
-#include "aabb.hpp"
 
 class GravityParticle: public Entity {
 public:
@@ -20,6 +18,3 @@ private:
 	int time;
 	int time_total;
 };
-
-
-#endif // GRAVITYPARTICLE_HPP

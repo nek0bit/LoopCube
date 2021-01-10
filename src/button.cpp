@@ -31,7 +31,7 @@ void Button::update(EventWrapper& events, int offset_x, int offset_y) {
 	}
 
 	int calc_width = dest.w + (src.w*2)*2;
-	if (AABB(events.vmouse.x, events.vmouse.y, 1, 1, offset_x+x, offset_y+y, calc_width, dest.h)) {
+	if (Generic::collision<int>(events.vmouse.x, events.vmouse.y, 1, 1, offset_x+x, offset_y+y, calc_width, dest.h)) {
 		hovered = true;
 		if (events.vmouse.down == 1) {
 			dest.y += 5;

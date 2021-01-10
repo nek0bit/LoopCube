@@ -3,9 +3,9 @@
 
 #include <SDL2/SDL.h>
 
+#include "generic.hpp"
 #include "uielement.hpp"
 #include "text.hpp"
-#include "aabb.hpp"
 #include "constants.hpp"
 
 struct Checkbox: public UiElement

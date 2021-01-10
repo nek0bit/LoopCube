@@ -6,12 +6,12 @@
 
 #include <SDL2/SDL.h>
 
+#include "generic.hpp"
 #include "eventwrapper.hpp"
 #include "texturehandler.hpp"
 #include "uielement.hpp"
 #include "constants.hpp"
 #include "text.hpp"
-#include "aabb.hpp"
 
 class Button: public UiElement {
 public:

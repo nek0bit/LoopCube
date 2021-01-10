@@ -9,11 +9,11 @@
 
 #include <SDL2/SDL.h>
 
+#include "generic.hpp"
 #include "eventwrapper.hpp"
 #include "uielement.hpp"
 #include "constants.hpp"
 #include "text.hpp"
-#include "aabb.hpp"
 #include "animation.hpp"
 
 class Textbox: public UiElement {

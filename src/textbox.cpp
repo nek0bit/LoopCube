@@ -12,7 +12,7 @@ Textbox::~Textbox() {}
 
 void Textbox::update(EventWrapper& events, int offset_x, int offset_y) {
 	if (events.vmouse.clicked) {
-		if (AABB(x+offset_x, y+offset_y, width, height, events.vmouse.x, events.vmouse.y, 1, 1)) {
+		if (Generic::collision<int>(x+offset_x, y+offset_y, width, height, events.vmouse.x, events.vmouse.y, 1, 1)) {
 			focused = true;
             // TODO clean this up
 #ifdef __SWITCH__

@@ -68,7 +68,7 @@ void Checkbox::update(EventWrapper& events, int offset_x, int offset_y)
 	changed = false;
 
 	if (events.vmouse.clicked &&
-		AABB(offset_x+x, offset_y+y, size, size, events.vmouse.x, events.vmouse.y, 1, 1))
+		Generic::collision<int>(offset_x+x, offset_y+y, size, size, events.vmouse.x, events.vmouse.y, 1, 1))
     {
 		toggle();
 		changed = true;
