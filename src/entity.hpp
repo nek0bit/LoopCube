@@ -14,30 +14,29 @@
 class Entity: public GameObject {
 public:
 	Entity() = default;
-	Entity(int texture_id,
+	Entity(int textureId,
 		   double x, double y, double width, double height);
 	virtual ~Entity();
 
 	virtual void update(ChunkGroup& chunks);
 
-	double get_vel_x() const;
-	double get_vel_y() const;
 
 	// Collision functions
-	virtual void collision_left();
-	virtual void collision_right();
-	virtual void collision_bottom();
-	virtual void collision_top();
+	virtual void collisionLeft();
+	virtual void collisionRight();
+	virtual void collisionBottom();
+	virtual void collisionTop();
+
+    double velX;
+	double velY;
 protected:
-	void update_basic_physics(ChunkGroup& chunks);
-	CollisionInfo check_block_collision(ChunkGroup &chunks);
+	void updateBasicPhysics(ChunkGroup& chunks);
+	CollisionInfo checkBlockCollision(ChunkGroup &chunks);
 
 	// Physics
-	double vel_x;
-	double vel_y;
 	double vel_x_speed;
-	bool on_ground;
-	int last_pos;
+	bool onGround;
+	int lastPos;
 };
 
 #endif

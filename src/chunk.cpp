@@ -25,7 +25,7 @@ void Chunk::debug_chunk_split() {
 	for (size_t i = 0; i < chunk.size(); ++i) {
 		std::cout << ">>> chunk " << i << std::endl;
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
-			std::cout << chunk[i][j].get_default_x() << ", ";
+			std::cout << chunk[i][j].obj.x << ", ";
 			if ((j+1)%MAX_WIDTH == 0) std::cout << std::endl;
 		}
 		std::cout << std::endl;
@@ -116,8 +116,8 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
 	}
     // Search for block, destroy it, and add it to the inventory
 	for (size_t j = 0; j < chunk[i].size(); ++j) {
-		if (get_chunk_x(x) == chunk[i][j].get_obj().x && y == chunk[i][j].get_obj().y) {
-			const BlockInfo* info = chunk[i][j].get_blockinfo();
+		if (get_chunk_x(x) * constants::block_w == chunk[i][j].obj.x && y * constants::block_h == chunk[i][j].obj.y) {
+			const BlockInfo* info = chunk[i][j].blockinfo;
 			inv->add_item(info->get_id());
 
 			chunk[i].erase(chunk[i].begin() + j);
@@ -139,7 +139,7 @@ bool Chunk::place_block(int id, int x, int y) {
 		    return false;
 		}
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
-			if (get_chunk_x(x)*constants::block_w == chunk[i][j].get_default_x() && y*constants::block_h == chunk[i][j].get_default_y()) {
+			if (get_chunk_x(x)*constants::block_w == chunk[i][j].obj.x && y*constants::block_h == chunk[i][j].obj.y) {
 				is_duplicate = true;
 				break;
 			}
@@ -171,7 +171,7 @@ void Chunk::update_all(Camera& camera) {
 
 void Chunk::render_all_shadows(SDL_Renderer* renderer, Camera& camera) {
 	render_all_functor(camera, [&](Block& blk) {
-		blk.render_shadow(renderer, camera);
+		blk.renderShadow(renderer, camera);
 	});
 }
 
@@ -189,7 +189,7 @@ void Chunk::render_all_functor(Camera& camera, std::function<void(Block&)> call)
 			if (!(min < check && max > check)) {
 				break;
 			}
-			if (!chunk[i][j].out_of_view(camera)) {
+			if (!chunk[i][j].shouldCull(camera)) {
 				call(chunk[i][j]);
 			}
 		}
@@ -198,8 +198,8 @@ void Chunk::render_all_functor(Camera& camera, std::function<void(Block&)> call)
 
 void Chunk::render_all_blocks(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
 	render_all_functor(camera, [&](Block& blk) {
-                                   blk.render(renderer, textures, camera);
-                               });
+        blk.render(renderer, textures, camera);
+    });
 }
 
 void Chunk::render_info(SDL_Renderer* renderer, Camera& camera) {

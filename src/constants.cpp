@@ -4,7 +4,7 @@
 namespace constants {
 	
 	// TODO add enum for texture indexes
-	const std::string version_str = "v0.3";
+	const std::string version_str = "v0.4-git";
 
 	const std::string root_path = DATA_LOCATION "/data/";
 	const std::string path = root_path+"img/";
@@ -76,15 +76,12 @@ namespace constants {
 	const std::vector<std::string> content = {
 		"Welcome to LoopCube!\n",
 		"Current Version: " + version_str + "\n",
-        "cool edition\n",
+        "Very tested edition\n",
 		"Changelog:",
-		"-Semi-Verticle chunks",
-		"-Faster chunk rendering",
-		"-Bigger chunks",
-		"-Better chunk generation",
-		"-Less memory usage",
-        "-Codebase changes",
-		"  And much more..."
+		"- LOTS of code refactoring [?]",
+        "- Polymorphic backgrounds [x]",
+        "- DeltaTime [ ]",
+        "- Camera zoom [ ]",
 	};
 
 	Config config{};

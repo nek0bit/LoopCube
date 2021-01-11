@@ -10,37 +10,39 @@ enum Sprites {
 };
 
 Player::Player()
-	: Entity{4, 0, 130*constants::block_h, 34, 66}, sprite{17, 33}, frame{40}, jumping{false}, can_jump{true}, jump_enabled{true}  {
-	
-}
+	: Entity{4, 0, 130*constants::block_h, 34, 66},
+      sprite{17, 33},
+      frame{40},
+      jumping{false},
+      canJump{true},
+      jumpEnabled{true}
+{}
 
-Player::~Player() {
-
-}
+Player::~Player()
+{}
 
 void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
-	update_basic_physics(chunks);
+	updateBasicPhysics(chunks);
 	frame.tick();
 
 	// Frame for when the character is looking the other way
-	const int max_frames = 5;
-	int flipped = max_frames;
+	constexpr int maxFrames = 5;
 
-	int on_frame = ceil((static_cast<double>(frame.frame)/static_cast<double>(frame.maxFrames)
-						 )*(max_frames-1));
-	if (on_frame == 0) on_frame = 1;
+	int onFrame = ceil((static_cast<double>(frame.frame)/static_cast<double>(frame.maxFrames)
+						 )*(maxFrames-1));
+	if (onFrame == 0) onFrame = 1;
 
 	// Where the player is looking
 	static int adder = 0;
 	
-	if ((vel_x < -0.1 || vel_x > 0.1) && on_ground) {
-		if (vel_x < -0.1) {
+	if ((velX < -0.1 || velX > 0.1) && onGround) {
+		if (velX < -0.1) {
 			// Walking left
-			sprite.set_x(on_frame + flipped);
-			adder = flipped;
-		} else if (vel_x > 0.1) {
+			sprite.set_x(onFrame + maxFrames);
+			adder = maxFrames;
+		} else if (velX > 0.1) {
 			// Walking right
-			sprite.set_x(on_frame);
+			sprite.set_x(onFrame);
 			adder = 0;
 		}
 	} else if (jumping) {
@@ -58,50 +60,50 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
 
 	// See if touching entities
 	for (auto*& entity: entities) {
-		CollisionInfo info = is_colliding(*entity);
+		CollisionInfo info = isColliding(*entity);
 		if (info.colliding) {
 			if (info.bottom >= 0) {
-				vel_y = 0;
-				entity->collision_bottom();
+				velY = 0;
+				entity->collisionBottom();
 				entity->update(chunks);
 			}
 			if (info.top >= 0) {
 				obj.y -= info.top;
-				vel_y = 0;
+				velY = 0;
 			}
 		}
 	}
 	
 	// Prevent player from holding jump
-	if (!can_jump && on_ground) {
-		jump_enabled = false;
+	if (!canJump && onGround) {
+		jumpEnabled = false;
 	}
 		
-	if (can_jump && on_ground) {
-		jump_enabled = true;
+	if (canJump && onGround) {
+		jumpEnabled = true;
 	}
 	
 	// Check if jump released
-	if (!on_ground && !jumping) {
-		if (vel_y < -5) {
-			vel_y += 1.0;
+	if (!onGround && !jumping) {
+		if (velY < -5) {
+			velY += 1.0;
 		}
 	}
 
 	// Reset
 	jumping = false;
-	can_jump = true;
+	canJump = true;
 }
 
 void Player::jump(ChunkGroup &chunks) {	
 	obj.y += 1;
-	if (on_ground && jump_enabled && check_block_collision(chunks).top != -1) {
-		vel_y = -12;
-		on_ground = false;
+	if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
+		velY = -12;
+		onGround = false;
 	}
 	obj.y -= 1;
 	jumping = true;
-	can_jump = false;
+	canJump = false;
 }
 
 void Player::direct_player(int direction, ChunkGroup &chunks) {
@@ -110,18 +112,18 @@ void Player::direct_player(int direction, ChunkGroup &chunks) {
 		jump(chunks);
 		break;
 	case 1: // RIGHT
-		if (!on_ground) vel_x += vel_x_speed/3;
-		else vel_x += vel_x_speed;
-		last_pos = 1;
+		if (!onGround) velX += vel_x_speed/3;
+		else velX += vel_x_speed;
+		lastPos = 1;
 		break;
 	case 2: // DOWN
 		break;
 	case 3: // LEFT
-		if (!on_ground) vel_x -= vel_x_speed/3;
-		else vel_x -= vel_x_speed;
-		last_pos = 3;
+		if (!onGround) velX -= vel_x_speed/3;
+		else velX -= vel_x_speed;
+		lastPos = 3;
 		break;
 	default:
-		std::cerr << "[Warning] Invalid direction" << std::endl;
+        break;
 	}
 }

@@ -1,31 +1,30 @@
 #include "entity.hpp"
 
-Entity::Entity(int texture_id, double x, double y, double width, double height)
-	: GameObject{texture_id, x, y, width, height}, vel_x{0}, vel_y{0}, vel_x_speed{1.8}, on_ground{false}, last_pos{-1} {
-	
-}
+Entity::Entity(int textureId, double x, double y, double width, double height)
+	: GameObject{textureId, x, y, width, height},
+      velX{0},
+      velY{0},
+      vel_x_speed{1.8},
+      onGround{false},
+      lastPos{-1}
+{}
 
-Entity::~Entity() {}
+Entity::~Entity()
+{}
 
-void Entity::update(ChunkGroup& chunks) {
+void Entity::update(ChunkGroup& chunks)
+{
 	// Optional; You can use your own physics function
-	update_basic_physics(chunks);
+	updateBasicPhysics(chunks);
 }
 
-double Entity::get_vel_x() const {
-	return vel_x;
-}
+void Entity::collisionLeft() {}
+void Entity::collisionRight() {}
+void Entity::collisionBottom() {}
+void Entity::collisionTop() {}
 
-double Entity::get_vel_y() const {
-	return vel_y;
-}
-
-void Entity::collision_left() {}
-void Entity::collision_right() {}
-void Entity::collision_bottom() {}
-void Entity::collision_top() {}
-
-CollisionInfo Entity::check_block_collision(ChunkGroup& chunks) {
+CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
+{
 	std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 
 	Chunk* c = chunks.get_chunk_at(obj.x, true);
@@ -56,8 +55,8 @@ CollisionInfo Entity::check_block_collision(ChunkGroup& chunks) {
 					continue;
 				}
 				for (auto &block: chunk[i]) {
-					auto blockinfo = block.get_blockinfo();
-					CollisionInfo info = is_colliding(block);
+					auto blockinfo = block.blockinfo;
+					CollisionInfo info = isColliding(block);
 					while (info == true && blockinfo->get_no_collision() != true) {
 						return info;
 					}
@@ -68,68 +67,69 @@ CollisionInfo Entity::check_block_collision(ChunkGroup& chunks) {
 	return CollisionInfo{};
 }
 
-void Entity::update_basic_physics(ChunkGroup& chunks) {
+void Entity::updateBasicPhysics(ChunkGroup& chunks) {
+    constexpr int cap = 36;
+    
 	// Update draw position
-	src.h = get_height();
-	src.w = get_width();
 	src.x = 0;
 	src.y = 0;
+    src.w = obj.w;
+	src.h = obj.h;
 	
-	if (on_ground) vel_x *= 0.78;
+	if (onGround) velX *= 0.78;
 
 	// Reset back
-	if (vel_x > 6) vel_x = 6;
-	if (vel_x < -6) vel_x = -6;
+	if (velX > 6) velX = 6;
+	if (velX < -6) velX = -6;
 		
-	obj.x += vel_x;
+	obj.x += velX;
 
-	CollisionInfo info_x = check_block_collision(chunks);
+	CollisionInfo infoX = checkBlockCollision(chunks);
 
 	// Check X velocity
-	if (info_x == true) {
-		if (vel_x == 0) {
+	if (infoX == true) {
+		if (velX == 0) {
 			// If entity happens to get stuck in the wall then push them out
-			if (last_pos == 1) {
+			if (lastPos == 1) {
 				obj.x -= 5;
-			} else if (last_pos == 3) {
+			} else if (lastPos == 3) {
 				obj.x += 5;
 			} else {
 				obj.x += 5;
 			}
 				
 		}
-		if (info_x.left != -1) {
-			obj.x -= info_x.left;
+		if (infoX.left != -1) {
+			obj.x -= infoX.left;
 		}
-		if (info_x.right != -1) {
-			obj.x += info_x.right;
+		if (infoX.right != -1) {
+			obj.x += infoX.right;
 		}
-		vel_x = 0;
-		on_ground = true;
+		velX = 0;
+		onGround = true;
 	}
 		
-	vel_y += .5;
-	obj.y += vel_y;
+	velY += .5;
+	obj.y += velY;
 
 	// Cap +Y velocity
-	const int cap = 36;
-	if (vel_y > cap) {
-		vel_y = cap;
+	if (velY > cap) {
+		velY = cap;
 	}
 
-	CollisionInfo info_y = check_block_collision(chunks);
+	CollisionInfo infoY = checkBlockCollision(chunks);
 		
 	// Check Y velocity
-	if (info_y == true) {
-		if (info_y.bottom != -1) {
-			obj.y += info_y.bottom;
+	if (infoY == true) {
+		if (infoY.bottom != -1) {
+			obj.y += infoY.bottom;
 		}
-		if (info_y.top != -1) {
-			obj.y -= info_y.top;
+		if (infoY.top != -1) {
+			obj.y -= infoY.top;
 		}
-		vel_y = 0;
-		on_ground = true;
+		velY = 0;
+		onGround = true;
 	} else {
-		on_ground = false;
+		onGround = false;
 	}
 }

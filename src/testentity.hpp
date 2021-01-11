@@ -12,7 +12,7 @@ public:
 
 	void update(ChunkGroup &chunks) override;
 
-	void collision_bottom() override;
+	void collisionBottom() override;
 };
 
 #endif

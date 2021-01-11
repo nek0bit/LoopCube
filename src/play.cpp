@@ -29,13 +29,13 @@ void Play::update() {
 	
 	// Update all chunks
 	chunks.update_all_viewport(camera);
-	chunks.check_area(player.get_default_x(), structures);
+	chunks.check_area(player.obj.x, structures);
 	
 	inv->update();
 
 	// Update all entities
 	for (Entity*& entity: entities) {
-		if (!entity->out_of_view(camera)) {
+		if (!entity->shouldCull(camera)) {
 			entity->update(chunks);
 		}
 	}
@@ -51,7 +51,7 @@ void Play::update() {
 
 	// Create entity
 	if (events.key_state[16] || events.button_state[9]) {
-		entities.push_back(new TestEntity(player.get_default_x(), player.get_default_y()-30));
+		entities.push_back(new TestEntity(player.obj.x, player.obj.y-30));
 	}
 
 	// Jump (A)
@@ -222,8 +222,8 @@ void Play::draw_selection(int* p1, int* p2) {
 
 // Sets camera to player position
 void Play::handle_camera() {
-	double x = std::floor(player.get_default_x()) * -1 + (winSize.w/2) - player.get_width()/2;
-	double y = std::floor(player.get_default_y()) * -1 + (winSize.h/2) - player.get_height()/2;
+	double x = std::floor(player.obj.x) * -1 + (winSize.w/2) - player.obj.w/2;
+	double y = std::floor(player.obj.y) * -1 + (winSize.h/2) - player.obj.h/2;
 	
 	static double move_x = x;
 	static double move_y = y;
@@ -237,6 +237,6 @@ void Play::handle_camera() {
 
 void Play::dead_particles() {
 	for (size_t i = 0; i < particles.size(); ++i) {
-		if (particles[i].is_dead()) particles.erase(particles.begin() + i);
+		if (particles[i].isDead()) particles.erase(particles.begin() + i);
 	}
 }

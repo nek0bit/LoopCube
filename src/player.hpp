@@ -26,8 +26,8 @@ private:
 	
 	// For jumping
 	bool jumping;
-	bool can_jump;
-	bool jump_enabled;
+	bool canJump;
+	bool jumpEnabled;
 };
 
 #endif // PLAYER_HPP

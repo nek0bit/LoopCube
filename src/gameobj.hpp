@@ -20,22 +20,16 @@ public:
 	virtual void update();
     virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
 
-	virtual bool out_of_view(Camera& camera);
+	virtual bool shouldCull(Camera& camera);
 
 	// Return position
-	virtual double get_default_x() const;
-	virtual double get_default_y() const;
-	virtual double get_x(Camera& camera) const;
-	virtual double get_y(Camera& camera) const;
-	virtual double get_width() const;
-	virtual double get_height() const;
+	virtual double getX(Camera& camera) const;
+	virtual double getY(Camera& camera) const;
 
-	virtual const Position& get_obj() const;
+	CollisionInfo isColliding(const GameObject &obj2);
 
-	CollisionInfo is_colliding(const GameObject &obj2);
+    Position obj;
 protected:
 	int texture_id;
-
-	Position obj;
     SDL_Rect src;
 };

@@ -3,9 +3,12 @@
 Block::Block() {}
 
 Block::Block(int id, int x, int y)
-	: GameObject{0, static_cast<double>(x), static_cast<double>(y), constants::block_w, constants::block_h} {
-
-	
+	: GameObject{0, static_cast<double>(x * constants::block_w),
+    static_cast<double>(y * constants::block_h),
+    constants::block_w,
+    constants::block_h}
+{
+    // Get block id
 	for (auto &i: constants::block_info) {
 		if (i.get_id() == id) {
 			this->texture_id = i.get_texture_id();
@@ -14,27 +17,8 @@ Block::Block(int id, int x, int y)
 	}
 }
 
-Block::~Block() {}
-
-double Block::get_default_x() const {
-	return obj.x*constants::block_w;
-}
-
-double Block::get_default_y() const {
-	return obj.y*constants::block_h;
-}
-
-double Block::get_x(Camera& camera) const {
-	return obj.x*constants::block_w + (camera.get_x());
-}
-
-double Block::get_y(Camera& camera) const {
-	return obj.y*constants::block_h + (camera.get_y());
-}
-
-const BlockInfo* Block::get_blockinfo() {
-	return blockinfo;
-}
+Block::~Block()
+{}
 
 void Block::update() {
 	src.h = constants::block_img_size;
@@ -43,10 +27,10 @@ void Block::update() {
 	src.y = 0;
 }
 
-void Block::render_shadow(SDL_Renderer* renderer, Camera& camera) const {
-	SDL_Rect shadow{static_cast<int>(get_x(camera) + 10), static_cast<int>(get_y(camera) + 10),
+void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const {
+	SDL_Rect shadow{static_cast<int>(getX(camera) + 5), static_cast<int>(getY(camera) + 5),
 		static_cast<int>(obj.w), static_cast<int>(obj.h)};
     
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 40);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 60);
     SDL_RenderFillRect(renderer, &shadow);
 }

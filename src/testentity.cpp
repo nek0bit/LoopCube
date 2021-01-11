@@ -10,13 +10,13 @@ TestEntity::~TestEntity() {
 }
 
 void TestEntity::update(ChunkGroup& chunks) {
-	update_basic_physics(chunks);
+	updateBasicPhysics(chunks);
 
-	if (on_ground) {
-		vel_y = -15;
+	if (onGround) {
+		velY = -15;
 	}
 }
 
-void TestEntity::collision_bottom() {
-	vel_y = -5;
+void TestEntity::collisionBottom() {
+	velY = -5;
 }
