@@ -2,6 +2,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "texturehandler.hpp"
+
 namespace Generic
 {
     template <typename CMP>
@@ -15,4 +17,10 @@ namespace Generic
     }
 
     bool collision(SDL_Rect r1, SDL_Rect r2);
+
+    namespace Render
+    {
+        void renderRepeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int offsetX, int offsetY, int width,
+                             int height, int gap, int top, bool verticle = false, int srcW = -1, int srcH = -1);
+    }
 }
