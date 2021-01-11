@@ -13,7 +13,9 @@ Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
       fade{60},
       particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
-	  background{} {
+	  background{nullptr}
+{
+    background = std::shared_ptr<Background>(new BackgroundOverworld());
 	camera.set_pos(0, 0);
 
 	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, winSize));
@@ -120,9 +122,9 @@ void Play::update() {
 	handle_camera();
 
 	// Update background (after we handle camera or things get a tiny bit off sync)
-	background.update(camera, time);
+	background->update(camera, time);
 
-	time.tick();
+	for (auto i = 0; i < 30; i++) time.tick();
 }
 
 void Play::update_config() {
@@ -131,7 +133,7 @@ void Play::update_config() {
 
 void Play::render() {
 	// Render background elements
-	background.render(renderer, textures);
+	background->render(renderer, textures);
 	
 	if (show_particles) {
 		for (auto& particle: particles) {
@@ -146,8 +148,6 @@ void Play::render() {
 	for (Entity*& entity: entities) {
 		entity->render(renderer, textures, camera);
 	}
-
-	background.render_light(renderer, camera);
 
 	if (!inv->get_inventory_visibility()) draw_selection(nullptr, nullptr);
 

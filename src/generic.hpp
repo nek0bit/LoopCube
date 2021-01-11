@@ -20,7 +20,8 @@ namespace Generic
 
     namespace Render
     {
-        void renderRepeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int offsetX, int offsetY, int width,
-                             int height, int gap, int top, bool verticle = false, int srcW = -1, int srcH = -1);
+        void renderRepeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int clipWidth,
+                             int clipHeight, int offsetX, int offsetY, int width, int height, int gap,
+                             int top, bool verticle = false, int srcW = -1, int srcH = -1);
     }
 }

@@ -5,6 +5,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "generic.hpp"
 #include "background.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
@@ -17,8 +18,8 @@ struct BackgroundOverworld: public Background
 	BackgroundOverworld();
 	~BackgroundOverworld();
 	
-	void update(Camera& camera, Time& time);
-	void render(SDL_Renderer* renderer, TextureHandler& textures);
+	void update(Camera& camera, Time& time) override;
+	void render(SDL_Renderer* renderer, TextureHandler& textures) override;
 private:
 	void renderRepeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int offsetX, int offsetY, int width,
                          int height, int gap, int top, bool verticle = false, int srcW = -1, int srcH = -1);
@@ -36,7 +37,7 @@ private:
     // Coordinates
     BGCoord bgCloudOffset;
     BGCoord bgHillsOffset;
-    BGCoord bgCaveBlock;
+    BGCoord bgCave;
 
     // Size
     BGSize bgShine;

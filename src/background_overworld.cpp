@@ -14,15 +14,20 @@ BackgroundOverworld::BackgroundOverworld()
       bgMoonDest{},
       bgCloudOffset{0, 0},
       bgHillsOffset{0, 0},
+      bgCave{0, 0},
       bgShine{10, 150},
       bgCloud{450, 100},
       bgHills{450*2, 114*2},
       bgCaveBlock{60, 60},
       bgLight{100, 100},
-      skyColor{0, 0, 0}
+      skyColor{0, 0, 0, 255}
 {}
 
-void Background::update(Camera& camera, Time& time) {
+BackgroundOverworld::~BackgroundOverworld()
+{}
+
+void BackgroundOverworld::update(Camera& camera, Time& time)
+{
 	constexpr int caveBackgroundOffset = -8000; // How deep down until the cave background shows
 	const int lightCamLeft = (camera.get_width() - bgLight.w) / 2;
 	constexpr int lightCamTop = 20;
@@ -30,7 +35,7 @@ void Background::update(Camera& camera, Time& time) {
 	const double timeOverMax = static_cast<double>(time.time) / static_cast<double>(time.max_time);
 	const int horCircle = camera.get_width() * .35;
 	const int vertCircle = camera.get_height() / 4;
-    constexpr SDL_Color dayColor{106, 164, 222};
+    constexpr SDL_Color dayColor{106, 164, 222, 255};
 
     // Window size
 	winWidth = camera.get_width();
@@ -48,17 +53,17 @@ void Background::update(Camera& camera, Time& time) {
 	bgShineDest.h = camera.get_height();
 
 	// Update bgCloud
-	bgCloudOffset.x = camera.get.x() / 10;
-	bgCloudOffset.y = camera.get.y() / 30;
+	bgCloudOffset.x = camera.get_x() / 10;
+	bgCloudOffset.y = camera.get_y() / 30;
 
 	// Update hills
-	bgHillsOffset.x = camera.get.x() / 15;
+	bgHillsOffset.x = camera.get_x() / 15;
 	bgHillsOffset.y = (camera.get_height() / 2) + hillsOffset;
 
 	// Enable the cave background is camera is low enough
-	showCaveBackground = camera.get.y() < cave_backgroundOffset;
-	bgCaveBlock.x = camera.get.x() / 10;
-	bgCaveBlock.y = camera.get.y() / 10;
+	showCaveBackground = camera.get_y() < caveBackgroundOffset;
+	bgCave.x = camera.get_x() / 10;
+	bgCave.y = camera.get_y() / 10;
 
 	//********************************
 	//  Handle time
@@ -68,7 +73,8 @@ void Background::update(Camera& camera, Time& time) {
 	// Else if, transition to night
 	// Else (switch-case), set brightness to time state 
 	if (time.time > time.morning_time - time.morning_offset &&
-		time.time <= time.morning_time) {		
+		time.time <= time.morning_time)
+    {		
 	    double distance = (static_cast<double>(time.time) -
 						   static_cast<double>(time.morning_time) +
 						   static_cast<double>(time.morning_offset)) / time.morning_offset;
@@ -76,15 +82,20 @@ void Background::update(Camera& camera, Time& time) {
 		skyColor.r = distance * dayColor.r;
 		skyColor.g = distance * dayColor.g;
 		skyColor.b = distance * dayColor.b;
-	} else if (time.time > time.night_time - time.night_offset &&
-		time.time <= time.night_time) {
+	}
+    else if (time.time > time.night_time - time.night_offset &&
+             time.time <= time.night_time)
+    {
 		double distance = abs(static_cast<double>(time.time) -
 						   static_cast<double>(time.night_time)) / time.night_offset;
 		skyColor.r = distance * dayColor.r;
 		skyColor.g = distance * dayColor.g;
 		skyColor.b = distance * dayColor.b;
-	} else {
-		switch(time.state) {
+	}
+    else
+    {
+		switch(time.state)
+        {
 		case TIME_DAY:
 			skyColor.r = dayColor.r;
 			skyColor.g = dayColor.g;
@@ -107,7 +118,7 @@ void Background::update(Camera& camera, Time& time) {
 	bgLightSrc.h = bgLight.h;
 
     // Next line is position of light, then sign gets flipped and multiplied to increase size
-	bgLightDest.x = lightCamLeft + (~(sin(timeOverMax * (M_PI*2))) + 1) * horCircle;
+	bgLightDest.x = lightCamLeft + -sin(timeOverMax * (M_PI*2)) * horCircle;
 	bgLightDest.y = bgHillsOffset.y + lightCamTop + cos(timeOverMax * (M_PI * 2)) * vertCircle;
 	bgLightDest.w = bgLight.w;
 	bgLightDest.h = bgLight.h;
@@ -118,15 +129,17 @@ void Background::update(Camera& camera, Time& time) {
 	bgMoonSrc.h = bgLight.h;
 
     // Same as last statement, but add 1 half to sin function
-	bgMoonDest.x = lightCamLeft + (~(sin((timeOverMax+.50) * (M_PI*2)))) + 1) * horCircle;
+	bgMoonDest.x = lightCamLeft + -sin((timeOverMax+.50) * (M_PI*2)) * horCircle;
 	bgMoonDest.y = bgHillsOffset.y + lightCamTop + cos((timeOverMax+.50) * (M_PI * 2)) * vertCircle;
 	bgMoonDest.w = bgLight.w;
 	bgMoonDest.h = bgLight.h;
 }
 
-void Background::render(SDL_Renderer* renderer, TextureHandler& textures) {
+void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& textures) {
     constexpr int cloudOffset = 240;
     constexpr int hillOffset = 0;
+	const int afterHillsTop = bgHillsOffset.y + bgHills.h + hillOffset;
+
     
     bgCaveOpacity.value = showCaveBackground ? 255 : 0;
 
@@ -143,22 +156,20 @@ void Background::render(SDL_Renderer* renderer, TextureHandler& textures) {
     SDL_RenderCopy(renderer, textures.get_texture(21), &bgMoonSrc, &bgMoonDest);
 
 	// Repeatedly render clouds and hills
-    Generic::Render::renderRepeating(renderer, textures, 14, bgCloudOffset.x, bgCloudOffset.y,
+    Generic::Render::renderRepeating(renderer, textures, 14, winWidth, winHeight, bgCloudOffset.x, bgCloudOffset.y,
 					 bgCloud.w, bgCloud.h, 60, cloudOffset);
-    Generic::Render::renderRepeating(renderer, textures, 15, bgHillsOffset.x, bgHillsOffset.y,
+    Generic::Render::renderRepeating(renderer, textures, 15, winWidth, winHeight, bgHillsOffset.x, bgHillsOffset.y,
 					 bgHills.w, bgHills.h, 0, hillOffset);
 
-    // I have no clue what this bit here renders
-	constexpr int afterHillsTop = bgHillsOffset.y + bgHills.h + hillOffset;
 	SDL_Rect after{0, afterHillsTop, winWidth, winHeight-afterHillsTop};
     SDL_SetRenderDrawColor(renderer, 131, 131, 131, 255);
     SDL_RenderFillRect(renderer, &after);
     
 	if (bgCaveOpacity.get() > 2) {
         SDL_Texture* tex = textures.get_texture(17);
-        SDL_SetTextureAlphaMod(tex, static_cast<int>(bgCaveOpacity));
+        SDL_SetTextureAlphaMod(tex, static_cast<int>(bgCaveOpacity.value));
 
-        Generic::Render::renderRepeating(renderer, textures, 17, bgCaveBlock.x, bgCaveBlock.y,
+        Generic::Render::renderRepeating(renderer, textures, 17, bgCave.x, bgCave.y,
 						 bgCaveBlock.w, bgCaveBlock.h, 0, 0, true, constants::block_img_size, constants::block_img_size);
 
 		// Reset opacity for future objects

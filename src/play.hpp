@@ -5,6 +5,7 @@
 #include <random>
 #include <cmath>
 #include <ctime>
+#include <memory>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -23,6 +24,7 @@
 #include "gravityparticle.hpp"
 #include "tree.hpp"
 #include "background.hpp"
+#include "background_overworld.hpp"
 #include "time.hpp"
 
 struct Play
@@ -61,6 +63,6 @@ private:
 
 	Time time;
 
-	Background background;
+    std::shared_ptr<Background> background;
 	std::vector<Structure*> structures;
 };
