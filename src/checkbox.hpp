@@ -14,28 +14,23 @@ struct Checkbox: public UiElement
 	Checkbox(SDL_Renderer* renderer, int id, std::string text, int x, int y, int size, bool checked=false);
 	~Checkbox();
 
-	void on_change(void (*function)(int, int)) override;
-	int get_id() override;
-	void get_value(bool& here) override;
-	bool is_changed() override;
+	void onChange(void (*function)(int, int)) override;
+	void getValue(bool& here) override;
+	bool isChanged() override;
     
 	bool toggle();
-	bool get_checked();
-	void check();
-	void uncheck();
+    bool checked;
 
-	void set_x(int x) override;
-	void set_y(int y) override;
+	void setX(int x) override;
+	void setY(int y) override;
 	void update(EventWrapper& events, int offset_x = 0, int offset_y = 0) override;
 	void render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x = 0, int offset_y = 0) override;
 private:
 	bool changed;
-	int id;
 	std::string text;
 	int x;
 	int y;
 	int size;
-	bool checked;
 
 	Text* text_render;
 

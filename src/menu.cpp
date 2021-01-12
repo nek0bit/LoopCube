@@ -18,6 +18,7 @@ Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
       offset_y{0},
       BLOCK_S{40},
       BUTTON_W{200},
+      back_button{nullptr},
       renderer{renderer},
       textures{textures},
       events{events},
@@ -45,23 +46,23 @@ Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
 	const int offset_y = 48;
 	
 	for (size_t i = 0; i < button_group.size(); ++i) {
-		button_group[i] = std::unique_ptr<Button>(new Button(i, 0, 30+(offset_y*i), BUTTON_W));
-		button_group[i]->set_text(renderer, option_str[i]);
+		button_group[i] = std::make_unique<Button>(Button(renderer, i, 0, 30+(offset_y*i), BUTTON_W));
+		button_group[i]->setText(option_str[i]);
 	}
 
 	//************************************************
 	// Setup options
 	//************************************************
-	back_button = std::unique_ptr<Button>(new Button(-1, 0, 30, 150));
-	back_button->set_text(renderer, "<- Back");
+	back_button = std::make_unique<Button>(Button(renderer, -1, 0, 30, 150));
+	back_button->setText("Return");
 
 	// Setup checkboxes
 	Checkbox* show_shadows = new Checkbox(renderer, CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 30);
 	Checkbox* show_particles = new Checkbox(renderer, CB_RENDER_PARTICLES, "Show Particles", 0, 0, 30);
 	Checkbox* show_info = new Checkbox(renderer, CB_SHOW_CHUNK_DEBUG, "Show Chunk Debug Info", 0, 0, 30);
-	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) show_shadows->check();
-	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) show_particles->check();
-	if (constants::config.get_int(CONFIG_SHOW_CHUNK_DEBUG) == 1) show_info->check();
+	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) show_shadows->checked = true;
+	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) show_particles->checked = true;
+	if (constants::config.get_int(CONFIG_SHOW_CHUNK_DEBUG) == 1) show_info->checked = true;
 
 	// Insert checkboxes
 	c_elements.push_back(show_shadows);
@@ -138,22 +139,22 @@ void Menu::update(bool update_animations) {
 	// Set background
 	if (state == MAIN_MENU) {
 		for (auto &i: button_group) {
-			i->set_x( (winSize.w/2) + 30 );
+			i->setX( (winSize.w/2) + 30 );
             // TODO IMPORTANT dont reference events
 			i->update(events, offset_x, offset_y);
 		}
 	} else if (state == CONFIG_MENU) {
-		back_button->set_x( (winSize.w/2) + 30 );
+		back_button->setX( (winSize.w/2) + 30 );
 		back_button->update(events, offset_x, offset_y);
 		for (size_t i = 0; i < c_elements.size(); ++i) {
-			c_elements[i]->set_x(left);
-			c_elements[i]->set_y(top+(gap*i));
+			c_elements[i]->setX(left);
+			c_elements[i]->setY(top+(gap*i));
 			c_elements[i]->update(events, offset_x, offset_y);
 
-			c_elements[i]->on_change(update_config_elements);
+			c_elements[i]->onChange(update_config_elements);
 		}
 
-		if (back_button->get_pressed()) {
+		if (back_button->clicked) {            
 			set_state(MAIN_MENU);
 		}
 
@@ -215,8 +216,8 @@ void Menu::render_sidebar() {
 
 int Menu::get_pressed() {
 	for (auto &i: button_group) {
-		if (i->get_pressed()) {
-			return i->get_id();
+		if (i->clicked) {
+			return i->id;
 		}
 	}
 	return -1;

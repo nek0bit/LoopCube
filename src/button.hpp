@@ -13,36 +13,32 @@
 #include "constants.hpp"
 #include "text.hpp"
 
-class Button: public UiElement {
-public:
+struct Button: public UiElement
+{
 	Button() = default;
-	Button(int id, int x, int y, int width, int height = 32);
-	~Button();
+	Button(SDL_Renderer* renderer, unsigned int id, int x, int y, int width, int height = 32);
 
-	void set_x(int x);
-	void set_y(int y);
-	void update(EventWrapper& events, int offset_x = 0, int offset_y = 0);
-	void render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x = 0, int offset_y = 0);
+	void setX(int x);
+	void setY(int y);
+    
+	void update(EventWrapper& events, int offsetX = 0, int offsetY = 0);
+	void render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX = 0, int offsetY = 0);
 
 	// Text
-	void set_text(SDL_Renderer* renderer, std::string text);
-	std::string get_text();
-	bool get_pressed();
-	int get_id();
+	void setText(std::string text);
+    
+    std::string text;
+    bool clicked;
 private:	
-	std::string text;
-	unsigned int id;
 	int x;
 	int y;
 	int width;
 	int height;
 
 	// Mouse state
+    bool beingClicked;
 	bool hovered;
-	bool being_clicked;
-	bool clicked;
 
 	SDL_Rect src, dest;
-	Text* button_text;
-
+    std::unique_ptr<Text> buttonText;
 };

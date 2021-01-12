@@ -1,5 +1,4 @@
-#ifndef UIELEMENT_HPP
-#define UIELEMENT_HPP
+#pragma once
 
 #include <iostream>
 
@@ -8,29 +7,28 @@
 #include "texturehandler.hpp"
 #include "eventwrapper.hpp"
 
-class UiElement {
-public:
+struct UiElement
+{
 	UiElement();
 	virtual ~UiElement();
 
 	// on_change functions
-	virtual void on_change(void (*function)(int, int));
-	virtual bool is_changed();
+	virtual void onChange(void (*function)(int, int));
+	virtual bool isChanged();
 	// Getters
-	virtual int get_id();
-	virtual void get_value(bool&);
-	//virtual void get_value_string(std::string&) {}
+	virtual void getValue(bool&);
 	// Setters
-	virtual void set_x(int x);
-	virtual void set_y(int y);
+	virtual void setX(int x);
+	virtual void setY(int y);
 	// Update functions
 	virtual void update();
 	virtual void update(EventWrapper& events);
-	virtual void update(EventWrapper& events, int x_offset, int y_offset);
+	virtual void update(EventWrapper& events, int offsetX, int offsetY);
 	// Render functions
 	virtual void render();
 	virtual void render(SDL_Renderer* renderer, TextureHandler& textures);
-	virtual void render(SDL_Renderer* renderer, TextureHandler& textures, int x_offset, int y_offset);
+	virtual void render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX, int offsetY);
+
+    unsigned int id;
 };
 
-#endif

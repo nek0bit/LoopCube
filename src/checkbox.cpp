@@ -1,8 +1,8 @@
 #include "checkbox.hpp"
 
 Checkbox::Checkbox(SDL_Renderer* renderer, int id, std::string text, int x, int y, int size, bool checked)
-	: changed{false},
-      id{id},
+	: UiElement{},
+      changed{false},
       text{text},
       x{x},
       y{y},
@@ -10,6 +10,8 @@ Checkbox::Checkbox(SDL_Renderer* renderer, int id, std::string text, int x, int 
       checked{checked},
       text_render{nullptr}
 {
+    this->id = id;
+    
     SDL_Color color{255, 255, 255, 255};
     text_render = new Text{renderer, text, color, constants::fontHandler.getFont(2)};
 }
@@ -19,24 +21,19 @@ Checkbox::~Checkbox()
     delete text_render;
 }
 
-void Checkbox::on_change(void (*function)(int, int))
+void Checkbox::onChange(void (*function)(int, int))
 {
 	if (changed) {
 		(*function)(id, checked ? 1 : 0);
 	}
 }
 
-int Checkbox::get_id()
-{
-	return id;
-}
-
-void Checkbox::get_value(bool& here)
+void Checkbox::getValue(bool& here)
 {
 	here = checked;
 }
 
-bool Checkbox::is_changed()
+bool Checkbox::isChanged()
 {
 	return changed;
 }
@@ -45,21 +42,6 @@ bool Checkbox::toggle()
 {
 	checked = !checked;
 	return checked;
-}
-
-bool Checkbox::get_checked()
-{
-	return checked;
-}
-
-void Checkbox::check()
-{
-	checked = true;
-}
-
-void Checkbox::uncheck()
-{
-	checked = false;
 }
 
 void Checkbox::update(EventWrapper& events, int offset_x, int offset_y)
@@ -99,12 +81,12 @@ void Checkbox::render(SDL_Renderer* renderer, TextureHandler& textures, int offs
 }
 
 
-void Checkbox::set_x(int x)
+void Checkbox::setX(int x)
 {
 	this->x = x;
 }
 
-void Checkbox::set_y(int y)
+void Checkbox::setY(int y)
 {
 	this->y = y;
 }
