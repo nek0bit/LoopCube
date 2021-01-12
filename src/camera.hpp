@@ -1,28 +1,16 @@
-#ifndef CAMERA_HPP
-#define CAMERA_HPP
-#include <iostream>
-#include <SDL2/SDL.h>
+#pragma once
 
-class Camera {
+#include "winsize.hpp"
 
-public:
-	Camera() {};
-	Camera(int* width, int* height);
-	~Camera();
+struct Camera {
+	Camera() = default;
+	Camera(WinSize* winSize);
+    
+	double x;
+	double y;
 
-	void set_pos(double x, double y);
-	double get_x();
-	double get_y();
-
-    int get_width();
-	int get_height();
+    int getWidth();
+	int getHeight();
 private:
-	double x_pos;
-	double y_pos;
-
-	int* width;
-	int* height;
+    WinSize* winSize;
 };
-
-
-#endif // CAMERA_HPP

@@ -29,17 +29,17 @@ BackgroundOverworld::~BackgroundOverworld()
 void BackgroundOverworld::update(Camera& camera, Time& time)
 {
 	constexpr int caveBackgroundOffset = -8000; // How deep down until the cave background shows
-	const int lightCamLeft = (camera.get_width() - bgLight.w) / 2;
+	const int lightCamLeft = (camera.getWidth() - bgLight.w) / 2;
 	constexpr int lightCamTop = 20;
 	constexpr int hillsOffset = -100;
 	const double timeOverMax = static_cast<double>(time.time) / static_cast<double>(time.max_time);
-	const int horCircle = camera.get_width() * .35;
-	const int vertCircle = camera.get_height() / 4;
+	const int horCircle = camera.getWidth() * .35;
+	const int vertCircle = camera.getHeight() / 4;
     constexpr SDL_Color dayColor{106, 164, 222, 255};
 
     // Window size
-	winWidth = camera.get_width();
-	winHeight = camera.get_height();
+	winWidth = camera.getWidth();
+	winHeight = camera.getHeight();
     
 	// Update bgShine
 	bgShineSrc.x = 0;
@@ -49,21 +49,21 @@ void BackgroundOverworld::update(Camera& camera, Time& time)
 
 	bgShineDest.x = 0;
 	bgShineDest.y = 0;
-	bgShineDest.w = camera.get_width();
-	bgShineDest.h = camera.get_height();
+	bgShineDest.w = camera.getWidth();
+	bgShineDest.h = camera.getHeight();
 
 	// Update bgCloud
-	bgCloudOffset.x = camera.get_x() / 10;
-	bgCloudOffset.y = camera.get_y() / 30;
+	bgCloudOffset.x = camera.x / 10;
+	bgCloudOffset.y = camera.y / 30;
 
 	// Update hills
-	bgHillsOffset.x = camera.get_x() / 15;
-	bgHillsOffset.y = (camera.get_height() / 2) + hillsOffset;
+	bgHillsOffset.x = camera.x / 15;
+	bgHillsOffset.y = (camera.getHeight() / 2) + hillsOffset;
 
 	// Enable the cave background is camera is low enough
-	showCaveBackground = camera.get_y() < caveBackgroundOffset;
-	bgCave.x = camera.get_x() / 10;
-	bgCave.y = camera.get_y() / 10;
+	showCaveBackground = camera.y < caveBackgroundOffset;
+	bgCave.x = camera.x / 10;
+	bgCave.y = camera.y / 10;
 
 	//********************************
 	//  Handle time

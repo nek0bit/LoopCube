@@ -16,19 +16,19 @@ GameObject::~GameObject()
 
 double GameObject::getX(Camera& camera) const
 {
-	return obj.x + camera.get_x();
+	return obj.x + camera.x;
 }
 
 double GameObject::getY(Camera& camera) const
 {
-	return obj.y + camera.get_y();
+	return obj.y + camera.y;
 }
 
 // Used for rendering culling
 bool GameObject::shouldCull(Camera& camera)
 {
     return (getX(camera) + obj.w < 0 || getY(camera) + obj.h < 0) // Upper-left culling
-        || (getX(camera) - obj.w > camera.get_width() || getY(camera) - obj.h > camera.get_height()); // Bottom-right culling
+        || (getX(camera) - obj.w > camera.getWidth() || getY(camera) - obj.h > camera.getHeight()); // Bottom-right culling
 }
 
 void GameObject::update()

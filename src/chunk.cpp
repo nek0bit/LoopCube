@@ -177,12 +177,12 @@ void Chunk::render_all_shadows(SDL_Renderer* renderer, Camera& camera) {
 
 void Chunk::render_all_functor(Camera& camera, std::function<void(Block&)> call) {
 	const int offset = 10;
-	const int flipped_camera = camera.get_y()*-1;
+	const int flipped_camera = -camera.y;
 	const int chunk_pixel_height = constants::chunk_split_height*constants::block_h;
 	
 	for(size_t i = 0; i < chunk.size(); ++i) {
 		const int min = get_y_split(flipped_camera - chunk_pixel_height - offset);
-		const int max = get_y_split(flipped_camera + camera.get_height() + offset);
+		const int max = get_y_split(flipped_camera + camera.getHeight() + offset);
 		const int check = get_y_split(i*chunk_pixel_height);
 		
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
@@ -211,11 +211,11 @@ void Chunk::render_info(SDL_Renderer* renderer, Camera& camera) {
 		std::string tmp = std::string{"Chunk "} + std::to_string(get_slot());
 		chunk_text = std::shared_ptr<Text>(new Text(renderer, tmp, color, constants::header_font));
 	} else {
-		chunk_text->draw(pos+20+camera.get_x(), 70);
+		chunk_text->draw(pos+20+camera.x, 70);
 	}*/
 
 	// Draw gap
-	SDL_Rect block_line{static_cast<int>(pos+camera.get_x()), 0, 2, camera.get_height()};
+	SDL_Rect block_line{static_cast<int>(pos+camera.x), 0, 2, camera.getHeight()};
     
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &block_line);

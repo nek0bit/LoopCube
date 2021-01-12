@@ -7,7 +7,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
       textures{textures},
       events{events},
       chunks{0}, 
-	  camera{&winSize.w, &winSize.h},
+	  camera{&winSize},
       player{},
       entities{},
       fade{60},
@@ -16,7 +16,8 @@ Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
 	  background{nullptr}
 {
     background = std::shared_ptr<Background>(new BackgroundOverworld());
-	camera.set_pos(0, 0);
+    camera.x = 0;
+    camera.y = 0;
 
 	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, winSize));
 	update_config();
@@ -206,10 +207,10 @@ void Play::draw_selection(int* p1, int* p2) {
 	int b_w = static_cast<int>(constants::block_w);
 	int b_h = static_cast<int>(constants::block_h);
 
-	const int sel_x = floor((events.vmouse.x - camera.get_x()) / b_w) * b_w;
-	const int sel_y = floor((events.vmouse.y - camera.get_y()) / b_h) * b_h;
+	const int sel_x = floor((events.vmouse.x - camera.x) / b_w) * b_w;
+	const int sel_y = floor((events.vmouse.y - camera.y) / b_h) * b_h;
 
-    SDL_Rect selection{sel_x + static_cast<int>(camera.get_x()), sel_y + static_cast<int>(camera.get_y()), b_w, b_h};
+    SDL_Rect selection{sel_x + static_cast<int>(camera.x), sel_y + static_cast<int>(camera.y), b_w, b_h};
 
 	int fade_amount = std::abs(std::sin(static_cast<double>(fade.frame)/20))*30+50;
 
@@ -232,7 +233,8 @@ void Play::handle_camera() {
 	move_x += (x - move_x)*amount;
 	move_y += (y - move_y)*amount;
 	
-	camera.set_pos(move_x, move_y);
+    camera.x = move_x;
+    camera.y = move_y;
 }
 
 void Play::dead_particles() {
