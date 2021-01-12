@@ -60,9 +60,9 @@ Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
 	Checkbox* show_shadows = new Checkbox(renderer, CB_RENDER_SHADOWS, "Show Shadows", 0, 0, 30);
 	Checkbox* show_particles = new Checkbox(renderer, CB_RENDER_PARTICLES, "Show Particles", 0, 0, 30);
 	Checkbox* show_info = new Checkbox(renderer, CB_SHOW_CHUNK_DEBUG, "Show Chunk Debug Info", 0, 0, 30);
-	if (constants::config.get_int(CONFIG_SHOW_SHADOWS) == 1) show_shadows->checked = true;
-	if (constants::config.get_int(CONFIG_SHOW_PARTICLES) == 1) show_particles->checked = true;
-	if (constants::config.get_int(CONFIG_SHOW_CHUNK_DEBUG) == 1) show_info->checked = true;
+	if (constants::config.getInt(CONFIG_SHOW_SHADOWS) == 1) show_shadows->checked = true;
+	if (constants::config.getInt(CONFIG_SHOW_PARTICLES) == 1) show_particles->checked = true;
+	if (constants::config.getInt(CONFIG_SHOW_CHUNK_DEBUG) == 1) show_info->checked = true;
 
 	// Insert checkboxes
 	c_elements.push_back(show_shadows);

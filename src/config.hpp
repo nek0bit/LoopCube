@@ -1,24 +1,21 @@
-#ifndef __CONFIG_HPP__
-#define __CONFIG_HPP__
+#pragma once
+
 #include <iostream>
 #include <unordered_map>
 
-// Mostly a wrapper for multiple std::maps
-class Config {
-public:
+// A wrapper for multiple std::unordered_maps for config
+struct Config
+{
 	Config();
-	~Config();
+	~Config() = default;
 
 	void set(int key, std::string value);
 	void set(int key, int value);
-	std::string get_string(int key);
-	int get_int(int key);
+	std::string getString(int key);
+	int getInt(int key);
 private:
 	// enum/number, string
-	std::unordered_map<int, std::string> string_values;
+	std::unordered_map<int, std::string> stringValues;
 	// enum/number, int
-	std::unordered_map<int, int> int_values;
-	
+	std::unordered_map<int, int> intValues;	
 };
-
-#endif

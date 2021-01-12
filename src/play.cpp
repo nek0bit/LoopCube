@@ -129,7 +129,7 @@ void Play::update() {
 }
 
 void Play::update_config() {
-	show_particles = constants::config.get_int(CONFIG_SHOW_PARTICLES);
+	show_particles = constants::config.getInt(CONFIG_SHOW_PARTICLES);
 }
 
 void Play::render() {

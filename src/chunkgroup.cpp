@@ -11,8 +11,8 @@ ChunkGroup::~ChunkGroup() {
 }
 
 void ChunkGroup::update_config() {
-	show_shadows = constants::config.get_int(CONFIG_SHOW_SHADOWS);
-	render_chunk_info = constants::config.get_int(CONFIG_SHOW_CHUNK_DEBUG);
+	show_shadows = constants::config.getInt(CONFIG_SHOW_SHADOWS);
+	render_chunk_info = constants::config.getInt(CONFIG_SHOW_CHUNK_DEBUG);
 }
 
 std::vector<Chunk>& ChunkGroup::get_chunks() {

@@ -1,13 +1,11 @@
-#ifndef COLLISIONINFO_HPP
-#define COLLISIONINFO_HPP
-#include <iostream>
+#pragma once
 
-#include <vector>
-
-struct CollisionInfo {
+struct CollisionInfo
+{
 	CollisionInfo();
 	CollisionInfo(double top, double bottom, double left, double right);
-	~CollisionInfo();
+	~CollisionInfo() = default;
+    
 	bool operator==(const bool& rhs) const;
 	
 	double top;
@@ -17,4 +15,3 @@ struct CollisionInfo {
 	bool colliding;
 };
 
-#endif
