@@ -75,7 +75,7 @@ Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(0, constants::block_info.size()-1);
 
-	int rand_id = constants::block_info[dist(rng)].get_id();
+	int rand_id = constants::block_info[dist(rng)].id;
 	random_block = Item(renderer, rand_id);
 
 	//************************************************

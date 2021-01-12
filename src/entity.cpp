@@ -57,7 +57,7 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 				for (auto &block: chunk[i]) {
 					auto blockinfo = block.blockinfo;
 					CollisionInfo info = isColliding(block);
-					while (info == true && blockinfo->get_no_collision() != true) {
+					while (info == true && blockinfo->noCollision != true) {
 						return info;
 					}
 				}

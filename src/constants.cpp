@@ -45,11 +45,11 @@ namespace constants {
 	};
 
 	const std::vector<BlockInfo> block_info = {
-		BlockInfo{BLOCK_GRASS, "Grass", 0},
-		BlockInfo{BLOCK_DIRT, "Dirt", 1},
-		BlockInfo{BLOCK_STONE, "Stone", 2},
+		BlockInfo{BLOCK_GRASS, "Grass", 0, false},
+		BlockInfo{BLOCK_DIRT, "Dirt", 1, false},
+		BlockInfo{BLOCK_STONE, "Stone", 2, false},
 		BlockInfo{BLOCK_WOOD, "Wood", 3, true},
-		BlockInfo{BLOCK_LEAF, "Leaf", 12},
+		BlockInfo{BLOCK_LEAF, "Leaf", 12, true},
 	};
 
 	const double block_w = 42;

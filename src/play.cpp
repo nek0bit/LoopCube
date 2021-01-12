@@ -176,7 +176,7 @@ void Play::mouse_events() {
 				if (block != nullptr) {
 					// Generate particles
 					if (show_particles) {
-						GravityParticle temp{block->get_texture_id(),50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
+						GravityParticle temp{block->textureId,50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
 						    p1*constants::block_w+(constants::block_w/2), p2*constants::block_h, 8, 6};
 						particles.push_back(temp);
 					}
@@ -188,7 +188,7 @@ void Play::mouse_events() {
 				Item& item = inv->get_selected_item();
 				if (item.enabled) {
 					BlockInfo b_info = item.get_block();
-					if (chunk->place_block(b_info.get_id(), chunk_pos, p2)) {
+					if (chunk->place_block(b_info.id, chunk_pos, p2)) {
 						item.add_count(-1);
 					}
 				}

@@ -10,8 +10,8 @@ Block::Block(int id, int x, int y)
 {
     // Get block id
 	for (auto &i: constants::block_info) {
-		if (i.get_id() == id) {
-			this->texture_id = i.get_texture_id();
+		if (i.id == id) {
+			this->texture_id = i.textureId;
 			this->blockinfo = &i;
 		}
 	}

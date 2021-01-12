@@ -16,7 +16,6 @@ void Button::update(EventWrapper& events, int offset_x, int offset_y) {
 	src.h = 16;
 	src.w = 16;
 	src.x = 0;
-
 	// Change sprite to hovered version if hovered is true
 	src.y = (static_cast<int>(hovered))*16;
 
@@ -66,7 +65,7 @@ void Button::render(SDL_Renderer* renderer, TextureHandler& textures, int offset
     SDL_RenderCopy(renderer, textures.get_texture(6), &src, &begin);
     SDL_RenderCopy(renderer, textures.get_texture(5), &src, &mod_dest);
     SDL_RenderCopy(renderer, textures.get_texture(7), &src, &end);
-
+    
 	if (button_text != nullptr)
 		button_text->draw(x+(width/2)-(button_text->get_width()/2)-2,
 							mod_dest.y+(height/2)-(button_text->get_height()/2)-2);

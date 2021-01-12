@@ -118,7 +118,7 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
 	for (size_t j = 0; j < chunk[i].size(); ++j) {
 		if (get_chunk_x(x) * constants::block_w == chunk[i][j].obj.x && y * constants::block_h == chunk[i][j].obj.y) {
 			const BlockInfo* info = chunk[i][j].blockinfo;
-			inv->add_item(info->get_id());
+			inv->add_item(info->id);
 
 			chunk[i].erase(chunk[i].begin() + j);
 			return info;

@@ -32,7 +32,7 @@ void Inventory::add_item(int id) {
 
 	auto found = std::find_if(items.begin(), items.end(), [&](Item item) {
 		if (!item.enabled) return false; 
-		return item.get_block().get_id() == id ? item.get_count() < max_count : false;
+		return item.get_block().id == id ? item.get_count() < max_count : false;
 	});
 
 	if (found != items.end()) {

@@ -4,7 +4,7 @@ Item::Item() : enabled{false} {}
 
 Item::Item(SDL_Renderer* renderer, int id) : enabled{true}, count{} {
 	for (auto &i: constants::block_info) {
-		if (i.get_id() == id) {
+		if (i.id == id) {
 			block = i;
 		}
 	}
@@ -38,7 +38,7 @@ void Item::render(SDL_Renderer* renderer, TextureHandler& textures, int x, int y
 	int offset_y = -10;
 	SDL_Rect src{0, 0, constants::block_img_size, constants::block_img_size};
     SDL_Rect block{x, y, width, height};
-    SDL_RenderCopy(renderer, textures.get_texture(this->block.get_texture_id()), &src, &block);
+    SDL_RenderCopy(renderer, textures.get_texture(this->block.textureId), &src, &block);
     
 	text->draw(x, y+height+offset_y);
 }
