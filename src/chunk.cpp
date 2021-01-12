@@ -1,8 +1,8 @@
 #include "chunk.hpp"
 
 Chunk::Chunk(unsigned long int seed, int slot, std::vector<Structure*>& structures)
-	: MAX_WIDTH{constants::chunk_width}, MAX_HEIGHT{constants::chunk_height}, MAX_SPLIT_COUNT{constants::chunk_split_count},
-	  MAX_SPLIT_HEIGHT{constants::chunk_split_height}, terrain_gen{} {
+	: MAX_WIDTH{constants::chunkWidth}, MAX_HEIGHT{constants::chunkHeight}, MAX_SPLIT_COUNT{constants::chunkSplitCount},
+	  MAX_SPLIT_HEIGHT{constants::chunkSplitHeight}, terrain_gen{} {
 	this->slot = slot;
 
 	terrain_gen.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
@@ -41,7 +41,7 @@ bool Chunk::operator>(const Chunk &c) const {
 }
 
 Position Chunk::get_pos() const {
-	return Position{slot*(MAX_WIDTH*constants::block_w), 0, (MAX_WIDTH*constants::block_w), 0};
+	return Position{slot*(MAX_WIDTH*constants::blockW), 0, (MAX_WIDTH*constants::blockW), 0};
 }
 
 int Chunk::get_chunk_x(int x) {
@@ -116,7 +116,7 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
 	}
     // Search for block, destroy it, and add it to the inventory
 	for (size_t j = 0; j < chunk[i].size(); ++j) {
-		if (get_chunk_x(x) * constants::block_w == chunk[i][j].obj.x && y * constants::block_h == chunk[i][j].obj.y) {
+		if (get_chunk_x(x) * constants::blockW == chunk[i][j].obj.x && y * constants::blockH == chunk[i][j].obj.y) {
 			const BlockInfo* info = chunk[i][j].blockinfo;
 			inv->add_item(info->id);
 
@@ -139,7 +139,7 @@ bool Chunk::place_block(int id, int x, int y) {
 		    return false;
 		}
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
-			if (get_chunk_x(x)*constants::block_w == chunk[i][j].obj.x && y*constants::block_h == chunk[i][j].obj.y) {
+			if (get_chunk_x(x)*constants::blockW == chunk[i][j].obj.x && y*constants::blockH == chunk[i][j].obj.y) {
 				is_duplicate = true;
 				break;
 			}
@@ -178,7 +178,7 @@ void Chunk::render_all_shadows(SDL_Renderer* renderer, Camera& camera) {
 void Chunk::render_all_functor(Camera& camera, std::function<void(Block&)> call) {
 	const int offset = 10;
 	const int flipped_camera = -camera.y;
-	const int chunk_pixel_height = constants::chunk_split_height*constants::block_h;
+	const int chunk_pixel_height = constants::chunkSplitHeight*constants::blockH;
 	
 	for(size_t i = 0; i < chunk.size(); ++i) {
 		const int min = get_y_split(flipped_camera - chunk_pixel_height - offset);
@@ -203,7 +203,7 @@ void Chunk::render_all_blocks(SDL_Renderer* renderer, TextureHandler& textures, 
 }
 
 void Chunk::render_info(SDL_Renderer* renderer, Camera& camera) {
-	int pos = get_chunk_x(0)*constants::block_w;
+	int pos = get_chunk_x(0)*constants::blockW;
 	/*if (chunk_text == nullptr) {
 		SDL_Color color;
 		color.r = 100; color.g = 100; color.b = 100; color.a = 255;

@@ -1,5 +1,5 @@
-#ifndef CONSTANTS_HPP
-#define CONSTANTS_HPP
+#pragma once
+
 #include <vector>
 #include <utility>
 #include <string>
@@ -8,7 +8,8 @@
 #include "config.hpp"
 #include "fonthandler.hpp"
 
-enum block_enum {
+enum block_enum
+{
 	BLOCK_GRASS,
 	BLOCK_DIRT,
 	BLOCK_STONE,
@@ -16,7 +17,8 @@ enum block_enum {
 	BLOCK_LEAF
 };
 
-enum config_enum {
+enum config_enum
+{
 	CONFIG_SHOW_SHADOWS,
 	CONFIG_SHOW_PARTICLES,
 	CONFIG_LOAD_DISTANCE,
@@ -24,33 +26,34 @@ enum config_enum {
 };
 
 
-namespace constants {
+namespace constants
+{
 	// Functions
 	
 	// Variables
-	extern const std::string version_str;
+	extern const std::string versionStr;
 
-	extern const std::string root_path;
+	extern const std::string rootPath;
 	extern const std::string path;
 
 	// Please add comment with index for code readability
-	extern const std::vector<const char*> texture_ids;
+	extern const std::vector<const char*> textureIds;
 
-	extern const std::vector<BlockInfo> block_info;
+	extern const std::vector<BlockInfo> blockInfo;
 
-	extern const double block_w;
-	extern const double block_h;
+	extern const double blockW;
+	extern const double blockH;
 
-	extern const int block_img_size;
+	extern const int blockImgSize;
 	
-	extern const int chunk_width;
-	extern const int chunk_height;
+	extern const int chunkWidth;
+	extern const int chunkHeight;
 
-	extern const int chunk_split_count;
-	extern const int chunk_split_height;
+	extern const int chunkSplitCount;
+	extern const int chunkSplitHeight;
 	
-	extern const int load_viewport;
-	extern const int load_distance;
+	extern const int loadViewport;
+	extern const int loadDistance;
 
 	extern const std::string header;
 	extern const std::vector<std::string> content;
@@ -59,5 +62,3 @@ namespace constants {
 	extern Config config;
     extern FontHandler fontHandler;
 }
-
-#endif // CONSTANTS

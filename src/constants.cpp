@@ -1,16 +1,17 @@
 #include "constants.hpp"
 
 // Texture stuff
-namespace constants {
+namespace constants
+{
 	
 	// TODO add enum for texture indexes
-	const std::string version_str = "v0.4-git";
+	const std::string versionStr = "v0.4-git";
 
-	const std::string root_path = DATA_LOCATION "/data/";
-	const std::string path = root_path+"img/";
+	const std::string rootPath = DATA_LOCATION "/data/";
+	const std::string path = rootPath+"img/";
 
 	// Please add comment with index for code readability
-	const std::vector<const char*> texture_ids = {
+	const std::vector<const char*> textureIds = {
 		"grass", // 0
 		"dirt", // 1
 		"stone", // 2
@@ -44,7 +45,7 @@ namespace constants {
 		"box9", // 30
 	};
 
-	const std::vector<BlockInfo> block_info = {
+	const std::vector<BlockInfo> blockInfo = {
 		BlockInfo{BLOCK_GRASS, "Grass", 0, false},
 		BlockInfo{BLOCK_DIRT, "Dirt", 1, false},
 		BlockInfo{BLOCK_STONE, "Stone", 2, false},
@@ -52,30 +53,30 @@ namespace constants {
 		BlockInfo{BLOCK_LEAF, "Leaf", 12, true},
 	};
 
-	const double block_w = 42;
-	const double block_h = 42;
+	const double blockW = 42;
+	const double blockH = 42;
 
-	const int block_img_size = 16;
+	const int blockImgSize = 16;
 	
-	const int load_viewport = 16;
+	const int loadViewport = 16;
 	
-	const int chunk_width = 8;
-	const int chunk_height = 800;
+	const int chunkWidth = 8;
+	const int chunkHeight = 800;
 
 	// chunk_height/x = integer(y)
-	const int chunk_split_count = 100; // x
-	const int chunk_split_height = constants::chunk_height/constants::chunk_split_count; // y
+	const int chunkSplitCount = 100; // x
+	const int chunkSplitHeight = constants::chunkHeight/constants::chunkSplitCount; // y
 
 #if defined(__WIIU__) || defined(__SWITCH__)
-	const int load_distance = 8;
+	const int loadDistance = 8;
 #else
-	const int load_distance = 12;
+	const int loadDistance = 12;
 #endif
 
 	const std::string header = "LoopCube";
 	const std::vector<std::string> content = {
 		"Welcome to LoopCube!\n",
-		"Current Version: " + version_str + "\n",
+		"Current Version: " + versionStr + "\n",
         "Very tested edition\n",
 		"Changelog:",
 		"- LOTS of code refactoring [?]",

@@ -97,10 +97,10 @@ void Play::update() {
 		
 		for (size_t i = 0; i < data.size(); ++i) {
 			// See if the chunk actually exists
-			auto c1 = chunks.get_chunk_at((structures[k]->get_x()+data[i].x)*constants::block_w, false);
+			auto c1 = chunks.get_chunk_at((structures[k]->get_x()+data[i].x)*constants::blockW, false);
 			
 			if (c1 != nullptr) {
-				int chunk_pos = std::abs(((structures[k]->get_x()+data[i].x))-(c1->get_slot()*constants::chunk_width));
+				int chunk_pos = std::abs(((structures[k]->get_x()+data[i].x))-(c1->get_slot()*constants::chunkWidth));
 
 				// Place block in proper chunk
 				c1->place_block(data[i].id, chunk_pos, structures[k]->get_y() + data[i].y);
@@ -163,10 +163,10 @@ void Play::mouse_events() {
 
 	
 	// Get cursor over chunk
-	Chunk* chunk = chunks.get_chunk_at(p1*constants::block_w, true);
+	Chunk* chunk = chunks.get_chunk_at(p1*constants::blockW, true);
 	if (chunk != nullptr) {
 		// Do some math to get the chunk position
-		int chunk_pos = std::abs(p1-(chunk->get_slot()*constants::chunk_width));
+		int chunk_pos = std::abs(p1-(chunk->get_slot()*constants::chunkWidth));
 
 		switch(events.vmouse.down) {
 		case 1:
@@ -178,7 +178,7 @@ void Play::mouse_events() {
 					// Generate particles
 					if (show_particles) {
 						GravityParticle temp{block->textureId,50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
-						    p1*constants::block_w+(constants::block_w/2), p2*constants::block_h, 8, 6};
+						    p1*constants::blockW+(constants::blockW/2), p2*constants::blockH, 8, 6};
 						particles.push_back(temp);
 					}
 				}
@@ -204,8 +204,8 @@ void Play::mouse_events() {
 // Draw a selection box and set p1 and p2 to the position
 // Perhaps we should rename this to get_selection and seperate rendering functions?
 void Play::draw_selection(int* p1, int* p2) {
-	int b_w = static_cast<int>(constants::block_w);
-	int b_h = static_cast<int>(constants::block_h);
+	int b_w = static_cast<int>(constants::blockW);
+	int b_h = static_cast<int>(constants::blockH);
 
 	const int sel_x = floor((events.vmouse.x - camera.x) / b_w) * b_w;
 	const int sel_y = floor((events.vmouse.y - camera.y) / b_h) * b_h;

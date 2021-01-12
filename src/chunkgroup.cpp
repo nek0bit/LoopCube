@@ -20,8 +20,8 @@ std::vector<Chunk>& ChunkGroup::get_chunks() {
 }
 
 int ChunkGroup::get_chunk_y(double y) {
-	int value = y / (constants::chunk_split_height * constants::block_h);
-	if (!(constants::chunk_split_count-1 > value && value >= 0)) return -1;
+	int value = y / (constants::chunkSplitHeight * constants::blockH);
+	if (!(constants::chunkSplitCount-1 > value && value >= 0)) return -1;
 	return value;
 }
 
@@ -74,10 +74,10 @@ void ChunkGroup::generate_chunk(int id, std::vector<Structure*>& structure) {
 }
 
 void ChunkGroup::check_area(long long int x, std::vector<Structure*>& structures) {
-	const int load_distance = constants::load_distance;
+	const int load_distance = constants::loadDistance;
 	
 	// Takes x, and returns the current chunk id the player is in
-	long int id = ceil(x / (constants::chunk_width * constants::block_w));
+	long int id = ceil(x / (constants::chunkWidth * constants::blockW));
 
 	// Unload old chunks
 	// Warning: This code below is very fragile and can easily break :P
@@ -146,12 +146,12 @@ void ChunkGroup::print_chunks_fancy() {
 }
 
 void ChunkGroup::update_viewport() {
-	const int total_load_dist = constants::load_distance * 2;
-	const int load_dist_midpoint = (total_load_dist / 2) - constants::load_viewport / 2;
+	const int total_load_dist = constants::loadDistance * 2;
+	const int load_dist_midpoint = (total_load_dist / 2) - constants::loadViewport / 2;
 	
 	// Populate viewport_chunks with references
 	viewport_chunks.clear();
-	for (int i = 0; i < constants::load_viewport; ++i) {
+	for (int i = 0; i < constants::loadViewport; ++i) {
 		Chunk* temp = &group[i+load_dist_midpoint];
 		viewport_chunks.push_back(temp);
 	}
@@ -168,9 +168,9 @@ void ChunkGroup::sort_all() {
 Chunk* ChunkGroup::get_chunk_at(double x, bool loaded=true) {
 	double id_double;
 	if (x >= 0) {
-		id_double = x / (constants::chunk_width * constants::block_w);
+		id_double = x / (constants::chunkWidth * constants::blockW);
 	} else {
-		id_double = floor(x / (constants::chunk_width * constants::block_w));
+		id_double = floor(x / (constants::chunkWidth * constants::blockW));
 	}
 
 	int id = id_double;	
@@ -198,7 +198,7 @@ Chunk* ChunkGroup::get_chunk_at(double x, bool loaded=true) {
 
 int ChunkGroup::get_id(Camera& camera, int surrounding) {
 	double id = 0;
-	id = ceil((camera.x - (camera.getWidth()/2))	 / (surrounding * constants::block_w));
+	id = ceil((camera.x - (camera.getWidth()/2))	 / (surrounding * constants::blockW));
 	if (id > 0) {
 		id *= -1;
 	} else {
@@ -212,7 +212,7 @@ void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler& tex
 		for (auto &chunk: viewport_chunks) {
 			Position box = chunk->get_pos();
 			if ((box.x+box.w)+camera.x < 0 ||
-				camera.getWidth() < ((box.x+box.w)+camera.x)-(constants::chunk_width*constants::block_w)) {
+				camera.getWidth() < ((box.x+box.w)+camera.x)-(constants::chunkWidth*constants::blockW)) {
 				continue;
 			} else {
 				chunk->render_all_shadows(renderer, camera);
@@ -222,7 +222,7 @@ void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler& tex
 	for (auto &chunk: viewport_chunks) {
 		Position box = chunk->get_pos();
 		if ((box.x+box.w)+camera.x < 0 ||
-			camera.getWidth() < ((box.x+box.w)+camera.x)-(constants::chunk_width*constants::block_w)) {
+			camera.getWidth() < ((box.x+box.w)+camera.x)-(constants::chunkWidth*constants::blockW)) {
 			continue;
 		} else {
 			chunk->render_all_blocks(renderer, textures, camera);
@@ -239,7 +239,7 @@ void ChunkGroup::update_all_viewport(Camera& camera) {
 	for (auto &chunk: viewport_chunks) {
 		Position box = chunk->get_pos();
 		if ((box.x+box.w)+camera.x < 0 ||
-			camera.getWidth() < ((box.x+box.w)+camera.x)-(constants::chunk_width*constants::block_w)) {
+			camera.getWidth() < ((box.x+box.w)+camera.x)-(constants::chunkWidth*constants::blockW)) {
 			continue;
 		} else {
 			chunk->update_all(camera);

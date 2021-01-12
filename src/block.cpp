@@ -3,13 +3,13 @@
 Block::Block() {}
 
 Block::Block(int id, int x, int y)
-	: GameObject{0, static_cast<double>(x * constants::block_w),
-    static_cast<double>(y * constants::block_h),
-    constants::block_w,
-    constants::block_h}
+	: GameObject{0, static_cast<double>(x * constants::blockW),
+    static_cast<double>(y * constants::blockH),
+    constants::blockW,
+    constants::blockH}
 {
     // Get block id
-	for (auto &i: constants::block_info) {
+	for (auto &i: constants::blockInfo) {
 		if (i.id == id) {
 			this->texture_id = i.textureId;
 			this->blockinfo = &i;
@@ -21,8 +21,8 @@ Block::~Block()
 {}
 
 void Block::update() {
-	src.h = constants::block_img_size;
-	src.w = constants::block_img_size;
+	src.h = constants::blockImgSize;
+	src.w = constants::blockImgSize;
 	src.x = 0;
 	src.y = 0;
 }

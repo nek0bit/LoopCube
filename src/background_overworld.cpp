@@ -170,7 +170,7 @@ void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& texture
         SDL_SetTextureAlphaMod(tex, static_cast<int>(bgCaveOpacity.value));
 
         Generic::Render::renderRepeating(renderer, textures, 17, bgCave.x, bgCave.y,
-						 bgCaveBlock.w, bgCaveBlock.h, 0, 0, true, constants::block_img_size, constants::block_img_size);
+						 bgCaveBlock.w, bgCaveBlock.h, 0, 0, true, constants::blockImgSize, constants::blockImgSize);
 
 		// Reset opacity for future objects
         SDL_SetTextureAlphaMod(tex, 255);
