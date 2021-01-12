@@ -128,11 +128,11 @@ void Menu::update(bool update_animations) {
 	content_left = mid_left-100;
 	
 	if (prev_mid_left != mid_left) {
-	    back.set_x(content_left-50);
-	    back.set_y(0);
-		back.set_width(box_width);
-		back.set_height(box_height);
-		back.update_pair();
+	    back.x = content_left-50;
+	    back.y = 0;
+		back.w = box_width;
+		back.h = box_height;
+		back.updatePair();
 	}
 
 	// Set background
