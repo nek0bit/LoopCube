@@ -4,7 +4,7 @@ PerlinNoise::PerlinNoise(unsigned long int seed) {
 	// Generate a permutation
 	permutation.resize(256);
 	std::iota(permutation.begin(), permutation.end(), 0);
-	std::default_random_engine rng{seed};
+	std::default_random_engine rng{static_cast<std::default_random_engine>(seed)};
 	std::shuffle(permutation.begin(), permutation.end(), rng);
 	permutation.insert(permutation.end(), permutation.begin(), permutation.end());
 }

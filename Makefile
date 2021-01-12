@@ -1,6 +1,6 @@
 # -*- mode: makefile -*-
 CXX ?= g++
-CXXFLAGS = -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
+CXXFLAGS = -std=c++14 -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
 LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
 SRC_DIR = ./src
 OBJ_DIR = ./obj

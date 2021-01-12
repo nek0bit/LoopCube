@@ -1,5 +1,7 @@
 #pragma once
 #include <iostream>
+#include <array>
+#include <utility>
 
 #include <SDL2/SDL.h>
 
