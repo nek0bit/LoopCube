@@ -2,23 +2,18 @@
 
 Checkbox::Checkbox(SDL_Renderer* renderer, int id, std::string text, int x, int y, int size, bool checked)
 	: UiElement{},
+      checked{checked},
       changed{false},
       text{text},
       x{x},
       y{y},
       size{size},
-      checked{checked},
-      text_render{nullptr}
+      textRender{nullptr}
 {
     this->id = id;
     
     SDL_Color color{255, 255, 255, 255};
-    text_render = new Text{renderer, text, color, constants::fontHandler.getFont(2)};
-}
-
-Checkbox::~Checkbox()
-{
-    delete text_render;
+    textRender = std::shared_ptr<Text>(new Text{renderer, text, color, constants::fontHandler.getFont(2)});
 }
 
 void Checkbox::onChange(void (*function)(int, int))
@@ -44,13 +39,13 @@ bool Checkbox::toggle()
 	return checked;
 }
 
-void Checkbox::update(EventWrapper& events, int offset_x, int offset_y)
+void Checkbox::update(EventWrapper& events, int offsetX, int offsetY)
 {
 	// Clear changed
 	changed = false;
 
 	if (events.vmouse.clicked &&
-		Generic::collision<int>(offset_x+x, offset_y+y, size, size, events.vmouse.x, events.vmouse.y, 1, 1))
+		Generic::collision<int>(offsetX+x, offsetY+y, size, size, events.vmouse.x, events.vmouse.y, 1, 1))
     {
 		toggle();
 		changed = true;
@@ -62,9 +57,9 @@ void Checkbox::update(EventWrapper& events, int offset_x, int offset_y)
 	dest.h = size;
 }
 
-void Checkbox::render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y)
+void Checkbox::render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX, int offsetY)
 {
-	SDL_Rect mod_dest{offset_x+dest.x, offset_y+dest.y, dest.w, dest.h};
+	SDL_Rect mod_dest{offsetX+dest.x, offsetY+dest.y, dest.w, dest.h};
 	// Draw box behind check
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
     SDL_RenderFillRect(renderer, &mod_dest);
@@ -77,7 +72,7 @@ void Checkbox::render(SDL_Renderer* renderer, TextureHandler& textures, int offs
         SDL_RenderFillRect(renderer, &check);
 	}
 
-	text_render->draw(mod_dest.x+size+10, mod_dest.y+5);
+	textRender->draw(mod_dest.x+size+10, mod_dest.y+5);
 }
 
 
