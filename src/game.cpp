@@ -19,18 +19,18 @@ Game::~Game() {
 
 // Game related stuff below
 // Initiates Game objects
-void Game::game_init() {
+void Game::gameInit() {
 	// Setup config
-	constants::config.set(CONFIG_SHOW_SHADOWS, 1);
-	constants::config.set(CONFIG_SHOW_PARTICLES, 1);
+	constants::config.set(CONFIG_SHOW_SHADOWS, true);
+	constants::config.set(CONFIG_SHOW_PARTICLES, true);
 	constants::config.set(CONFIG_LOAD_DISTANCE, 12);
-	constants::config.set(CONFIG_SHOW_CHUNK_DEBUG, 0);
+	constants::config.set(CONFIG_SHOW_CHUNK_DEBUG, false);
 
     // Setup fonts
     constants::fontHandler.addFontByFilename(constants::rootPath+"fonts/liberation-sans/LiberationSans-Regular.ttf",
                                              {10, 12, 14, 16, 18, 32});
 	
-	menu = new Menu(renderer, *textures, events, winSize);
+	menu = std::shared_ptr<Menu>(new Menu(renderer, *textures, events, winSize));
 }
 
 // Game related loop stuff
@@ -54,7 +54,7 @@ void Game::update() {
 			menu->set_state(1);
 			break;
 		case 3:
-			is_running = false;
+			isRunning = false;
 			break;
 		default:
 			break;
@@ -63,7 +63,7 @@ void Game::update() {
 	case STATE_PLAYING:
 		// Check if the game is nullptr, then create it
 		if (game == nullptr) {
-			game = new Play(renderer, *textures, events, winSize);
+			game = std::shared_ptr<Play>(new Play(renderer, *textures, events, winSize));
 			// Let's pre-load a frame so everything can generate and render
 			// This may need to change depending on world generation in the future
 			game->update();
@@ -138,7 +138,7 @@ void Game::init(bool fullscreen = false) {
 		throw std::runtime_error(error);
 	}
 
-    textures = new TextureHandler(renderer); 
+    textures = std::shared_ptr<TextureHandler>(new TextureHandler(renderer));
 
     // Enable images
 	int img_flags = IMG_INIT_PNG;
@@ -150,38 +150,29 @@ void Game::init(bool fullscreen = false) {
 
     TTF_Init();
 
-	events.update_controllers();
+	events.updateControllers();
 
-	game_init();
+	gameInit();
 
-	is_running = true;
+	isRunning = true;
 }
 
 // Handles events such as exit, keypresses, mouse
-void Game::event_handler() {
+void Game::eventHandler() {
 	events.listen();
 
 	if (events.quit) {
-		is_running = false;
+		isRunning = false;
 	}
-}
-
-bool Game::running() {
-	return is_running;
 }
 
 void Game::free() {
 	// Incase user manually runs this method and then the destructor calls this afterwards
-	if (has_freed == false) {
-		// Cleanup core game stuff
-		delete game;
-		delete menu;
-
-        // SDL2 Cleanup
+	if (!hasFreed) {
         SDL_DestroyWindow(window);
         SDL_DestroyRenderer(renderer);
         SDL_Quit();
 	}
 
-	has_freed = true;
+	hasFreed = true;
 }

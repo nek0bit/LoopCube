@@ -4,7 +4,7 @@ Entity::Entity(int textureId, double x, double y, double width, double height)
 	: GameObject{textureId, x, y, width, height},
       velX{0},
       velY{0},
-      vel_x_speed{1.8},
+      velXSpeed{1.8},
       onGround{false},
       lastPos{-1}
 {}

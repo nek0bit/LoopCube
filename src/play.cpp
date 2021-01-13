@@ -45,38 +45,38 @@ void Play::update() {
 	player.update(chunks, entities);
 
 	for (int i = 0; i < 4; ++i) {
-		if (events.key_state[i]) {
+		if (events.keyState[i]) {
 			player.direct_player(i, chunks);
 		}
 	}
 
 	// Create entity
-	if (events.key_state[16] || events.button_state[9]) {
+	if (events.keyState[16] || events.buttonState[9]) {
 		entities.push_back(new TestEntity(player.obj.x, player.obj.y-30));
 	}
 
 	// Jump (A)
-	if (events.button_state[4]) {
+	if (events.buttonState[4]) {
 		player.direct_player(0, chunks);
 	}
 
 	// Down
-	if (events.button_state[0]) {
+	if (events.buttonState[0]) {
 		player.direct_player(2, chunks);
 	}
 
 	// Right
-	if (events.button_state[1]) {
+	if (events.buttonState[1]) {
 		player.direct_player(1, chunks);
 	}
 
 	// Left
-	if (events.button_state[2]) {
+	if (events.buttonState[2]) {
 		player.direct_player(3, chunks);
 	}
 
 	// Up
-	if (events.button_state[3]) {
+	if (events.buttonState[3]) {
 		player.direct_player(0, chunks);
 	}
 

@@ -50,12 +50,12 @@ void Inventory::add_item(int id) {
 void Inventory::update() {
 	// hotbar_slot keys
 	for (int i = 5; i < 15; ++i) {
-		if (events.key_state[i]) {
+		if (events.keyState[i]) {
 			hotbar_pos = i-5;
 		}
 	}
 
-	if (events.key_state[4] || events.button_state[8]) {
+	if (events.keyState[4] || events.buttonState[8]) {
 		show_inventory_menu = !show_inventory_menu;
 		animation = show_inventory_menu;
 	}

@@ -30,14 +30,14 @@ void Textbox::update(EventWrapper& events, int offset_x, int offset_y) {
 			focused = false;
 #else
 			blink.frame = 0;
-			events.set_text_mode_buffer(text);
-			events.enable_text_mode();
+            events.textModeBuffer = text;
+            events.textMode = true;
 #endif
 		} else {
 			focused = false;
 			textbox_text->set_text(text);
-			events.disable_text_mode();
-			events.clear_text_mode_buffer();
+            events.textMode = false;
+            events.textModeBuffer = "";
 		}
 	}
 	
@@ -47,15 +47,13 @@ void Textbox::update(EventWrapper& events, int offset_x, int offset_y) {
 
 void Textbox::handle_keyboard(EventWrapper& events) {
 	bool cursor = false;
-    
-	text = events.text_mode_buffer;
-	
+    	
 	if (blink.frame < (blink.maxFrames/2)) {
 		cursor = true;
 	}	
 	
 	if (textbox_text != nullptr) {
-		textbox_text->set_text(text + (cursor ? "_" : ""));
+		textbox_text->set_text(events.textModeBuffer + (cursor ? "_" : ""));
 	}
 }
 

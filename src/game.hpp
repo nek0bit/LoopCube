@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -16,33 +17,32 @@
 #include "winsize.hpp"
 #include "eventwrapper.hpp"
 
-class Game {
-
-public:
+struct Game
+{
 	Game();
 	~Game();
 
 	void init(bool fullscreen);
-	void game_init();
-	void event_handler();
+	void gameInit();
+	void eventHandler();
 	void render();
 	void update();
-	bool running();
 	void free();
+
+    bool isRunning = false;
 private:
 	const char* title;
 	
-	bool has_freed = false;
-	bool is_running = false;
+	bool hasFreed = false;
 
 	State state;
-	Play* game;
-	Menu* menu;
+    std::shared_ptr<Play> game;
+    std::shared_ptr<Menu> menu;
 
     WinSize winSize;
 
     EventWrapper events;
     SDL_Window* window;
 	SDL_Renderer* renderer;
-    TextureHandler* textures;
+    std::shared_ptr<TextureHandler> textures;
 };

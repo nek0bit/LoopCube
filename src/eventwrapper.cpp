@@ -4,9 +4,9 @@ EventWrapper::EventWrapper()
     : quit{false},
       vmouse{0, 0, 0, 0},
       controller{nullptr},
-      text_mode{false}
+      textMode{false}
 {
-	key_mapping = {
+	keyMapping = {
 		SDL_SCANCODE_W, // UP
 		SDL_SCANCODE_D, // RIGHT
 		SDL_SCANCODE_S, // DOWN
@@ -25,7 +25,7 @@ EventWrapper::EventWrapper()
 		SDL_SCANCODE_F8, // DEBUG
 		SDL_SCANCODE_C // SPAWN ENTITY
 	};
-	button_mapping = {
+	buttonMapping = {
 		SDL_CONTROLLER_BUTTON_DPAD_UP,
 		SDL_CONTROLLER_BUTTON_DPAD_RIGHT,
 		SDL_CONTROLLER_BUTTON_DPAD_DOWN,
@@ -41,15 +41,18 @@ EventWrapper::EventWrapper()
     resizeInputStates();
 }
 
-EventWrapper::~EventWrapper() {}
+EventWrapper::~EventWrapper()
+{
+    SDL_JoystickClose(this->controller);
+}
 
 void EventWrapper::resizeInputStates()
 {
-    key_state.resize(key_mapping.size());
-    button_state.resize(button_mapping.size());
+    keyState.resize(keyMapping.size());
+    buttonState.resize(buttonMapping.size());
 }
 
-void EventWrapper::update_controllers() {
+void EventWrapper::updateControllers() {
 	// NOTE this only works with the furthest port priority controller
 	for (int i = 0; i < SDL_NumJoysticks(); ++i) {
 		this->controller = SDL_JoystickOpen(i);
@@ -69,14 +72,14 @@ void EventWrapper::listen() {
 	
 	// Disable Exceptions
 	for (auto exc: exceptions) {
-		if (key_state[exc] == 1) {
-			key_state[exc] = 0;
+		if (keyState[exc] == 1) {
+			keyState[exc] = 0;
 		}
 	}
 
 	for (auto exc: controller_exceptions) {
-		if (button_state[exc] == 1) {
-			button_state[exc] = 0;
+		if (buttonState[exc] == 1) {
+			buttonState[exc] = 0;
 		}
 	}
 	// End TODO
@@ -109,7 +112,7 @@ void EventWrapper::listen() {
 		const Uint8* keystate = SDL_GetKeyboardState(NULL);
 
 		// Set state for each key
-		for (size_t i = 0; i < key_mapping.size(); ++i) {
+		for (size_t i = 0; i < keyMapping.size(); ++i) {
 			// Check exceptions; if found, skip.
 			bool check = false;
 			for (auto exc: exceptions) {
@@ -120,28 +123,28 @@ void EventWrapper::listen() {
 			}
 			if (check == true) continue;
 
-			if (keystate[key_mapping[i]]) {
-				key_state[i] = 1;
+			if (keystate[keyMapping[i]]) {
+				keyState[i] = 1;
 			} else {
-				key_state[i] = 0;
+				keyState[i] = 0;
 			}
 		}
 
 		switch(event.type) {
 			case SDL_TEXTINPUT:
-			if (text_mode) {
-				text_mode_buffer += event.text.text;
+			if (textMode) {
+				textModeBuffer += event.text.text;
 			}
 			break;
 		case SDL_KEYDOWN:
 			for (auto exc: exceptions) {
-				if (keystate[key_mapping[exc]]) {
-					key_state[exc] = 1;
+				if (keystate[keyMapping[exc]]) {
+					keyState[exc] = 1;
 				}
 			}
-			if (text_mode && event.key.keysym.sym == SDLK_BACKSPACE) {
-				if (text_mode_buffer.length() != 0) {
-					text_mode_buffer.pop_back();
+			if (textMode && event.key.keysym.sym == SDLK_BACKSPACE) {
+				if (textModeBuffer.length() != 0) {
+					textModeBuffer.pop_back();
 				}
 			}
 			break;
@@ -160,9 +163,9 @@ void EventWrapper::listen() {
 			quit = true;
 			break;
 		case SDL_JOYBUTTONDOWN:
-			for (size_t i = 0; i < button_mapping.size(); ++i) {
-				if (event.jbutton.button == button_mapping[i]) {
-					button_state[i] = 1;
+			for (size_t i = 0; i < buttonMapping.size(); ++i) {
+				if (event.jbutton.button == buttonMapping[i]) {
+					buttonState[i] = 1;
 					if (i == 5) {
 						quit = true;
 					}
@@ -189,9 +192,9 @@ void EventWrapper::listen() {
 			}
 			break;
 		case SDL_JOYBUTTONUP:
-			for (size_t i = 0; i < button_mapping.size(); ++i) {
-				if (event.jbutton.button == button_mapping[i]) {
-					button_state[i] = 0;
+			for (size_t i = 0; i < buttonMapping.size(); ++i) {
+				if (event.jbutton.button == buttonMapping[i]) {
+					buttonState[i] = 0;
 					switch(i) {
 					case 6:
 					case 7:
@@ -209,8 +212,3 @@ void EventWrapper::listen() {
 		}
 	}
 }
-
-void EventWrapper::enable_text_mode() { text_mode = true; }
-void EventWrapper::disable_text_mode() { text_mode = false; }
-void EventWrapper::set_text_mode_buffer(std::string str) { text_mode_buffer = str; }
-void EventWrapper::clear_text_mode_buffer() { set_text_mode_buffer(""); }

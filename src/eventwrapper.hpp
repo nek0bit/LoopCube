@@ -19,22 +19,18 @@ struct EventWrapper
     EventWrapper();
 	~EventWrapper();
 
-	void update_controllers();
+	void updateControllers();
 	
 	void listen();
 
 	// Text mode
-	void enable_text_mode();
-	void disable_text_mode();
-	void set_text_mode_buffer(std::string str);
-	void clear_text_mode_buffer();
-    
-	std::string text_mode_buffer;
+    bool textMode;    
+	std::string textModeBuffer;
 
-	std::vector<int> button_mapping; // Maps to proper state index
-	std::vector<int> button_state;
-	std::vector<int> key_mapping; // Maps to proper state index
-	std::vector<int> key_state;
+	std::vector<int> buttonMapping; // Maps to proper state index
+	std::vector<int> buttonState;
+	std::vector<int> keyMapping; // Maps to proper state index
+	std::vector<int> keyState;
 
     bool quit; // If true, game should quit entirely
     
@@ -46,6 +42,4 @@ private:
     
 	SDL_Joystick* controller;
 	SDL_Event event;
-    
-	bool text_mode;
 };

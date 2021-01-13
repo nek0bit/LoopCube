@@ -1,5 +1,4 @@
-#ifndef ENTITY_HPP
-#define ENTITY_HPP
+#pragma once
 #include <iostream>
 
 #include <SDL2/SDL.h>
@@ -11,8 +10,8 @@
 #include "gameobj.hpp"
 #include "collisioninfo.hpp"
 
-class Entity: public GameObject {
-public:
+struct Entity: public GameObject
+{
 	Entity() = default;
 	Entity(int textureId,
 		   double x, double y, double width, double height);
@@ -34,9 +33,7 @@ protected:
 	CollisionInfo checkBlockCollision(ChunkGroup &chunks);
 
 	// Physics
-	double vel_x_speed;
+	double velXSpeed;
 	bool onGround;
 	int lastPos;
 };
-
-#endif

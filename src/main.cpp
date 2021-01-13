@@ -3,7 +3,7 @@
 void game_handles(Game& game) {
 	game.update();
 	game.render();
-	game.event_handler();
+	game.eventHandler();
 }
 
 void game_loop() {
@@ -17,7 +17,7 @@ void game_loop() {
 	Uint32 frame;
 	int frame_time;
 	
-	while(game.running()) {
+	while(game.isRunning) {
 		frame = SDL_GetTicks();
 		
         game_handles(game);
