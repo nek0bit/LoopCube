@@ -7,10 +7,8 @@ GravityParticle::GravityParticle(int textureId, int time, double startVelX, doub
 	velY = startVelY;
 }
 
-GravityParticle::~GravityParticle() {}
-
 void GravityParticle::update(ChunkGroup& chunks) {
-	time += 1;
+	time++;
 	updateBasicPhysics(chunks);
 }
 	

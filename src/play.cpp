@@ -150,16 +150,16 @@ void Play::render() {
 		entity->render(renderer, textures, camera);
 	}
 
-	if (!inv->get_inventory_visibility()) draw_selection(nullptr, nullptr);
+	if (!inv->showInventoryMenu) draw_selection(nullptr, nullptr);
 
-	inv->draw_hotbar();
+	inv->drawHotbar();
 
-	inv->draw_inventory_menu();
+	inv->drawInventoryMenu();
 }
 
 void Play::mouse_events() {
 	int p1, p2;
-	if (!inv->get_inventory_visibility()) draw_selection(&p1, &p2);
+	if (!inv->showInventoryMenu) draw_selection(&p1, &p2);
 
 	
 	// Get cursor over chunk
@@ -186,7 +186,7 @@ void Play::mouse_events() {
 			break;
 		case 3:
 			{
-				Item& item = inv->get_selected_item();
+				Item& item = inv->getSelectedItem();
 				if (item.enabled) {
 					BlockInfo b_info = item.get_block();
 					if (chunk->place_block(b_info.id, chunk_pos, p2)) {

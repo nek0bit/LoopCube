@@ -10,12 +10,11 @@
 #include "camera.hpp"
 #include "collisioninfo.hpp"
 
-class GameObject {
-
-public:
-	GameObject();
-	GameObject(int texture_id, double x, double y, double w, double h);
-	virtual ~GameObject();
+struct GameObject
+{
+	GameObject() = default;
+	GameObject(int textureId, double x, double y, double w, double h);
+	virtual ~GameObject() = default;
 
 	virtual void update();
     virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
@@ -30,6 +29,6 @@ public:
 
     Position obj;
 protected:
-	int texture_id;
+	int textureId;
     SDL_Rect src;
 };

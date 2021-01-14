@@ -11,7 +11,7 @@ Block::Block(int id, int x, int y)
     // Get block id
 	for (auto &i: constants::blockInfo) {
 		if (i.id == id) {
-			this->texture_id = i.textureId;
+			this->textureId = i.textureId;
 			this->blockinfo = &i;
 		}
 	}

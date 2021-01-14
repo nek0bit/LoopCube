@@ -1,11 +1,11 @@
-#ifndef INVENTORY_HPP
-#define INVENTORY_HPP
+#pragma once
 #include <iostream>
 #include <vector>
 #include <algorithm>
 
 #include <SDL2/SDL.h>
 
+#include "generic.hpp"
 #include "eventwrapper.hpp"
 #include "texturehandler.hpp"
 #include "winsize.hpp"
@@ -14,44 +14,38 @@
 #include "position.hpp"
 #include "item.hpp"
 
-class Inventory {
-public:
+struct Inventory
+{
 	Inventory(SDL_Renderer* renderer,
               TextureHandler& textures,
 			  EventWrapper& events,
               WinSize& winSize);
 	~Inventory();
 
-	void draw_hotbar();
-	void draw_inventory_menu();
-	bool get_inventory_visibility();
-	Item& get_selected_item(); 
-	void add_item(int id);
+	void drawHotbar();
+	void drawInventoryMenu();
+    Item& getSelectedItem();
+    bool showInventoryMenu;
+	void addItem(int id);
 	void update();
 private:
     WinSize& winSize;
 	bool animation;
-	int hotbar_slots;
-	int max_slots;
+	int hotbarSlots;
+	int maxSlots;
 	bool visible;
-	bool show_inventory_menu;
-	int hotbar_pos;
-	std::vector<int> get_hovered_pos(int x, int y, int corner_x, int corner_y, bool draw);
-	bool collision(int, int, int, int, int, int, int, int);
+	int hotbarPos;
+	std::vector<int> getHoveredPos(int x, int y, int cornerX, int cornerY, bool draw);
 
 	std::vector<int> slots;
 
 	std::vector<Item> items;
+    Item itemHeld;
 	
-	// Temporary item slot for holding items
-	Item item_held;
-
 	SDL_Renderer* renderer;
     TextureHandler& textures;
 	EventWrapper& events;
 
-    Transition inventory_slide;
-	Transition hotbar_slide;
+    Transition inventorySlide;
+	Transition hotbarSlide;
 };
-
-#endif // INVENTORY_HPP

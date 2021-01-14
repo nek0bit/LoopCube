@@ -1,18 +1,11 @@
 #include "gameobj.hpp"
 
-GameObject::GameObject() {}
-
-GameObject::GameObject(int texture_id, double x, double y, double w, double h) {
-	obj.x = x;
-	obj.y = y;
-	obj.w = w;
-	obj.h = h;
-
-	this->texture_id = texture_id;
+GameObject::GameObject(int textureId, double x, double y, double w, double h)
+    : obj{x, y, w, h},
+      textureId{textureId},
+      src{0, 0, 0, 0}
+{
 }
-
-GameObject::~GameObject()
-{}
 
 double GameObject::getX(Camera& camera) const
 {
@@ -45,7 +38,7 @@ void GameObject::render(SDL_Renderer* renderer, TextureHandler& textures, Camera
         static_cast<int>(getY(camera)),
         static_cast<int>(obj.w),
         static_cast<int>(obj.h)};
-    SDL_RenderCopy(renderer, textures.get_texture(texture_id), &src, &dest);
+    SDL_RenderCopy(renderer, textures.get_texture(textureId), &src, &dest);
 }
 
 CollisionInfo GameObject::isColliding(const GameObject &obj2)
@@ -58,30 +51,30 @@ CollisionInfo GameObject::isColliding(const GameObject &obj2)
 		r1.x + r1.w > r2.x &&
 		r1.y < r2.y + r2.h &&
 		r1.y + r1.h > r2.y) {
-		const double top_calc = (r1.y+r1.h) - r2.y;
-		const double bottom_calc = (r2.y+r2.h) - r1.y;
-		const double left_calc = (r1.x+r1.w) - r2.x;
-		const double right_calc = (r2.x+r2.h) - r1.x;
+		const double topCalc = (r1.y+r1.h) - r2.y;
+		const double bottomCalc = (r2.y+r2.h) - r1.y;
+		const double leftCalc = (r1.x+r1.w) - r2.x;
+		const double rightCalc = (r2.x+r2.h) - r1.x;
 
 		CollisionInfo info{-1, -1, -1, -1};
 		// top collision
-		if (top_calc < bottom_calc) {
-			info.top = top_calc;
+		if (topCalc < bottomCalc) {
+			info.top = topCalc;
 		}
 
 		// bottom collision
-		if (top_calc > bottom_calc) {
-			info.bottom = bottom_calc;
+		if (topCalc > bottomCalc) {
+			info.bottom = bottomCalc;
 		}
 
 		// left collision
-		if (left_calc < right_calc) {
-			info.left = left_calc;
+		if (leftCalc < rightCalc) {
+			info.left = leftCalc;
 		}
 
 		// right collision
-		if (left_calc > right_calc) {
-			info.right = right_calc;
+		if (leftCalc > rightCalc) {
+			info.right = rightCalc;
 		}
 		return info;
 	}
