@@ -188,9 +188,9 @@ void Play::mouse_events() {
 			{
 				Item& item = inv->getSelectedItem();
 				if (item.enabled) {
-					BlockInfo b_info = item.get_block();
+					BlockInfo& b_info = item.block;
 					if (chunk->place_block(b_info.id, chunk_pos, p2)) {
-						item.add_count(-1);
+						item.addCount(-1);
 					}
 				}
 			}

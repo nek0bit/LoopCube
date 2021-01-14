@@ -36,12 +36,12 @@ void Inventory::addItem(int id)
 	auto found = std::find_if(items.begin(), items.end(), [&](Item item)
         {
             if (!item.enabled) return false; 
-            return item.get_block().id == id ? item.get_count() < maxCount : false;
+            return item.block.id == id ? item.count < maxCount : false;
         });
 
 	if (found != items.end())
     {
-		found->add_count();
+		found->addCount();
 	}
     else
     {

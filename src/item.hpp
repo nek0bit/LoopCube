@@ -1,5 +1,4 @@
-#ifndef ITEM_HPP
-#define ITEM_HPP
+#pragma once
 #include <iostream>
 #include <string>
 #include <memory>
@@ -11,22 +10,17 @@
 #include "blockinfo.hpp"
 #include "texturehandler.hpp"
 
-class Item {
-public:
+struct Item {
 	Item();
 	Item(SDL_Renderer* renderer, int id);
-	~Item();
+	~Item() = default;
 
 	void render(SDL_Renderer* renderer, TextureHandler& textures, int x, int y, int width, int height);
-	void add_count(int amount = 1);
-	int get_count();
-	BlockInfo get_block();
+	void addCount(int amount = 1);
+    int count;
+    BlockInfo block;
 	bool enabled;
 private:
     std::shared_ptr<Text> text;
 	std::string id;
-	BlockInfo block;
-	int count;
 };
-
-#endif // ITEM_HPP

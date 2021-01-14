@@ -2,9 +2,14 @@
 
 Item::Item() : enabled{false} {}
 
-Item::Item(SDL_Renderer* renderer, int id) : enabled{true}, count{} {
-	for (auto &i: constants::blockInfo) {
-		if (i.id == id) {
+Item::Item(SDL_Renderer* renderer, int id)
+    : enabled{true},
+      count{}
+{
+	for (auto &i: constants::blockInfo)
+    {
+		if (i.id == id)
+        {
 			block = i;
 		}
 	}
@@ -14,18 +19,10 @@ Item::Item(SDL_Renderer* renderer, int id) : enabled{true}, count{} {
     
 }
 
-Item::~Item() {}
-
-int Item::get_count() {
-	return count;
-}
-
-BlockInfo Item::get_block() {
-	return block;
-}
-
-void Item::add_count(int amount) {
+void Item::addCount(int amount)
+{
 	count += amount;
+    
 	if (count == -1) {
 		enabled = false;
 	}
@@ -34,11 +31,13 @@ void Item::add_count(int amount) {
 
 }
 
-void Item::render(SDL_Renderer* renderer, TextureHandler& textures, int x, int y, int width = 35, int height = 35) {
+void Item::render(SDL_Renderer* renderer, TextureHandler& textures,
+                  int x, int y, int width = 35, int height = 35)
+{
 	int offset_y = -10;
 	SDL_Rect src{0, 0, constants::blockImgSize, constants::blockImgSize};
     SDL_Rect block{x, y, width, height};
     SDL_RenderCopy(renderer, textures.get_texture(this->block.textureId), &src, &block);
     
-	text->draw(x, y+height+offset_y);
+	text->draw(x, y + height + offset_y);
 }
