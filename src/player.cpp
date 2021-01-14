@@ -1,6 +1,7 @@
 #include "player.hpp"
 
-enum Sprites {
+enum Sprites
+{
 	PLAYER_IDLE,
 	PLAYER_WALK_CYCLE1,
 	PLAYER_WALK_CYCLE2,
@@ -21,7 +22,8 @@ Player::Player()
 Player::~Player()
 {}
 
-void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
+void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities)
+{
 	updateBasicPhysics(chunks);
 	frame.tick();
 
@@ -35,20 +37,28 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
 	// Where the player is looking
 	static int adder = 0;
 	
-	if ((velX < -0.1 || velX > 0.1) && onGround) {
-		if (velX < -0.1) {
+	if ((velX < -0.1 || velX > 0.1) && onGround)
+    {
+		if (velX < -0.1)
+        {
 			// Walking left
 			sprite.set_x(onFrame + maxFrames);
 			adder = maxFrames;
-		} else if (velX > 0.1) {
+		}
+        else if (velX > 0.1)
+        {
 			// Walking right
 			sprite.set_x(onFrame);
 			adder = 0;
 		}
-	} else if (jumping) {
+	}
+    else if (jumping)
+    {
 		// Jumping
 		sprite.set_x(PLAYER_IDLE + adder);
-	} else {
+	}
+    else
+    {
 		// Idle
 		sprite.set_x(PLAYER_IDLE + adder);
 	}
@@ -59,15 +69,19 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
 	src.h = sprite.get_height();
 
 	// See if touching entities
-	for (auto*& entity: entities) {
+	for (auto*& entity: entities)
+    {
 		CollisionInfo info = isColliding(*entity);
-		if (info.colliding) {
-			if (info.bottom >= 0) {
+		if (info.colliding)
+        {
+			if (info.bottom >= 0)
+            {
 				velY = 0;
 				entity->collisionBottom();
 				entity->update(chunks);
 			}
-			if (info.top >= 0) {
+			if (info.top >= 0)
+            {
 				obj.y -= info.top;
 				velY = 0;
 			}
@@ -75,16 +89,19 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
 	}
 	
 	// Prevent player from holding jump
-	if (!canJump && onGround) {
+	if (!canJump && onGround)
+    {
 		jumpEnabled = false;
 	}
 		
-	if (canJump && onGround) {
+	if (canJump && onGround)
+    {
 		jumpEnabled = true;
 	}
 	
 	// Check if jump released
-	if (!onGround && !jumping) {
+	if (!onGround && !jumping)
+    {
 		if (velY < -5) {
 			velY += 1.0;
 		}
@@ -95,7 +112,8 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities) {
 	canJump = true;
 }
 
-void Player::jump(ChunkGroup &chunks) {	
+void Player::jump(ChunkGroup &chunks)
+{
 	obj.y += 1;
 	if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
 		velY = -12;
@@ -106,8 +124,10 @@ void Player::jump(ChunkGroup &chunks) {
 	canJump = false;
 }
 
-void Player::direct_player(int direction, ChunkGroup &chunks) {
-	switch (direction) {
+void Player::directPlayer(int direction, ChunkGroup &chunks)
+{
+	switch (direction)
+    {
 	case 0: // UP
 		jump(chunks);
 		break;

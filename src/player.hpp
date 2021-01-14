@@ -1,5 +1,4 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#pragma once
 #include <iostream>
 #include <cmath>
 
@@ -9,8 +8,8 @@
 #include "animation.hpp"
 #include "spritesheet.hpp"
 
-class Player: public Entity {
-public:
+struct Player: public Entity
+{
 	Player();
 	~Player();
 
@@ -18,7 +17,7 @@ public:
 	
 	// Movement
 	void jump(ChunkGroup &chunks);
-	void direct_player(int direction, ChunkGroup &chunks);
+	void directPlayer(int direction, ChunkGroup &chunks);
 private:
 	// Sprite stuff
 	Spritesheet sprite;
@@ -29,5 +28,3 @@ private:
 	bool canJump;
 	bool jumpEnabled;
 };
-
-#endif // PLAYER_HPP

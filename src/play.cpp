@@ -51,7 +51,7 @@ void Play::update()
     {
 		if (events.keyState[i])
         {
-			player.direct_player(i, chunks);
+			player.directPlayer(i, chunks);
 		}
 	}
 
@@ -64,31 +64,31 @@ void Play::update()
 	// Jump (A)
 	if (events.buttonState[4])
     {
-		player.direct_player(0, chunks);
+		player.directPlayer(0, chunks);
 	}
 
 	// Down
 	if (events.buttonState[0])
     {
-		player.direct_player(2, chunks);
+		player.directPlayer(2, chunks);
 	}
 
 	// Right
 	if (events.buttonState[1])
     {
-		player.direct_player(1, chunks);
+		player.directPlayer(1, chunks);
 	}
 
 	// Left
 	if (events.buttonState[2])
     {
-		player.direct_player(3, chunks);
+		player.directPlayer(3, chunks);
 	}
 
 	// Up
 	if (events.buttonState[3])
     {
-		player.direct_player(0, chunks);
+		player.directPlayer(0, chunks);
 	}
 
 
