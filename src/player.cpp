@@ -42,31 +42,31 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities)
 		if (velX < -0.1)
         {
 			// Walking left
-			sprite.set_x(onFrame + maxFrames);
+			sprite.x = onFrame + maxFrames;
 			adder = maxFrames;
 		}
         else if (velX > 0.1)
         {
 			// Walking right
-			sprite.set_x(onFrame);
+			sprite.x = onFrame;
 			adder = 0;
 		}
 	}
     else if (jumping)
     {
 		// Jumping
-		sprite.set_x(PLAYER_IDLE + adder);
+		sprite.x = PLAYER_IDLE + adder;
 	}
     else
     {
 		// Idle
-		sprite.set_x(PLAYER_IDLE + adder);
+		sprite.x = PLAYER_IDLE + adder;
 	}
 
-	src.x = sprite.get_x();
-	src.y = sprite.get_y();
-	src.w = sprite.get_width();
-	src.h = sprite.get_height();
+	src.x = sprite.getX();
+	src.y = sprite.getY();
+	src.w = sprite.width;
+	src.h = sprite.height;
 
 	// See if touching entities
 	for (auto*& entity: entities)

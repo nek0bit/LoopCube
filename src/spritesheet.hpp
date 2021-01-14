@@ -1,25 +1,16 @@
-#ifndef SPRITESHEET_HPP
+#pragma once
 #include <iostream>
 
-// Note: This uses single-precision, I personally didn't see the reason to use double precision numbers but if there are errors in the future consult here
-class Spritesheet {
-public:
+struct Spritesheet
+{
 	Spritesheet(float width, float height);
 	~Spritesheet();
 
-	void set_x(int x);
-    void set_y(int y);
-
-	// Getters
-    float get_x();
-    float get_y();
-	float get_width();
-	float get_height();
-private:
+    float getX();
+    float getY();
+    
 	float x;
     float y;
     float width;
     float height;
 };
-
-#endif
