@@ -1,14 +1,14 @@
 #include "main.hpp"
 
-void game_handles(Game& game) {
+void gameHandles(Game& game) {
 	game.update();
 	game.render();
 	game.eventHandler();
 }
 
-void game_loop() {
-	const int FPS = 60;
-	const int frame_del = 1000 / FPS;
+void gameLoop() {
+	constexpr int FPS = 60;
+	constexpr int FRAME_DEL = 1000 / FPS;
 	
 	Game game{};
 	
@@ -20,12 +20,12 @@ void game_loop() {
 	while(game.isRunning) {
 		frame = SDL_GetTicks();
 		
-        game_handles(game);
+        gameHandles(game);
 
 	    frame_time = SDL_GetTicks() - frame;
 
-		if (frame_time < frame_del) {
-			SDL_Delay(frame_del - frame_time);
+		if (frame_time < FRAME_DEL) {
+			SDL_Delay(FRAME_DEL - frame_time);
 		}
 	}
 		
@@ -48,7 +48,7 @@ int main(/* int argc, char* argv[] */) {
 		romfsInit();
 #endif
 
-	game_loop();
+	gameLoop();
 
 // End main applet loop for nintendo switch
 #ifdef __SWITCH__
