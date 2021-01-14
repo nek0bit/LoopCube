@@ -1,5 +1,4 @@
-#ifndef MENU_HPP
-#define MENU_HPP
+#pragma once
 #include <iostream>
 #include <vector>
 #include <string>
@@ -18,41 +17,41 @@
 #include "animation.hpp"
 #include "item.hpp"
 
-class Menu {
-public:
+struct Menu
+{
 	Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize);
 	~Menu();
 
 	void update(bool update_animations = true);
 	void render();
-	void render_background();
-	void render_sidebar();
-	void render_main_menu();
-	void render_config_menu();
-	void set_state(int state);
-	int get_pressed();
+	void renderBackground();
+	void renderSidebar();
+	void renderMainMenu();
+	void renderConfigMenu();
+	void setState(int state);
+	int getPressed();
 private:
 	// Functions
-	static void update_config_elements(int id, int value);
+	static void updateConfigElements(int id, int value);
 	
 	int state;
 
     WinSize& winSize;
 	
-	int offset_x;
-	int offset_y;
+	int offsetX;
+	int offsetY;
 	// Main Menu Stuff
-	std::vector<std::string> option_str;
-	std::vector<int> option_state; 
-	std::vector<std::unique_ptr<Button>> button_group;
+	std::vector<std::string> optionStr;
+	std::vector<int> optionState; 
+	std::vector<std::unique_ptr<Button>> buttonGroup;
 
 	// MISC
 	const int BLOCK_S;
 	const int BUTTON_W;
 
 	// Config stuff
-	std::unique_ptr<Button> back_button;
-	std::vector<UiElement*> c_elements;
+	std::unique_ptr<Button> backButton;
+	std::vector<UiElement*> cElements;
 	
 	// Important setup
 	SDL_Renderer* renderer;
@@ -61,21 +60,18 @@ private:
 	Animation shift;
 
 	Box back;
-	const int box_width;
-	const int box_height;
+	const int boxWidth;
+	const int boxHeight;
 	
 	// Content elements for sidebar
-	int prev_mid_left;
-	int mid_left;
-	int content_left;
+	int prevMidLeft;
+	int midLeft;
+	int contentLeft;
 	
-	Item random_block;
-    std::string p_string;
+	Item randomBlock;
+    std::string pString;
 
 	Text* header;
 	Text* paragraph;
-	const int pad_left;
+	const int padLeft;
 };
-
-
-#endif // MENU_HPP

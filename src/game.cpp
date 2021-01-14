@@ -38,7 +38,7 @@ void Game::update() {
 	switch(state.get()) {
 	case STATE_MAIN_MENU:
 		menu->update();
-		switch(menu->get_pressed()) {
+		switch(menu->getPressed()) {
 		case 0:
 			// Set state, we need to redo this switch case afterwards
 			state.set(STATE_PLAYING);
@@ -51,7 +51,7 @@ void Game::update() {
 			// NOTE not implemented yet
 			break;
 		case 2:
-			menu->set_state(1);
+			menu->setState(1);
 			break;
 		case 3:
 			isRunning = false;
