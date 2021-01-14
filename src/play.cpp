@@ -2,7 +2,7 @@
 
 Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize)
 	: winSize{winSize},
-      show_particles{false},
+      showParticles{false},
       renderer{renderer},
       textures{textures},
       events{events},
@@ -20,13 +20,14 @@ Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
     camera.y = 0;
 
 	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, winSize));
-	update_config();
+	updateConfig();
 }
 
 Play::~Play() {}
 
-void Play::update() {	
-	mouse_events();
+void Play::update()
+{
+	mouseEvents();
 	
 	// Update all chunks
 	chunks.update_all_viewport(camera);
@@ -35,8 +36,10 @@ void Play::update() {
 	inv->update();
 
 	// Update all entities
-	for (Entity*& entity: entities) {
-		if (!entity->shouldCull(camera)) {
+	for (Entity*& entity: entities)
+    {
+		if (!entity->shouldCull(camera))
+        {
 			entity->update(chunks);
 		}
 	}
@@ -44,39 +47,47 @@ void Play::update() {
 	// Update player
 	player.update(chunks, entities);
 
-	for (int i = 0; i < 4; ++i) {
-		if (events.keyState[i]) {
+	for (int i = 0; i < 4; ++i)
+    {
+		if (events.keyState[i])
+        {
 			player.direct_player(i, chunks);
 		}
 	}
 
 	// Create entity
-	if (events.keyState[16] || events.buttonState[9]) {
+	if (events.keyState[16] || events.buttonState[9])
+    {
 		entities.push_back(new TestEntity(player.obj.x, player.obj.y-30));
 	}
 
 	// Jump (A)
-	if (events.buttonState[4]) {
+	if (events.buttonState[4])
+    {
 		player.direct_player(0, chunks);
 	}
 
 	// Down
-	if (events.buttonState[0]) {
+	if (events.buttonState[0])
+    {
 		player.direct_player(2, chunks);
 	}
 
 	// Right
-	if (events.buttonState[1]) {
+	if (events.buttonState[1])
+    {
 		player.direct_player(1, chunks);
 	}
 
 	// Left
-	if (events.buttonState[2]) {
+	if (events.buttonState[2])
+    {
 		player.direct_player(3, chunks);
 	}
 
 	// Up
-	if (events.buttonState[3]) {
+	if (events.buttonState[3])
+    {
 		player.direct_player(0, chunks);
 	}
 
@@ -85,21 +96,25 @@ void Play::update() {
 	fade.tick();
 	
 	// Structures Queue Handling
-	for (size_t k = 0; k < structures.size(); ++k) {
+	for (size_t k = 0; k < structures.size(); ++k)
+    {
 		auto& data = structures[k]->get_data();
 		
 		// Make sure we delete old structures to prevent memleaks
-		if (data.size() == 0) {
+		if (data.size() == 0)
+        {
 			delete structures[k];
 			structures.erase(structures.begin() + k);
 			continue;
 		}
 		
-		for (size_t i = 0; i < data.size(); ++i) {
+		for (size_t i = 0; i < data.size(); ++i)
+        {
 			// See if the chunk actually exists
 			auto c1 = chunks.get_chunk_at((structures[k]->get_x()+data[i].x)*constants::blockW, false);
 			
-			if (c1 != nullptr) {
+			if (c1 != nullptr)
+            {
 				int chunk_pos = std::abs(((structures[k]->get_x()+data[i].x))-(c1->get_slot()*constants::chunkWidth));
 
 				// Place block in proper chunk
@@ -112,15 +127,17 @@ void Play::update() {
 	}
 	
 	// Particles
-	dead_particles();
+	deadParticles();
 
-	if (show_particles) {
-		for (auto& particle: particles) {
+	if (showParticles)
+    {
+		for (auto& particle: particles)
+        {
 			particle.update(chunks);
 		}
 	}
 
-	handle_camera();
+	handleCamera();
 
 	// Update background (after we handle camera or things get a tiny bit off sync)
 	background->update(camera, time);
@@ -128,16 +145,18 @@ void Play::update() {
     time.tick();
 }
 
-void Play::update_config() {
-	show_particles = constants::config.getInt(CONFIG_SHOW_PARTICLES);
+void Play::updateConfig() {
+	showParticles = constants::config.getInt(CONFIG_SHOW_PARTICLES);
 }
 
 void Play::render() {
 	// Render background elements
 	background->render(renderer, textures);
 	
-	if (show_particles) {
-		for (auto& particle: particles) {
+	if (showParticles)
+    {
+		for (auto& particle: particles)
+        {
 			particle.render(renderer, textures, camera);
 		}
 	}
@@ -146,55 +165,57 @@ void Play::render() {
 	
 	player.render(renderer, textures, camera);
 
-	for (Entity*& entity: entities) {
+	for (Entity*& entity: entities)
+    {
 		entity->render(renderer, textures, camera);
 	}
 
-	if (!inv->showInventoryMenu) draw_selection(nullptr, nullptr);
+	if (!inv->showInventoryMenu) drawSelection(nullptr, nullptr);
 
 	inv->drawHotbar();
 
 	inv->drawInventoryMenu();
 }
 
-void Play::mouse_events() {
+void Play::mouseEvents() {
 	int p1, p2;
-	if (!inv->showInventoryMenu) draw_selection(&p1, &p2);
-
+	if (!inv->showInventoryMenu) drawSelection(&p1, &p2);
 	
 	// Get cursor over chunk
 	Chunk* chunk = chunks.get_chunk_at(p1*constants::blockW, true);
-	if (chunk != nullptr) {
+	if (chunk != nullptr)
+    {
 		// Do some math to get the chunk position
 		int chunk_pos = std::abs(p1-(chunk->get_slot()*constants::chunkWidth));
 
-		switch(events.vmouse.down) {
+		switch(events.vmouse.down)
+        {
 		case 1:
-			{
-				const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv.get());
-
-				// Check if block found
-				if (block != nullptr) {
-					// Generate particles
-					if (show_particles) {
-						GravityParticle temp{block->textureId,50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
-						    p1*constants::blockW+(constants::blockW/2), p2*constants::blockH, 8, 6};
-						particles.push_back(temp);
-					}
-				}
-			}
-			break;
+        {
+            const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv.get());
+            
+            // Check if block found
+            if (block != nullptr) {
+                // Generate particles
+                if (showParticles) {
+                    GravityParticle temp{block->textureId,50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
+                        p1*constants::blockW+(constants::blockW/2), p2*constants::blockH, 8, 6};
+                    particles.push_back(temp);
+                }
+            }
+        }
+        break;
 		case 3:
-			{
-				Item& item = inv->getSelectedItem();
-				if (item.enabled) {
-					BlockInfo& b_info = item.block;
-					if (chunk->place_block(b_info.id, chunk_pos, p2)) {
-						item.addCount(-1);
-					}
-				}
-			}
-			break;
+        {
+            Item& item = inv->getSelectedItem();
+            if (item.enabled) {
+                BlockInfo& b_info = item.block;
+                if (chunk->place_block(b_info.id, chunk_pos, p2)) {
+                    item.addCount(-1);
+                }
+            }
+        }
+        break;
 		default:
 			break;
 		}
@@ -203,7 +224,8 @@ void Play::mouse_events() {
 
 // Draw a selection box and set p1 and p2 to the position
 // Perhaps we should rename this to get_selection and seperate rendering functions?
-void Play::draw_selection(int* p1, int* p2) {
+void Play::drawSelection(int* p1, int* p2)
+{
 	int b_w = static_cast<int>(constants::blockW);
 	int b_h = static_cast<int>(constants::blockH);
 
@@ -212,33 +234,36 @@ void Play::draw_selection(int* p1, int* p2) {
 
     SDL_Rect selection{sel_x + static_cast<int>(camera.x), sel_y + static_cast<int>(camera.y), b_w, b_h};
 
-	int fade_amount = std::abs(std::sin(static_cast<double>(fade.frame)/20))*30+50;
+	int fade_amount = std::abs(std::sin(static_cast<double>(fade.frame) / 20)) * 30 + 50;
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, fade_amount);
     SDL_RenderFillRect(renderer, &selection);
 
-	if (p1 != nullptr) *p1 = sel_x/b_w;
-	if (p2 != nullptr) *p2 = sel_y/b_h;
+	if (p1 != nullptr) *p1 = sel_x / b_w;
+	if (p2 != nullptr) *p2 = sel_y / b_h;
 }
 
 // Sets camera to player position
-void Play::handle_camera() {
-	double x = std::floor(player.obj.x) * -1 + (winSize.w/2) - player.obj.w/2;
-	double y = std::floor(player.obj.y) * -1 + (winSize.h/2) - player.obj.h/2;
+void Play::handleCamera()
+{
+	double x = -std::floor(player.obj.x) + (winSize.w / 2) - player.obj.w/2;
+	double y = -std::floor(player.obj.y) + (winSize.h/2) - player.obj.h/2;
 	
-	static double move_x = x;
-	static double move_y = y;
+	static double moveX = x;
+	static double moveY = y;
 
 	float amount = 0.25;
-	move_x += (x - move_x)*amount;
-	move_y += (y - move_y)*amount;
+	moveX += (x - moveX) * amount;
+	moveY += (y - moveY) * amount;
 	
-    camera.x = move_x;
-    camera.y = move_y;
+    camera.x = moveX;
+    camera.y = moveY;
 }
 
-void Play::dead_particles() {
-	for (size_t i = 0; i < particles.size(); ++i) {
+void Play::deadParticles()
+{
+	for (size_t i = 0; i < particles.size(); ++i)
+    {
 		if (particles[i].isDead()) particles.erase(particles.begin() + i);
 	}
 }

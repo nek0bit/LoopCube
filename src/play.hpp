@@ -32,19 +32,18 @@ struct Play
 	Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize);
 	~Play();
 
-	void event_handler();
 	void render();
 	void update();
 private:
     WinSize& winSize;
-	void handle_camera();
-	void draw_selection(int* p1, int* p2);
-	void dead_particles();
-	void update_config();
-	void mouse_events();
+	void handleCamera();
+	void drawSelection(int* p1, int* p2);
+	void deadParticles();
+	void updateConfig();
+	void mouseEvents();
 
 	// Options
-	bool show_particles;
+	bool showParticles;
 	
     SDL_Renderer* renderer;
     TextureHandler& textures;
