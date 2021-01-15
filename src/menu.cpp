@@ -20,11 +20,14 @@ Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
       offsetY{0},
       BLOCK_S{40},
       BUTTON_W{200},
+      showPlayBuffer{false},
+      bgX{0},
+      bgY{0},
       backButton{nullptr},
       renderer{renderer},
       textures{textures},
       events{events},
-      shift{BLOCK_S},
+      shift{1270},
       back{40, 40, 400, 400},
       boxWidth{660},
       boxHeight{460},
@@ -184,30 +187,6 @@ void Menu::update(bool updateAnimations)
 	}
 }
 
-void Menu::renderBackground()
-{
-	// Render the background in a tile manner with animations
-	const int BLOCK_S = 40;
-	const int MAX_X = (winSize.w + BLOCK_S*2)/BLOCK_S;
-	const int MAX_Y = (winSize.h + BLOCK_S*2)/BLOCK_S;
-	// Create a grid of tiles as the background
-	for (int i = -1; i < MAX_X; ++i)
-    {
-		for (int j = -1; j < MAX_Y; ++j)
-        {
-		    SDL_Rect block{
-				i*BLOCK_S - shift.frame,
-				j*BLOCK_S - shift.frame,
-				BLOCK_S, BLOCK_S};
-			SDL_Rect src{0, 0, 16, 16};
-
-			// Draw the tile
-            SDL_RenderCopy(renderer, textures.get_texture(2), &src, &block);    
-		}
-	}
-
-	back.render(renderer, textures, offsetX, offsetY);
-}
 
 void Menu::setState(int state)
 {
@@ -267,9 +246,31 @@ void Menu::renderConfigMenu()
 	}
 }
 
+void Menu::renderBackground()
+{
+    constexpr int radius = 360;
+    bgX = std::sin(shift.frame*0.005)*radius;
+    bgY = std::cos(shift.frame*0.005)*radius;
+    Generic::Render::renderRepeating(renderer, textures, 8, winSize.w, winSize.h,
+                                     bgX, bgY, 40, 40, 0, 0,
+                                     true, constants::blockImgSize, constants::blockImgSize);
+}
+
 void Menu::render()
 {
-	renderBackground();
+    if (!showPlayBuffer)
+    {
+        renderBackground();
+    }
+    else
+    {
+        SDL_Rect bg{0, 0, winSize.w, winSize.h};
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 120);
+        SDL_RenderFillRect(renderer, &bg);
+    }
+    
+    back.render(renderer, textures, offsetX, offsetY);
 	renderSidebar();
 
 	if (state == MAIN_MENU)

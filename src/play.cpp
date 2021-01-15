@@ -2,7 +2,6 @@
 
 Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize)
 	: winSize{winSize},
-      showParticles{false},
       renderer{renderer},
       textures{textures},
       events{events},
@@ -20,7 +19,6 @@ Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
     camera.y = 0;
 
 	inv = std::unique_ptr<Inventory>(new Inventory(renderer, textures, events, winSize));
-	updateConfig();
 }
 
 Play::~Play() {}
@@ -129,7 +127,7 @@ void Play::update()
 	// Particles
 	deadParticles();
 
-	if (showParticles)
+	if (constants::config.getInt(CONFIG_SHOW_PARTICLES))
     {
 		for (auto& particle: particles)
         {
@@ -145,15 +143,11 @@ void Play::update()
     time.tick();
 }
 
-void Play::updateConfig() {
-	showParticles = constants::config.getInt(CONFIG_SHOW_PARTICLES);
-}
-
 void Play::render() {
 	// Render background elements
 	background->render(renderer, textures);
 	
-	if (showParticles)
+	if (constants::config.getInt(CONFIG_SHOW_PARTICLES))
     {
 		for (auto& particle: particles)
         {
@@ -197,7 +191,7 @@ void Play::mouseEvents() {
             // Check if block found
             if (block != nullptr) {
                 // Generate particles
-                if (showParticles) {
+                if (constants::config.getInt(CONFIG_SHOW_PARTICLES)) {
                     GravityParticle temp{block->textureId,50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
                         p1*constants::blockW+(constants::blockW/2), p2*constants::blockH, 8, 6};
                     particles.push_back(temp);

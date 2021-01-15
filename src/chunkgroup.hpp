@@ -48,7 +48,6 @@ public:
 	// Debug
 	void print_chunks_fancy();
 private:
-	void update_config();
 	void sort_all();
 	template <class T, class U>
 	void insert_sorted(T &data, U value) {
@@ -57,7 +56,6 @@ private:
 	}
 
 	// Config
-	bool show_shadows;
 	bool render_chunk_info;
 
 	std::vector<Chunk> group; // Chunks the game works with in place

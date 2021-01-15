@@ -39,11 +39,7 @@ private:
 	void handleCamera();
 	void drawSelection(int* p1, int* p2);
 	void deadParticles();
-	void updateConfig();
 	void mouseEvents();
-
-	// Options
-	bool showParticles;
 	
     SDL_Renderer* renderer;
     TextureHandler& textures;

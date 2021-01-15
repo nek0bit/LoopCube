@@ -34,6 +34,10 @@ void Game::update() {
         switch(state.top()) {
         case STATE_MAIN_MENU:
             menu->update();
+            if (game != nullptr && menu->showPlayBuffer == false)
+            {
+                menu->showPlayBuffer = true;
+            }
             switch(menu->getPressed()) {
             case 0:
                 // Set state, we need to redo this switch case afterwards
@@ -88,6 +92,7 @@ void Game::render() {
     {
         switch(state.top()) {
         case STATE_MAIN_MENU:
+            if (game != nullptr) game->render();
             if (menu != nullptr) menu->render();
             break;
         case STATE_PLAYING:

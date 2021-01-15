@@ -6,6 +6,7 @@
 #include <random>
 #include <memory>
 
+#include "generic.hpp"
 #include "box.hpp"
 #include "texturehandler.hpp"
 #include "winsize.hpp"
@@ -30,6 +31,8 @@ struct Menu
 	void renderConfigMenu();
 	void setState(int state);
 	int getPressed();
+
+    bool showPlayBuffer;
 private:
 	// Functions
 	static void updateConfigElements(int id, int value);
@@ -48,6 +51,10 @@ private:
 	// MISC
 	const int BLOCK_S;
 	const int BUTTON_W;
+
+    // Background movement
+    int bgX;
+    int bgY;
 
 	// Config stuff
 	std::unique_ptr<Button> backButton;
