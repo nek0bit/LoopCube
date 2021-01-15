@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <stack>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -13,9 +14,16 @@
 #include "texturehandler.hpp"
 #include "play.hpp"
 #include "menu.hpp"
-#include "state.hpp"
 #include "winsize.hpp"
 #include "eventwrapper.hpp"
+
+enum GAME_STATE {
+	// Menu
+	STATE_MAIN_MENU,
+
+	// Game
+	STATE_PLAYING,
+};
 
 struct Game
 {
@@ -35,7 +43,7 @@ private:
 	
 	bool hasFreed = false;
 
-	State state;
+    std::stack<int> state;
     std::shared_ptr<Play> game;
     std::shared_ptr<Menu> menu;
 

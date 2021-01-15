@@ -23,7 +23,8 @@ EventWrapper::EventWrapper()
 		SDL_SCANCODE_9, // Slot 9
 		SDL_SCANCODE_0, // Slot 0
 		SDL_SCANCODE_F8, // DEBUG
-		SDL_SCANCODE_C // SPAWN ENTITY
+		SDL_SCANCODE_C, // SPAWN ENTITY
+        SDL_SCANCODE_ESCAPE // Exit
 	};
 	buttonMapping = {
 		SDL_CONTROLLER_BUTTON_DPAD_UP,
@@ -66,7 +67,7 @@ void EventWrapper::updateControllers() {
 
 void EventWrapper::listen() {
 	// TODO move exceptions from SDL2 into internal class
-	std::vector<int> exceptions{4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+	std::vector<int> exceptions{4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
 	std::vector<int> controller_exceptions{6, 8};
 
 	

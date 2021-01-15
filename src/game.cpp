@@ -1,15 +1,9 @@
 #include "game.hpp"
 
-enum GAME_STATE {
-	// Menu
-	STATE_MAIN_MENU,
 
-	// Game
-	STATE_PLAYING,
-} STATE;
 
 Game::Game() : title{"LoopCube"}, state{}, game{nullptr}, menu{nullptr}, winSize{}, textures{nullptr} {
-
+    state.push(STATE_MAIN_MENU);
 }
 
 Game::~Game() {
@@ -35,45 +29,48 @@ void Game::gameInit() {
 
 // Game related loop stuff
 void Game::update() {
-	switch(state.get()) {
-	case STATE_MAIN_MENU:
-		menu->update();
-		switch(menu->getPressed()) {
-		case 0:
-			// Set state, we need to redo this switch case afterwards
-			state.set(STATE_PLAYING);
+    if (state.size() > 0)
+    {
+        switch(state.top()) {
+        case STATE_MAIN_MENU:
+            menu->update();
+            switch(menu->getPressed()) {
+            case 0:
+                // Set state, we need to redo this switch case afterwards
+                state.push(STATE_PLAYING);
 			
-			// Go through switch-case again so we can setup the game
-			update();
+                // Go through switch-case again so we can setup the game
+                update();
 			
-			break;
-		case 1:
-			// NOTE not implemented yet
-			break;
-		case 2:
-			menu->setState(1);
-			break;
-		case 3:
-			isRunning = false;
-			break;
-		default:
-			break;
-		}
-		break;
-	case STATE_PLAYING:
-		// Check if the game is nullptr, then create it
-		if (game == nullptr) {
-			game = std::shared_ptr<Play>(new Play(renderer, *textures, events, winSize));
-			// Let's pre-load a frame so everything can generate and render
-			// This may need to change depending on world generation in the future
-			game->update();
-		} else {
-			game->update();
-		}
-		break;
-	default:
-		break;
-	}
+                break;
+            case 1:
+                // NOTE not implemented yet
+                break;
+            case 2:
+                menu->setState(1);
+                break;
+            case 3:
+                isRunning = false;
+                break;
+            default:
+                break;
+            }
+            break;
+        case STATE_PLAYING:
+            // Check if the game is nullptr, then create it
+            if (game == nullptr) {
+                game = std::shared_ptr<Play>(new Play(renderer, *textures, events, winSize));
+                // Let's pre-load a frame so everything can generate and render
+                // This may need to change depending on world generation in the future
+                game->update();
+            } else {
+                game->update();
+            }
+            break;
+        default:
+            break;
+        }
+    }
 
 	// Update screen size
     SDL_GetWindowSize(window, &winSize.w, &winSize.h);
@@ -87,16 +84,19 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-	switch(state.get()) {
-	case STATE_MAIN_MENU:
-		if (menu != nullptr) menu->render();
-		break;
-	case STATE_PLAYING:
-		if (game != nullptr) game->render();
-		break;
-	default:
-		break;
-	}
+    if (state.size() > 0)
+    {
+        switch(state.top()) {
+        case STATE_MAIN_MENU:
+            if (menu != nullptr) menu->render();
+            break;
+        case STATE_PLAYING:
+            if (game != nullptr) game->render();
+            break;
+        default:
+            break;
+        }
+    }
 
     // TODO clean me up
 #if defined(__WIIU__) || defined(__SWITCH__)
@@ -161,9 +161,19 @@ void Game::init(bool fullscreen = false) {
 void Game::eventHandler() {
 	events.listen();
 
-	if (events.quit) {
+	if (events.quit)
+    {
 		isRunning = false;
 	}
+
+    if (events.keyState[17])
+    {
+        state.pop();
+        if (state.size() == 0)
+        {
+            events.quit = true;
+        }
+    }
 }
 
 void Game::free() {
