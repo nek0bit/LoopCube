@@ -15,15 +15,15 @@ Texture::Texture(SDL_Renderer* renderer, std::string filename)
 
 Texture::~Texture()
 {
-    free_texture();
+    freeTexture();
 }
 
-SDL_Texture*& Texture::get_texture()
+SDL_Texture*& Texture::getTexture()
 {
     return texture;
 }
 
-void Texture::free_texture()
+void Texture::freeTexture()
 {
     SDL_DestroyTexture(texture);
 }

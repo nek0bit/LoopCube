@@ -70,9 +70,9 @@ void Button::render(SDL_Renderer* renderer, TextureHandler& textures, int offset
 		end{offsetX+dest.x+dest.w, offsetY+dest.y, src.w*2, dest.h};
 	SDL_Rect mod_dest{offsetX+dest.x, offsetY+dest.y, dest.w, dest.h};
 
-    SDL_RenderCopy(renderer, textures.get_texture(6), &src, &begin);
-    SDL_RenderCopy(renderer, textures.get_texture(5), &src, &mod_dest);
-    SDL_RenderCopy(renderer, textures.get_texture(7), &src, &end);
+    SDL_RenderCopy(renderer, textures.getTexture(6), &src, &begin);
+    SDL_RenderCopy(renderer, textures.getTexture(5), &src, &mod_dest);
+    SDL_RenderCopy(renderer, textures.getTexture(7), &src, &end);
     
 	if (buttonText != nullptr)
 		buttonText->draw(x+(width/2)-(buttonText->getWidth()/2)-2,

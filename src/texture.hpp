@@ -10,8 +10,8 @@ struct Texture
     Texture(SDL_Renderer* renderer, std::string filename);
     ~Texture();
 
-    SDL_Texture*& get_texture();
-    void free_texture();
+    SDL_Texture*& getTexture();
+    void freeTexture();
 private:
     SDL_Texture* texture;
 };

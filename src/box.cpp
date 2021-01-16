@@ -32,6 +32,6 @@ void Box::render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX, 
 		SDL_Rect mod = p.second;
 		mod.x += offsetX;
 		mod.y += offsetY;
-        SDL_RenderCopy(renderer, textures.get_texture(p.first), &src, &mod);
+        SDL_RenderCopy(renderer, textures.getTexture(p.first), &src, &mod);
 	}
 }

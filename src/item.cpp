@@ -37,7 +37,7 @@ void Item::render(SDL_Renderer* renderer, TextureHandler& textures,
 	int offset_y = -10;
 	SDL_Rect src{0, 0, constants::blockImgSize, constants::blockImgSize};
     SDL_Rect block{x, y, width, height};
-    SDL_RenderCopy(renderer, textures.get_texture(this->block.textureId), &src, &block);
+    SDL_RenderCopy(renderer, textures.getTexture(this->block.textureId), &src, &block);
     
 	text->draw(x, y + height + offset_y);
 }

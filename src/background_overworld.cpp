@@ -149,11 +149,11 @@ void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& texture
     SDL_RenderFillRect(renderer, &sky);
 	
 	// Render bgShine
-    SDL_RenderCopy(renderer, textures.get_texture(13), &bgShineSrc, &bgShineDest);
+    SDL_RenderCopy(renderer, textures.getTexture(13), &bgShineSrc, &bgShineDest);
 
 	// Render sun/moon
-    SDL_RenderCopy(renderer, textures.get_texture(20), &bgLightSrc, &bgLightDest);
-    SDL_RenderCopy(renderer, textures.get_texture(21), &bgMoonSrc, &bgMoonDest);
+    SDL_RenderCopy(renderer, textures.getTexture(20), &bgLightSrc, &bgLightDest);
+    SDL_RenderCopy(renderer, textures.getTexture(21), &bgMoonSrc, &bgMoonDest);
 
 	// Repeatedly render clouds and hills
     Generic::Render::renderRepeating(renderer, textures, 14, winWidth, winHeight, bgCloudOffset.x, bgCloudOffset.y,
@@ -166,7 +166,7 @@ void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& texture
     SDL_RenderFillRect(renderer, &after);
     
 	if (bgCaveOpacity.get() > 2) {
-        SDL_Texture* tex = textures.get_texture(17);
+        SDL_Texture* tex = textures.getTexture(17);
         SDL_SetTextureAlphaMod(tex, static_cast<int>(bgCaveOpacity.value));
 
         Generic::Render::renderRepeating(renderer, textures, 17, bgCave.x, bgCave.y,

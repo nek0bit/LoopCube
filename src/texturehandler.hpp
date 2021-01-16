@@ -1,5 +1,4 @@
-#ifndef TEXTUREHANDLER_HPP
-#define TEXTUREHANDLER_HPP
+#pragma once
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -11,16 +10,13 @@
 #include "texture.hpp"
 #include "constants.hpp"
 
-class TextureHandler {
-public:
+struct TextureHandler
+{
     TextureHandler(SDL_Renderer* renderer);
 	~TextureHandler();
 
-    SDL_Texture* get_texture(int id);
-	void free_textures();
+    SDL_Texture* getTexture(int id);
+	void freeTextures();
 private:
 	std::vector<std::pair<int, Texture*>> textures;
 };
-
-
-#endif // TEXTUREHANDLER_HPP

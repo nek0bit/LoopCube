@@ -9,23 +9,23 @@ TextureHandler::TextureHandler(SDL_Renderer* renderer)
 
 TextureHandler::~TextureHandler()
 {
-    free_textures();
+    freeTextures();
 }
 
-SDL_Texture* TextureHandler::get_texture(int id)
+SDL_Texture* TextureHandler::getTexture(int id)
 {
     for (auto &i: textures) {
         if (id == i.first) {
-            return i.second->get_texture();
+            return i.second->getTexture();
         }
     }
     return nullptr;
 }
 
-void TextureHandler::free_textures()
+void TextureHandler::freeTextures()
 {
     for (auto &i: textures) {
-        i.second->free_texture();
+        i.second->freeTexture();
         delete i.second;
     }
 }
