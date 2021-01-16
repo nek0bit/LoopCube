@@ -24,6 +24,7 @@ struct Inventory
 
 	void drawHotbar();
 	void drawInventoryMenu();
+    void shiftHotbarPos(int shift);
     Item& getSelectedItem();
     bool showInventoryMenu;
 	void addItem(int id);

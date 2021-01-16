@@ -67,6 +67,9 @@ void Inventory::update()
 		}
 	}
 
+    // Scroll hotbar
+    if (!showInventoryMenu) shiftHotbarPos(-events.vmouse.scroll);
+
 	if (events.keyState[4] || events.buttonState[8])
     {
 		showInventoryMenu = !showInventoryMenu;
@@ -75,6 +78,12 @@ void Inventory::update()
 
 	inventorySlide.update();
 	hotbarSlide.update();
+}
+
+void Inventory::shiftHotbarPos(int shift)
+{
+    const int newPos = hotbarPos + shift;
+    hotbarPos = newPos < 0 ? hotbarSlots-1 : newPos % hotbarSlots;
 }
 
 void Inventory::drawInventoryMenu()

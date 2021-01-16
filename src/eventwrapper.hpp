@@ -12,6 +12,7 @@ struct VMouse
     int y;
     int down;
     int clicked;
+    int scroll; // 0 = null, -1 = down, 1 = up
 };
 
 struct EventWrapper
@@ -37,6 +38,7 @@ struct EventWrapper
 	// vmouse = virtual mouse; Could be a real mouse, could be emulated (via a controller or touch screen)
     // Also, vmouse_down/vmouse_clicked must have 0: none; 1: left click; 2: middle click; 3: right click
     VMouse vmouse;
+    
 private:
     void resizeInputStates();
     

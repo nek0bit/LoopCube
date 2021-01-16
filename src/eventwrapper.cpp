@@ -2,7 +2,7 @@
 
 EventWrapper::EventWrapper()
     : quit{false},
-      vmouse{0, 0, 0, 0},
+      vmouse{0, 0, 0, 0, 0},
       controller{nullptr},
       textMode{false}
 {
@@ -86,6 +86,7 @@ void EventWrapper::listen() {
 	// End TODO
 	
 	if (vmouse.down == 1) vmouse.clicked = 0;
+    vmouse.scroll = 0;
 
 	if (vmouse.x < 0) {
 		vmouse.x = 1;
@@ -93,6 +94,7 @@ void EventWrapper::listen() {
 	if (vmouse.y < 0) {
 		vmouse.y = 1;
 	}
+
 
 	/* TODO move this bit all into it's own function. Controllers are a seperate thing
 	 * so it's best we move it all out of the way; same for the keyboard stuff
@@ -157,6 +159,9 @@ void EventWrapper::listen() {
 			vmouse.down = 0;
 			vmouse.clicked = 0;
 			break;
+        case SDL_MOUSEWHEEL:
+            vmouse.scroll = event.wheel.y;
+            break;
 		case SDL_MOUSEMOTION:
 			SDL_GetMouseState(&vmouse.x, &vmouse.y);
 			break;
