@@ -25,7 +25,7 @@ void Textbox::update(EventWrapper& events, int offset_x, int offset_y) {
 			
 			text = std::string(tmp);
 			if (textbox_text != nullptr) {
-				textbox_text->set_text(text);
+				textbox_text->setText(text);
 			}
 			focused = false;
 #else
@@ -35,7 +35,7 @@ void Textbox::update(EventWrapper& events, int offset_x, int offset_y) {
 #endif
 		} else {
 			focused = false;
-			textbox_text->set_text(text);
+			textbox_text->setText(text);
             events.textMode = false;
             events.textModeBuffer = "";
 		}
@@ -53,7 +53,7 @@ void Textbox::handle_keyboard(EventWrapper& events) {
 	}	
 	
 	if (textbox_text != nullptr) {
-		textbox_text->set_text(events.textModeBuffer + (cursor ? "_" : ""));
+		textbox_text->setText(events.textModeBuffer + (cursor ? "_" : ""));
 	}
 }
 

@@ -27,7 +27,7 @@ void Item::addCount(int amount)
 		enabled = false;
 	}
 
-    text->set_text(count == 0 ? "" : std::to_string(count+1));
+    text->setText(count == 0 ? "" : std::to_string(count+1));
 
 }
 

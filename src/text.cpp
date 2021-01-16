@@ -4,49 +4,59 @@ Text::Text(SDL_Renderer* renderer,
 		   std::string text, 
 		   SDL_Color color,
 		   TTF_Font* font,
-		   int wrap_width)
-	:  wrap_width{wrap_width}, text{text}, color{color}, renderer{renderer} {
+		   int wrapWidth)
+	:  wrapWidth{wrapWidth},
+       text{text},
+       color{color},
+       renderer{renderer}
+{
 	this->font = font;
 
 	if (this->font == NULL) {
 		std::cerr << "[Error] TTF_OpenFont: " << TTF_GetError() << ".. expect dragons and segfaults" << std::endl;
 	}
-	update_surface();
+	updateSurface();
 	messageText = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
-Text::~Text() {
+Text::~Text()
+{
 	SDL_FreeSurface(surface);
 	SDL_DestroyTexture(messageText);
 }
 
-void Text::update_surface() {
-	if (wrap_width == -1) {
+void Text::updateSurface()
+{
+	if (wrapWidth == -1) {
 		surface = TTF_RenderText_Blended(this->font, text.c_str(), color);
 	} else {
-		surface = TTF_RenderText_Blended_Wrapped(this->font, text.c_str(), color, wrap_width);
+		surface = TTF_RenderText_Blended_Wrapped(this->font, text.c_str(), color, wrapWidth);
 	}
 }
 
-void Text::set_text(std::string text) {
+void Text::setText(std::string text)
+{
 	this->text = text;
-	SDL_FreeSurface(surface);
+    SDL_FreeSurface(surface);
 	SDL_DestroyTexture(messageText);
-	update_surface();
+    updateSurface();
 	messageText = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
-int Text::get_width() {
+int Text::getWidth()
+{
 	if (surface != nullptr) return surface->w;
 	return 0;
 }
 
-int Text::get_height() {
+int Text::getHeight()
+{
 	if (surface != nullptr) return surface->h;
 	return 0;
 }
 
-void Text::draw(int x, int y) {
+void Text::draw(int x, int y)
+{
 	int w = 0, h = 0;
 	if (surface != nullptr) {
 		w = surface->w;

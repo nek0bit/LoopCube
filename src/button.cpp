@@ -75,14 +75,14 @@ void Button::render(SDL_Renderer* renderer, TextureHandler& textures, int offset
     SDL_RenderCopy(renderer, textures.get_texture(7), &src, &end);
     
 	if (buttonText != nullptr)
-		buttonText->draw(x+(width/2)-(buttonText->get_width()/2)-2,
-							mod_dest.y+(height/2)-(buttonText->get_height()/2)-2);
+		buttonText->draw(x+(width/2)-(buttonText->getWidth()/2)-2,
+							mod_dest.y+(height/2)-(buttonText->getHeight()/2)-2);
 }
 
 void Button::setText(std::string text)
 {
 	this->text = text;
-    buttonText->set_text(text);
+    buttonText->setText(text);
 }
 
 // Exists for compatibility with UiElement class
