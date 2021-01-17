@@ -27,8 +27,8 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 {
 	std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 
-	Chunk* c = chunks.get_chunk_at(obj.x, true);
-	Chunk* c_front = chunks.get_chunk_at(obj.x+obj.w, true);
+	Chunk* c = chunks.get_chunk_at(position.x, true);
+	Chunk* c_front = chunks.get_chunk_at(position.x+size.w, true);
 
 	if (c == nullptr || c_front == nullptr) {
 		return CollisionInfo{};
@@ -45,8 +45,8 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 			std::vector<std::vector<Block>>& chunk = chunk_it->get_chunk();
 
 			std::array<int, 2> player_check = {
-				chunks.get_chunk_y(obj.y),
-				chunks.get_chunk_y(obj.y+obj.h)
+				chunks.get_chunk_y(position.y),
+				chunks.get_chunk_y(position.y+size.h)
 			};
 			
 			
@@ -73,8 +73,8 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks) {
 	// Update draw position
 	src.x = 0;
 	src.y = 0;
-    src.w = obj.w;
-	src.h = obj.h;
+    src.w = size.w;
+	src.h = size.h;
 	
 	if (onGround) velX *= 0.78;
 
@@ -82,7 +82,7 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks) {
 	if (velX > 6) velX = 6;
 	if (velX < -6) velX = -6;
 		
-	obj.x += velX;
+    position.x += velX;
 
 	CollisionInfo infoX = checkBlockCollision(chunks);
 
@@ -91,26 +91,26 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks) {
 		if (velX == 0) {
 			// If entity happens to get stuck in the wall then push them out
 			if (lastPos == 1) {
-				obj.x -= 5;
+			    position.x -= 5;
 			} else if (lastPos == 3) {
-				obj.x += 5;
+			    position.x += 5;
 			} else {
-				obj.x += 5;
+			    position.x += 5;
 			}
 				
 		}
 		if (infoX.left != -1) {
-			obj.x -= infoX.left;
+		    position.x -= infoX.left;
 		}
 		if (infoX.right != -1) {
-			obj.x += infoX.right;
+		    position.x += infoX.right;
 		}
 		velX = 0;
 		onGround = true;
 	}
 		
 	velY += .5;
-	obj.y += velY;
+    position.y += velY;
 
 	// Cap +Y velocity
 	if (velY > cap) {
@@ -122,10 +122,10 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks) {
 	// Check Y velocity
 	if (infoY == true) {
 		if (infoY.bottom != -1) {
-			obj.y += infoY.bottom;
+		    position.y += infoY.bottom;
 		}
 		if (infoY.top != -1) {
-			obj.y -= infoY.top;
+		    position.y -= infoY.top;
 		}
 		velY = 0;
 		onGround = true;

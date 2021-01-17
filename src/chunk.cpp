@@ -25,7 +25,7 @@ void Chunk::debug_chunk_split() {
 	for (size_t i = 0; i < chunk.size(); ++i) {
 		std::cout << ">>> chunk " << i << std::endl;
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
-			std::cout << chunk[i][j].obj.x << ", ";
+			//std::cout << chunk[i][j].obj.x << ", ";
 			if ((j+1)%MAX_WIDTH == 0) std::cout << std::endl;
 		}
 		std::cout << std::endl;
@@ -40,8 +40,13 @@ bool Chunk::operator>(const Chunk &c) const {
 	return slot > c.slot;
 }
 
-Position Chunk::get_pos() const {
-	return Position{slot*(MAX_WIDTH*constants::blockW), 0, (MAX_WIDTH*constants::blockW), 0};
+Vec2 Chunk::get_pos() const {
+	return Vec2{slot*(MAX_WIDTH*constants::blockW), 0};
+}
+
+Size Chunk::getSize() const
+{
+    return Size{MAX_WIDTH*constants::blockW, 0};
 }
 
 int Chunk::get_chunk_x(int x) {
@@ -116,7 +121,8 @@ const BlockInfo* Chunk::destroy_block(int x, int y, Inventory *inv) {
 	}
     // Search for block, destroy it, and add it to the inventory
 	for (size_t j = 0; j < chunk[i].size(); ++j) {
-		if (get_chunk_x(x) * constants::blockW == chunk[i][j].obj.x && y * constants::blockH == chunk[i][j].obj.y) {
+		if (get_chunk_x(x) * constants::blockW == chunk[i][j].position.x
+            && y * constants::blockH == chunk[i][j].position.y) {
 			const BlockInfo* info = chunk[i][j].blockinfo;
 			inv->addItem(info->id);
 
@@ -139,7 +145,7 @@ bool Chunk::place_block(int id, int x, int y) {
 		    return false;
 		}
 		for (size_t j = 0; j < chunk[i].size(); ++j) {
-			if (get_chunk_x(x)*constants::blockW == chunk[i][j].obj.x && y*constants::blockH == chunk[i][j].obj.y) {
+			if (get_chunk_x(x)*constants::blockW == chunk[i][j].position.x && y*constants::blockH == chunk[i][j].position.y) {
 				is_duplicate = true;
 				break;
 			}

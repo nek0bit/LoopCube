@@ -29,7 +29,7 @@ void Play::update()
 	
 	// Update all chunks
 	chunks.update_all_viewport(camera);
-	chunks.check_area(player.obj.x, structures);
+	chunks.check_area(player.position.x, structures);
 	
 	inv->update();
 
@@ -56,7 +56,7 @@ void Play::update()
 	// Create entity
 	if (events.keyState[16] || events.buttonState[9])
     {
-		entities.push_back(new TestEntity(player.obj.x, player.obj.y-30));
+		entities.push_back(new TestEntity(player.position.x, player.position.y-30));
 	}
 
 	// Jump (A)
@@ -240,8 +240,8 @@ void Play::drawSelection(int* p1, int* p2)
 // Sets camera to player position
 void Play::handleCamera()
 {
-	double x = -std::floor(player.obj.x) + (winSize.w / 2) - player.obj.w/2;
-	double y = -std::floor(player.obj.y) + (winSize.h/2) - player.obj.h/2;
+	double x = -std::floor(player.position.x) + (winSize.w / 2) - player.size.w/2;
+	double y = -std::floor(player.position.y) + (winSize.h/2) - player.size.h/2;
 	
 	static double moveX = x;
 	static double moveY = y;

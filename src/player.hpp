@@ -3,7 +3,6 @@
 #include <cmath>
 
 #include "entity.hpp"
-#include "position.hpp"
 #include "collisioninfo.hpp"
 #include "animation.hpp"
 #include "spritesheet.hpp"

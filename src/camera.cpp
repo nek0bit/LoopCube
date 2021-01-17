@@ -1,7 +1,8 @@
 #include "camera.hpp"
 
 Camera::Camera(WinSize* winSize)
-    : winSize{winSize}
+    : Vec2{0, 0},
+      winSize{winSize}
 {}
 
 int Camera::getWidth()

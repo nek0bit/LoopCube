@@ -7,9 +7,9 @@
 
 #include "texturehandler.hpp"
 #include "constants.hpp"
-#include "position.hpp"
 
-struct Box {
+struct Box
+{
 	Box(int x = 0, int y = 0, int w = 0, int h = 0);
     
     int x;

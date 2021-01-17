@@ -6,7 +6,8 @@
 
 #include "texturehandler.hpp"
 #include "constants.hpp"
-#include "position.hpp"
+#include "vector.hpp"
+#include "size.hpp"
 #include "camera.hpp"
 #include "collisioninfo.hpp"
 
@@ -22,12 +23,12 @@ struct GameObject
 	virtual bool shouldCull(Camera& camera);
 
 	// Return position
-	virtual double getX(Camera& camera) const;
-	virtual double getY(Camera& camera) const;
+	virtual Vec2 getPos(Camera& camera) const;
 
 	CollisionInfo isColliding(const GameObject &obj2);
 
-    Position obj;
+    Vec2 position;
+    Size size;
 protected:
 	int textureId;
     SDL_Rect src;

@@ -82,7 +82,7 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities)
 			}
 			if (info.top >= 0)
             {
-				obj.y -= info.top;
+				position.y -= info.top;
 				velY = 0;
 			}
 		}
@@ -114,12 +114,12 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities)
 
 void Player::jump(ChunkGroup &chunks)
 {
-	obj.y += 1;
+	position.y += 1;
 	if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
 		velY = -12;
 		onGround = false;
 	}
-	obj.y -= 1;
+	position.y -= 1;
 	jumping = true;
 	canJump = false;
 }

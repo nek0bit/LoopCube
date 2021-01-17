@@ -10,7 +10,8 @@
 
 #include <SDL2/SDL.h>
 
-#include "position.hpp"
+#include "vector.hpp"
+#include "size.hpp"
 #include "chunk.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
@@ -58,6 +59,7 @@ private:
 	// Config
 	bool render_chunk_info;
 
+    // WTF is this???
 	std::vector<Chunk> group; // Chunks the game works with in place
 	std::vector<int> loaded_chunks; // group ids
 	std::vector<Chunk> group_past; // Unloaded chunks, gets moved into group when loaded again

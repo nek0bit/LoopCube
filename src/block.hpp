@@ -1,14 +1,15 @@
 #pragma once
+
 #include <SDL2/SDL.h>
 
 #include "gameobj.hpp"
 
+#include "vector.hpp"
 #include "constants.hpp"
 #include "blockinfo.hpp"
 
-class Block: public GameObject {
-
-public:
+struct Block: public GameObject
+{
 	Block();
 	~Block();
 	Block(int id, int x, int y);

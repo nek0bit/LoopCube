@@ -205,19 +205,21 @@ int ChunkGroup::get_id(Camera& camera, int surrounding) {
 void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera) {
 	if (constants::config.getInt(CONFIG_SHOW_SHADOWS)) {
 		for (auto &chunk: viewport_chunks) {
-			Position box = chunk->get_pos();
-			if ((box.x+box.w)+camera.x < 0 ||
-				camera.getWidth() < ((box.x+box.w)+camera.x)-(constants::chunkWidth*constants::blockW)) {
+		    Vec2 box = chunk->get_pos();
+            Size boxs = chunk->getSize();
+			if ((box.x+boxs.w)+camera.x < 0 ||
+				camera.getWidth() < ((box.x+boxs.w)+camera.x)-(constants::chunkWidth*constants::blockW)) {
 				continue;
 			} else {
 				chunk->render_all_shadows(renderer, camera);
 			}
 		}
 	}
-	for (auto &chunk: viewport_chunks) {
-		Position box = chunk->get_pos();
-		if ((box.x+box.w)+camera.x < 0 ||
-			camera.getWidth() < ((box.x+box.w)+camera.x)-(constants::chunkWidth*constants::blockW)) {
+	for (auto &chunk: viewport_chunks) {        
+        Vec2 box = chunk->get_pos();
+        Size boxs = chunk->getSize();
+		if ((box.x+boxs.w)+camera.x < 0 ||
+			camera.getWidth() < ((box.x+boxs.w)+camera.x)-(constants::chunkWidth*constants::blockW)) {
 			continue;
 		} else {
 			chunk->render_all_blocks(renderer, textures, camera);
@@ -232,9 +234,11 @@ void ChunkGroup::render_all_viewport(SDL_Renderer* renderer, TextureHandler& tex
 
 void ChunkGroup::update_all_viewport(Camera& camera) {
 	for (auto &chunk: viewport_chunks) {
-		Position box = chunk->get_pos();
-		if ((box.x+box.w)+camera.x < 0 ||
-			camera.getWidth() < ((box.x+box.w)+camera.x)-(constants::chunkWidth*constants::blockW)) {
+        Vec2 box = chunk->get_pos();
+        Size boxs = chunk->getSize();
+
+		if ((box.x+boxs.w)+camera.x < 0 ||
+			camera.getWidth() < ((box.x+boxs.w)+camera.x)-(constants::chunkWidth*constants::blockW)) {
 			continue;
 		} else {
 			chunk->update_all(camera);

@@ -1,60 +1,53 @@
 #include "gameobj.hpp"
 
 GameObject::GameObject(int textureId, double x, double y, double w, double h)
-    : obj{x, y, w, h},
+    : position{x, y},
+      size{w, h},
       textureId{textureId},
       src{0, 0, 0, 0}
-{
-}
+{}
 
-double GameObject::getX(Camera& camera) const
+Vec2 GameObject::getPos(Camera& camera) const
 {
-	return obj.x + camera.x;
-}
-
-double GameObject::getY(Camera& camera) const
-{
-	return obj.y + camera.y;
+	return position + camera;
 }
 
 // Used for rendering culling
 bool GameObject::shouldCull(Camera& camera)
 {
-    return (getX(camera) + obj.w < 0 || getY(camera) + obj.h < 0) // Upper-left culling
-        || (getX(camera) - obj.w > camera.getWidth() || getY(camera) - obj.h > camera.getHeight()); // Bottom-right culling
+    const Vec2 val = getPos(camera);
+    return (val.x + size.w < 0 || val.y + size.h < 0) // Upper-left culling
+        || (val.x - size.w > camera.getWidth() || val.y - size.h > camera.getHeight()); // Bottom-right culling
 }
 
 void GameObject::update()
 {
 	src.x = 0;
 	src.y = 0;
-	src.w = obj.w;
-    src.h = obj.h;
+	src.w = size.w;
+    src.h = size.h;
 }
 
 void GameObject::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
 {
-	SDL_Rect dest{static_cast<int>(getX(camera)),
-        static_cast<int>(getY(camera)),
-        static_cast<int>(obj.w),
-        static_cast<int>(obj.h)};
+    const Vec2 val = getPos(camera);
+	SDL_Rect dest{static_cast<int>(val.x),
+        static_cast<int>(val.y),
+        static_cast<int>(size.w),
+        static_cast<int>(size.h)};
     SDL_RenderCopy(renderer, textures.getTexture(textureId), &src, &dest);
 }
 
 CollisionInfo GameObject::isColliding(const GameObject &obj2)
-{
-    // Aliases
-    const Position& r1 = obj,
-        r2 = obj2.obj;
-	
-	if (r1.x < r2.x + r2.w &&
-		r1.x + r1.w > r2.x &&
-		r1.y < r2.y + r2.h &&
-		r1.y + r1.h > r2.y) {
-		const double topCalc = (r1.y+r1.h) - r2.y;
-		const double bottomCalc = (r2.y+r2.h) - r1.y;
-		const double leftCalc = (r1.x+r1.w) - r2.x;
-		const double rightCalc = (r2.x+r2.h) - r1.x;
+{    
+	if (position.x < obj2.position.x + obj2.size.w &&
+		position.x + size.w > obj2.position.x &&
+		position.y < obj2.position.y + obj2.size.h &&
+		position.y + size.h > obj2.position.y) {
+		const double topCalc = (position.y+size.h) - obj2.position.y;
+		const double bottomCalc = (obj2.position.y+obj2.size.h) - position.y;
+		const double leftCalc = (position.x+size.w) - obj2.position.x;
+		const double rightCalc = (obj2.position.x+obj2.size.h) - position.x;
 
 		CollisionInfo info{-1, -1, -1, -1};
 		// top collision

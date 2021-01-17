@@ -11,7 +11,6 @@
 #include "winsize.hpp"
 #include "transition.hpp"
 #include "constants.hpp"
-#include "position.hpp"
 #include "item.hpp"
 
 struct Inventory

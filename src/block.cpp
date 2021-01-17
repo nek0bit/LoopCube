@@ -28,8 +28,9 @@ void Block::update() {
 }
 
 void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const {
-	SDL_Rect shadow{static_cast<int>(getX(camera) + 5), static_cast<int>(getY(camera) + 5),
-		static_cast<int>(obj.w), static_cast<int>(obj.h)};
+    const Vec2 val = getPos(camera);
+	SDL_Rect shadow{static_cast<int>(val.x + 5), static_cast<int>(val.y + 5),
+		static_cast<int>(size.w), static_cast<int>(size.h)};
     
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 60);
     SDL_RenderFillRect(renderer, &shadow);

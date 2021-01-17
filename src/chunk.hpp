@@ -19,10 +19,11 @@
 #include "camera.hpp"
 #include "inventory.hpp"
 #include "texturehandler.hpp"
+#include "vector.hpp"
+#include "size.hpp"
 #include "structure.hpp"
 #include "tree.hpp"
 #include "text.hpp"
-#include "position.hpp"
 
 class Chunk {
 
@@ -43,7 +44,8 @@ public:
 	void generate_chunk(unsigned long int seed, std::vector<Structure*>& structure);
 
 	int get_slot() const;
-	Position get_pos() const;
+    Vec2 get_pos() const;
+    Size getSize() const;
 
 	// Need to be able to view the chunk to do stuff such as collision detection
 	std::vector<std::vector<Block>>& get_chunk();

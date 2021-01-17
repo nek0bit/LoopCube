@@ -1,14 +1,13 @@
 #pragma once
 
 #include "winsize.hpp"
+#include "vector.hpp"
 
-struct Camera {
+struct Camera: public Vec2
+{
 	Camera() = default;
 	Camera(WinSize* winSize);
     
-	double x;
-	double y;
-
     int getWidth();
 	int getHeight();
 private:
