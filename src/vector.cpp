@@ -51,3 +51,16 @@ Vec2 Vec2::operator/(const double& div) const
 {
     return Vec2{x / div, y / div};
 }
+
+float Vec2::magnitude() const
+{
+    return sqrt(x*x + y*y);
+}
+
+Vec2 Vec2::normalize() const
+{
+    float mag = magnitude();
+    if (mag > 0)
+        return this->operator/(mag);
+    return Vec2{};
+}

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <math.h>
+
+// This is an euclidean vector, not like std::vector :)
 struct Vec2
 {
     Vec2();
@@ -17,6 +20,9 @@ struct Vec2
     Vec2 operator-(const double& sub) const;
     Vec2 operator*(const double& mul) const;
     Vec2 operator/(const double& div) const;
+
+    float magnitude() const;
+    Vec2 normalize() const;
     
 	double x, y;
 };
