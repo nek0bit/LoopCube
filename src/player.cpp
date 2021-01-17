@@ -22,9 +22,9 @@ Player::Player()
 Player::~Player()
 {}
 
-void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities)
+void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<Entity*> entities)
 {
-	updateBasicPhysics(chunks);
+	updateBasicPhysics(chunks, timer);
 	frame.tick();
 
 	// Frame for when the character is looking the other way
@@ -78,7 +78,7 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities)
             {
 				velY = 0;
 				entity->collisionBottom();
-				entity->update(chunks);
+				entity->update(chunks, timer);
 			}
 			if (info.top >= 0)
             {
@@ -112,11 +112,11 @@ void Player::update(ChunkGroup& chunks, std::vector<Entity*> entities)
 	canJump = true;
 }
 
-void Player::jump(ChunkGroup &chunks)
+void Player::jump(ChunkGroup &chunks, Timer& timer)
 {
 	position.y += 1;
 	if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
-		velY = -12;
+		velY = -60 * timer.deltaTime.s;
 		onGround = false;
 	}
 	position.y -= 1;
@@ -124,23 +124,21 @@ void Player::jump(ChunkGroup &chunks)
 	canJump = false;
 }
 
-void Player::directPlayer(int direction, ChunkGroup &chunks)
+void Player::directPlayer(int direction, ChunkGroup &chunks, Timer& timer)
 {
 	switch (direction)
     {
 	case 0: // UP
-		jump(chunks);
+		jump(chunks, timer);
 		break;
 	case 1: // RIGHT
-		if (!onGround) velX += velXSpeed/3;
-		else velX += velXSpeed;
+        velX += velXSpeed * timer.deltaTime.ms;
 		lastPos = 1;
 		break;
 	case 2: // DOWN
 		break;
 	case 3: // LEFT
-		if (!onGround) velX -= velXSpeed/3;
-		else velX -= velXSpeed;
+        velX -= velXSpeed * timer.deltaTime.ms;
 		lastPos = 3;
 		break;
 	default:

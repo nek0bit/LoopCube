@@ -7,9 +7,9 @@ GravityParticle::GravityParticle(int textureId, int time, double startVelX, doub
 	velY = startVelY;
 }
 
-void GravityParticle::update(ChunkGroup& chunks) {
-	time++;
-	updateBasicPhysics(chunks);
+void GravityParticle::update(ChunkGroup& chunks, Timer& timer) {
+	time += timer.deltaTime.ms;
+	updateBasicPhysics(chunks, timer);
 }
 	
 bool GravityParticle::isDead() const {

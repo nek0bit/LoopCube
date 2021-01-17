@@ -12,11 +12,11 @@ struct Player: public Entity
 	Player();
 	~Player();
 
-	void update(ChunkGroup &chunks, std::vector<Entity*> entities);
+	void update(ChunkGroup &chunks, Timer& timer, std::vector<Entity*> entities);
 	
 	// Movement
-	void jump(ChunkGroup &chunks);
-	void directPlayer(int direction, ChunkGroup &chunks);
+	void jump(ChunkGroup &chunks, Timer& timer);
+	void directPlayer(int direction, ChunkGroup &chunks, Timer& timer);
 private:
 	// Sprite stuff
 	Spritesheet sprite;

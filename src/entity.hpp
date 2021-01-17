@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "timer.hpp"
 #include "chunkgroup.hpp"
 #include "camera.hpp"
 #include "chunk.hpp"
@@ -17,7 +18,7 @@ struct Entity: public GameObject
 		   double x, double y, double width, double height);
 	virtual ~Entity();
 
-	virtual void update(ChunkGroup& chunks);
+	virtual void update(ChunkGroup& chunks, Timer& timer);
 
 
 	// Collision functions
@@ -29,7 +30,7 @@ struct Entity: public GameObject
     double velX;
 	double velY;
 protected:
-	void updateBasicPhysics(ChunkGroup& chunks);
+	void updateBasicPhysics(ChunkGroup& chunks, Timer& timer);
 	CollisionInfo checkBlockCollision(ChunkGroup &chunks);
 
 	// Physics

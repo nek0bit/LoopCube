@@ -4,7 +4,7 @@ Entity::Entity(int textureId, double x, double y, double width, double height)
 	: GameObject{textureId, x, y, width, height},
       velX{0},
       velY{0},
-      velXSpeed{1.8},
+      velXSpeed{.009},
       onGround{false},
       lastPos{-1}
 {}
@@ -12,10 +12,10 @@ Entity::Entity(int textureId, double x, double y, double width, double height)
 Entity::~Entity()
 {}
 
-void Entity::update(ChunkGroup& chunks)
+void Entity::update(ChunkGroup& chunks, Timer& timer)
 {
 	// Optional; You can use your own physics function
-	updateBasicPhysics(chunks);
+	updateBasicPhysics(chunks, timer);
 }
 
 void Entity::collisionLeft() {}
@@ -67,8 +67,9 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 	return CollisionInfo{};
 }
 
-void Entity::updateBasicPhysics(ChunkGroup& chunks) {
-    constexpr int cap = 36;
+void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
+    const int cap = 2;
+    constexpr float friction = 20.0f;
     
 	// Update draw position
 	src.x = 0;
@@ -76,13 +77,9 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks) {
     src.w = size.w;
 	src.h = size.h;
 	
-	if (onGround) velX *= 0.78;
-
-	// Reset back
-	if (velX > 6) velX = 6;
-	if (velX < -6) velX = -6;
+	velX *= 1 / (1 + (timer.deltaTime.s * friction));
 		
-    position.x += velX;
+    position.x += velX * timer.deltaTime.ms;
 
 	CollisionInfo infoX = checkBlockCollision(chunks);
 
@@ -109,8 +106,8 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks) {
 		onGround = true;
 	}
 		
-	velY += .5;
-    position.y += velY;
+	velY += .002 * timer.deltaTime.ms;
+    position.y += velY * timer.deltaTime.ms;
 
 	// Cap +Y velocity
 	if (velY > cap) {

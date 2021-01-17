@@ -1,6 +1,6 @@
 #include "play.hpp"
 
-Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize)
+Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize)
 	: winSize{winSize},
       renderer{renderer},
       textures{textures},
@@ -12,6 +12,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
       fade{60},
       particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
+      timer{timer},
 	  background{nullptr}
 {
     background = std::shared_ptr<Background>(new BackgroundOverworld());
@@ -38,18 +39,18 @@ void Play::update()
     {
 		if (!entity->shouldCull(camera))
         {
-			entity->update(chunks);
+			entity->update(chunks, timer);
 		}
 	}
 	
 	// Update player
-	player.update(chunks, entities);
+	player.update(chunks, timer, entities);
 
 	for (int i = 0; i < 4; ++i)
     {
 		if (events.keyState[i])
         {
-			player.directPlayer(i, chunks);
+			player.directPlayer(i, chunks, timer);
 		}
 	}
 
@@ -62,31 +63,31 @@ void Play::update()
 	// Jump (A)
 	if (events.buttonState[4])
     {
-		player.directPlayer(0, chunks);
+		player.directPlayer(0, chunks, timer);
 	}
 
 	// Down
 	if (events.buttonState[0])
     {
-		player.directPlayer(2, chunks);
+		player.directPlayer(2, chunks, timer);
 	}
 
 	// Right
 	if (events.buttonState[1])
     {
-		player.directPlayer(1, chunks);
+		player.directPlayer(1, chunks, timer);
 	}
 
 	// Left
 	if (events.buttonState[2])
     {
-		player.directPlayer(3, chunks);
+		player.directPlayer(3, chunks, timer);
 	}
 
 	// Up
 	if (events.buttonState[3])
     {
-		player.directPlayer(0, chunks);
+		player.directPlayer(0, chunks, timer);
 	}
 
 
@@ -131,7 +132,7 @@ void Play::update()
     {
 		for (auto& particle: particles)
         {
-			particle.update(chunks);
+			particle.update(chunks, timer);
 		}
 	}
 
@@ -241,14 +242,14 @@ void Play::drawSelection(int* p1, int* p2)
 void Play::handleCamera()
 {
 	double x = -std::floor(player.position.x) + (winSize.w / 2) - player.size.w/2;
-	double y = -std::floor(player.position.y) + (winSize.h/2) - player.size.h/2;
+	double y = -std::floor(player.position.y) + (winSize.h / 2) - player.size.h/2;
 	
 	static double moveX = x;
 	static double moveY = y;
 
-	float amount = 0.25;
-	moveX += (x - moveX) * amount;
-	moveY += (y - moveY) * amount;
+	float amount = 0.015;
+	moveX += (x - moveX) * amount * timer.deltaTime.ms;
+	moveY += (y - moveY) * amount * timer.deltaTime.ms;
 	
     camera.x = moveX;
     camera.y = moveY;

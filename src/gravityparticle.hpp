@@ -9,12 +9,12 @@ struct GravityParticle: public Entity
                     double x, double y, double width = 10, double height = 10);
 	~GravityParticle() = default;
 	
-	void update(ChunkGroup &chunks) override;
+	void update(ChunkGroup &chunks, Timer& timer) override;
 	
 	// Returns true if time reached
 	// Appropriate to destruct or quit rendering when done.
 	bool isDead() const;
 private:
-	int time;
+    float time;
 	int timeTotal;
 };

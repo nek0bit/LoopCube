@@ -26,10 +26,11 @@
 #include "background.hpp"
 #include "background_overworld.hpp"
 #include "time.hpp"
+#include "timer.hpp"
 
 struct Play
 {
-	Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize);
+	Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize);
 	~Play();
 
 	void render();
@@ -57,6 +58,7 @@ private:
 	std::vector<GravityParticle> particles;
 
 	Time time;
+    Timer timer;
 
     std::shared_ptr<Background> background;
 	std::vector<Structure*> structures;

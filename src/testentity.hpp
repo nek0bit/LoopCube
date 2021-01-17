@@ -10,7 +10,7 @@ public:
 	TestEntity(double x, double y);
 	~TestEntity();
 
-	void update(ChunkGroup &chunks) override;
+	void update(ChunkGroup &chunks, Timer& timer) override;
 
 	void collisionBottom() override;
 };

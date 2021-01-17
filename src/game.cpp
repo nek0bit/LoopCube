@@ -72,7 +72,7 @@ void Game::update()
         case STATE_PLAYING:
             // Check if the game is nullptr, then create it
             if (game == nullptr) {
-                game = std::shared_ptr<Play>(new Play(renderer, *textures, events, winSize));
+                game = std::shared_ptr<Play>(new Play(renderer, *textures, events, timer, winSize));
                 // Let's pre-load a frame so everything can generate and render
                 // This may need to change depending on world generation in the future
                 game->update();

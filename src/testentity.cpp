@@ -9,8 +9,8 @@ TestEntity::~TestEntity() {
 
 }
 
-void TestEntity::update(ChunkGroup& chunks) {
-	updateBasicPhysics(chunks);
+void TestEntity::update(ChunkGroup& chunks, Timer& timer) {
+	updateBasicPhysics(chunks, timer);
 
 	if (onGround) {
 		velY = -15;
