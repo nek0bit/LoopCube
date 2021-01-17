@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "timer.hpp"
 #include "config.hpp"
 #include "constants.hpp"
 #include "texturehandler.hpp"
@@ -27,7 +28,7 @@ enum GAME_STATE {
 
 struct Game
 {
-	Game();
+	Game(Timer& timer);
 	~Game();
 
 	void init(bool fullscreen);
@@ -49,6 +50,7 @@ private:
 
     WinSize winSize;
 
+    Timer& timer;
     EventWrapper events;
     SDL_Window* window;
 	SDL_Renderer* renderer;

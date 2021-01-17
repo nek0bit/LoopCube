@@ -13,12 +13,12 @@ enum CONFIG_ID
 	CB_SHOW_CHUNK_DEBUG,
 };
 
-Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize)
+Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize)
     : state{0},
       winSize{winSize},
+      timer{timer},
       offsetX{0},
       offsetY{0},
-      BLOCK_S{40},
       BUTTON_W{200},
       showPlayBuffer{false},
       bgX{0},
@@ -27,7 +27,6 @@ Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
       renderer{renderer},
       textures{textures},
       events{events},
-      shift{1270},
       back{40, 40, 400, 400},
       boxWidth{660},
       boxHeight{460},
@@ -155,7 +154,6 @@ void Menu::update(bool updateAnimations)
 		for (auto &i: buttonGroup)
         {
 			i->setX( (winSize.w/2) + 30 );
-            // TODO IMPORTANT dont reference events
 			i->update(events, offsetX, offsetY);
 		}
 	}
@@ -248,9 +246,7 @@ void Menu::renderConfigMenu()
 
 void Menu::renderBackground()
 {
-    constexpr int radius = 360;
-    bgX = std::sin(shift.frame*0.005)*radius;
-    bgY = std::cos(shift.frame*0.005)*radius;
+    bgX += 100 * timer.deltaTime.s;
     Generic::Render::renderRepeating(renderer, textures, 8, winSize.w, winSize.h,
                                      bgX, bgY, 40, 40, 0, 0,
                                      true, constants::blockImgSize, constants::blockImgSize);

@@ -1,19 +1,27 @@
 #include "game.hpp"
 
-
-
-Game::Game() : title{"LoopCube"}, state{}, game{nullptr}, menu{nullptr}, winSize{}, textures{nullptr} {
+Game::Game(Timer& timer)
+    : title{"LoopCube"},
+      state{},
+      game{nullptr},
+      menu{nullptr},
+      winSize{},
+      timer{timer},
+      textures{nullptr}
+{
     state.push(STATE_MAIN_MENU);
 }
 
-Game::~Game() {
+Game::~Game()
+{
 	// Clean up all game objects/SDL stuff to prevent memory leakage
 	free();
 }
 
 // Game related stuff below
 // Initiates Game objects
-void Game::gameInit() {
+void Game::gameInit()
+{
 	// Setup config
 	constants::config.set(CONFIG_SHOW_SHADOWS, true);
 	constants::config.set(CONFIG_SHOW_PARTICLES, true);
@@ -24,11 +32,12 @@ void Game::gameInit() {
     constants::fontHandler.addFontByFilename(constants::rootPath+"fonts/liberation-sans/LiberationSans-Regular.ttf",
                                              {10, 12, 14, 16, 18, 32});
 	
-	menu = std::shared_ptr<Menu>(new Menu(renderer, *textures, events, winSize));
+	menu = std::shared_ptr<Menu>(new Menu(renderer, *textures, events, timer, winSize));
 }
 
 // Game related loop stuff
-void Game::update() {
+void Game::update()
+{
     if (state.size() > 0)
     {
         switch(state.top()) {

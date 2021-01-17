@@ -5,7 +5,7 @@ struct Animation
 	Animation() = default;
 	Animation(int maximum);
 
-	int tick();
+	int tick(int amount = 1);
     
 	int frame;
 	int maxFrames;

@@ -5,9 +5,9 @@ Animation::Animation(int maximum)
       maxFrames{maximum}
 {}
 
-int Animation::tick()
+int Animation::tick(int amount)
 {
-	frame++;
+	frame += amount;
 
 	if (frame > maxFrames)
     {

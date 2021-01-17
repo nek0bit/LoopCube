@@ -7,26 +7,21 @@ void gameHandles(Game& game) {
 }
 
 void gameLoop() {
-	constexpr int FPS = 60;
-	constexpr int FRAME_DEL = 1000 / FPS;
-	
-	Game game{};
+    Timer timer{120};
+	Game game{timer};
 	
 	game.init(false);
-
-	Uint32 frame;
-	int frame_time;
 	
 	while(game.isRunning) {
-		frame = SDL_GetTicks();
-		
+        timer.setTime();
+
+        std::cout << "Time/ms: " << timer.deltaTime.ms << std::endl;
+        std::cout << "Time/s: " << timer.deltaTime.s << std::endl;
+        
         gameHandles(game);
-
-	    frame_time = SDL_GetTicks() - frame;
-
-		if (frame_time < FRAME_DEL) {
-			SDL_Delay(FRAME_DEL - frame_time);
-		}
+        
+        int calc = timer.calcSleep();
+        if (calc > 0) SDL_Delay(calc);
 	}
 		
 	game.free();

@@ -5,9 +5,11 @@ bool Generic::collision(SDL_Rect r1, SDL_Rect r2)
     return Generic::collision(r1.x, r1.y, r1.w, r1.h, r2.x, r2.y, r2.w, r2.h);
 }
 
-void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int clipWidth,
-                                      int clipHeight, int offsetX, int offsetY, int width, int height, int gap,
-                                      int top, bool verticle, int srcW, int srcH)
+void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& textures,
+                                      int texture, int clipWidth,
+                                      int clipHeight, int offsetX, int offsetY,
+                                      int width, int height, int gap, int top,
+                                      bool verticle, int srcW, int srcH)
 {
     srcW = srcW == -1 ? width : srcW;
     srcH = srcH == -1 ? height : srcH;

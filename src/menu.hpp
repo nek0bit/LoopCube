@@ -6,6 +6,7 @@
 #include <random>
 #include <memory>
 
+#include "timer.hpp"
 #include "generic.hpp"
 #include "box.hpp"
 #include "texturehandler.hpp"
@@ -20,7 +21,7 @@
 
 struct Menu
 {
-	Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, WinSize& winSize);
+	Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize);
 	~Menu();
 
 	void update(bool update_animations = true);
@@ -40,6 +41,7 @@ private:
 	int state;
 
     WinSize& winSize;
+    Timer& timer;
 	
 	int offsetX;
 	int offsetY;
@@ -49,12 +51,11 @@ private:
 	std::vector<std::unique_ptr<Button>> buttonGroup;
 
 	// MISC
-	const int BLOCK_S;
 	const int BUTTON_W;
 
     // Background movement
-    int bgX;
-    int bgY;
+    float bgX;
+    float bgY;
 
 	// Config stuff
 	std::unique_ptr<Button> backButton;
