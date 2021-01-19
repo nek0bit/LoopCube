@@ -4,7 +4,7 @@ Entity::Entity(int textureId, double x, double y, double width, double height)
 	: GameObject{textureId, x, y, width, height},
       velX{0},
       velY{0},
-      velXSpeed{.009},
+      velXSpeed{9},
       onGround{false},
       lastPos{-1}
 {}
@@ -79,7 +79,7 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
 	
 	velX *= 1 / (1 + (timer.deltaTime.s * friction));
 		
-    position.x += velX * timer.deltaTime.ms;
+    position.x += velX * timer.deltaTime.s;
 
 	CollisionInfo infoX = checkBlockCollision(chunks);
 

@@ -7,7 +7,7 @@ void gameHandles(Game& game) {
 }
 
 void gameLoop() {
-    Timer timer{60};
+    Timer timer{100};
 	Game game{timer};
 	
 	game.init(false);
