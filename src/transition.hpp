@@ -1,13 +1,14 @@
-#ifndef TRANSITION_HPP
-#define TRANSITION_HPP
+#pragma once
 
-class Transition {
-public:
+#include "timer.hpp"
+
+struct Transition
+{
 	Transition() = default;
 	Transition(double value, double threshold);
 	~Transition();
 
-	void update();
+	void update(Timer& timer);
 	double get();
 	
 	double value;
@@ -15,5 +16,3 @@ public:
 private:
     double at;
 };
-
-#endif

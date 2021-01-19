@@ -7,16 +7,13 @@ void gameHandles(Game& game) {
 }
 
 void gameLoop() {
-    Timer timer{100};
+    Timer timer{200};
 	Game game{timer};
 	
 	game.init(false);
 	
 	while(game.isRunning) {
         timer.setTime();
-
-        std::cout << "Time/ms: " << timer.deltaTime.ms << std::endl;
-        std::cout << "Time/s: " << timer.deltaTime.s << std::endl;
         
         gameHandles(game);
         

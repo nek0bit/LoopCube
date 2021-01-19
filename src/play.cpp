@@ -32,7 +32,7 @@ void Play::update()
 	chunks.update_all_viewport(camera);
 	chunks.check_area(player.position.x, structures);
 	
-	inv->update();
+	inv->update(timer);
 
 	// Update all entities
 	for (Entity*& entity: entities)

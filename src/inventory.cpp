@@ -18,8 +18,8 @@ Inventory::Inventory(SDL_Renderer* renderer,
 {
 	items.resize(maxSlots, Item{});
 
-	inventorySlide = Transition{static_cast<double>(winSize.h), 0.30};
-	hotbarSlide = Transition{0, 0.30};
+	inventorySlide = Transition{static_cast<double>(winSize.h), 25.6};
+	hotbarSlide = Transition{0, 25.6};
 }
 
 Inventory::~Inventory() {}
@@ -56,7 +56,7 @@ void Inventory::addItem(int id)
 	}
 }
 
-void Inventory::update()
+void Inventory::update(Timer& timer)
 {
 	// hotbar_slot keys
 	for (int i = 5; i < 15; ++i)
@@ -76,8 +76,8 @@ void Inventory::update()
 		animation = showInventoryMenu;
 	}
 
-	inventorySlide.update();
-	hotbarSlide.update();
+	inventorySlide.update(timer);
+	hotbarSlide.update(timer);
 }
 
 void Inventory::shiftHotbarPos(int shift)

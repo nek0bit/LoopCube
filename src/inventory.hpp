@@ -12,6 +12,7 @@
 #include "transition.hpp"
 #include "constants.hpp"
 #include "item.hpp"
+#include "timer.hpp"
 
 struct Inventory
 {
@@ -27,7 +28,7 @@ struct Inventory
     Item& getSelectedItem();
     bool showInventoryMenu;
 	void addItem(int id);
-	void update();
+	void update(Timer& timer);
 private:
     WinSize& winSize;
 	bool animation;
