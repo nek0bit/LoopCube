@@ -1,24 +1,24 @@
-#ifndef _TIME_HPP
-#define _TIME_HPP
+#pragma once
+
+#include "timer.hpp"
 
 enum time_state {
 	TIME_DAY, TIME_NIGHT
 };
 
 struct Time {
-	Time(int start_time, int max_time, int morning_time, int night_time, int morning_offset, int night_offset);
+	Time(float startTime, float maxTime, float morningTime,
+         float nightTime, float morningOffset, float nightOffset);
 	~Time();
 
-	void tick(int amount = 1);
+	void tick(Timer& timer, int amount = 1);
 
-	int state;
-	int time;
+    time_state state;
+    float time;
 
-	const int max_time;
-	const int morning_time;
-	const int night_time;
-	const int morning_offset;
-	const int night_offset;
+	const float maxTime;
+	const float morningTime;
+	const float nightTime;
+	const float morningOffset;
+	const float nightOffset;
 };
-
-#endif

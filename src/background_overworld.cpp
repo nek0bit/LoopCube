@@ -32,7 +32,7 @@ void BackgroundOverworld::update(Camera& camera, Time& time)
 	const int lightCamLeft = (camera.getWidth() - bgLight.w) / 2;
 	constexpr int lightCamTop = 20;
 	constexpr int hillsOffset = -100;
-	const double timeOverMax = static_cast<double>(time.time) / static_cast<double>(time.max_time);
+	const double timeOverMax = static_cast<double>(time.time) / static_cast<double>(time.maxTime);
 	const int horCircle = camera.getWidth() * .35;
 	const int vertCircle = camera.getHeight() / 4;
     constexpr SDL_Color dayColor{106, 164, 222, 255};
@@ -72,22 +72,22 @@ void BackgroundOverworld::update(Camera& camera, Time& time)
 	// Transition to Morning
 	// Else if, transition to night
 	// Else (switch-case), set brightness to time state 
-	if (time.time > time.morning_time - time.morning_offset &&
-		time.time <= time.morning_time)
+	if (time.time > time.morningTime - time.morningOffset &&
+		time.time <= time.morningTime)
     {		
 	    double distance = (static_cast<double>(time.time) -
-						   static_cast<double>(time.morning_time) +
-						   static_cast<double>(time.morning_offset)) / time.morning_offset;
+						   static_cast<double>(time.morningTime) +
+						   static_cast<double>(time.morningOffset)) / time.morningOffset;
         
 		skyColor.r = distance * dayColor.r;
 		skyColor.g = distance * dayColor.g;
 		skyColor.b = distance * dayColor.b;
 	}
-    else if (time.time > time.night_time - time.night_offset &&
-             time.time <= time.night_time)
+    else if (time.time > time.nightTime - time.nightOffset &&
+             time.time <= time.nightTime)
     {
 		double distance = abs(static_cast<double>(time.time) -
-						   static_cast<double>(time.night_time)) / time.night_offset;
+						   static_cast<double>(time.nightTime)) / time.nightOffset;
 		skyColor.r = distance * dayColor.r;
 		skyColor.g = distance * dayColor.g;
 		skyColor.b = distance * dayColor.b;

@@ -141,7 +141,7 @@ void Play::update()
 	// Update background (after we handle camera or things get a tiny bit off sync)
 	background->update(camera, time);
 
-    time.tick();
+    time.tick(timer, 40);
 }
 
 void Play::render() {
