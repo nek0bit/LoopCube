@@ -173,6 +173,7 @@ void Play::render() {
 }
 
 void Play::mouseEvents() {
+    constexpr size_t MAX_PARTICLES = 10;
 	int p1, p2;
 	if (!inv->showInventoryMenu) drawSelection(&p1, &p2);
 	
@@ -193,9 +194,18 @@ void Play::mouseEvents() {
             if (block != nullptr) {
                 // Generate particles
                 if (constants::config.getInt(CONFIG_SHOW_PARTICLES)) {
-                    GravityParticle temp{block->textureId,50, rand() % 2 == 1 ? -2.0 : 2.0, -3.0,
-                        p1*constants::blockW+(constants::blockW/2), p2*constants::blockH, 8, 6};
-                    particles.push_back(temp);
+                    for (size_t i = 0; i < MAX_PARTICLES; ++i)
+                    {
+                        GravityParticle temp{block->textureId,
+                            600,
+                            rand() % 2 == 1 ? -230.0f : 230.0f,
+                            -0.14f,
+                            p1 * constants::blockW + (rand() % static_cast<int>(constants::blockW)),
+                            p2 * constants::blockH + (rand() % static_cast<int>(constants::blockH)),
+                            8,
+                            6};
+                        particles.push_back(temp);
+                    }
                 }
             }
         }
