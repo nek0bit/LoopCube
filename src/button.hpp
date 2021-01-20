@@ -21,7 +21,7 @@ struct Button: public UiElement
 	void setX(int x);
 	void setY(int y);
     
-	void update(EventWrapper& events, int offsetX = 0, int offsetY = 0);
+	void update(EventWrapper& events, Timer& timer, int offsetX = 0, int offsetY = 0);
 	void render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX = 0, int offsetY = 0);
 
 	// Text

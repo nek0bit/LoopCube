@@ -22,8 +22,8 @@ public:
 	Textbox(int id, int x, int y, int width, int height);
 	~Textbox();
 
-	void update(EventWrapper& events, int offset_x, int offset_y);
-	void render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y);
+	void update(EventWrapper& events, Timer& timer, int offset_x, int offset_y) override;
+	void render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y) override;
     
 	int x;
 	int y;

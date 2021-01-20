@@ -22,7 +22,7 @@ Button::Button(SDL_Renderer* renderer,
     buttonText = std::make_unique<Text>(Text(renderer, text, fontColor, constants::fontHandler.getFont(4)));
 }
 
-void Button::update(EventWrapper& events, int offsetX, int offsetY) {
+void Button::update(EventWrapper& events, Timer& timer, int offsetX, int offsetY) {
 	src.x = 0;
 	// Change sprite to hovered version if hovered is true
 	src.y = static_cast<int>(hovered) * 16;

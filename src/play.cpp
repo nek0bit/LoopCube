@@ -92,7 +92,7 @@ void Play::update()
 
 
 	// Update animation(s)
-	fade.tick();
+	fade.tick(timer, 50);
 	
 	// Structures Queue Handling
 	for (size_t k = 0; k < structures.size(); ++k)

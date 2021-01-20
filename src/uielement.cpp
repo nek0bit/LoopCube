@@ -10,8 +10,8 @@ void UiElement::getValue(bool&) {}
 void UiElement::setX(int) {}
 void UiElement::setY(int) {}
 void UiElement::update() {}
-void UiElement::update(EventWrapper&) {}
-void UiElement::update(EventWrapper&, int, int) {}
+void UiElement::update(EventWrapper&, Timer&) {}
+void UiElement::update(EventWrapper&, Timer&, int, int) {}
 void UiElement::render() {}
 void UiElement::render(SDL_Renderer*, TextureHandler&) {}
 void UiElement::render(SDL_Renderer*, TextureHandler&, int, int) {}

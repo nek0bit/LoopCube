@@ -10,7 +10,7 @@ Textbox::Textbox(int id, int x, int y, int width, int height)
 
 Textbox::~Textbox() {}
 
-void Textbox::update(EventWrapper& events, int offset_x, int offset_y) {
+void Textbox::update(EventWrapper& events, Timer& timer, int offset_x, int offset_y) {
 	if (events.vmouse.clicked) {
 		if (Generic::collision<int>(x+offset_x, y+offset_y, width, height, events.vmouse.x, events.vmouse.y, 1, 1)) {
 			focused = true;
@@ -41,7 +41,7 @@ void Textbox::update(EventWrapper& events, int offset_x, int offset_y) {
 		}
 	}
 	
-	blink.tick();
+	blink.tick(timer, 120);
 	if (focused) handle_keyboard(events);
 }
 

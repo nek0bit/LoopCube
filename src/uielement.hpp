@@ -6,6 +6,7 @@
 
 #include "texturehandler.hpp"
 #include "eventwrapper.hpp"
+#include "timer.hpp"
 
 struct UiElement
 {
@@ -22,8 +23,8 @@ struct UiElement
 	virtual void setY(int y);
 	// Update functions
 	virtual void update();
-	virtual void update(EventWrapper& events);
-	virtual void update(EventWrapper& events, int offsetX, int offsetY);
+	virtual void update(EventWrapper& events, Timer& timer);
+	virtual void update(EventWrapper& events, Timer& timer, int offsetX, int offsetY);
 	// Render functions
 	virtual void render();
 	virtual void render(SDL_Renderer* renderer, TextureHandler& textures);

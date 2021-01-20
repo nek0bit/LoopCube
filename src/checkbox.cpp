@@ -39,7 +39,7 @@ bool Checkbox::toggle()
 	return checked;
 }
 
-void Checkbox::update(EventWrapper& events, int offsetX, int offsetY)
+void Checkbox::update(EventWrapper& events, Timer& timer, int offsetX, int offsetY)
 {
 	// Clear changed
 	changed = false;

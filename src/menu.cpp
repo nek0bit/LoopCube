@@ -154,18 +154,18 @@ void Menu::update(bool updateAnimations)
 		for (auto &i: buttonGroup)
         {
 			i->setX( (winSize.w/2) + 30 );
-			i->update(events, offsetX, offsetY);
+			i->update(events, timer, offsetX, offsetY);
 		}
 	}
     else if (state == CONFIG_MENU)
     {
 		backButton->setX( (winSize.w/2) + 30 );
-		backButton->update(events, offsetX, offsetY);
+		backButton->update(events, timer, offsetX, offsetY);
 		for (size_t i = 0; i < cElements.size(); ++i)
         {
 			cElements[i]->setX(left);
 			cElements[i]->setY(top+(gap*i));
-			cElements[i]->update(events, offsetX, offsetY);
+			cElements[i]->update(events, timer, offsetX, offsetY);
 
 			cElements[i]->onChange(updateConfigElements);
 		}
@@ -181,7 +181,7 @@ void Menu::update(bool updateAnimations)
 	// Update animation for background
 	if (updateAnimations)
     { // Removes stutter if we must call multiple updates in a single frame
-		shift.tick();
+		shift.tick(timer, 20);
 	}
 }
 

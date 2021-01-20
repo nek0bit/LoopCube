@@ -25,7 +25,7 @@ struct Checkbox: public UiElement
 
 	void setX(int x) override;
 	void setY(int y) override;
-	void update(EventWrapper& events, int offsetX = 0, int offsetY = 0) override;
+	void update(EventWrapper& events, Timer& timer, int offsetX = 0, int offsetY = 0) override;
 	void render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX = 0, int offsetY = 0) override;
 private:
 	bool changed;

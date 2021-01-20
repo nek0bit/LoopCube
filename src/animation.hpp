@@ -1,12 +1,14 @@
 #pragma once
 
+#include "timer.hpp"
+
 struct Animation
 {
 	Animation() = default;
 	Animation(int maximum);
 
-	int tick(int amount = 1);
+	int tick(Timer& timer, float amount = 1);
     
-	int frame;
+    float frame;
 	int maxFrames;
 };

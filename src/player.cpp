@@ -25,17 +25,17 @@ Player::~Player()
 void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<Entity*> entities)
 {
 	updateBasicPhysics(chunks, timer);
-	frame.tick();
+	frame.tick(timer, 50);
 
 	// Frame for when the character is looking the other way
 	constexpr int maxFrames = 5;
 
-	int onFrame = ceil((static_cast<double>(frame.frame)/static_cast<double>(frame.maxFrames)
-						 )*(maxFrames-1));
+	int onFrame = ceil(static_cast<double>(frame.frame) / static_cast<double>(frame.maxFrames)
+                       *(maxFrames-1));
 	if (onFrame == 0) onFrame = 1;
 
 	// Where the player is looking
-	static int adder = 0;
+	static float adder = 0;
 	
 	if ((velX < -0.1 || velX > 0.1) && onGround)
     {
