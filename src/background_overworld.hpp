@@ -21,13 +21,8 @@ struct BackgroundOverworld: public Background
 	void update(Camera& camera, Time& time) override;
 	void render(SDL_Renderer* renderer, TextureHandler& textures) override;
 private:
-	void renderRepeating(SDL_Renderer* renderer, TextureHandler& textures, int texture, int offsetX, int offsetY, int width,
-                         int height, int gap, int top, bool verticle = false, int srcW = -1, int srcH = -1);
 	int winWidth;
 	int winHeight;
-
-	bool showCaveBackground;
-    Transition bgCaveOpacity;
 
     // Src, Dest
 	SDL_Rect bgShineSrc, bgShineDest;

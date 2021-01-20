@@ -4,8 +4,6 @@ BackgroundOverworld::BackgroundOverworld()
 	: Background{},
       winWidth{0},
       winHeight{0},
-      showCaveBackground{false},
-      bgCaveOpacity{0, 0.20},
       bgShineSrc{},
       bgShineDest{},
       bgLightSrc{},
@@ -28,7 +26,6 @@ BackgroundOverworld::~BackgroundOverworld()
 
 void BackgroundOverworld::update(Camera& camera, Time& time)
 {
-	constexpr int caveBackgroundOffset = -8000; // How deep down until the cave background shows
 	const int lightCamLeft = (camera.getWidth() - bgLight.w) / 2;
 	constexpr int lightCamTop = 20;
 	constexpr int hillsOffset = -100;
@@ -59,11 +56,6 @@ void BackgroundOverworld::update(Camera& camera, Time& time)
 	// Update hills
 	bgHillsOffset.x = camera.x / 15;
 	bgHillsOffset.y = (camera.getHeight() / 2) + hillsOffset;
-
-	// Enable the cave background is camera is low enough
-	showCaveBackground = camera.y < caveBackgroundOffset;
-	bgCave.x = camera.x / 10;
-	bgCave.y = camera.y / 10;
 
 	//********************************
 	//  Handle time
@@ -140,9 +132,6 @@ void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& texture
     constexpr int hillOffset = 0;
 	const int afterHillsTop = bgHillsOffset.y + bgHills.h + hillOffset;
 
-    
-    bgCaveOpacity.value = showCaveBackground ? 255 : 0;
-
 	// Render sky
 	SDL_Rect sky{0, 0, winWidth, winHeight};
     SDL_SetRenderDrawColor(renderer, skyColor.r, skyColor.g, skyColor.b, 255);
@@ -164,16 +153,5 @@ void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& texture
 	SDL_Rect after{0, afterHillsTop, winWidth, winHeight-afterHillsTop};
     SDL_SetRenderDrawColor(renderer, 131, 131, 131, 255);
     SDL_RenderFillRect(renderer, &after);
-    
-	if (bgCaveOpacity.get() > 2) {
-        SDL_Texture* tex = textures.getTexture(17);
-        SDL_SetTextureAlphaMod(tex, static_cast<int>(bgCaveOpacity.value));
-
-        Generic::Render::renderRepeating(renderer, textures, 17, bgCave.x, bgCave.y,
-						 bgCaveBlock.w, bgCaveBlock.h, 0, 0, true, constants::blockImgSize, constants::blockImgSize);
-
-		// Reset opacity for future objects
-        SDL_SetTextureAlphaMod(tex, 255);
-	}
 }
 
