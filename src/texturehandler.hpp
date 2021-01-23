@@ -4,6 +4,7 @@
 #include <vector>
 #include <utility>
 #include <string>
+#include <unordered_map>
 
 #include <SDL2/SDL.h>
 
@@ -15,7 +16,8 @@ struct TextureHandler
     TextureHandler(SDL_Renderer* renderer);
 	~TextureHandler();
 
-    SDL_Texture* getTexture(int id);
+    Texture* getTexture(size_t id);
+    
 	void freeTextures();
 private:
 	std::vector<std::pair<int, Texture*>> textures;

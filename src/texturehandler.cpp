@@ -2,8 +2,14 @@
 
 TextureHandler::TextureHandler(SDL_Renderer* renderer)
 {
-    for (size_t i = 0; i < constants::textureIds.size(); ++i) {
-        textures.push_back(std::make_pair(i, new Texture{renderer, constants::path + constants::textureIds[i] + ".png"}));	
+    for (size_t i = 0; i < constants::textureInfo.size(); ++i) {
+        textures.push_back(
+            std::make_pair(i,
+                           new Texture{renderer,
+                               constants::path + constants::textureInfo[i].textureFilename,
+                               constants::textureInfo[i].w,
+                               constants::textureInfo[i].h}
+                ));	
     }
 }
 
@@ -12,14 +18,9 @@ TextureHandler::~TextureHandler()
     freeTextures();
 }
 
-SDL_Texture* TextureHandler::getTexture(int id)
+Texture* TextureHandler::getTexture(size_t id)
 {
-    for (auto &i: textures) {
-        if (id == i.first) {
-            return i.second->getTexture();
-        }
-    }
-    return nullptr;
+    return textures[id].second;
 }
 
 void TextureHandler::freeTextures()
