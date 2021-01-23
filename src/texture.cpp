@@ -1,6 +1,8 @@
 #include "texture.hpp"
 
-Texture::Texture(SDL_Renderer* renderer, std::string filename)
+Texture::Texture(SDL_Renderer* renderer, std::string filename, unsigned int w, unsigned int h)
+    : w{w},
+      h{w}
 {
     SDL_Surface* surface = IMG_Load(filename.c_str());
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -16,11 +18,6 @@ Texture::Texture(SDL_Renderer* renderer, std::string filename)
 Texture::~Texture()
 {
     freeTexture();
-}
-
-SDL_Texture*& Texture::getTexture()
-{
-    return texture;
 }
 
 void Texture::freeTexture()

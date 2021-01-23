@@ -7,11 +7,13 @@
 
 struct Texture
 {
-    Texture(SDL_Renderer* renderer, std::string filename);
+    Texture(SDL_Renderer* renderer, std::string filename, unsigned int w, unsigned int h);
     ~Texture();
 
-    SDL_Texture*& getTexture();
     void freeTexture();
-private:
+    
     SDL_Texture* texture;
+
+    unsigned int w;
+    unsigned int h;
 };
