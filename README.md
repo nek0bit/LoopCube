@@ -6,7 +6,7 @@ LoopCube is an open source Survival/Sandbox game written in C++.
 
 It has infinite world generation, a day/night cycle, caves, and more.
 
-Currently it can be compiled with SDL2 and SFML support.
+Currently it can be compiled with SDL2 support.
 
 # Screenshots
 
@@ -34,20 +34,6 @@ If you would like to build for release, run `make release`
 
 Run `make DATA_LOCATION=/usr/local/share/loopcube release`
 
-### SFML
-
-Requires: `sfml`
-
-###### If you want to simply run the application in the current directory
-
-Run `make -f Makefile.sfml debug`
-
-If you would like to build for release, run `make -f Makefile.sfml release`
-
-###### If you plan on installing
-
-Run `make -f Makefile.sfml DATA_LOCATION=/usr/local/share/loopcube release`
-
 ## MacOS
 
 On macOS, LoopCube requires GCC to build. Using the regular Xcode development tools will not work.
@@ -68,10 +54,6 @@ If you use zsh (default on 10.15 and later), run:
 
 where *n* is the version of GCC installed by Homebrew.
 
-## Windows
-
-(((soon)))
-
 # Installing
 ## Linux
 
@@ -84,10 +66,6 @@ Replace `install` with `uninstall` if you want to remove it.
 `sudo make -f Makefile.macos DATA_LOCATION=/usr/local/share/loopcube PREFIX=/usr/local/bin install`
 
 Replace `install` with `uninstall` if you want to remove it.
-
-## Windows
-
-(((soon)))
 
 # License
 
