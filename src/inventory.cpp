@@ -129,7 +129,7 @@ void Inventory::drawInventoryMenu()
             else
             {
 				// Swap items
-			    Item& tmp = it;
+			    Item tmp = it;
 				it = itemHeld;
 				itemHeld = tmp;
 			}
