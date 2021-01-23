@@ -4,7 +4,7 @@
 
 LoopCube is an open source Survival/Sandbox game written in C++.
 
-It has infinite world generation, a day/night cycle, caves, and more.
+It has infinite horizontal/vertical world generation, a day/night cycle, caves, and more.
 
 Currently it can be compiled with SDL2 support.
 
