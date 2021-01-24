@@ -138,11 +138,11 @@ void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& texture
     SDL_RenderFillRect(renderer, &sky);
 	
 	// Render bgShine
-    SDL_RenderCopy(renderer, textures.getTexture(13), &bgShineSrc, &bgShineDest);
+    SDL_RenderCopy(renderer, textures.getTexture(13)->texture, &bgShineSrc, &bgShineDest);
 
 	// Render sun/moon
-    SDL_RenderCopy(renderer, textures.getTexture(20), &bgLightSrc, &bgLightDest);
-    SDL_RenderCopy(renderer, textures.getTexture(21), &bgMoonSrc, &bgMoonDest);
+    SDL_RenderCopy(renderer, textures.getTexture(20)->texture, &bgLightSrc, &bgLightDest);
+    SDL_RenderCopy(renderer, textures.getTexture(21)->texture, &bgMoonSrc, &bgMoonDest);
 
 	// Repeatedly render clouds and hills
     Generic::Render::renderRepeating(renderer, textures, 14, winWidth, winHeight, bgCloudOffset.x, bgCloudOffset.y,

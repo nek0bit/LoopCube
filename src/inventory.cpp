@@ -112,7 +112,7 @@ void Inventory::drawInventoryMenu()
 		// Render inventory menu
 		SDL_Rect src{0, 0, MENU_WIDTH, MENU_HEIGHT};
 		SDL_Rect dest{MAX_X, MAX_Y + static_cast<int>(slide), src.w * scale, src.h * scale};
-        SDL_RenderCopy(renderer, textures.getTexture(11), &src, &dest);
+        SDL_RenderCopy(renderer, textures.getTexture(11)->texture, &src, &dest);
 
 		std::vector<int> pos = getHoveredPos(events.vmouse.x, events.vmouse.y,
                                                MAX_X, MAX_Y + slide, true);
@@ -213,7 +213,7 @@ void Inventory::drawHotbar()
 			src.y = 16;
 		}
 	    SDL_Rect block{i * (BLOCK_S + 3) + MAX_X, slide, BLOCK_S, BLOCK_S};
-        SDL_RenderCopy(renderer, textures.getTexture(10), &src, &block);
+        SDL_RenderCopy(renderer, textures.getTexture(10)->texture, &src, &block);
 
 		if (items[i].enabled) {
 			items[i].render(renderer, textures, block.x + 5, slide + block.y + 5, 30, 30);

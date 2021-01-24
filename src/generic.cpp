@@ -25,7 +25,7 @@ void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& te
 				verticle ? ((offsetY % (height + gap)) + top) + ((height + gap) * j) : top + offsetY,
 				width, height};
 
-            SDL_RenderCopy(renderer, textures.getTexture(texture), &src, &block);
+            SDL_RenderCopy(renderer, textures.getTexture(texture)->texture, &src, &block);
 		}
 	}
 }
