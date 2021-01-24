@@ -16,11 +16,8 @@ void gameLoop() {
         timer.setTime();
         
         gameHandles(game);
-
-        std::cout << timer.deltaTime.ms << std::endl;
         
         int calc = timer.calcSleep();
-        std::cout << "Sleeping for..." << calc << std::endl;
         if (calc > 0) SDL_Delay(calc);
 	}
 		

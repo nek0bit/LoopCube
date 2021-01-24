@@ -84,9 +84,6 @@ namespace constants
 	
 	extern const int chunkWidth;
 	extern const int chunkHeight;
-
-	extern const int chunkSplitCount;
-	extern const int chunkSplitHeight;
 	
 	extern const int loadViewport;
 	extern const int loadDistance;

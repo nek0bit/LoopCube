@@ -61,11 +61,7 @@ namespace constants
 	const int loadViewport = 16;
 	
 	const int chunkWidth = 8;
-	const int chunkHeight = 800;
-
-	// chunk_height/x = integer(y)
-	const int chunkSplitCount = 100; // x
-	const int chunkSplitHeight = constants::chunkHeight/constants::chunkSplitCount; // y
+	const int chunkHeight = 8;
 
 #if defined(__WIIU__) || defined(__SWITCH__)
 	const int loadDistance = 8;
