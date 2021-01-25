@@ -65,7 +65,7 @@ struct LoadDistance
 {
     unsigned int x;
     unsigned int y;
-}
+};
 
 namespace constants
 {
