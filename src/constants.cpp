@@ -1,5 +1,7 @@
 #include "constants.hpp"
 
+
+
 // Texture stuff
 namespace constants
 {
@@ -57,16 +59,14 @@ namespace constants
 	const double blockH = 42;
 
 	const int blockImgSize = 16;
-	
-	const int loadViewport = 16;
-	
+		
 	const int chunkWidth = 8;
 	const int chunkHeight = 8;
 
 #if defined(__WIIU__) || defined(__SWITCH__)
-	const int loadDistance = 8;
+	const LoadDistance loadDistance{12, 12};
 #else
-	const int loadDistance = 12;
+	const LoadDistance loadDistance{16, 16};
 #endif
 
 	const std::string header = "LoopCube";

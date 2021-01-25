@@ -61,6 +61,11 @@ enum config_enum
 	CONFIG_SHOW_CHUNK_DEBUG,
 };
 
+struct LoadDistance
+{
+    unsigned int x;
+    unsigned int y;
+}
 
 namespace constants
 {
@@ -85,8 +90,7 @@ namespace constants
 	extern const int chunkWidth;
 	extern const int chunkHeight;
 	
-	extern const int loadViewport;
-	extern const int loadDistance;
+	extern const LoadDistance loadDistance;
 
 	extern const std::string header;
 	extern const std::vector<std::string> content;
