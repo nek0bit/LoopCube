@@ -30,7 +30,7 @@ void _ChunkDataSplit::updateLoaded()
 {
     for (size_t i = 0; i < loadedChunks.size(); ++i)
     {
-        const int chunkPos = loadPtr.y + i;
+        const int chunkPos = -loadPtr.y + i;
         std::shared_ptr<Chunk> dataReceived = getData(chunkPos);
         
         // Generate if nullptr (might want to remove this later)
@@ -46,6 +46,9 @@ void _ChunkDataSplit::updateLoaded()
 // Update all loaded chunks in the split
 void _ChunkDataSplit::updateSplit(Camera& camera)
 {
+    // TODO Remove me, just for debugging
+    updateLoaded();
+    
     for (auto& chunk: loadedChunks)
     {
         chunk->updateAll(camera);
