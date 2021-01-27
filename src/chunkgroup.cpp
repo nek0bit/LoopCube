@@ -9,33 +9,40 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
       x{x}
 {}
 
-// True = Chunk isn't loaded/Generate it
-// False = Chunk Loaded/No need to generate
-bool _ChunkDataSplit::checkGenerate(long int y)
+// Generates a chunk if it isn't loaded
+std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate(long int y)
 {
     auto ind = data.find(y);
-    // Check if element exists
+    // Check if element doesn't exists
     if (ind == data.end())
     {
         // Generate the chunk
-        ind->second.data = std::make_shared<Chunk>(Chunk{x, y});
-        ind->second.generated = true;
-        return true;
+        data.insert({y, ChunkData{true, std::make_shared<Chunk>(Chunk{x, y})}});
+        return data.find(y);
     }
-    return false;
+    return ind;
 }
 
+// Clears and reupdates the loadedChunks vector
 void _ChunkDataSplit::updateLoaded()
 {
     prepareLoaded();
 
     for (size_t i = 0; i < loadedChunks.size(); ++i)
     {
-        std::shared_ptr<Chunk> dataReceived = getData(loadPtr.y + i);
+        const int chunkPos = loadPtr.y + i;
+        std::shared_ptr<Chunk> dataReceived = getData(chunkPos);
+        // Generate if nullptr (might want to remove this later)
+        if (dataReceived == nullptr)
+        {            
+            dataReceived = checkGenerate(chunkPos);
+        }
+        
         loadedChunks[i] = dataReceived;
     }
 }
 
+// Update all loaded chunks in the split
 void _ChunkDataSplit::updateSplit(Camera& camera)
 {
     for (auto& chunk: loadedChunks)
@@ -44,6 +51,7 @@ void _ChunkDataSplit::updateSplit(Camera& camera)
     }
 }
 
+// Renders all loaded chunks in the split if visible
 void _ChunkDataSplit::renderSplit(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
 {
     for (auto& chunk: loadedChunks)
@@ -59,8 +67,21 @@ std::shared_ptr<Chunk> _ChunkDataSplit::getData(long int y)
     catch (std::out_of_range& err) { return nullptr; }
 }
 
+// Clears and resizes loadedChunks
 void _ChunkDataSplit::prepareLoaded()
 {
     loadedChunks.clear();
     loadedChunks.resize(loadDistance.y);
 }
+
+//***************************************************
+// _ChunkData: For horizontal vertical chunks
+//***************************************************
+
+_ChunkData::_ChunkData(LoadPtr& loadPtr, LoadDistance& loadDistance)
+    : loadPtr{loadPtr},
+      loadDistance{loadDistance},
+      loadedSplits{},
+      data{}
+{}
+
