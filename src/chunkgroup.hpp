@@ -22,19 +22,32 @@ struct LoadPtr
     int y;
 };
 
+struct ChunkData
+{
+    bool generated;
+    std::shared_ptr<Chunk> data = nullptr;
+};
+
 struct _ChunkDataSplit
 {
-    _ChunkDataSplit(LoadPtr& loadPtr, LoadDistance& loadDistance);
+    _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance);
     ~_ChunkDataSplit() = default;
 
-    std::shared_ptr<Chunk>& getData(long int y);
+    void updateLoaded();
+    bool checkGenerate(long int y);
+    void updateSplit(Camera& camera);
+    void renderSplit(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+    
+    std::shared_ptr<Chunk> getData(long int y);
     
     LoadPtr& loadPtr;
     LoadDistance& loadDistance;
-private:
     std::vector<std::shared_ptr<Chunk>> loadedChunks;
+private:
+    void prepareLoaded();
+    const long int x;
     // int = y
-    std::unordered_map<long int, std::shared_ptr<Chunk>> data;
+    std::unordered_map<long int, ChunkData> data;
 };
 
 struct _ChunkData
