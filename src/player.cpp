@@ -115,10 +115,11 @@ void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<Entity*> entit
 void Player::jump(ChunkGroup &chunks, Timer& timer)
 {
 	position.y += 1;
-	if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
+	//if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
+    // DEBUG jumping
 		velY = -.85;
 		onGround = false;
-	}
+        //}
 	position.y -= 1;
 	jumping = true;
 	canJump = false;
