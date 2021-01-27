@@ -246,7 +246,7 @@ void Menu::renderConfigMenu()
 
 void Menu::renderBackground()
 {
-    bgX += 0.001 * timer.deltaTime;
+    bgX += 100 * timer.deltaTime;
     Generic::Render::renderRepeating(renderer, textures, 8, winSize.w, winSize.h,
                                      bgX, bgY, 40, 40, 0, 0,
                                      true, constants::blockImgSize, constants::blockImgSize);
