@@ -25,7 +25,7 @@ void Entity::collisionTop() {}
 
 CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 {
-	std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
+/*	std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
 
 	Chunk* c = chunks.get_chunk_at(position.x, true);
 	Chunk* c_front = chunks.get_chunk_at(position.x+size.w, true);
@@ -63,7 +63,7 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 				}
 			}
 		}
-	}
+        }*/
 	return CollisionInfo{};
 }
 

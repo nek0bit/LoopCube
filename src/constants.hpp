@@ -90,7 +90,7 @@ namespace constants
 	extern const int chunkWidth;
 	extern const int chunkHeight;
 	
-	extern const LoadDistance loadDistance;
+	extern LoadDistance loadDistance;
 
 	extern const std::string header;
 	extern const std::vector<std::string> content;

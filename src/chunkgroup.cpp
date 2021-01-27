@@ -7,7 +7,9 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
     : loadPtr{loadPtr},
       loadDistance{loadDistance},
       x{x}
-{}
+{
+    prepareLoaded();
+}
 
 // Generates a chunk if it isn't loaded
 std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate(long int y)
@@ -26,8 +28,6 @@ std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate
 // Clears and reupdates the loadedChunks vector
 void _ChunkDataSplit::updateLoaded()
 {
-    prepareLoaded();
-
     for (size_t i = 0; i < loadedChunks.size(); ++i)
     {
         const int chunkPos = loadPtr.y + i;
@@ -76,13 +76,77 @@ void _ChunkDataSplit::prepareLoaded()
 }
 
 //***************************************************
-// _ChunkData: For horizontal vertical chunks
+// ChunkGroup: For horizontal vertical chunks,
+// Handles most abstractions
 //***************************************************
 
-_ChunkData::_ChunkData(LoadPtr& loadPtr, LoadDistance& loadDistance)
-    : loadPtr{loadPtr},
-      loadDistance{loadDistance},
-      loadedSplits{},
-      data{}
-{}
+ChunkGroup::ChunkGroup()
+    : loadedSplits{},
+      data{},
+      loadPtr{-5, -5},
+      loadDistance{constants::loadDistance}
+{
+    // Generate vertical splits
+    prepareLoaded();
+    updateLoaded();
+}
+      
+void ChunkGroup::updateLoaded()
+{
+    for (size_t i = 0; i < loadedSplits.size(); ++i)
+    {
+        const int chunkPos = loadPtr.x + i;
+        std::shared_ptr<_ChunkDataSplit> dataReceived = getData(chunkPos);
+        
+        // Generate if nullptr (might want to remove this later)
+        if (dataReceived == nullptr)
+        {            
+            dataReceived = checkSplitGenerate(chunkPos)->second;
+        }
+        
+        loadedSplits[i] = dataReceived;
+    }    
+}
 
+void ChunkGroup::prepareLoaded()
+{
+    loadedSplits.clear();
+    loadedSplits.resize(loadDistance.x);
+}
+
+// Cleaner way to get at data
+std::shared_ptr<_ChunkDataSplit> ChunkGroup::getData(long int x)
+{
+    try { return data.at(x); }
+    catch (const std::out_of_range& err) { return nullptr; }
+}
+
+void ChunkGroup::update(Camera& camera)
+{
+    // TODO Remove me, just for testing things out
+    updateLoaded();
+
+    for (auto& split: loadedSplits)
+    {
+        split->updateSplit(camera);
+    }
+}
+
+void ChunkGroup::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
+{
+    
+}
+
+std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>>::iterator
+ChunkGroup::checkSplitGenerate(long int x)
+{
+    auto ind = data.find(x);
+    // Check if element doesn't exists
+    if (ind == data.end())
+    {
+        // Generate the chunk
+        data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance)});
+        return data.find(x);
+    }
+    return ind;
+}

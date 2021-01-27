@@ -64,9 +64,9 @@ namespace constants
 	const int chunkHeight = 8;
 
 #if defined(__WIIU__) || defined(__SWITCH__)
-	const LoadDistance loadDistance{12, 12};
+	LoadDistance loadDistance{12, 12};
 #else
-	const LoadDistance loadDistance{16, 16};
+	LoadDistance loadDistance{16, 16};
 #endif
 
 	const std::string header = "LoopCube";

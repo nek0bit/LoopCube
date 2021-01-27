@@ -52,37 +52,27 @@ private:
 
 //**************************************************
 
-struct _ChunkData
-{
-    _ChunkData(LoadPtr& loadPtr, LoadDistance& loadDistance);
-    ~_ChunkData() = default;
-
-    std::shared_ptr<_ChunkDataSplit>& getData(long int x);
-
-    LoadPtr& loadPtr;
-    LoadDistance& loadDistance;
-private:
-    
-    std::vector<std::shared_ptr<_ChunkDataSplit>> loadedSplits;
-    // int = x
-    std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>> data;
-};
-
-//**************************************************
-
 struct ChunkGroup
 {
     ChunkGroup();
     ~ChunkGroup() = default;
 
-    std::shared_ptr<Chunk>& getChunkAt(long int x, long int y);
+    void update(Camera& camera);
+    void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+    void updateLoaded();
 
-private:
-    void chunkLoad(long int x, long int y);
+    //std::shared_ptr<Chunk>& getChunkAt(long int x, long int y);
 
-    _ChunkData chunks;
-
-    // Loaded data
     LoadPtr loadPtr;
-    LoadDistance loadDistance;
+private:
+    std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>>::iterator
+        checkSplitGenerate(long int x);
+    void prepareLoaded();
+    std::shared_ptr<_ChunkDataSplit> getData(long int x);
+
+    std::vector<std::shared_ptr<_ChunkDataSplit>> loadedSplits;
+    std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>> data;
+    
+    // Loaded data
+    LoadDistance& loadDistance;
 };

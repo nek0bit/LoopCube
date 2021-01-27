@@ -5,7 +5,7 @@ Play::Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
       renderer{renderer},
       textures{textures},
       events{events},
-      chunks{0}, 
+      chunks{}, 
 	  camera{&winSize},
       player{},
       entities{},
@@ -29,8 +29,7 @@ void Play::update()
 	mouseEvents();
 	
 	// Update all chunks
-	chunks.update_all_viewport(camera);
-	chunks.check_area(player.position.x, structures);
+	chunks.update(camera);
 	
 	inv->update(timer);
 
@@ -107,7 +106,7 @@ void Play::update()
 			continue;
 		}
 		
-		for (size_t i = 0; i < data.size(); ++i)
+		/*for (size_t i = 0; i < data.size(); ++i)
         {
 			// See if the chunk actually exists
 			auto c1 = chunks.get_chunk_at((structures[k]->get_x()+data[i].x)*constants::blockW, false);
@@ -122,7 +121,7 @@ void Play::update()
 				// Erase the data now that we are done using it
 				data.erase(data.begin() + i);
 			}
-		}
+            }*/
 	}
 	
 	// Particles
@@ -156,7 +155,7 @@ void Play::render() {
 		}
 	}
 	
-	chunks.render_all_viewport(renderer, textures, camera);
+	chunks.render(renderer, textures, camera);
 	
 	player.render(renderer, textures, camera);
 
@@ -178,7 +177,7 @@ void Play::mouseEvents() {
 	if (!inv->showInventoryMenu) drawSelection(&p1, &p2);
 	
 	// Get cursor over chunk
-	Chunk* chunk = chunks.get_chunk_at(p1*constants::blockW, true);
+	/*Chunk* chunk = chunks.get_chunk_at(p1*constants::blockW, true);
 	if (chunk != nullptr)
     {
 		// Do some math to get the chunk position
@@ -224,7 +223,7 @@ void Play::mouseEvents() {
 		default:
 			break;
 		}
-	}
+        }*/
 }
 
 // Draw a selection box and set p1 and p2 to the position
