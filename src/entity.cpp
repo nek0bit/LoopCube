@@ -4,7 +4,7 @@ Entity::Entity(int textureId, double x, double y, double width, double height)
 	: GameObject{textureId, x, y, width, height},
       velX{0},
       velY{0},
-      velXSpeed{9},
+      velXSpeed{9000},
       onGround{false},
       lastPos{-1}
 {}
@@ -68,7 +68,7 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 }
 
 void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
-    const int cap = 2;
+    const int cap = 2000.0f;
     constexpr float friction = 20.0f;
     
 	// Update draw position
@@ -77,9 +77,9 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
     src.w = size.w;
 	src.h = size.h;
 	
-	velX *= 1 / (1 + (timer.deltaTime.s * friction));
+	velX *= 1 / (1 + (timer.deltaTime * friction));
 		
-    position.x += velX * timer.deltaTime.s;
+    position.x += velX * timer.deltaTime;
 
 	CollisionInfo infoX = checkBlockCollision(chunks);
 
@@ -106,8 +106,8 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
 		onGround = true;
 	}
 		
-	velY += .002 * timer.deltaTime.ms;
-    position.y += velY * timer.deltaTime.ms;
+	velY += 2000.0f * timer.deltaTime;
+    position.y += velY * timer.deltaTime;
 
 	// Cap +Y velocity
 	if (velY > cap) {

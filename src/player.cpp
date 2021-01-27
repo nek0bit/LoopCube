@@ -117,7 +117,7 @@ void Player::jump(ChunkGroup &chunks, Timer& timer)
 	position.y += 1;
 	//if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
     // DEBUG jumping
-		velY = -.85;
+		velY = -1085;
 		onGround = false;
         //}
 	position.y -= 1;
@@ -133,15 +133,15 @@ void Player::directPlayer(int direction, ChunkGroup &chunks, Timer& timer)
 		jump(chunks, timer);
 		break;
 	case 1: // RIGHT
-        if (!onGround) velX += (velXSpeed*0.02) * timer.deltaTime.ms;
-        velX += velXSpeed * timer.deltaTime.ms;
+        if (!onGround) velX += (velXSpeed*0.02) * timer.deltaTime;
+        velX += velXSpeed * timer.deltaTime;
 		lastPos = 1;
 		break;
 	case 2: // DOWN
 		break;
 	case 3: // LEFT
-        if (!onGround) velX -= (velXSpeed*0.02) * timer.deltaTime.ms;
-        velX -= velXSpeed * timer.deltaTime.ms;
+        if (!onGround) velX -= (velXSpeed*0.02) * timer.deltaTime;
+        velX -= velXSpeed * timer.deltaTime;
 		lastPos = 3;
 		break;
 	default:

@@ -30,13 +30,14 @@ void Chunk::renderInfo(SDL_Renderer* renderer, Camera& camera)
         constexpr int lineSize = 3;
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        
 
-        SDL_Rect leftLine{static_cast<int>(getChunkX() * constants::blockW),
-            static_cast<int>(getChunkY() * constants::blockH),
+        SDL_Rect leftLine{static_cast<int>(getChunkX() * constants::blockW + camera.x),
+            static_cast<int>(getChunkY() * constants::blockH + camera.y),
             lineSize,
             static_cast<int>(MAX_HEIGHT * constants::blockH)};
-        SDL_Rect topLine{static_cast<int>(getChunkX(0) * constants::blockW),
-            static_cast<int>(getChunkY(0) * constants::blockH),
+        SDL_Rect topLine{static_cast<int>(getChunkX(0) * constants::blockW + camera.x),
+            static_cast<int>(getChunkY(0) * constants::blockH + camera.y),
             static_cast<int>(MAX_WIDTH * constants::blockW),
             lineSize};
         SDL_Rect rightLine{static_cast<int>(leftLine.x + (MAX_WIDTH * constants::blockW) - lineSize),
@@ -66,6 +67,7 @@ void Chunk::renderAllBlocks(SDL_Renderer* renderer, TextureHandler& textures, Ca
     iterateFunctor(camera, [&](Block& blk) {
         blk.render(renderer, textures, camera);
     });
+    renderInfo(renderer, camera);
 }
 
 // Does checking, Slower (but not by that much)

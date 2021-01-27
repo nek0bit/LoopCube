@@ -14,7 +14,7 @@ Time::Time(float startTime, float maxTime,
 Time::~Time() {}
 
 void Time::tick(Timer& timer, int amount) {
-	time += amount * timer.deltaTime.s;
+	time += amount * timer.deltaTime;
 	if (time > maxTime) time = 0;
 
 	if (time > morningTime && time < nightTime) {

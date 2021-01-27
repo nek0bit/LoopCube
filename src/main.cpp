@@ -1,11 +1,5 @@
 #include "main.hpp"
 
-void gameHandles(Game& game) {
-	game.update();
-	game.render();
-	game.eventHandler();
-}
-
 void gameLoop() {
     Timer timer{120};
 	Game game{timer};
@@ -15,10 +9,12 @@ void gameLoop() {
 	while(game.isRunning) {
         timer.setTime();
         
-        gameHandles(game);
+        game.update();
+        game.render();
+        game.eventHandler();
         
         int calc = timer.calcSleep();
-        if (calc > 0) SDL_Delay(calc);
+        if (calc > 0) std::this_thread::sleep_for(std::chrono::milliseconds(timer.calcSleep()));
 	}
 		
 	game.free();
@@ -29,8 +25,7 @@ int main(/* int argc, char* argv[] */) {
 #ifdef __SWITCH__	 
 	hidScanInput();
 	
-	Result rc = 0;
-	rc = hiddbgInitialize();
+	Result rc = hiddbgInitialize();
 	
 	if (R_FAILED(rc)) {
 		std::cout << "hiddbgInitialize(): " << rc << std::endl;

@@ -9,3 +9,8 @@
 
 #include "game.hpp"
 #include "timer.hpp"
+#include <thread>
+#include <chrono>
+
+int main();
+void gameLoop();

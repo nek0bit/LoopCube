@@ -2,11 +2,12 @@
 
 Timer::Timer(int FPS)
     : FPS{0},
-      deltaTime{0, 0},
-      lastFrame{0},
-      currFrame{0}
+      deltaTime{},
+      lastFrame{},
+      currFrame{}
 {
     setFPS(FPS);
+    lastFrame = std::chrono::high_resolution_clock::now().time_since_epoch();
 }
 
 void Timer::setFPS(int FPS)
@@ -16,15 +17,16 @@ void Timer::setFPS(int FPS)
 
 void Timer::setTime()
 {
-    lastFrame = currFrame;
-    currFrame = SDL_GetPerformanceCounter();
+    currFrame = std::chrono::high_resolution_clock::now().time_since_epoch();
     
-    deltaTime.ms = (double)((currFrame - lastFrame)*1000
-                           / (double)SDL_GetPerformanceFrequency());
-    deltaTime.s = deltaTime.ms / 1000;
+    std::chrono::duration<double> deltaTimeTmp = currFrame - lastFrame;
+    
+    deltaTime = deltaTimeTmp.count();
+        
+    lastFrame = currFrame;
 }
 
 int Timer::calcSleep()
 {
-    return floor(FPS - deltaTime.s);
+    return FPS - deltaTime;
 }

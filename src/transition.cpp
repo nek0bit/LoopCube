@@ -10,7 +10,7 @@ Transition::~Transition() {}
 
 void Transition::update(Timer& timer)
 {
-	at += ((value - at) * threshold) * timer.deltaTime.s;
+	at += ((value - at) * threshold) * timer.deltaTime;
 }
 
 double Transition::get()

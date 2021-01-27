@@ -29,7 +29,7 @@ void Play::update()
 	mouseEvents();
 	
 	// Update all chunks
-	chunks.update(camera);
+    chunks.update(camera);
 	
 	inv->update(timer);
 
@@ -256,9 +256,9 @@ void Play::handleCamera()
 	static double moveX = x;
 	static double moveY = y;
 
-	float amount = 0.015;
-	moveX += (x - moveX) * amount * timer.deltaTime.ms;
-	moveY += (y - moveY) * amount * timer.deltaTime.ms;
+	float amount = 15.0f;
+	moveX += (x - moveX) * amount * timer.deltaTime;
+	moveY += (y - moveY) * amount * timer.deltaTime;
 	
     camera.x = moveX;
     camera.y = moveY;
