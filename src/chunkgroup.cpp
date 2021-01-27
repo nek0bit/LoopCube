@@ -128,13 +128,18 @@ void ChunkGroup::update(Camera& camera)
 
     for (auto& split: loadedSplits)
     {
+        if (split == nullptr) continue;
         split->updateSplit(camera);
     }
 }
 
 void ChunkGroup::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
 {
-    
+    for (auto& split: loadedSplits)
+    {
+        if (split == nullptr) continue;
+        split->renderSplit(renderer, textures, camera);
+    }
 }
 
 std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>>::iterator
@@ -146,6 +151,8 @@ ChunkGroup::checkSplitGenerate(long int x)
     {
         // Generate the chunk
         data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance)});
+        auto ret = data.find(x);
+        ret->second->updateLoaded();
         return data.find(x);
     }
     return ind;

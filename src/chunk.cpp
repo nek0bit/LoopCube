@@ -7,9 +7,9 @@ Chunk::Chunk(long int x, long int y)
       MAX_HEIGHT{static_cast<unsigned>(constants::chunkHeight)},
       chunk{}
 {
-    generateChunk();
-
     chunk.resize(MAX_WIDTH*MAX_HEIGHT, nullptr);
+
+    generateChunk();
 }
 
 Chunk::~Chunk()
