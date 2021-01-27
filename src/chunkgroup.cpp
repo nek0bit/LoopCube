@@ -32,10 +32,11 @@ void _ChunkDataSplit::updateLoaded()
     {
         const int chunkPos = loadPtr.y + i;
         std::shared_ptr<Chunk> dataReceived = getData(chunkPos);
+        
         // Generate if nullptr (might want to remove this later)
         if (dataReceived == nullptr)
         {            
-            dataReceived = checkGenerate(chunkPos);
+            dataReceived = checkGenerate(chunkPos)->second.data;
         }
         
         loadedChunks[i] = dataReceived;
