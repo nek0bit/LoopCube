@@ -120,17 +120,14 @@ size_t Chunk::posToIndex(const unsigned int x, const unsigned int y) const
 
 bool Chunk::chunkInView(Camera& camera) const
 {
-    SDL_Rect windowRect{static_cast<int>(camera.x),
-        static_cast<int>(camera.y),
-        camera.getWidth(),
-        camera.getHeight()};
+    SDL_Rect windowRect{0, 0, camera.getWidth(), camera.getHeight()};
     return Generic::collision(getChunkRect(camera), windowRect);
 }
 
 SDL_Rect Chunk::getChunkRect(Camera& camera) const
 {
-    return SDL_Rect{static_cast<int>(getChunkX() + camera.x),
-        static_cast<int>(getChunkY() + camera.y),
+    return SDL_Rect{static_cast<int>(getChunkX() * constants::blockW + camera.x),
+        static_cast<int>(getChunkY() * constants::blockH + camera.y),
         static_cast<int>(MAX_WIDTH * constants::blockW),
         static_cast<int>(MAX_HEIGHT * constants::blockH)};
 }
