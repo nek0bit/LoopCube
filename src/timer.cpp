@@ -28,5 +28,5 @@ void Timer::setTime()
 
 int Timer::calcSleep()
 {
-    return FPS - deltaTime;
+    return floor(FPS - deltaTime);
 }

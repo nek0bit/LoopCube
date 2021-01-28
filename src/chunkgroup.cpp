@@ -145,6 +145,20 @@ void ChunkGroup::render(SDL_Renderer* renderer, TextureHandler& textures, Camera
     }
 }
 
+// Wrapper for multiple getData calls
+std::shared_ptr<Chunk> ChunkGroup::getChunkAt(const long int x, const long int y)
+{
+    std::shared_ptr<_ChunkDataSplit> call = getData(x);
+    
+    return call == nullptr ? nullptr : getData(x)->getData(y);
+}
+
+ChunkPos ChunkGroup::posToChunkPos(const double x, const double y) const
+{
+    return ChunkPos{static_cast<long>(x / (constants::chunkWidth * constants::blockW)),
+        static_cast<long>(y / (constants::chunkHeight * constants::blockH))};
+}
+
 std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>>::iterator
 ChunkGroup::checkSplitGenerate(long int x)
 {

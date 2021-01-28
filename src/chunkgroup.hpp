@@ -20,6 +20,12 @@ struct LoadPtr
     int y; // Shifts top to bottom
 };
 
+struct ChunkPos
+{
+    long int x;
+    long int y;
+};
+
 struct ChunkData
 {
     bool generated;
@@ -59,20 +65,20 @@ struct ChunkGroup
 
     void update(Camera& camera);
     void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
-    void updateLoaded();
 
-    //std::shared_ptr<Chunk>& getChunkAt(long int x, long int y);
+    std::shared_ptr<Chunk> getChunkAt(const long int x, const long int y);
+
+    ChunkPos posToChunkPos(const double x, const double y) const;
 
     LoadPtr loadPtr;
+    LoadDistance& loadDistance;
 private:
     std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>>::iterator
         checkSplitGenerate(long int x);
+    void updateLoaded();
     void prepareLoaded();
     std::shared_ptr<_ChunkDataSplit> getData(long int x);
 
     std::vector<std::shared_ptr<_ChunkDataSplit>> loadedSplits;
     std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>> data;
-    
-    // Loaded data
-    LoadDistance& loadDistance;
 };

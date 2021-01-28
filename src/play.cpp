@@ -29,8 +29,10 @@ void Play::update()
 	mouseEvents();
 	
 	// Update all chunks
-    chunks.loadPtr.x = player.position.x / (constants::chunkWidth * constants::blockW);
-    chunks.loadPtr.y = -player.position.y / (constants::chunkHeight * constants::blockH);
+    ChunkPos chunkPlayer = chunks.posToChunkPos(player.position.x, -player.position.y);
+    chunks.loadPtr.x = chunkPlayer.x - (chunks.loadDistance.x / 2);
+    chunks.loadPtr.y = chunkPlayer.y + (chunks.loadDistance.y / 2);
+    
     chunks.update(camera);
 	
 	inv->update(timer);
