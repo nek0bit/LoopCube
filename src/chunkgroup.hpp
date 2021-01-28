@@ -68,7 +68,7 @@ struct ChunkGroup
 
     std::shared_ptr<Chunk> getChunkAt(const long int x, const long int y);
 
-    ChunkPos posToChunkPos(const double x, const double y) const;
+    ChunkPos posToChunkPos(double x, double y) const;
 
     LoadPtr loadPtr;
     LoadDistance& loadDistance;

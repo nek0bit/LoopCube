@@ -178,18 +178,38 @@ void Play::render() {
 void Play::mouseEvents() {
     constexpr size_t MAX_PARTICLES = 10;
 	int p1, p2;
+    int withinX, withinY;
 	if (!inv->showInventoryMenu) drawSelection(&p1, &p2);
-	
+
+    
 	// Get cursor over chunk
-    std::shared_ptr<Chunk> chunk = chunks.getChunkAt(p1 / constants::chunkWidth, p2 / constants::chunkWidth);
-    std::cout << chunk << std::endl;
+    if (p1 < 0)
+    {
+        p1 = p1 - constants::chunkWidth;
+        withinX = ((p1+1) % constants::chunkWidth) + constants::chunkWidth - 1;
+    } else {
+        withinX = p1 % constants::chunkWidth;
+    }
+    
+    if (p2 < 0)
+    {
+        p2 = p2 - constants::chunkHeight;
+        withinY = ((p2+1) % constants::chunkHeight) + constants::chunkHeight - 1;
+    } else {
+        withinY = p2 % constants::chunkHeight;
+    }
+    
+    std::shared_ptr<Chunk> chunk = chunks.getChunkAt(p1 / constants::chunkWidth, p2 / constants::chunkHeight);
+
 	if (chunk != nullptr)
     {
 		switch(events.vmouse.down)
         {
 		case 1:
         {
-            const BlockInfo* block = chunk->destroyBlock(1, 1, *inv);
+            
+            const BlockInfo* block = chunk->destroyBlock(withinX,
+                                                         withinY, *inv);
             
             // Check if block found
             if (block != nullptr) {
@@ -232,15 +252,15 @@ void Play::mouseEvents() {
 // Perhaps we should rename this to get_selection and seperate rendering functions?
 void Play::drawSelection(int* p1, int* p2)
 {
-	int b_w = static_cast<int>(constants::blockW);
-	int b_h = static_cast<int>(constants::blockH);
+    float b_w = static_cast<float>(constants::blockW);
+    float b_h = static_cast<float>(constants::blockH);
 
-	const int sel_x = floor((events.vmouse.x - camera.x) / b_w) * b_w;
-	const int sel_y = floor((events.vmouse.y - camera.y) / b_h) * b_h;
+	const float sel_x = floor((events.vmouse.x - camera.x) / b_w) * b_w;
+	const float sel_y = floor((events.vmouse.y - camera.y) / b_h) * b_h;
 
-    SDL_Rect selection{sel_x + static_cast<int>(camera.x), sel_y + static_cast<int>(camera.y), b_w, b_h};
+    SDL_Rect selection{static_cast<int>(sel_x + camera.x), static_cast<int>(sel_y + camera.y), b_w, b_h};
 
-	int fade_amount = std::abs(std::sin(static_cast<double>(fade.frame) / 20)) * 30 + 50;
+	int fade_amount = std::abs(std::sin(fade.frame / 20.0f)) * 30.0f + 50.0f;
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, fade_amount);
     SDL_RenderFillRect(renderer, &selection);

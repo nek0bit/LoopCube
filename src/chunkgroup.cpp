@@ -153,10 +153,17 @@ std::shared_ptr<Chunk> ChunkGroup::getChunkAt(const long int x, const long int y
     return call == nullptr ? nullptr : getData(x)->getData(y);
 }
 
-ChunkPos ChunkGroup::posToChunkPos(const double x, const double y) const
+ChunkPos ChunkGroup::posToChunkPos(double x, double y) const
 {
-    return ChunkPos{static_cast<long>(x / (constants::chunkWidth * constants::blockW)),
-        static_cast<long>(y / (constants::chunkHeight * constants::blockH))};
+    const int absSizeX = constants::chunkWidth * constants::blockW;
+    const int absSizeY = constants::chunkHeight * constants::blockH;
+    
+    // Prevent -0 from being a value (which is really still 0)
+    if (x < 0) x = x - absSizeX;
+    if (y < 0) y = y - absSizeY;
+    
+    return ChunkPos{static_cast<long>(x / absSizeX),
+        static_cast<long>(y / absSizeY)};
 }
 
 std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>>::iterator
