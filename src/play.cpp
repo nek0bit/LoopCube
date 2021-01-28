@@ -181,17 +181,15 @@ void Play::mouseEvents() {
 	if (!inv->showInventoryMenu) drawSelection(&p1, &p2);
 	
 	// Get cursor over chunk
-	/*Chunk* chunk = chunks.get_chunk_at(p1*constants::blockW, true);
+    std::shared_ptr<Chunk> chunk = chunks.getChunkAt(p1 / constants::chunkWidth, p2 / constants::chunkWidth);
+    std::cout << chunk << std::endl;
 	if (chunk != nullptr)
     {
-		// Do some math to get the chunk position
-		int chunk_pos = std::abs(p1-(chunk->get_slot()*constants::chunkWidth));
-
 		switch(events.vmouse.down)
         {
 		case 1:
         {
-            const BlockInfo* block = chunk->destroy_block(chunk_pos, p2, inv.get());
+            const BlockInfo* block = chunk->destroyBlock(1, 1, *inv);
             
             // Check if block found
             if (block != nullptr) {
@@ -218,7 +216,7 @@ void Play::mouseEvents() {
             Item& item = inv->getSelectedItem();
             if (item.enabled) {
                 BlockInfo& b_info = item.block;
-                if (chunk->place_block(b_info.id, chunk_pos, p2)) {
+                if (chunk->placeBlock(b_info.id, 0, p2)) {
                     item.addCount(-1);
                 }
             }
@@ -227,7 +225,7 @@ void Play::mouseEvents() {
 		default:
 			break;
 		}
-        }*/
+    }
 }
 
 // Draw a selection box and set p1 and p2 to the position

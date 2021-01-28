@@ -91,6 +91,7 @@ void Chunk::placeBlockFast(unsigned int id, unsigned int x, unsigned int y)
 
 const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y, Inventory& inv)
 {
+    chunk[posToIndex(x, y)] = nullptr;
     return nullptr;
 }
 
@@ -141,6 +142,7 @@ void Chunk::iterateFunctor(Camera& camera, std::function<void(Block&)> call)
     {
         for (std::shared_ptr<Block>& block: chunk)
         {
+            if (block == nullptr) continue;
             if (!block->shouldCull(camera))
             {
                 call(*block);
