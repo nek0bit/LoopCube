@@ -3,10 +3,13 @@
 //***************************************
 // _ChunkDataSplit: For vertical chunks
 //***************************************
-_ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance)
+_ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
+                                 std::shared_ptr<ChunkGen> chunkGen)
     : loadPtr{loadPtr},
       loadDistance{loadDistance},
-      x{x}
+      loadedChunks{},
+      x{x},
+      chunkGen{chunkGen}
 {
     prepareLoaded();
 }
@@ -19,7 +22,7 @@ std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate
     if (ind == data.end())
     {
         // Generate the chunk
-        data.insert({y, ChunkData{true, std::make_shared<Chunk>(Chunk{x, y})}});
+        data.insert({y, ChunkData{true, std::make_shared<Chunk>(Chunk{chunkGen, x, y})}});
         return data.find(y);
     }
     return ind;
@@ -83,11 +86,12 @@ void _ChunkDataSplit::prepareLoaded()
 // Handles most abstractions
 //***************************************************
 
-ChunkGroup::ChunkGroup()
-    : loadedSplits{},
-      data{},
-      loadPtr{-5, -5},
-      loadDistance{constants::loadDistance}
+ChunkGroup::ChunkGroup(std::shared_ptr<ChunkGen> chunkGen)
+    :  loadPtr{-5, -5},
+       loadDistance{constants::loadDistance},
+       chunkGen{chunkGen},
+       loadedSplits{},
+       data{}
 {
     // Generate vertical splits
     prepareLoaded();
@@ -174,7 +178,7 @@ ChunkGroup::checkSplitGenerate(long int x)
     if (ind == data.end())
     {
         // Generate the chunk
-        data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance)});
+        data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance, chunkGen)});
         auto ret = data.find(x);
         ret->second->updateLoaded();
         return data.find(x);

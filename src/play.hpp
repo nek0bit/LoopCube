@@ -15,6 +15,7 @@
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "camera.hpp"
+#include "chunkgen.hpp"
 #include "chunkgroup.hpp"
 #include "player.hpp"
 #include "testentity.hpp"
@@ -45,6 +46,7 @@ private:
     SDL_Renderer* renderer;
     TextureHandler& textures;
 	EventWrapper& events;
+    std::shared_ptr<ChunkGen> generator;
 	ChunkGroup chunks;
 	std::unique_ptr<Inventory> inv;
 	Camera camera;

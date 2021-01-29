@@ -1,10 +1,11 @@
 #include "chunk.hpp"
 
-Chunk::Chunk(long int x, long int y)
+Chunk::Chunk(std::shared_ptr<ChunkGen> chunkGen, long int x, long int y)
     : x{x},
       y{y},
       MAX_WIDTH{static_cast<unsigned>(constants::chunkWidth)},
       MAX_HEIGHT{static_cast<unsigned>(constants::chunkHeight)},
+      chunkGen{chunkGen},
       chunk{}
 {
     chunk.resize(MAX_WIDTH*MAX_HEIGHT, nullptr);
@@ -97,13 +98,9 @@ const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y, Inventory& 
 
 void Chunk::generateChunk()
 {
-    for (unsigned int y = 0; y < MAX_HEIGHT; ++y)
-    {
-        for (unsigned int x = 0; x < MAX_WIDTH; ++x)
-        {
-            placeBlockFast(0, x, y);
-        }
-    }
+    chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {
+        placeBlock(id, x, y);
+    }, MAX_WIDTH, MAX_HEIGHT);
 }
 
 long int Chunk::getChunkX(const int x) const

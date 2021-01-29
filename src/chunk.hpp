@@ -8,6 +8,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "chunkgen.hpp"
 #include "generic.hpp"
 #include "texturehandler.hpp"
 #include "constants.hpp"
@@ -23,7 +24,7 @@ typedef std::vector<std::shared_ptr<Block>> t_blockCollection;
 
 struct Chunk
 {
-    Chunk(long int x, long int y);
+    Chunk(std::shared_ptr<ChunkGen> chunkGen, long int x, long int y);
     ~Chunk();
 
     void updateAll(Camera& camera);
@@ -47,15 +48,17 @@ struct Chunk
     // Chunk position
     const long int x;
     const long int y;
+
+    // Chunk size
+    const unsigned int MAX_WIDTH;
+    const unsigned int MAX_HEIGHT;
 private:
     size_t posToIndex(const unsigned int x, const unsigned int y) const;
     bool chunkInView(Camera& camera) const;
     SDL_Rect getChunkRect(Camera& camera) const;
     void iterateFunctor(Camera& camera, std::function<void(Block&)> call);
-    
-    // Size
-    const unsigned int MAX_WIDTH;
-    const unsigned int MAX_HEIGHT;
 
+    std::shared_ptr<ChunkGen> chunkGen;
+    
     t_blockCollection chunk;
 };
