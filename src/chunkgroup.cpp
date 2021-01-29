@@ -158,9 +158,12 @@ ChunkPos ChunkGroup::posToChunkPos(double x, double y) const
     const int absSizeX = constants::chunkWidth * constants::blockW;
     const int absSizeY = constants::chunkHeight * constants::blockH;
     
-    // Prevent -0 from being a value (which is really still 0)    
-    return ChunkPos{static_cast<long>(floor(x / absSizeX)),
-        static_cast<long>(floor(y / absSizeY))};
+    // Prevent -0 from being a value (which is really still 0)
+    if (x < 0) x = x - constants::chunkWidth + 1;
+    if (y < 0) y = y - constants::chunkHeight + 1;
+    
+    return ChunkPos{static_cast<long>(x / absSizeX),
+        static_cast<long>(y / absSizeY)};
 }
 
 std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>>::iterator
