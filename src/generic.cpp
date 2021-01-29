@@ -5,6 +5,15 @@ bool Generic::collision(SDL_Rect r1, SDL_Rect r2)
     return Generic::collision(r1.x, r1.y, r1.w, r1.h, r2.x, r2.y, r2.w, r2.h);
 }
 
+GridCollision_t Generic::gridCollision(unsigned int width, unsigned int height, SDL_Rect box)
+{
+    // Constrain coordinates
+    box.x %= width;
+    box.y %= height;
+
+    return GridCollision_t{(box.w + box.x) / width, (box.h + box.y) / height};
+}
+
 void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& textures,
                                       int texture, int clipWidth,
                                       int clipHeight, int offsetX, int offsetY,

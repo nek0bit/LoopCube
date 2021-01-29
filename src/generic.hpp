@@ -4,6 +4,12 @@
 
 #include "texturehandler.hpp"
 
+struct GridCollision_t
+{
+    unsigned int width;
+    unsigned int height;
+};
+
 namespace Generic
 {
     template <typename CMP>
@@ -17,6 +23,8 @@ namespace Generic
     }
 
     bool collision(SDL_Rect r1, SDL_Rect r2);
+
+    GridCollision_t gridCollision(unsigned int width, unsigned int height, SDL_Rect box);
 
     namespace Render
     {
