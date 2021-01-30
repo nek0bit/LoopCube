@@ -11,18 +11,13 @@
 
 enum block_enum
 {
-	BLOCK_GRASS,
-	BLOCK_DIRT,
-	BLOCK_STONE,
-	BLOCK_WOOD,
-	BLOCK_LEAF
+	BLOCK_MOON_BLOCK,
+	BLOCK_WOOD
 };
 
 enum texture_enum
 {
-    TEXTURE_GRASS,
-    TEXTURE_DIRT,
-    TEXTURE_STONE,
+    TEXTURE_MOON_BLOCK,
     TEXTURE_WOOD,
     TEXTURE_PLAYER,
     TEXTURE_MENU_SOLID,
@@ -82,14 +77,14 @@ namespace constants
 
 	extern const std::vector<BlockInfo> blockInfo;
 
-	extern const double blockW;
-	extern const double blockH;
+	extern const int blockW;
+	extern const int blockH;
 
 	extern const int blockImgSize;
 	
 	extern const int chunkWidth;
 	extern const int chunkHeight;
-	
+    
 	extern LoadDistance loadDistance;
 
 	extern const std::string header;

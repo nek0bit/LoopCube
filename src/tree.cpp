@@ -10,7 +10,7 @@ Tree::Tree(int x, int y) : Structure{x, y} {
 	int top_width = 2;
 	for (int j = 0; j < top_height; ++j) {
 		for (int k = top_width*-1; k <= top_width; ++k) {
-			data.push_back({k, (height+j)*-1,BLOCK_LEAF});
+			data.push_back({k, (height+j)*-1,BLOCK_MOON_BLOCK});
 		}
 	}
 	// top2
@@ -18,7 +18,7 @@ Tree::Tree(int x, int y) : Structure{x, y} {
 	int top2_width = 1;
 	for (int l = 0; l < top2_height; ++l) {
 		for (int m = top2_width*-1; m <= top2_width; ++m) {
-			data.push_back({m, (height+top_height+l)*-1, BLOCK_LEAF});
+			data.push_back({m, (height+top_height+l)*-1, BLOCK_MOON_BLOCK});
 		}
 	}
 }

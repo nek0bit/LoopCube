@@ -2,6 +2,8 @@
 
 #include <functional>
 
+#include "constants.hpp"
+
 struct ChunkGen
 {
     ChunkGen(int seed = 0);

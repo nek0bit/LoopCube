@@ -12,7 +12,7 @@ void ChunkGen::generateChunk(std::function<void(unsigned, unsigned, unsigned)> p
     {
         for (unsigned int x = 0; x < HEIGHT; ++x)
         {
-            placeBlockFunctor(1, x, y);
+            placeBlockFunctor(BLOCK_MOON_BLOCK, x, y);
         }
     }
 }
