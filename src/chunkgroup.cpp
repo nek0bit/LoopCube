@@ -163,12 +163,12 @@ std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, 
     GridCollision_t col = Generic::gridCollision(constants::chunkWidth * constants::blockW,
                                                  constants::chunkHeight * constants::blockH,
                                                  vec, size);
-    std::cout << col.width << " - " << col.height << std::endl;
+
     std::vector<std::shared_ptr<Chunk>> ch{};
 
-    for (size_t i = 0; i < col.width; ++i)
+    for (size_t i = 0; i < col.width + 1; ++i)
     {
-        for (size_t j = 0; j < col.height; ++j)
+        for (size_t j = 0; j < col.height + 1; ++j)
         {
             ch.emplace_back(getChunkAt(inChunk.x + i, inChunk.y + j));
         }

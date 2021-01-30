@@ -36,7 +36,6 @@ void Play::update()
     chunks.loadPtr.x = chunkPlayer.x - (chunks.loadDistance.x / 2);
     chunks.loadPtr.y = chunkPlayer.y + (chunks.loadDistance.y / 2);
 
-    std::cout << chunks.isWithinChunks(player.position, player.size).size() << std::endl;
     
     chunks.update(camera);
 	
@@ -170,6 +169,16 @@ void Play::render() {
 	}
 	
 	chunks.render(renderer, textures, camera);
+
+    
+    auto a = chunks.isWithinChunks(player.position, player.size);
+    std::cout << "----------------" << std::endl;
+    for (auto& i: a)
+    {
+        std::cout << "Chunk " << i->x << " " << i->y << std::endl;
+        i->renderInfo(renderer, camera);
+    }
+    std::cout << "----------------" << std::endl;
 	
 	player.render(renderer, textures, camera);
 

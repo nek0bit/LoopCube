@@ -68,7 +68,6 @@ void Chunk::renderAllBlocks(SDL_Renderer* renderer, TextureHandler& textures, Ca
     iterateFunctor(camera, [&](Block& blk) {
         blk.render(renderer, textures, camera);
     });
-    renderInfo(renderer, camera);
 }
 
 // Does checking, Slower (but not by that much)
