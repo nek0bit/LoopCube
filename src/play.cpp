@@ -36,7 +36,7 @@ void Play::update()
     chunks.loadPtr.x = chunkPlayer.x - (chunks.loadDistance.x / 2);
     chunks.loadPtr.y = chunkPlayer.y + (chunks.loadDistance.y / 2);
 
-    chunks.isWithinChunks(player.position, player.size);
+    std::cout << chunks.isWithinChunks(player.position, player.size).size() << std::endl;
     
     chunks.update(camera);
 	

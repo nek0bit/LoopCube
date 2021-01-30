@@ -17,13 +17,13 @@ GridCollision_t Generic::gridCollision(unsigned int width, unsigned int height, 
         box.y -= height + 1;
         add = add | 2;
     }
-    
+
     // Constrain coordinates
     box.x = std::fmod(box.x, width);
     box.y = std::fmod(box.y, height);
 
-    return {((size.w + box.x) / width) + (add & 1 == 1 ? 2 : 1),
-        ((size.h + box.y) / height) + (add & 2 == 2 ? 2 : 1)};
+    return {((size.w + box.x) / width) + ((add & 1) == 1),
+        ((size.h + box.y) / height) + ((add & 2) == 2)};
 }
 
 void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& textures,
