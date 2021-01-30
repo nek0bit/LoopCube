@@ -70,6 +70,7 @@ struct ChunkGroup
     void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
 
     std::shared_ptr<Chunk> getChunkAt(const long int x, const long int y);
+    std::vector<std::shared_ptr<Chunk>> isWithinChunks(const Vec2& vec, const Size& size);
 
     ChunkPos posToChunkPos(double x, double y) const;
 

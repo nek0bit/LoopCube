@@ -29,16 +29,22 @@ void Play::update()
 {
 	mouseEvents();
 	
-	// Update all chunks
+	//**************************************************
+    // Chunks
+    //**************************************************
     ChunkPos chunkPlayer = chunks.posToChunkPos(player.position.x, -player.position.y);
     chunks.loadPtr.x = chunkPlayer.x - (chunks.loadDistance.x / 2);
     chunks.loadPtr.y = chunkPlayer.y + (chunks.loadDistance.y / 2);
+
+    chunks.isWithinChunks(player.position, player.size);
     
     chunks.update(camera);
 	
 	inv->update(timer);
-
-	// Update all entities
+    
+	//**************************************************
+    // Entities
+    //**************************************************
 	for (Entity*& entity: entities)
     {
 		if (!entity->shouldCull(camera))
@@ -47,7 +53,10 @@ void Play::update()
 		}
 	}
 	
-	// Update player
+
+    //**************************************************
+    // Player
+    //**************************************************
 	player.update(chunks, timer, entities);
 
 	for (int i = 0; i < 4; ++i)

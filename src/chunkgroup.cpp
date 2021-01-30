@@ -157,16 +157,26 @@ std::shared_ptr<Chunk> ChunkGroup::getChunkAt(const long int x, const long int y
     return call == nullptr ? nullptr : getData(x)->getData(y);
 }
 
+std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, const Size& size)
+{
+    GridCollision_t col = Generic::gridCollision(constants::chunkWidth * constants::blockW,
+                                                 constants::chunkHeight * constants::blockH,
+                                                 vec, size);
+
+    std::cout << col.width << std::endl;
+    return {};
+}
+
 ChunkPos ChunkGroup::posToChunkPos(double x, double y) const
 {
     const int absSizeX = constants::chunkWidth * constants::blockW;
     const int absSizeY = constants::chunkHeight * constants::blockH;
     
     // Prevent -0 from being a value (which is really still 0)
-    if (x < 0) x = x - constants::chunkWidth + 1;
-    if (y < 0) y = y - constants::chunkHeight + 1;
+    if (x < 0) x -= constants::chunkWidth + 1;
+    if (y < 0) y -= constants::chunkHeight + 1;
     
-    return ChunkPos{static_cast<long>(x / absSizeX),
+    return {static_cast<long>(x / absSizeX),
         static_cast<long>(y / absSizeY)};
 }
 

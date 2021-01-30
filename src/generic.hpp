@@ -1,8 +1,12 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <cmath>
+#include <cstdint>
 
 #include "texturehandler.hpp"
+#include "vector.hpp"
+#include "size.hpp"
 
 struct GridCollision_t
 {
@@ -24,7 +28,7 @@ namespace Generic
 
     bool collision(SDL_Rect r1, SDL_Rect r2);
 
-    GridCollision_t gridCollision(unsigned int width, unsigned int height, SDL_Rect box);
+    GridCollision_t gridCollision(unsigned int width, unsigned int height, Vec2 box, const Size& size);
 
     namespace Render
     {
