@@ -102,8 +102,8 @@ void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<Entity*> entit
 	// Check if jump released
 	if (!onGround && !jumping)
     {
-		if (velY < -.42) {
-			velY += 0.06;
+		if (velY < -20.0f) {
+			velY += 30.06f;
 		}
 	}
 
@@ -115,11 +115,10 @@ void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<Entity*> entit
 void Player::jump(ChunkGroup &chunks, Timer& timer)
 {
 	position.y += 1;
-	//if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
-    // DEBUG jumping
-		velY = -1085;
-		onGround = false;
-        //}
+	if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
+        velY = -885.0f;
+        onGround = false;
+    }
 	position.y -= 1;
 	jumping = true;
 	canJump = false;
@@ -133,14 +132,12 @@ void Player::directPlayer(int direction, ChunkGroup &chunks, Timer& timer)
 		jump(chunks, timer);
 		break;
 	case 1: // RIGHT
-        if (!onGround) velX += (velXSpeed*0.02) * timer.deltaTime;
         velX += velXSpeed * timer.deltaTime;
 		lastPos = 1;
 		break;
 	case 2: // DOWN
 		break;
 	case 3: // LEFT
-        if (!onGround) velX -= (velXSpeed*0.02) * timer.deltaTime;
         velX -= velXSpeed * timer.deltaTime;
 		lastPos = 3;
 		break;

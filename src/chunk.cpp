@@ -6,9 +6,9 @@ Chunk::Chunk(std::shared_ptr<ChunkGen> chunkGen, long int x, long int y)
       MAX_WIDTH{static_cast<unsigned>(constants::chunkWidth)},
       MAX_HEIGHT{static_cast<unsigned>(constants::chunkHeight)},
       chunkGen{chunkGen},
-      chunk{}
+      data{}
 {
-    chunk.resize(MAX_WIDTH*MAX_HEIGHT, nullptr);
+    data.resize(MAX_WIDTH*MAX_HEIGHT, nullptr);
 
     generateChunk();
 }
@@ -56,6 +56,10 @@ void Chunk::renderInfo(SDL_Renderer* renderer, Camera& camera)
     }
 }
 
+// Note: I don't recommend this function as it's unoptimized and doesn't cull properly
+// so it basically multiplies the amount of render calls
+// If only SDL had a feature to mesh multiple blocks together :(
+// I think its possible with textures but it would take up a bit of memory
 void Chunk::renderAllShadows(SDL_Renderer* renderer, Camera& camera)
 {
     iterateFunctor(camera, [&](Block& blk) {
@@ -85,14 +89,22 @@ bool Chunk::placeBlock(unsigned int id, unsigned int x, unsigned int y)
 // Is actually used by the slower placeBlock
 void Chunk::placeBlockFast(unsigned int id, unsigned int x, unsigned int y)
 {
-    chunk[posToIndex(x, y)] = std::make_shared<Block>(
+    data[posToIndex(x, y)] = std::make_shared<Block>(
         Block{static_cast<int>(id), static_cast<int>(getChunkX(x)), static_cast<int>(getChunkY(y))});
 }
 
 const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y, Inventory& inv)
 {
-    chunk[posToIndex(x, y)] = nullptr;
-    return nullptr;
+    std::shared_ptr<Block>& block = data[posToIndex(x, y)];
+    
+    if (block == nullptr) return nullptr;
+    
+    const BlockInfo* info = block->blockinfo;
+
+    // Delete the block (since its a shared ptr, it will be deleted when reassigned)
+    block = nullptr;
+    
+    return info;
 }
 
 void Chunk::generateChunk()
@@ -136,7 +148,7 @@ void Chunk::iterateFunctor(Camera& camera, std::function<void(Block&)> call)
     // Check if chunk is in view
     if (chunkInView(camera))
     {
-        for (std::shared_ptr<Block>& block: chunk)
+        for (std::shared_ptr<Block>& block: data)
         {
             if (block == nullptr) continue;
             if (!block->shouldCull(camera))

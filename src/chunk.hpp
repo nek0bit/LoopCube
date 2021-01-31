@@ -52,6 +52,8 @@ struct Chunk
     // Chunk size
     const unsigned int MAX_WIDTH;
     const unsigned int MAX_HEIGHT;
+
+    t_blockCollection data;
 private:
     size_t posToIndex(const unsigned int x, const unsigned int y) const;
     bool chunkInView(Camera& camera) const;
@@ -59,6 +61,4 @@ private:
     void iterateFunctor(Camera& camera, std::function<void(Block&)> call);
 
     std::shared_ptr<ChunkGen> chunkGen;
-    
-    t_blockCollection chunk;
 };

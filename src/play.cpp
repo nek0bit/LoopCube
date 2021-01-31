@@ -169,16 +169,6 @@ void Play::render() {
 	}
 	
 	chunks.render(renderer, textures, camera);
-
-    
-    auto a = chunks.isWithinChunks(player.position, player.size);
-    std::cout << "----------------" << std::endl;
-    for (auto& i: a)
-    {
-        std::cout << "Chunk " << i->x << " " << i->y << std::endl;
-        i->renderInfo(renderer, camera);
-    }
-    std::cout << "----------------" << std::endl;
 	
 	player.render(renderer, textures, camera);
 
@@ -198,25 +188,26 @@ void Play::mouseEvents() {
     constexpr size_t MAX_PARTICLES = 10;
 	int p1, p2;
 	if (!inv->showInventoryMenu) drawSelection(&p1, &p2);
+    int p1Fixed = p1, p2Fixed = p2;
     int withinX, withinY;
 
     
 	// Get cursor over chunk
     if (p1 < 0) {
-        p1 = p1 - constants::chunkWidth + 1;
-        withinX = (p1 % constants::chunkWidth) + constants::chunkWidth - 1;
+        p1Fixed = p1 - constants::chunkWidth + 1;
+        withinX = (p1Fixed % constants::chunkWidth) + constants::chunkWidth - 1;
     } else {
         withinX = p1 % constants::chunkWidth;
     }
 
     if (p2 < 0) {
-        p2 = p2 - constants::chunkHeight + 1;
-        withinY = (p2 % constants::chunkHeight) + constants::chunkHeight - 1;
+        p2Fixed = p2 - constants::chunkHeight + 1;
+        withinY = (p2Fixed % constants::chunkHeight) + constants::chunkHeight - 1;
     } else {
         withinY = p2 % constants::chunkHeight;
     }
     
-    std::shared_ptr<Chunk> chunk = chunks.getChunkAt(p1 / constants::chunkWidth, p2 / constants::chunkHeight);
+    std::shared_ptr<Chunk> chunk = chunks.getChunkAt(p1Fixed / constants::chunkWidth, p2Fixed / constants::chunkHeight);
 	if (chunk != nullptr)
     {
 		switch(events.vmouse.down)
@@ -233,9 +224,9 @@ void Play::mouseEvents() {
                     for (size_t i = 0; i < MAX_PARTICLES; ++i)
                     {
                         GravityParticle temp{block->textureId,
-                            600,
+                            .3 + (static_cast<float>(rand() % 100) / 100.0f),
                             rand() % 2 == 1 ? -230.0f : 230.0f,
-                            -0.14f,
+                            -180.0f,
                             p1 * constants::blockW + (rand() % static_cast<int>(constants::blockW)),
                             p2 * constants::blockH + (rand() % static_cast<int>(constants::blockH)),
                             8,

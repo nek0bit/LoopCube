@@ -25,45 +25,24 @@ void Entity::collisionTop() {}
 
 CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 {
-/*	std::vector<Chunk*>& chunkgroup = chunks.get_viewport_chunks();
+    // TODO URGENT optimize entity position to work within blocks instead of chunks
+    // It's 100% easy and possible and should optimize a lot
 
-	Chunk* c = chunks.get_chunk_at(position.x, true);
-	Chunk* c_front = chunks.get_chunk_at(position.x+size.w, true);
+    std::vector<std::shared_ptr<Chunk>> inChunks = chunks.isWithinChunks(position, size);
 
-	if (c == nullptr || c_front == nullptr) {
-		return CollisionInfo{};
-	}
-
-	// Loop through all chunks
-	for (auto *&chunk_it: chunkgroup) {
-		// See if player is within this chunk, if so, move on and handle collision
-		// If not, it's pointless to check the chunk, continue
-		if (chunk_it->get_slot() == c->get_slot() ||
-			chunk_it->get_slot() == c_front->get_slot()) {
-
-			// Store chunk as reference for further usage
-			std::vector<std::vector<Block>>& chunk = chunk_it->get_chunk();
-
-			std::array<int, 2> player_check = {
-				chunks.get_chunk_y(position.y),
-				chunks.get_chunk_y(position.y+size.h)
-			};
-			
-			
-			for (auto &i: player_check) {
-				if (i == -1) {
-					continue;
-				}
-				for (auto &block: chunk[i]) {
-					auto blockinfo = block.blockinfo;
-					CollisionInfo info = isColliding(block);
-					while (info == true && blockinfo->noCollision != true) {
-						return info;
-					}
-				}
-			}
-		}
-        }*/
+    for (auto& chunk: inChunks)
+    {
+        t_blockCollection& data = chunk->data;
+        for (auto& block: data) {
+            if (block == nullptr) continue;
+            auto blockinfo = block->blockinfo;
+            CollisionInfo info = isColliding(*block);
+            while (info == true && blockinfo->noCollision != true) {
+                return info;
+            }
+        }
+    }
+    
 	return CollisionInfo{};
 }
 

@@ -63,7 +63,7 @@ void _ChunkDataSplit::renderSplit(SDL_Renderer* renderer, TextureHandler& textur
 {
     for (auto& chunk: loadedChunks)
     {
-        chunk->renderAllShadows(renderer, camera);
+        //chunk->renderAllShadows(renderer, camera);
         chunk->renderAllBlocks(renderer, textures, camera);
     }
 }
@@ -160,7 +160,6 @@ std::shared_ptr<Chunk> ChunkGroup::getChunkAt(const long int x, const long int y
 std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, const Size& size)
 {
     ChunkPos inChunk = posToChunkPos(vec.x, vec.y);
-    std::cout << inChunk.x << std::endl;
     GridCollision_t col = Generic::gridCollision(constants::chunkWidth * constants::blockW,
                                                  constants::chunkHeight * constants::blockH,
                                                  vec, size);
