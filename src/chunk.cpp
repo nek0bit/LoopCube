@@ -90,6 +90,9 @@ bool Chunk::placeBlock(unsigned int id, unsigned int x, unsigned int y)
 // Is actually used by the slower placeBlock
 void Chunk::placeBlockFast(unsigned int id, unsigned int x, unsigned int y)
 {
+    // TODO work on me???
+    unsigned int srcX, srcY;
+    
     data[posToIndex(x, y)] = std::make_shared<Block>(
         Block{static_cast<int>(id), static_cast<int>(getChunkX(x)), static_cast<int>(getChunkY(y)), 1, 1});
 }
