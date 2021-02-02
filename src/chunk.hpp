@@ -19,6 +19,16 @@
 #include "size.hpp"
 #include "text.hpp"
 
+// forward declaration
+struct Chunk;
+struct BorderingChunks
+{
+    Chunk* left;
+    Chunk* right;
+    Chunk* top;
+    Chunk* bottom;
+};
+
 // 2D array[y][x] flattened to 1D array
 typedef std::vector<std::shared_ptr<Block>> t_blockCollection;
 
@@ -54,6 +64,8 @@ struct Chunk
     const unsigned int MAX_HEIGHT;
 
     t_blockCollection data;
+
+    BorderingChunks borders;
 private:
     size_t posToIndex(const unsigned int x, const unsigned int y) const;
     bool chunkInView(Camera& camera) const;

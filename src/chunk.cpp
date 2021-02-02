@@ -6,7 +6,8 @@ Chunk::Chunk(std::shared_ptr<ChunkGen> chunkGen, long int x, long int y)
       MAX_WIDTH{static_cast<unsigned>(constants::chunkWidth)},
       MAX_HEIGHT{static_cast<unsigned>(constants::chunkHeight)},
       chunkGen{chunkGen},
-      data{}
+      data{},
+      borders{nullptr, nullptr, nullptr, nullptr}
 {
     data.resize(MAX_WIDTH*MAX_HEIGHT, nullptr);
 
@@ -90,7 +91,7 @@ bool Chunk::placeBlock(unsigned int id, unsigned int x, unsigned int y)
 void Chunk::placeBlockFast(unsigned int id, unsigned int x, unsigned int y)
 {
     data[posToIndex(x, y)] = std::make_shared<Block>(
-        Block{static_cast<int>(id), static_cast<int>(getChunkX(x)), static_cast<int>(getChunkY(y))});
+        Block{static_cast<int>(id), static_cast<int>(getChunkX(x)), static_cast<int>(getChunkY(y)), 1, 1});
 }
 
 const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y, Inventory& inv)
