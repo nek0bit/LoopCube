@@ -185,7 +185,7 @@ void Play::render() {
 }
 
 void Play::mouseEvents() {
-    constexpr size_t MAX_PARTICLES = 10;
+    constexpr size_t MAX_PARTICLES = 4;
 	int p1, p2;
 	if (!inv->showInventoryMenu) drawSelection(&p1, &p2);
     int p1Fixed = p1, p2Fixed = p2;
