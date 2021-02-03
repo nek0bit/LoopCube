@@ -12,7 +12,7 @@ struct Block: public GameObject
 {
 	Block();
 	~Block();
-	Block(int id, int x, int y, unsigned int typeX = 0, unsigned int typeY = 0);
+	Block(int id, int x, int y, unsigned int typeX = 0);
 
 	void update();
     void updateSrc();
@@ -21,6 +21,5 @@ struct Block: public GameObject
 	const BlockInfo* blockinfo;
     
     unsigned int typeX;
-    unsigned int typeY;
 };
 

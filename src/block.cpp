@@ -2,18 +2,16 @@
 
 Block::Block()
     : blockinfo{nullptr},
-      typeX{0},
-      typeY{0}
+      typeX{0}
 {}
 
-Block::Block(int id, int x, int y, unsigned int typeX, unsigned int typeY)
+Block::Block(int id, int x, int y, unsigned int typeX)
 	: GameObject{0, static_cast<double>(x * constants::blockW),
     static_cast<double>(y * constants::blockH),
     constants::blockW,
     constants::blockH},
       blockinfo{nullptr},
-      typeX{typeX},
-      typeY{typeY}
+      typeX{typeX}
 {
     // TODO don't search
 	for (auto &i: constants::blockInfo) {
@@ -35,7 +33,6 @@ Block::~Block()
 void Block::updateSrc()
 {
     src.x = typeX * constants::blockImgSize;
-	src.y = typeY * constants::blockImgSize;
 }
 
 void Block::update()

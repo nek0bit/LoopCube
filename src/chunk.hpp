@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <cstdint>
 #include <vector>
 #include <algorithm>
 #include <memory>
@@ -49,11 +50,18 @@ struct Chunk
     void placeBlockFast(unsigned int id, unsigned int x, unsigned int y);
     const BlockInfo* destroyBlock(unsigned int x, unsigned int y, Inventory& inv);
 
-    void generateChunk(); // Temporary
+    void updateBlockBorders(const unsigned int x, const unsigned int y, const bool recurseOnce = false);
+
+    void regenBlockBorders();
+
+    void generateChunk();
 
     // Common methods
     long int getChunkX(const int x = 0) const;
     long int getChunkY(const int y = 0) const;
+
+    // Designed for updating block borders
+    std::shared_ptr<Block> getBorderBlock(const int x, const int y) const;
     
     // Chunk position
     const long int x;

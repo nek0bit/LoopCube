@@ -89,12 +89,11 @@ bool Chunk::placeBlock(unsigned int id, unsigned int x, unsigned int y)
 // Does not check, Faster. (but not by much; useful for chunk generation)
 // Is actually used by the slower placeBlock
 void Chunk::placeBlockFast(unsigned int id, unsigned int x, unsigned int y)
-{
-    // TODO work on me???
-    unsigned int srcX, srcY;
-    
+{    
     data[posToIndex(x, y)] = std::make_shared<Block>(
-        Block{static_cast<int>(id), static_cast<int>(getChunkX(x)), static_cast<int>(getChunkY(y)), 1, 1});
+        Block{static_cast<int>(id), static_cast<int>(getChunkX(x)), static_cast<int>(getChunkY(y)), 4});
+
+    updateBlockBorders(x, y, true);
 }
 
 const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y, Inventory& inv)
@@ -107,8 +106,96 @@ const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y, Inventory& 
 
     // Delete the block (since its a shared ptr, it will be deleted when reassigned)
     block = nullptr;
+
+    regenBlockBorders();
     
     return info;
+}
+
+void Chunk::updateBlockBorders(const unsigned int x, const unsigned int y, const bool recurseOnce)
+{
+    std::shared_ptr<Block> left = getBorderBlock(x - 1, y),
+        right = getBorderBlock(x + 1, y),
+        top = getBorderBlock(x, y - 1),
+        bottom = getBorderBlock(x, y + 1),
+        center = data[posToIndex(x, y)];
+
+    // Enjoy this ugly bit of code :)
+    
+    // None on all sides
+    if (!left && !right && !bottom && !top && center) center->typeX = 15;
+
+    // On all sides
+    if ( left &&  right &&  bottom &&  top && center) center->typeX = 4;
+
+    // One on each side
+    if ( left && !right && !bottom && !top && center) center->typeX = 13;
+    if (!left &&  right && !bottom && !top && center) center->typeX = 11;
+    if (!left && !right &&  bottom && !top && center) center->typeX = 12;
+    if (!left && !right && !bottom &&  top && center) center->typeX = 14;
+
+    // On opposite sides
+    if ( left &&  right && !bottom && !top && center) center->typeX = 10;
+    if (!left && !right &&  bottom &&  top && center) center->typeX = 9;
+
+    // On corners/adjacent sides
+    if ( left && !right && !bottom &&  top && center) center->typeX = 8;
+    if ( left && !right &&  bottom && !top && center) center->typeX = 2;
+    if (!left &&  right && !bottom &&  top && center) center->typeX = 6;
+    if (!left &&  right &&  bottom && !top && center) center->typeX = 0;
+
+    // All but one side
+    if (!left &&  right &&  bottom &&  top && center) center->typeX = 3;
+    if ( left && !right &&  bottom &&  top && center) center->typeX = 5;
+    if ( left &&  right && !bottom &&  top && center) center->typeX = 7;
+    if ( left &&  right &&  bottom && !top && center) center->typeX = 1;
+
+    // Sorry for the repetition, im lazy
+    if (center) center->updateSrc();
+    if (left) left->updateSrc();
+    if (right) right->updateSrc();
+    if (top) top->updateSrc();
+    if (bottom) bottom->updateSrc();
+}
+
+std::shared_ptr<Block> Chunk::getBorderBlock(const int x, const int y) const
+{
+    // Return a block within this chunk like normal
+    if (x >= 0 && x < constants::chunkWidth &&
+        y >= 0 && y < constants::chunkHeight)
+    {
+        return data[posToIndex(x, y)];
+    }
+
+    // Return fixed chunk at left chunk
+    if (x < 0)
+    {
+        if (borders.left == nullptr) return nullptr;
+        borders.left->data[posToIndex(x + 7, y)];
+    }
+
+    // Return fixed chunk at right chunk
+    if (x >= constants::chunkWidth)
+    {
+        if (borders.right == nullptr) return nullptr;
+        borders.right->data[posToIndex(x - 7, y)];
+    }
+
+    // Return fixed chunk at top chunk
+    if (y < 0)
+    {
+        if (borders.top == nullptr) return nullptr;
+        borders.top->data[posToIndex(x, y + 7)];
+    }
+
+    // Return fixed chunk at bottom chunk
+    if (y >= constants::chunkHeight)
+    {
+        if (borders.bottom == nullptr) return nullptr;
+        borders.bottom->data[posToIndex(x, y - 7)];
+    }
+
+    return nullptr;
 }
 
 void Chunk::generateChunk()
@@ -116,6 +203,19 @@ void Chunk::generateChunk()
     chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {
         placeBlock(id, x, y);
     }, MAX_WIDTH, MAX_HEIGHT);
+
+    regenBlockBorders();
+}
+
+void Chunk::regenBlockBorders()
+{
+    for (unsigned int i = 0; i < constants::chunkWidth; ++i)
+    {
+        for (unsigned int j = 0; j < constants::chunkHeight; ++j)
+        {
+            if (data.at(posToIndex(i, j)) != nullptr) updateBlockBorders(i, j, false);
+        }
+    }
 }
 
 long int Chunk::getChunkX(const int x) const
