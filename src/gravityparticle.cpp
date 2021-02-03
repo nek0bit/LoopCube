@@ -5,6 +5,7 @@ GravityParticle::GravityParticle(int textureId, double time, double startVelX, d
 	: Entity{textureId, x, y, width, height}, time{0}, timeTotal{time} {
 	velX = startVelX;
 	velY = startVelY;
+    src.x = 4 * constants::blockImgSize;
 }
 
 void GravityParticle::update(ChunkGroup& chunks, Timer& timer) {

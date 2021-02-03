@@ -7,7 +7,13 @@ Entity::Entity(int textureId, double x, double y, double width, double height)
       velXSpeed{9000},
       onGround{false},
       lastPos{-1}
-{}
+{
+	// Update draw position
+	src.x = 0;
+	src.y = 0;
+    src.w = size.w;
+	src.h = size.h;
+}
 
 Entity::~Entity()
 {}
@@ -50,11 +56,6 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
     const int cap = 2000.0f;
     constexpr float friction = 20.0f;
     
-	// Update draw position
-	src.x = 0;
-	src.y = 0;
-    src.w = size.w;
-	src.h = size.h;
 	
 	velX *= 1 / (1 + (timer.deltaTime * friction));
 		
