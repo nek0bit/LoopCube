@@ -51,6 +51,10 @@ struct _ChunkDataSplit
     LoadPtr& loadPtr;
     LoadDistance& loadDistance;
     std::vector<std::shared_ptr<Chunk>> loadedChunks;
+
+    // Access pointers
+    std::shared_ptr<_ChunkDataSplit> left;
+    std::shared_ptr<_ChunkDataSplit> right;
 private:
     void prepareLoaded();
     const long int x;

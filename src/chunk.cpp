@@ -184,7 +184,6 @@ std::shared_ptr<Block> Chunk::getBorderBlock(const int x, const int y) const
     // Return fixed chunk at top chunk
     if (y < 0)
     {
-        std::cout << y << std::endl;
         if (borders.top == nullptr) return nullptr;
         return borders.top->data[posToIndex(x, y + constants::chunkHeight)];
     }

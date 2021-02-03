@@ -8,6 +8,8 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
     : loadPtr{loadPtr},
       loadDistance{loadDistance},
       loadedChunks{},
+      left{nullptr},
+      right{nullptr},
       x{x},
       chunkGen{chunkGen}
 {
@@ -42,6 +44,26 @@ std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate
             newChunk->borders.bottom = chunkBelow->second.data;
             newChunk->regenBlockBorders();
             chunkBelow->second.data->borders.top = newChunk;
+        }
+
+        if (left != nullptr)
+        {
+            std::shared_ptr<Chunk> chunkLeft = left->getData(y);
+            if (chunkLeft != nullptr)
+            {
+                chunkLeft->borders.right = newChunk;
+                newChunk->borders.left = chunkLeft;
+            }
+        }
+
+        if (right != nullptr)
+        {
+            std::shared_ptr<Chunk> chunkRight = right->getData(y);
+            if (chunkRight != nullptr)
+            {
+                chunkRight->borders.left = newChunk;
+                newChunk->borders.right = chunkRight;
+            }
         }
         
         return current;
@@ -221,7 +243,25 @@ ChunkGroup::checkSplitGenerate(long int x)
         // Generate the chunk
         data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance, chunkGen)});
         auto ret = data.find(x);
+
+        auto splitLeft = data.find(x - 1),
+            splitRight = data.find(x + 1);
+
+        if (splitLeft != data.end())
+        {
+            ret->second->left = splitLeft->second;
+            splitLeft->second->right = ret->second;
+        }
+        
+        if (splitRight != data.end())
+        {
+            ret->second->right = splitRight->second;
+            splitRight->second->left = ret->second;
+        }
+
+        // Get chunks to generate
         ret->second->updateLoaded();
+        
         return data.find(x);
     }
     return ind;
