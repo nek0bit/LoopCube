@@ -171,28 +171,28 @@ std::shared_ptr<Block> Chunk::getBorderBlock(const int x, const int y) const
     if (x < 0)
     {
         if (borders.left == nullptr) return nullptr;
-        borders.left->data[posToIndex(x + 7, y)];
+        return borders.left->data[posToIndex(x + 7, y)];
     }
 
     // Return fixed chunk at right chunk
     if (x >= constants::chunkWidth)
     {
         if (borders.right == nullptr) return nullptr;
-        borders.right->data[posToIndex(x - 7, y)];
+        return borders.right->data[posToIndex(x - 7, y)];
     }
 
     // Return fixed chunk at top chunk
     if (y < 0)
     {
         if (borders.top == nullptr) return nullptr;
-        borders.top->data[posToIndex(x, y + 7)];
+        return borders.top->data[posToIndex(x, y + 7)];
     }
 
     // Return fixed chunk at bottom chunk
     if (y >= constants::chunkHeight)
     {
         if (borders.bottom == nullptr) return nullptr;
-        borders.bottom->data[posToIndex(x, y - 7)];
+        return borders.bottom->data[posToIndex(x, y - 7)];
     }
 
     return nullptr;

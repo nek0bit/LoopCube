@@ -24,10 +24,10 @@
 struct Chunk;
 struct BorderingChunks
 {
-    Chunk* left;
-    Chunk* right;
-    Chunk* top;
-    Chunk* bottom;
+    std::shared_ptr<Chunk> left;
+    std::shared_ptr<Chunk> right;
+    std::shared_ptr<Chunk> top;
+    std::shared_ptr<Chunk> bottom;
 };
 
 // 2D array[y][x] flattened to 1D array

@@ -23,7 +23,28 @@ std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate
     {
         // Generate the chunk
         data.insert({y, ChunkData{true, std::make_shared<Chunk>(Chunk{chunkGen, x, y})}});
-        return data.find(y);
+        auto current = data.find(y);
+
+        std::shared_ptr<Chunk>& newChunk = current->second.data;
+
+        auto chunkAbove = data.find(y - 1),
+            chunkBelow = data.find(y + 1);
+
+        if (chunkAbove != data.end())
+        {
+            newChunk->borders.top = chunkAbove->second.data;
+            newChunk->regenBlockBorders();
+            chunkAbove->second.data->borders.bottom = newChunk;
+        }
+        
+        if (chunkBelow != data.end())
+        {
+            newChunk->borders.bottom = chunkBelow->second.data;
+            newChunk->regenBlockBorders();
+            chunkBelow->second.data->borders.top = newChunk;
+        }
+        
+        return current;
     }
     return ind;
 }
