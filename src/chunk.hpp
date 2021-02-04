@@ -50,7 +50,7 @@ struct Chunk
     void placeBlockFast(unsigned int id, unsigned int x, unsigned int y);
     const BlockInfo* destroyBlock(unsigned int x, unsigned int y, Inventory& inv);
 
-    void updateBlockBorders(const unsigned int x, const unsigned int y, const bool recurseOnce = false);
+    void updateBlockBorders(const int x, const int y, const bool recurseOnce = false);
 
     void regenBlockBorders();
 

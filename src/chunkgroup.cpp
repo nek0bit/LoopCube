@@ -37,6 +37,7 @@ std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate
             newChunk->borders.top = chunkAbove->second.data;
             newChunk->regenBlockBorders();
             chunkAbove->second.data->borders.bottom = newChunk;
+            chunkAbove->second.data->regenBlockBorders();
         }
         
         if (chunkBelow != data.end())
@@ -44,6 +45,7 @@ std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate
             newChunk->borders.bottom = chunkBelow->second.data;
             newChunk->regenBlockBorders();
             chunkBelow->second.data->borders.top = newChunk;
+            chunkBelow->second.data->regenBlockBorders();
         }
 
         if (left != nullptr)
@@ -52,6 +54,7 @@ std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate
             if (chunkLeft != nullptr)
             {
                 chunkLeft->borders.right = newChunk;
+                chunkLeft->regenBlockBorders();
                 newChunk->borders.left = chunkLeft;
             }
         }
@@ -62,6 +65,7 @@ std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate
             if (chunkRight != nullptr)
             {
                 chunkRight->borders.left = newChunk;
+                chunkRight->regenBlockBorders();
                 newChunk->borders.right = chunkRight;
             }
         }

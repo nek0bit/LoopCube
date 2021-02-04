@@ -107,19 +107,20 @@ const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y, Inventory& 
     // Delete the block (since its a shared ptr, it will be deleted when reassigned)
     block = nullptr;
 
-    regenBlockBorders();
+    //regenBlockBorders();
+    updateBlockBorders(x, y, true);
     
     return info;
 }
 
-void Chunk::updateBlockBorders(const unsigned int x, const unsigned int y, const bool recurseOnce)
+void Chunk::updateBlockBorders(const int x, const int y, const bool recurseOnce)
 {
     std::shared_ptr<Block> left = getBorderBlock(x - 1, y),
         right = getBorderBlock(x + 1, y),
         top = getBorderBlock(x, y - 1),
         bottom = getBorderBlock(x, y + 1),
-        center = data[posToIndex(x, y)];
-
+        center = getBorderBlock(x, y);
+        
     // Enjoy this ugly bit of code :)
     
     // None on all sides
@@ -156,43 +157,63 @@ void Chunk::updateBlockBorders(const unsigned int x, const unsigned int y, const
     if (right) right->updateSrc();
     if (top) top->updateSrc();
     if (bottom) bottom->updateSrc();
+
+    if (recurseOnce)
+    {
+        // Go around each block and update it once more
+        updateBlockBorders(x - 1, y, false);
+        updateBlockBorders(x + 1, y, false);
+        updateBlockBorders(x, y - 1, false);
+        updateBlockBorders(x, y + 1, false);
+        updateBlockBorders(x - 1, y - 1, false);
+        updateBlockBorders(x + 1, y - 1, false);
+        updateBlockBorders(x - 1, y + 1, false);
+        updateBlockBorders(x + 1, y + 1, false);
+    }
 }
 
 std::shared_ptr<Block> Chunk::getBorderBlock(const int x, const int y) const
 {
-    // Return a block within this chunk like normal
-    if (x >= 0 && x < constants::chunkWidth &&
-        y >= 0 && y < constants::chunkHeight)
+    try
     {
-        return data[posToIndex(x, y)];
-    }
+        // Return a block within this chunk like normal
+        if (x >= 0 && x < constants::chunkWidth &&
+            y >= 0 && y < constants::chunkHeight)
+        {
+            return data.at(posToIndex(x, y));
+        }
 
-    // Return fixed chunk at left chunk
-    if (x < 0)
-    {
-        if (borders.left == nullptr) return nullptr;
-        return borders.left->data[posToIndex(x + constants::chunkWidth, y)];
-    }
+        // Return fixed chunk at left chunk
+        if (x < 0)
+        {
+            if (borders.left == nullptr) return nullptr;
+            return borders.left->data.at(posToIndex(x + constants::chunkWidth, y));
+        }
 
-    // Return fixed chunk at right chunk
-    if (x >= constants::chunkWidth)
-    {
-        if (borders.right == nullptr) return nullptr;
-        return borders.right->data[posToIndex(x - constants::chunkWidth, y)];
-    }
+        // Return fixed chunk at right chunk
+        if (x >= constants::chunkWidth)
+        {
+            if (borders.right == nullptr) return nullptr;
+            return borders.right->data.at(posToIndex(x - constants::chunkWidth, y));
+        }
 
-    // Return fixed chunk at top chunk
-    if (y < 0)
-    {
-        if (borders.top == nullptr) return nullptr;
-        return borders.top->data[posToIndex(x, y + constants::chunkHeight)];
-    }
+        // Return fixed chunk at top chunk
+        if (y < 0)
+        {
+            if (borders.top == nullptr) return nullptr;
+            return borders.top->data.at(posToIndex(x, y + constants::chunkHeight));
+        }
 
-    // Return fixed chunk at bottom chunk
-    if (y >= constants::chunkHeight)
+        // Return fixed chunk at bottom chunk
+        if (y >= constants::chunkHeight)
+        {
+            if (borders.bottom == nullptr) return nullptr;
+            return borders.bottom->data.at(posToIndex(x, y - constants::chunkHeight));
+        }
+    }
+    catch(const std::out_of_range& err)
     {
-        if (borders.bottom == nullptr) return nullptr;
-        return borders.bottom->data[posToIndex(x, y - constants::chunkHeight)];
+        return nullptr;
     }
 
     return nullptr;
@@ -204,9 +225,9 @@ void Chunk::generateChunk()
         placeBlock(id, x, y);
     }, MAX_WIDTH, MAX_HEIGHT);
 
-    regenBlockBorders();
 }
 
+// A little slow, not recommended except for when joining chunks
 void Chunk::regenBlockBorders()
 {
     for (unsigned int i = 0; i < constants::chunkWidth; ++i)

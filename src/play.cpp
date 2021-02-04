@@ -240,12 +240,12 @@ void Play::mouseEvents() {
 		case 3:
         {
             Item& item = inv->getSelectedItem();
-            if (item.enabled) {
-                BlockInfo& b_info = item.block;
-                if (chunk->placeBlock(b_info.id, 0, p2)) {
-                    item.addCount(-1);
-                }
+            //if (item.enabled) {
+            //BlockInfo& b_info = item.block;
+            if (chunk->placeBlock(0, withinX, withinY)) {
+                //item.addCount(-1);
             }
+            //}
         }
         break;
 		default:
