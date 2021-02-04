@@ -161,14 +161,17 @@ void Chunk::updateBlockBorders(const int x, const int y, const bool recurseOnce)
     if (recurseOnce)
     {
         // Go around each block and update it once more
-        updateBlockBorders(x - 1, y, false);
-        updateBlockBorders(x + 1, y, false);
-        updateBlockBorders(x, y - 1, false);
-        updateBlockBorders(x, y + 1, false);
-        updateBlockBorders(x - 1, y - 1, false);
-        updateBlockBorders(x + 1, y - 1, false);
-        updateBlockBorders(x - 1, y + 1, false);
-        updateBlockBorders(x + 1, y + 1, false);
+        if (x - 1 != -1) updateBlockBorders(x - 1, y, false);
+        else if (borders.left) borders.left->updateBlockBorders(x - 1 + constants::chunkWidth, y, false);
+
+        if (x + 1 != constants::chunkWidth) updateBlockBorders(x + 1, y, false);
+        else if (borders.right) borders.right->updateBlockBorders(0, y, false);
+
+        if (y - 1 != -1) updateBlockBorders(x, y - 1, false);
+        else if (borders.top) borders.top->updateBlockBorders(x, y - 1 + constants::chunkHeight, false);
+
+        if (y + 1 != constants::chunkHeight) updateBlockBorders(x, y + 1, false);
+        else if (borders.bottom) borders.bottom->updateBlockBorders(x, 0, false);
     }
 }
 
@@ -213,6 +216,7 @@ std::shared_ptr<Block> Chunk::getBorderBlock(const int x, const int y) const
     }
     catch(const std::out_of_range& err)
     {
+        std::cout << "Warning: Out of range in Chunk::getBorderBlock, this shouldn't happen" << std::endl;
         return nullptr;
     }
 
