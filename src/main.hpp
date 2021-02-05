@@ -11,6 +11,7 @@
 #include "timer.hpp"
 #include <thread>
 #include <chrono>
+#include <random>
 
 int main();
 void gameLoop();

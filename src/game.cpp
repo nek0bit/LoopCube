@@ -133,7 +133,7 @@ void Game::init(bool fullscreen = false) {
 	win_flags = win_flags | SDL_WINDOW_RESIZABLE;
 
 	rend_flags = rend_flags | SDL_RENDERER_ACCELERATED;
-	rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
+	//rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
 
 	if (SDL_Init(SDL_INIT_VIDEO) == 0) {
 		window = SDL_CreateWindow(title,
