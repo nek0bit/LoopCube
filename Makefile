@@ -1,12 +1,13 @@
 # -*- mode: makefile -*-
 CXX ?= g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
-LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
-SRC_DIR = ./src
-OBJ_DIR = ./obj
+CXXFLAGS += -std=c++14 -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
+LDFLAGS += $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
+SRC_DIR = src
+OBJ_DIR = obj
 TARGET = loopcube
 SRC = $(wildcard src/*.cpp)
 OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
+MAKE ?= make
 
 ifeq ($(strip $(DATA_LOCATION)),)
 CXXFLAGS += -DDATA_LOCATION=\".\"
@@ -15,6 +16,8 @@ CXXFLAGS += -DDATA_LOCATION=\"$(DATA_LOCATION)\"
 endif
 
 all: debug
+server:
+	@$(MAKE) -f Makefile.server all
 
 obj/%.o: %.cpp %.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ 
@@ -44,8 +47,10 @@ uninstall:
 
 setup:
 	@mkdir -p obj/src/
+	@mkdir -p obj/server/
 
-.PHONY: all clean setup debug release install
 clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(TARGET)
+
+.PHONY: all server clean setup debug release install

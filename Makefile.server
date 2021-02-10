@@ -1,0 +1,48 @@
+# -*- mode: makefile -*-
+CXX ?= g++
+CXXFLAGS += -std=c++14 -Wall -Wextra -pipe -pedantic
+LDFLAGS += -pthread
+SRC_DIR = src
+SERVER_DIR = server
+OBJ_DIR = obj
+TARGET = loopcube_server
+SRC = $(SRC_DIR)/server.cpp \
+      $(SRC_DIR)/server.cpp \
+      $(SERVER_DIR)/main.cpp
+OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
+
+all: debug
+
+obj/%.o: %.cpp %.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@ 
+
+$(TARGET): $(OBJ)
+	$(CXX) -o $(TARGET) $^ $(LDFLAGS) 
+
+
+debug: CXXFLAGS += -g
+debug: setup
+debug: $(TARGET)
+
+release: CXXFLAGS += -O2
+release: setup
+release: $(TARGET)
+
+install:
+	@echo "Installing server binary..."
+	install -Dm755 $(TARGET) $(PREFIX)/$(TARGET)
+
+uninstall:
+	@echo "Uninstalling server binary... type yes if prompted (be careful)"
+	rm -Ir $(DATA_LOCATION)
+	rm -ir $(PREFIX)/$(TARGET)
+
+setup:
+	@mkdir -p obj/src/
+	@mkdir -p obj/server/
+
+clean:
+	rm -rf $(OBJ_DIR)
+	rm -rf $(TARGET)
+
+.PHONY: all clean setup debug release install
