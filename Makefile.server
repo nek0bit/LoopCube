@@ -1,7 +1,7 @@
 # -*- mode: makefile -*-
 CXX ?= g++
-CXXFLAGS += -std=c++14 -Wall -Wextra -pipe -pedantic
-LDFLAGS += -pthread
+CXXFLAGS += -std=c++14 -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_net)
+LDFLAGS += -pthread $(shell pkg-config --libs sdl2 SDL2_net)
 SRC_DIR = src
 SERVER_DIR = server
 OBJ_DIR = obj
