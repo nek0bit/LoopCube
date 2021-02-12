@@ -2,11 +2,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <thread>
 #include <algorithm>
 #include <cstring>
 #include <cstdint>
 #include <exception>
-#include <SDL2/SDL_thread.h>
 
 #include "socketwrapper.hpp"
 
@@ -15,13 +15,11 @@ struct ServerThreadItem;
 struct ThreadData;
 struct NetworkError;
 
-int Server_thread(void* data);
-
 // Struct for thread items
 struct ServerThreadItem
 {
     uint16_t id;
-    SDL_Thread* thread;
+    std::thread thread;
     uint32_t count;
 };
 
@@ -58,7 +56,8 @@ struct Server
     Server(const uint32_t port, bool verbose = true);
     ~Server();
 
-    void startServer(const size_t threadCount = 1); // Note: Blocking
+    void startServer(const uint16_t threadCount = 1); // Note: Blocking
+    void serverThread();
 private:
     std::vector<ServerThreadItem> threadPool;
     int fd;
