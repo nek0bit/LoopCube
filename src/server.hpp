@@ -3,10 +3,14 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include <chrono>
+#include <mutex>
+#include <atomic>
 #include <algorithm>
 #include <cstring>
 #include <cstdint>
 #include <exception>
+#include <poll.h>
 
 #include "socketwrapper.hpp"
 
@@ -21,6 +25,7 @@ struct ServerThreadItem
     uint16_t id;
     std::thread thread;
     uint32_t count;
+    std::vector<pollfd> connections;
 };
 
 // Error handling
@@ -56,13 +61,15 @@ struct Server
     Server(const uint32_t port, bool verbose = true);
     ~Server();
 
-    void startServer(const uint16_t threadCount = 1); // Note: Blocking
-    void serverThread();
+    void startServer(const size_t threadCount = 1); // Note: Blocking
+    void serverThread(const size_t index);
 private:
     std::vector<ServerThreadItem> threadPool;
+    std::mutex tpLock; // threadPoolLock
+    std::atomic<bool> exit;
     int fd;
     addrinfo opts, *info;
     socklen_t sin_size;
-    
+
     bool verbose;
 };

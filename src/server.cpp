@@ -79,6 +79,8 @@ Server::~Server()
 {
     ServLog::log("Shutting down server...");
 
+    exit = true;
+
     // Join threadpool threads
     for (ServerThreadItem& item: threadPool)
     {
@@ -91,17 +93,29 @@ Server::~Server()
     close(fd);
 }
 
-void Server::startServer(const uint16_t threadCount)
+void Server::startServer(const size_t threadCount)
 {
-    for (uint16_t i = 0; i < threadCount; ++i)
+    for (size_t i = 0; i < threadCount; ++i)
     {
         uint16_t id = i + 1;
         threadPool.emplace_back(ServerThreadItem{id,
-            std::thread(&Server::serverThread, this),
-            0});
+                std::thread(&Server::serverThread, this, i),
+                0, {}});
+    }
+
+    while (!exit.load())
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }
 
-void Server::serverThread()
+void Server::serverThread(const size_t index)
 {
+    while (!exit.load())
+    {
+        tpLock.lock();
+        ServerThreadItem& item = threadPool.at(index);
+        int events = poll(&(item.connections[0]), item.connections.size(), 300);
+        tpLock.unlock();
+    }
 }
