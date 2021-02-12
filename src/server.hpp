@@ -1,12 +1,29 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <vector>
 #include <algorithm>
 #include <cstring>
 #include <cstdint>
 #include <exception>
+#include <SDL2/SDL_thread.h>
 
 #include "socketwrapper.hpp"
+
+struct Server;
+struct ServerThreadItem;
+struct ThreadData;
+struct NetworkError;
+
+int Server_thread(void* data);
+
+// Struct for thread items
+struct ServerThreadItem
+{
+    uint16_t id;
+    SDL_Thread* thread;
+    uint32_t count;
+};
 
 // Error handling
 enum NERROR_TYPE
@@ -41,8 +58,9 @@ struct Server
     Server(const uint32_t port, bool verbose = true);
     ~Server();
 
-    void startServer(const uint16_t threadCount = 1); // Note: Blocking
+    void startServer(const size_t threadCount = 1); // Note: Blocking
 private:
+    std::vector<ServerThreadItem> threadPool;
     int fd;
     addrinfo opts, *info;
     socklen_t sin_size;

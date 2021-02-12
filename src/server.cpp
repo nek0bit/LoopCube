@@ -77,9 +77,43 @@ Server::Server(const uint32_t port, bool verbose)
 
 Server::~Server()
 {
+    ServLog::log("Shutting down server...");
+
+    // Join threadpool threads
+    for (ServerThreadItem& item: threadPool)
+    {
+        verbose && ServLog::log(std::string{"Waiting for thread #"} +
+                                std::to_string(item.id) + std::string{" to join..."});
+        int res = 0;
+        SDL_WaitThread(item.thread, &res);
+
+        verbose && ServLog::log(std::string{"Thread returned "} + std::to_string(res));
+    }
+    
+    close(fd);
 }
 
-void Server::startServer(const uint16_t threadCount)
+void Server::startServer(const size_t threadCount)
 {
+    // Resize to match threadcount (struct is filled afterwards)
+    threadPool.resize(threadCount);
     
+    for (size_t i = 0; i < threadPool.size(); ++i)
+    {
+        threadPool[i].id = i + 1;
+        threadPool[i].thread = SDL_CreateThread(Server_thread,
+                                                std::to_string(i).c_str(),
+                                                this);
+        // Keeps count of elements, needed to add new connections to the
+        // thread with the least amount of connections
+        threadPool[i].count = 0;
+    }
+}
+
+// TODO return more than just this
+int Server_thread(void* data)
+{
+    Server* that = static_cast<Server*>(data);
+    std::cout << "Hello from the other thread" << std::endl;
+    return -1;
 }
