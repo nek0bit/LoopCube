@@ -173,6 +173,15 @@ void Server::startServer(const size_t threadCount)
         
         // Add to smallest thread
         ServerThreadItem& low = minThreadCount();
+
+        tpLock.lock();
+        // Add poll to pollfd vector
+        pollfd newPoll;
+        newPoll.fd = connection;
+        newPoll.events = POLLIN;
+        
+        low.connections.push_back(newPoll);
+        tpLock.unlock();
     }
 }
 
@@ -201,7 +210,11 @@ void Server::serverThread(const size_t index) noexcept
         try
         {
             ServerThreadItem& item = threadPool.at(index);
-            int events = poll(&item.connections[0], item.connections.size(), 10);
+            int pl = poll(&item.connections[0], item.connections.size(), 15);
+            if (pl == -1)
+            {
+                ServLog::error(std::string{"Poll: "} + std::string{strerror()});
+            }
         }
         catch (const std::out_of_range& err)
         {
