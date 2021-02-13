@@ -128,18 +128,27 @@ void Game::render() {
 void Game::init(bool fullscreen = false) {
 	int win_flags = 0;
 	int rend_flags = 0;
+
+    int defWidth = 800;
+    int defHeight = 600;
+
+#ifdef __SWITCH__
+    defWidth = 1280;
+    defHeight = 720;
+#endif
     
 	if (fullscreen) win_flags = win_flags | SDL_WINDOW_FULLSCREEN;
 	win_flags = win_flags | SDL_WINDOW_RESIZABLE;
 
 	rend_flags = rend_flags | SDL_RENDERER_ACCELERATED;
-	//rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
+	rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
 
-	if (SDL_Init(SDL_INIT_VIDEO) == 0) {
+    SDL_StartTextInput();
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) == 0) {
 		window = SDL_CreateWindow(title,
                                   SDL_WINDOWPOS_UNDEFINED,
                                   SDL_WINDOWPOS_UNDEFINED,
-                                  800, 600, win_flags);
+                                  defWidth, defHeight, win_flags);
 		renderer = SDL_CreateRenderer(window, -1, rend_flags);
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -193,6 +202,7 @@ void Game::eventHandler() {
 void Game::free() {
 	// Incase user manually runs this method and then the destructor calls this afterwards
 	if (!hasFreed) {
+        SDL_StopTextInput();
         SDL_DestroyWindow(window);
         SDL_DestroyRenderer(renderer);
         SDL_Quit();

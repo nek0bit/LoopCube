@@ -4,7 +4,10 @@ EventWrapper::EventWrapper()
     : quit{false},
       vmouse{0, 0, 0, 0, 0},
       controller{nullptr},
-      textMode{false}
+      textMode{false},
+#ifdef __SWITCH__
+      conID{hidGetHandheldMode() ? CONTROLLER_HANDHELD : CONTROLLER_PLAYER_1}
+#endif
 {
 	keyMapping = {
 		SDL_SCANCODE_W, // UP
@@ -27,6 +30,19 @@ EventWrapper::EventWrapper()
         SDL_SCANCODE_ESCAPE // Exit
 	};
 	buttonMapping = {
+#ifdef __SWITCH__
+        // Nintendo switch defaults
+        SDL_CONTROLLER_BUTTON_MAX,
+        SDL_CONTROLLER_BUTTON_DPAD_RIGHT,
+        SDL_CONTROLLER_BUTTON_DPAD_DOWN,
+        SDL_CONTROLLER_BUTTON_DPAD_LEFT,
+        SDL_CONTROLLER_BUTTON_X,
+        SDL_CONTROLLER_BUTTON_LEFTSTICK,
+        SDL_CONTROLLER_BUTTON_LEFTSHOULDER,
+        SDL_CONTROLLER_BUTTON_START,
+        SDL_CONTROLLER_BUTTON_Y,
+        SDL_CONTROLLER_BUTTON_GUIDE
+#else
 		SDL_CONTROLLER_BUTTON_DPAD_UP,
 		SDL_CONTROLLER_BUTTON_DPAD_RIGHT,
 		SDL_CONTROLLER_BUTTON_DPAD_DOWN,
@@ -37,14 +53,23 @@ EventWrapper::EventWrapper()
 		SDL_CONTROLLER_BUTTON_START,
 		SDL_CONTROLLER_BUTTON_Y,
 		SDL_CONTROLLER_BUTTON_GUIDE
+#endif
 	};
 
     resizeInputStates();
+
+#ifdef __SWITCH__
+    hiddbgInitialize();
+#endif
 }
 
 EventWrapper::~EventWrapper()
 {
     SDL_JoystickClose(this->controller);
+
+#ifdef __SWITCH__
+    hiddbgExit();
+#endif
 }
 
 void EventWrapper::resizeInputStates()
@@ -100,6 +125,26 @@ void EventWrapper::listen() {
 	 * so it's best we move it all out of the way; same for the keyboard stuff
 	 */
 	if (controller != nullptr) {
+#ifdef __SWITCH__
+        // Switch doesn't like SDL joysticks (but recognizes buttons fine), instead, let's just use libnx for this
+		hidScanInput();
+		
+		if (hidIsControllerConnected(conID)) {
+			// TODO maybe add deadzone for controllers with slight drift
+			JoystickPosition tmp[2];
+			hidJoystickRead(&tmp[0], conID, JOYSTICK_LEFT);
+			hidJoystickRead(&tmp[1], conID, JOYSTICK_RIGHT);
+				
+			// Right joystick
+			vmouse.x += tmp[1].dx / 2048;
+			// JoystickPosition.dy is inverted
+			vmouse.y += -tmp[1].dy / 2048;
+			
+			// Left joystick
+			vmouse.x += tmp[0].dx / 2048;
+			vmouse.y += -tmp[0].dy / 2048;
+		}
+#else
 		auto axis_hor = SDL_JoystickGetAxis(controller, 0);
 		auto axis_ver = SDL_JoystickGetAxis(controller, 1);
 
@@ -108,8 +153,23 @@ void EventWrapper::listen() {
 			vmouse.x += axis_hor / 2048;
 			vmouse.y += axis_ver / 2048;
 		}
+#endif
 	}
+    
+#ifdef __SWITCH__
+    if (conID == CONTROLLER_HANDHELD) {
+        touchPosition touch;
+        u32 touch_count = hidTouchCount();
+        for (u32 i = 0; i < touch_count; ++i) {
+            hidTouchRead(&touch, i);
 
+            vmouse.x = touch.px;
+            vmouse.y = touch.py;
+            if (!vmouse.down) vmouse.clicked = true;
+            vmouse.down = true;
+        }
+    }
+#endif
 
 	while (SDL_PollEvent(&event)) {
 		const Uint8* keystate = SDL_GetKeyboardState(NULL);
@@ -172,13 +232,6 @@ void EventWrapper::listen() {
 			for (size_t i = 0; i < buttonMapping.size(); ++i) {
 				if (event.jbutton.button == buttonMapping[i]) {
 					buttonState[i] = 1;
-					if (i == 5) {
-						quit = true;
-					}
-					if (i == 6) {
-						vmouse.down = 1;
-						vmouse.clicked = 1;
-					}
 					switch(i) {
 					case 5:
 						quit = true;

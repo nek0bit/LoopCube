@@ -6,6 +6,10 @@
 
 #include <SDL2/SDL.h>
 
+#ifdef __SWITCH__
+#include <switch.h>
+#endif
+
 struct VMouse
 {
     int x;
@@ -44,4 +48,8 @@ private:
     
 	SDL_Joystick* controller;
 	SDL_Event event;
+
+#ifdef __SWITCH__
+    HidControllerID conID;
+#endif
 };
