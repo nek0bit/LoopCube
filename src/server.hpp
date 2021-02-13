@@ -65,6 +65,7 @@ struct Server
     void startServer(const size_t threadCount = 1); // Note: Blocking
     void serverThread(const size_t index) noexcept;
 private:
+    ServerThreadItem& minThreadCount();
     std::string getAddress(sockaddr* info);
     const uint32_t port;
     std::string address;

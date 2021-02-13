@@ -171,9 +171,26 @@ void Server::startServer(const size_t threadCount)
         ipMsg += getAddress((sockaddr*)&incoming);
         ServLog::log(ipMsg);
         
-        // Close Temporarily for now
-        close(connection);
+        // Add to smallest thread
+        ServerThreadItem& low = minThreadCount();
     }
+}
+
+ServerThreadItem& Server::minThreadCount()
+{
+    uint32_t count = -1;
+    ServerThreadItem* ret = nullptr;
+    for (ServerThreadItem& item: threadPool)
+    {
+        if (count > item.count || count == static_cast<uint32_t>(-1))
+        {
+            count = item.count;
+            ret = &item;
+        }
+    }
+    ret->count++;
+    
+    return *ret;
 }
 
 void Server::serverThread(const size_t index) noexcept
@@ -184,7 +201,7 @@ void Server::serverThread(const size_t index) noexcept
         try
         {
             ServerThreadItem& item = threadPool.at(index);
-            int events = poll(&(item.connections[0]), item.connections.size(), 10);
+            int events = poll(&item.connections[0], item.connections.size(), 10);
         }
         catch (const std::out_of_range& err)
         {

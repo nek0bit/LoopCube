@@ -24,7 +24,7 @@ int main()
         serverPtr = new Server(DEFAULT_PORT);
 
         // Note: Blocks here
-        serverPtr->startServer(16);
+        serverPtr->startServer(4);
     }
     catch(const NetworkError& err)
     {
