@@ -73,10 +73,7 @@ Server::Server(const uint32_t port, bool verbose)
                                 std::to_string(fd) + std::string{"."});
 
         address = getAddress(cur->ai_addr);
-    }
-
-    // TODO listening (probably done in other thread)
-    
+    }    
 }
 
 Server::~Server()
@@ -194,8 +191,6 @@ void Server::serverThread(const size_t index) noexcept
             tpLock.unlock();
             continue;
         }
-        tpLock.unlock();
-
-        
+        tpLock.unlock();        
     }
 }
