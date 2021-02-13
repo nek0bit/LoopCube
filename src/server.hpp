@@ -66,7 +66,9 @@ struct Server
     void serverThread(const size_t index) noexcept;
 private:
     ServerThreadItem& minThreadCount();
+#ifndef __NOIPLOG__
     std::string getAddress(sockaddr* info);
+#endif
     const uint32_t port;
     std::string address;
     std::vector<ServerThreadItem> threadPool;
