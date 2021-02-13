@@ -84,6 +84,18 @@ Server::~Server()
 
     exit = true;
 
+    // Close all current connections
+    tpLock.lock();
+    for (ServerThreadItem& item: threadPool)
+    {
+        for (pollfd& con: item.connections)
+        {
+            verbose && ServLog::log(std::string{"Closing connection "} + std::to_string(con.fd));
+            close(con.fd);
+        }
+    }
+    tpLock.unlock();
+
     // Join threadpool threads
     !verbose && ServLog::log("Waiting for threads to finish...");
     for (ServerThreadItem& item: threadPool)
@@ -142,13 +154,16 @@ void Server::startServer(const size_t threadCount)
         msg += address + std::string(":") + std::to_string(port);
         ServLog::info(msg);
     }
-    
+
+    // Create threadpool
     for (size_t i = 0; i < threadCount; ++i)
     {
+        tpLock.lock();
         uint16_t id = i + 1;
         threadPool.emplace_back(ServerThreadItem{id,
                 std::thread(&Server::serverThread, this, i),
-                0, {}});
+                0, {}, {}});
+        tpLock.unlock();
     }
 
     while (!exit.load())
@@ -190,8 +205,14 @@ void Server::startServer(const size_t threadCount)
         newPoll.events = POLLIN;
         
         low.connections.push_back(newPoll);
+        low.connectionData.push_back({"", 0.0, 0.0});
         tpLock.unlock();
     }
+}
+
+void Server::handleCommand(char* buffer, ConnectionData& data)
+{
+    std::string msg = buffer;
 }
 
 ServerThreadItem& Server::minThreadCount()
@@ -216,13 +237,14 @@ void Server::serverThread(const size_t index) noexcept
     char buffer[256];
     while (!exit.load())
     {
-        tpLock.lock();
+        tpLock.lock(); // Ensure threadPool has been created
+                       // also ensures threadPool cannot be modified
         try
         {
             ServerThreadItem& item = threadPool.at(index);
             tpLock.unlock();
             
-            int pl = poll(&item.connections[0], item.connections.size(), 500);
+            int pl = poll(&item.connections[0], item.connections.size(), 5000);
             
             if (pl == -1)
             {
@@ -256,12 +278,12 @@ void Server::serverThread(const size_t index) noexcept
                             
                             item.connections.erase(item.connections.begin() + i);
                         }
-                        else // Data is good
+                        else // Data is recieved
                         {
                             // Cap data
                             buffer[bytes] = '\0';
-                        
-                            std::cout << con.fd << ": " << buffer << std::endl;
+
+                            handleCommand(buffer, item.connectionData[i]);
                         }
                     }
                 }

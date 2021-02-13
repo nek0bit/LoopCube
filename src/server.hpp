@@ -19,13 +19,21 @@ struct ServerThreadItem;
 struct ThreadData;
 struct NetworkError;
 
+struct ConnectionData
+{
+    std::string username;
+    double playerX;
+    double playerY;
+};
+
 // Struct for thread items
 struct ServerThreadItem
 {
     uint16_t id;
     std::thread thread;
     uint32_t count;
-    std::vector<pollfd> connections;
+    std::vector<pollfd> connections; // Must be pollfd's or poll won't work
+    std::vector<ConnectionData> connectionData; // Alligned to connections vector
 };
 
 // Error handling
@@ -65,6 +73,7 @@ struct Server
     void startServer(const size_t threadCount = 1); // Note: Blocking
     void serverThread(const size_t index) noexcept;
 private:
+    void handleCommand(char* buffer, ConnectionData& data);
     ServerThreadItem& minThreadCount();
 #ifndef __NOIPLOG__
     std::string getAddress(sockaddr* info);
