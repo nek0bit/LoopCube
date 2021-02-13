@@ -33,7 +33,8 @@ enum NERROR_TYPE
 {
     NRESOLUTION_ERROR = 1,
     NSOCKOPT_ERROR,
-    NSOCKBIND_ERROR
+    NSOCKBIND_ERROR,
+    NLISTEN_ERROR
 };
 
 struct NetworkError: public std::exception
@@ -49,7 +50,7 @@ private:
 // LOGGER (for server)
 namespace ServLog
 {
-    bool warning(const std::string msg);
+    bool warn(const std::string msg);
     bool error(const std::string msg);
     bool info(const std::string msg);
     bool log(const std::string msg);
@@ -62,14 +63,16 @@ struct Server
     ~Server();
 
     void startServer(const size_t threadCount = 1); // Note: Blocking
-    void serverThread(const size_t index);
+    void serverThread(const size_t index) noexcept;
 private:
+    std::string getAddress(sockaddr* info);
+    const uint32_t port;
+    std::string address;
     std::vector<ServerThreadItem> threadPool;
     std::mutex tpLock; // threadPoolLock
     std::atomic<bool> exit;
     int fd;
     addrinfo opts, *info;
-    socklen_t sin_size;
 
     bool verbose;
 };
