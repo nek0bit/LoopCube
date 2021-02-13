@@ -47,7 +47,6 @@ private:
     void resizeInputStates();
     
 	SDL_Joystick* controller;
-	SDL_Event event;
 
 #ifdef __SWITCH__
     HidControllerID conID;
