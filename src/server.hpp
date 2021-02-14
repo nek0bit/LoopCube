@@ -4,6 +4,9 @@
 #include <memory>
 #include <vector>
 #include <thread>
+#include <sstream>
+#include <numeric>
+#include <iterator>
 #include <chrono>
 #include <mutex>
 #include <atomic>
@@ -16,6 +19,9 @@
 #include "socketwrapper.hpp"
 #include "gameserver.hpp"
 #include "timer.hpp"
+
+// Messages
+constexpr const char* MSG_QUIT = "QUIT";
 
 struct Server;
 struct ServerThreadItem;
@@ -77,7 +83,21 @@ struct Server
     void serverThread(const size_t index) noexcept;
     void startGameThread() noexcept;
 private:
-    void handleCommand(char* buffer, ConnectionData& data);
+    template <typename Iterator>
+    std::string combineString(Iterator begin,
+                              Iterator end,
+                              const std::string delim = "")
+    {
+        std::stringstream str;
+        for (std::vector<std::string>::iterator i = begin; i != end; ++i)
+        {
+            str << *i;
+            if (i != end-1) str << delim;
+        }
+        return str.str();
+    }
+    void removeConnection(ServerThreadItem& item, const size_t index);
+    int handleCommand(char* buffer, ServerThreadItem& item, const size_t index);
     ServerThreadItem& minThreadCount();
 #ifndef __NOIPLOG__
     std::string getAddress(sockaddr* info);

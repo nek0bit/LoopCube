@@ -233,9 +233,70 @@ void Server::startServer(const size_t threadCount)
     }
 }
 
-void Server::handleCommand(char* buffer, ConnectionData& data)
+int Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t index)
 {
+    const pollfd& fd = item.connections[index];
+    ConnectionData& data = item.connectionData[index];
+    
     std::string msg = buffer;
+    std::vector<std::string> msgSplit;
+    
+    // KEEP ME COMMENTED OUT
+    // Telnet debugger
+    if(*(msg.end()-1)=='\n'&&*(msg.end()-2)=='\r'){msg.erase(msg.end()-2, msg.end());}
+
+    // Split a string
+    std::istringstream sm(msg);
+    std::string back;
+    while (std::getline(sm, back, ' '))
+    {
+        msgSplit.push_back(back);
+    }
+    // ... man I love this language
+
+    //******************************
+    // COMMANDS
+    //******************************
+    try
+    {
+        // *** SINGLE COMMANDS ***
+        if (msg == MSG_QUIT)
+        {
+            removeConnection(item, index);
+            return 0;
+        }
+        // *** ARG COMMANDS ***
+        else if (msgSplit.at(0) == "SENDMSG")
+        {
+            // Just as a test :)
+            std::cout << "Message sent: " <<
+                combineString(msgSplit.begin()+1, msgSplit.end(), " ") << std::endl;
+            return 0;
+        }
+    }
+    catch (const std::out_of_range& err)
+    {
+        return 2;
+    }
+     
+    return 1;
+}
+
+void Server::removeConnection(ServerThreadItem& item, const size_t index)
+{   
+    close(item.connections[index].fd);
+
+    // Erase from connections list
+    item.connections.erase(item.connections.begin() + index);
+    item.connectionData.erase(item.connectionData.begin() + index);
+
+    const std::string name = item.connectionData[index].username;
+    ServLog::log(std::string{"Player "} +
+                 (name == "" ? std::string{"???"} : name) +
+                 std::string{" disconnected."});
+    verbose && ServLog::info(std::to_string(item.connections.size()) +
+                 std::string{"=?="} +
+                 std::to_string(item.connectionData.size()));
 }
 
 ServerThreadItem& Server::minThreadCount()
@@ -297,16 +358,14 @@ void Server::serverThread(const size_t index) noexcept
                                 ServLog::warn(std::string{"Recv: "} + std::string{strerror(errno)});
                             }
 
-                            close(con.fd);
-                            
-                            item.connections.erase(item.connections.begin() + i);
+                            removeConnection(item, i);
                         }
                         else // Data is recieved
                         {
                             // Cap data
                             buffer[bytes] = '\0';
 
-                            handleCommand(buffer, item.connectionData[i]);
+                            handleCommand(buffer, item, i);
                         }
                     }
                 }
