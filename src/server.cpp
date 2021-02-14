@@ -12,6 +12,9 @@ bool ServLog::log(const std::string msg)
 Server::Server(const uint32_t port, bool verbose)
     : port{port},
       address{},
+      threadPool{},
+      gameThread{},
+      game{},
       fd{},
       opts{},
       info{nullptr},
@@ -106,6 +109,9 @@ Server::~Server()
         
         if (item.thread.joinable()) item.thread.join();
     }
+
+    verbose && ServLog::log("Waiting for GameServer thread to finish...");
+    if (gameThread.joinable()) gameThread.join();
     
     close(fd);
 }
@@ -136,11 +142,28 @@ std::string Server::getAddress(sockaddr* info)
 }
 #endif
 
+void Server::startGameThread() noexcept
+{
+    Timer TPS = 30;
+    
+    while (!exit.load())
+    {
+        TPS.setTime();
+
+        game.update(TPS);
+
+        int calc = TPS.calcSleep();
+        if (calc > 0) std::this_thread::sleep_for(std::chrono::milliseconds(TPS.calcSleep()));
+    }
+}
+
 void Server::startServer(const size_t threadCount)
 {
-    
     constexpr int QUEUE = 10;
 
+    // Start the game server + it's thread
+    gameThread = std::thread(&Server::startGameThread, this);
+    
     // Start listening for connections
     if (listen(fd, QUEUE) == -1)
     {
@@ -244,7 +267,7 @@ void Server::serverThread(const size_t index) noexcept
             ServerThreadItem& item = threadPool.at(index);
             tpLock.unlock();
             
-            int pl = poll(&item.connections[0], item.connections.size(), 5000);
+            int pl = poll(&item.connections[0], item.connections.size(), 300);
             
             if (pl == -1)
             {

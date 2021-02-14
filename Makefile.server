@@ -8,6 +8,8 @@ OBJ_DIR = obj
 TARGET = loopcube_server
 SRC = $(SRC_DIR)/server.cpp \
       $(SRC_DIR)/server.cpp \
+      $(SRC_DIR)/gameserver.cpp \
+      $(SRC_DIR)/timer.cpp \
       $(SERVER_DIR)/main.cpp
 OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
 

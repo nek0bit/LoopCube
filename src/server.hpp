@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <memory>
 #include <vector>
 #include <thread>
 #include <chrono>
@@ -13,6 +14,8 @@
 #include <poll.h>
 
 #include "socketwrapper.hpp"
+#include "gameserver.hpp"
+#include "timer.hpp"
 
 struct Server;
 struct ServerThreadItem;
@@ -72,6 +75,7 @@ struct Server
 
     void startServer(const size_t threadCount = 1); // Note: Blocking
     void serverThread(const size_t index) noexcept;
+    void startGameThread() noexcept;
 private:
     void handleCommand(char* buffer, ConnectionData& data);
     ServerThreadItem& minThreadCount();
@@ -83,6 +87,8 @@ private:
     std::vector<ServerThreadItem> threadPool;
     std::mutex tpLock; // threadPoolLock
     std::atomic<bool> exit;
+    std::thread gameThread;
+    GameServer game;
     int fd;
     addrinfo opts, *info;
 
