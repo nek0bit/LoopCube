@@ -233,9 +233,9 @@ void Server::startServer(const size_t threadCount)
     }
 }
 
-int Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t index)
+void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t index)
 {
-    const pollfd& fd = item.connections[index];
+    const int& fd = item.connections[index].fd;
     ConnectionData& data = item.connectionData[index];
     
     std::string msg = buffer;
@@ -263,23 +263,26 @@ int Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t ind
         if (msg == MSG_QUIT)
         {
             removeConnection(item, index);
-            return 0;
         }
         // *** ARG COMMANDS ***
-        else if (msgSplit.at(0) == "SENDMSG")
+        else if (msgSplit.at(0) == "PING")
         {
-            // Just as a test :)
-            std::cout << "Message sent: " <<
-                combineString(msgSplit.begin()+1, msgSplit.end(), " ") << std::endl;
-            return 0;
+            std::string comb = combineString(msgSplit.begin()+1, msgSplit.end(), " ");
+            send(fd, comb.c_str(), comb.length(), 0);
+        }
+        else if (msgSplit.at(0) == MSG_PLAYER_POS)
+        {
+            try
+            {
+                // Game internally uses doubles, not floats
+                data.playerX = std::stod(msgSplit.at(1));
+                data.playerY = std::stod(msgSplit.at(2));
+            }
+            catch (const std::out_of_range& err) {}
+            catch (const std::invalid_argument& err) {}
         }
     }
-    catch (const std::out_of_range& err)
-    {
-        return 2;
-    }
-     
-    return 1;
+    catch (const std::out_of_range& err) {} // Do nothing     
 }
 
 void Server::removeConnection(ServerThreadItem& item, const size_t index)

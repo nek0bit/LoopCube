@@ -21,7 +21,12 @@
 #include "timer.hpp"
 
 // Messages
+constexpr const char* _MSG_SUCCESS = "ACK"; // This shouldn't be sent very often!
+constexpr const char* _MSG_FAIL = "FAIL";
+
 constexpr const char* MSG_QUIT = "QUIT";
+constexpr const char* MSG_PING = "PING";
+constexpr const char* MSG_PLAYER_POS = "PPOS";
 
 struct Server;
 struct ServerThreadItem;
@@ -97,7 +102,7 @@ private:
         return str.str();
     }
     void removeConnection(ServerThreadItem& item, const size_t index);
-    int handleCommand(char* buffer, ServerThreadItem& item, const size_t index);
+    void handleCommand(char* buffer, ServerThreadItem& item, const size_t index);
     ServerThreadItem& minThreadCount();
 #ifndef __NOIPLOG__
     std::string getAddress(sockaddr* info);
