@@ -52,44 +52,38 @@ void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const
 }
 #endif
 
-std::vector<unsigned char> Block::serialize()
+std::array<unsigned char, 10> Block::serialize()
 {
-    std::array<unsigned char, 2> id;
-    std::array<unsigned char, 4> positionX;
-    std::array<unsigned char, 4> positionY;
+    constexpr uint8_t idSize = 2;
+    constexpr uint8_t valSize = 4;
+    std::array<unsigned char, 10> fullRes;
 
     // Id serialize
     uint16_t valueid = blockinfo->id;
     // fill char array with segmant of binary per valueid
-    id[0] = (valueid>>8) & 0xff; // i use 0xff because it makes me look cooler
-    id[1] = valueid & 0xff;
+    fullRes[0] = (valueid>>8) & 0xff; // i use 0xff because it makes me look cooler
+    fullRes[1] = valueid & 0xff;
 
 
     // Serialize both positionX and positionY
-    std::array<unsigned char, 4> charWork = positionX;
     int32_t posWork = position.x / constants::blockW;
-    for (int i = 0; i <= 1; ++i)
+    
+    for (int i = 0, j = idSize; i <= 1; ++i)
     {
-        charWork[0] = (posWork>>24) & 0xff;
-        charWork[1] = (posWork>>16) & 0xff;
-        charWork[2] = (posWork>>8) & 0xff;
-        charWork[3] = posWork & 0xff;
+        fullRes[j] = (posWork>>24) & 0xff;
+        fullRes[j+1] = (posWork>>16) & 0xff;
+        fullRes[j+2] = (posWork>>8) & 0xff;
+        fullRes[j+3] = posWork & 0xff;
         
         // flip bit at position
-        charWork[0] ^= (posWork<0)<<7;
+        fullRes[j] ^= (posWork<0)<<7;
 
         
-        charWork = positionY;
         posWork = position.y / constants::blockH;
+        j += valSize;
     }
-
-    std::vector<unsigned char> full;
-
-    full.insert(full.end(), id.begin(), id.end());
-    full.insert(full.end(), positionX.begin(), positionX.end());
-    full.insert(full.end(), positionY.begin(), positionY.end());
     
-    return full;
+    return fullRes;
 }
 
 void Block::deserialize(const std::string& str)
