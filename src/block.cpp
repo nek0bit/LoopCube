@@ -33,10 +33,7 @@ Block::~Block()
 {}
 
 void Block::update()
-{
-    std::cout << "Serialize: " << position.x/constants::blockW  << " " << position.y/constants::blockH << std::endl;
-    serialize();
-}
+{}
 
 #ifndef __HEADLESS
 void Block::updateSrc()
