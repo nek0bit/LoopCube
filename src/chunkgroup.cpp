@@ -13,7 +13,9 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
       x{x},
       chunkGen{chunkGen}
 {
+#ifndef __HEADLESS
     prepareLoaded();
+#endif
 }
 
 // Generates a chunk if it isn't loaded
@@ -143,8 +145,10 @@ ChunkGroup::ChunkGroup(std::shared_ptr<ChunkGen> chunkGen)
        data{}
 {
     // Generate vertical splits
+#ifndef __HEADLESS
     prepareLoaded();
     updateLoaded();
+#endif
 }
       
 void ChunkGroup::updateLoaded()

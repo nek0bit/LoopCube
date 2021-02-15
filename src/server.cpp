@@ -287,17 +287,20 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
                 data.playerX = std::stod(msgSplit.at(1));
                 data.playerY = std::stod(msgSplit.at(2));
             }
-            catch (const std::out_of_range& err) {}
             catch (const std::invalid_argument& err) {}
         }
         else if (msgSplit.at(0) == COMMAND_GET_CHUNK)
         {
-            const long int x = std::stol(msgSplit.at(1));
-            const long int y = std::stol(msgSplit.at(2));
-            game.getChunkAt(x, y);
+            try
+            {
+                const long int x = std::stol(msgSplit.at(1));
+                const long int y = std::stol(msgSplit.at(2));
+                game.getChunkAt(x, y);
+            }
+            catch (const std::invalid_argument& err) {}
         }
     }
-    catch (const std::out_of_range& err) {} // Do nothing     
+    catch (const std::out_of_range& err) {} // Do nothing
 }
 
 void Server::removeConnection(ServerThreadItem& item, const size_t index)
