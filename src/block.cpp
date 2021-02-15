@@ -52,11 +52,11 @@ void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const
 }
 #endif
 
-unsigned char* Block::serialize()
+std::vector<unsigned char> Block::serialize()
 {
-    unsigned char id[2];
-    unsigned char positionX[4];
-    unsigned char positionY[4];
+    std::array<unsigned char, 2> id;
+    std::array<unsigned char, 4> positionX;
+    std::array<unsigned char, 4> positionY;
 
     // Id serialize
     uint16_t valueid = blockinfo->id;
@@ -66,7 +66,7 @@ unsigned char* Block::serialize()
 
 
     // Serialize both positionX and positionY
-    unsigned char* charWork = positionX;
+    std::array<unsigned char, 4> charWork = positionX;
     int32_t posWork = position.x / constants::blockW;
     for (int i = 0; i <= 1; ++i)
     {
@@ -81,7 +81,15 @@ unsigned char* Block::serialize()
         
         charWork = positionY;
         posWork = position.y / constants::blockH;
-    }    
+    }
+
+    std::vector<unsigned char> full;
+
+    full.insert(full.end(), id.begin(), id.end());
+    full.insert(full.end(), positionX.begin(), positionX.end());
+    full.insert(full.end(), positionY.begin(), positionY.end());
+    
+    return full;
 }
 
 void Block::deserialize(const std::string& str)
