@@ -24,19 +24,22 @@ Block::Block(int id, int x, int y, unsigned int typeX)
     
 	src.h = constants::blockImgSize;
 	src.w = constants::blockImgSize;
+#ifndef __HEADLESS
     updateSrc();
+#endif
 }
 
 Block::~Block()
 {}
 
+void Block::update()
+{}
+
+#ifndef __HEADLESS
 void Block::updateSrc()
 {
     src.x = typeX * constants::blockImgSize;
 }
-
-void Block::update()
-{}
 
 void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const
 {
@@ -47,3 +50,4 @@ void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 60);
     SDL_RenderFillRect(renderer, &shadow);
 }
+#endif

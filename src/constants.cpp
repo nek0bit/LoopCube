@@ -1,6 +1,8 @@
 #include "constants.hpp"
 
-
+#ifndef DATA_LOCATION
+#define DATA_LOCATION
+#endif
 
 // Texture stuff
 namespace constants
@@ -76,6 +78,8 @@ namespace constants
         "- Camera zoom [ ]",
 	};
 
-	Config config{};
+#ifndef __HEADLESS
+    Config config{};
     FontHandler fontHandler{};
+#endif
 }

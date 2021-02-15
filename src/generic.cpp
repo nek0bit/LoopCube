@@ -26,6 +26,7 @@ GridCollision_t Generic::gridCollision(unsigned int width, unsigned int height, 
         ((size.h + box.y) / height) + ((add & 2) == 2)};
 }
 
+#ifndef __HEADLESS
 void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& textures,
                                       int texture, int clipWidth,
                                       int clipHeight, int offsetX, int offsetY,
@@ -50,3 +51,4 @@ void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& te
 		}
 	}
 }
+#endif

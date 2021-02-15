@@ -1,14 +1,16 @@
 #pragma once
-
 #include <string>
 
+#ifndef __HEADLESS
 #include <SDL2/SDL.h>
-
 #include "texturehandler.hpp"
-#include "constants.hpp"
-#include "vector.hpp"
-#include "size.hpp"
 #include "camera.hpp"
+#endif
+
+#include "generic.hpp"
+#include "size.hpp"
+#include "vector.hpp"
+#include "constants.hpp"
 #include "collisioninfo.hpp"
 
 struct GameObject
@@ -17,13 +19,15 @@ struct GameObject
 	GameObject(int textureId, double x, double y, double w, double h);
 	virtual ~GameObject() = default;
 
-	virtual void update();
+    virtual void update();
+#ifndef __HEADLESS
     virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
 
 	virtual bool shouldCull(Camera& camera);
 
 	// Return position
 	virtual Vec2 getPos(Camera& camera) const;
+#endif
 
 	CollisionInfo isColliding(const GameObject &obj2);
 

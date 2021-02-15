@@ -1,21 +1,28 @@
 # -*- mode: makefile -*-
 CXX ?= g++
-CXXFLAGS += -std=c++14 -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_net)
-LDFLAGS += -pthread $(shell pkg-config --libs sdl2 SDL2_net)
+CXXFLAGS += -std=c++14 -Wall -Wextra -pipe -pedantic -D__HEADLESS
+LDFLAGS += -pthread
 SRC_DIR = src
 SERVER_DIR = server
-OBJ_DIR = obj
+OBJ_DIR = obj/server
 TARGET = loopcube_server
 SRC = $(SRC_DIR)/server.cpp \
-      $(SRC_DIR)/server.cpp \
       $(SRC_DIR)/gameserver.cpp \
+      $(SRC_DIR)/chunkgroup.cpp \
+      $(SRC_DIR)/chunk.cpp \
+      $(SRC_DIR)/constants.cpp \
+      $(SRC_DIR)/vector.cpp \
+      $(SRC_DIR)/generic.cpp \
+      $(SRC_DIR)/block.cpp \
+      $(SRC_DIR)/gameobj.cpp \
+      $(SRC_DIR)/chunkgen.cpp \
       $(SRC_DIR)/timer.cpp \
       $(SERVER_DIR)/main.cpp
-OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
+OBJ = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRC))
 
 all: debug
 
-obj/%.o: %.cpp %.hpp
+$(OBJ_DIR)/%.o: %.cpp %.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@ 
 
 $(TARGET): $(OBJ)
@@ -41,7 +48,8 @@ uninstall:
 
 setup:
 	@mkdir -p obj/src/
-	@mkdir -p obj/server/
+	@mkdir -p obj/server/src/
+	@mkdir -p obj/server/server/
 
 clean:
 	rm -rf $(OBJ_DIR)

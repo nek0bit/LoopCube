@@ -94,6 +94,7 @@ void _ChunkDataSplit::updateLoaded()
 }
 
 // Update all loaded chunks in the split
+#ifndef __HEADLESS
 void _ChunkDataSplit::updateSplit(Camera& camera)
 {
     // TODO Remove me, just for debugging
@@ -114,6 +115,7 @@ void _ChunkDataSplit::renderSplit(SDL_Renderer* renderer, TextureHandler& textur
         chunk->renderAllBlocks(renderer, textures, camera);
     }
 }
+#endif
 
 std::shared_ptr<Chunk> _ChunkDataSplit::getData(long int y)
 {
@@ -175,6 +177,7 @@ std::shared_ptr<_ChunkDataSplit> ChunkGroup::getData(long int x)
     catch (const std::out_of_range& err) { return nullptr; }
 }
 
+#ifndef __HEADLESS
 void ChunkGroup::update(Camera& camera)
 {
     // TODO Remove me, just for testing things out
@@ -195,6 +198,7 @@ void ChunkGroup::render(SDL_Renderer* renderer, TextureHandler& textures, Camera
         split->renderSplit(renderer, textures, camera);
     }
 }
+#endif
 
 // Wrapper for multiple getData calls
 std::shared_ptr<Chunk> ChunkGroup::getChunkAt(const long int x, const long int y)
@@ -222,6 +226,12 @@ std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, 
     }
 
     return ch;
+}
+
+void ChunkGroup::generateChunkAt(const long x, const long y)
+{
+    auto splitX = checkSplitGenerate(x);
+    splitX->second->checkGenerate(y);
 }
 
 ChunkPos ChunkGroup::posToChunkPos(double x, double y) const

@@ -4,10 +4,13 @@
 #include <utility>
 #include <string>
 
+#ifndef __HEADLESS
+#include "fonthandler.hpp"
+#endif
+
 #include "textureinfo.hpp"
 #include "blockinfo.hpp"
 #include "config.hpp"
-#include "fonthandler.hpp"
 
 enum block_enum
 {
@@ -91,6 +94,8 @@ namespace constants
 	extern const std::vector<std::string> content;
 
     // Public stuff
-	extern Config config;
+#ifndef __HEADLESS
+    extern Config config;
     extern FontHandler fontHandler;
+#endif
 }

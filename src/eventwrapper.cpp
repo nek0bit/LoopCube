@@ -4,9 +4,9 @@ EventWrapper::EventWrapper()
     : quit{false},
       vmouse{0, 0, 0, 0, 0},
       controller{nullptr},
-      textMode{false},
+      textMode{false}
 #ifdef __SWITCH__
-      conID{hidGetHandheldMode() ? CONTROLLER_HANDHELD : CONTROLLER_PLAYER_1}
+     ,conID{hidGetHandheldMode() ? CONTROLLER_HANDHELD : CONTROLLER_PLAYER_1}
 #endif
 {
 	keyMapping = {
@@ -171,6 +171,7 @@ void EventWrapper::listen() {
     }
 #endif
 
+    SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		const Uint8* keystate = SDL_GetKeyboardState(NULL);
 

@@ -1,11 +1,8 @@
 #pragma once
 #include <iostream>
 
-#include <SDL2/SDL.h>
-
 #include "timer.hpp"
 #include "chunkgroup.hpp"
-#include "camera.hpp"
 #include "chunk.hpp"
 #include "block.hpp"
 #include "gameobj.hpp"

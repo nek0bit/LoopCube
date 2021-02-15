@@ -215,7 +215,7 @@ void Play::mouseEvents() {
 		case 1:
         {
             
-            const BlockInfo* block = chunk->destroyBlock(withinX, withinY, *inv);
+            const BlockInfo* block = chunk->destroyBlock(withinX, withinY);
             
             // Check if block found
             if (block != nullptr) {

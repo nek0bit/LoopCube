@@ -5,15 +5,17 @@
 #include <memory>
 #include <unordered_map>
 
+#ifndef __HEADLESS
 #include <SDL2/SDL.h>
+#include "vector.hpp"
+#include "size.hpp"
+#include "texturehandler.hpp"
+#endif
 
 #include "chunkgen.hpp"
 #include "chunk.hpp"
-#include "vector.hpp"
-#include "size.hpp"
 #include "constants.hpp"
 #include "generic.hpp"
-#include "texturehandler.hpp"
 
 struct LoadPtr
 {
@@ -43,8 +45,10 @@ struct _ChunkDataSplit
 
     void updateLoaded();
     std::unordered_map<long int, ChunkData>::iterator checkGenerate(long int y);
+#ifndef __HEADLESS
     void updateSplit(Camera& camera);
     void renderSplit(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+#endif
     
     std::shared_ptr<Chunk> getData(long int y);
     
@@ -70,11 +74,14 @@ struct ChunkGroup
     ChunkGroup(std::shared_ptr<ChunkGen> chunkGen);
     ~ChunkGroup() = default;
 
+#ifndef __HEADLESS
     void update(Camera& camera);
     void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+#endif
 
-    std::shared_ptr<Chunk> getChunkAt(const long int x, const long int y);
+    std::shared_ptr<Chunk> getChunkAt(const long x, const long y);
     std::vector<std::shared_ptr<Chunk>> isWithinChunks(const Vec2& vec, const Size& size);
+    void generateChunkAt(const long x, const long y);
 
     ChunkPos posToChunkPos(double x, double y) const;
 

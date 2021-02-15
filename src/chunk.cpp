@@ -17,6 +17,7 @@ Chunk::Chunk(std::shared_ptr<ChunkGen> chunkGen, long int x, long int y)
 Chunk::~Chunk()
 {}
 
+#ifndef __HEADLESS
 void Chunk::updateAll(Camera& camera)
 {
     iterateFunctor(camera, [&](Block& blk) {
@@ -74,6 +75,7 @@ void Chunk::renderAllBlocks(SDL_Renderer* renderer, TextureHandler& textures, Ca
         blk.render(renderer, textures, camera);
     });
 }
+#endif
 
 // Does checking, Slower (but not by that much)
 bool Chunk::placeBlock(unsigned int id, unsigned int x, unsigned int y)
@@ -96,7 +98,7 @@ void Chunk::placeBlockFast(unsigned int id, unsigned int x, unsigned int y)
     updateBlockBorders(x, y, true);
 }
 
-const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y, Inventory& inv)
+const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y)
 {
     std::shared_ptr<Block>& block = data[posToIndex(x, y)];
     
@@ -152,11 +154,13 @@ void Chunk::updateBlockBorders(const int x, const int y, const bool recurseOnce)
     if ( left &&  right &&  bottom && !top && center) center->typeX = 1;
 
     // Sorry for the repetition, im lazy
+#ifndef __HEADLESS
     if (center) center->updateSrc();
     if (left) left->updateSrc();
     if (right) right->updateSrc();
     if (top) top->updateSrc();
     if (bottom) bottom->updateSrc();
+#endif
 
     if (recurseOnce)
     {
@@ -258,6 +262,7 @@ size_t Chunk::posToIndex(const unsigned int x, const unsigned int y) const
     return x + y * MAX_WIDTH;
 }
 
+#ifndef __HEADLESS
 bool Chunk::chunkInView(Camera& camera) const
 {
     SDL_Rect windowRect{0, 0, camera.getWidth(), camera.getHeight()};
@@ -287,3 +292,4 @@ void Chunk::iterateFunctor(Camera& camera, std::function<void(Block&)> call)
         }
     }
 }
+#endif

@@ -20,7 +20,7 @@ Server::Server(const uint32_t port, bool verbose)
       info{nullptr},
       verbose{verbose}
 {
-    int one = 1, err;
+    int yes = 1, no = 0, err;
     // Clear hints struct
     memset(&opts, 0, sizeof opts);
     opts.ai_family = AF_UNSPEC;
@@ -46,12 +46,21 @@ Server::Server(const uint32_t port, bool verbose)
         }
 
         // Allow reuse of this file descriptor
-        if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one)) == -1)
+        if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1)
         {
             close(fd);
             throw NetworkError(NSOCKOPT_ERROR, strerror(errno));
         }
-
+        
+#ifndef __NONODELAY__
+        // Disables the Nagle algorithm
+        if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &no, sizeof(no)) == -1)
+        {
+            close(fd);
+            throw NetworkError(NSOCKOPT_ERROR, strerror(errno));
+        }
+#endif
+        
         if (bind(fd, cur->ai_addr, cur->ai_addrlen) == -1)
         {
             close(fd);
@@ -260,17 +269,17 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
     try
     {
         // *** SINGLE COMMANDS ***
-        if (msg == MSG_QUIT)
+        if (msg == COMMAND_QUIT)
         {
             removeConnection(item, index);
         }
         // *** ARG COMMANDS ***
-        else if (msgSplit.at(0) == "PING")
+        else if (msgSplit.at(0) == COMMAND_PING)
         {
             std::string comb = combineString(msgSplit.begin()+1, msgSplit.end(), " ");
             send(fd, comb.c_str(), comb.length(), 0);
         }
-        else if (msgSplit.at(0) == MSG_PLAYER_POS)
+        else if (msgSplit.at(0) == COMMAND_PLAYER_POS)
         {
             try
             {
@@ -280,6 +289,12 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
             }
             catch (const std::out_of_range& err) {}
             catch (const std::invalid_argument& err) {}
+        }
+        else if (msgSplit.at(0) == COMMAND_GET_CHUNK)
+        {
+            const long int x = std::stol(msgSplit.at(1));
+            const long int y = std::stol(msgSplit.at(2));
+            game.getChunkAt(x, y);
         }
     }
     catch (const std::out_of_range& err) {} // Do nothing     

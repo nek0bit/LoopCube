@@ -7,25 +7,10 @@ GameObject::GameObject(int textureId, double x, double y, double w, double h)
       src{0, 0, 0, 0}
 {}
 
+#ifndef __HEADLESS
 Vec2 GameObject::getPos(Camera& camera) const
 {
 	return position + camera;
-}
-
-// Used for rendering culling
-bool GameObject::shouldCull(Camera& camera)
-{
-    const Vec2 val = getPos(camera);
-    return (val.x + size.w < 0 || val.y + size.h < 0) // Upper-left culling
-        || (val.x - size.w > camera.getWidth() || val.y - size.h > camera.getHeight()); // Bottom-right culling
-}
-
-void GameObject::update()
-{
-	src.x = 0;
-	src.y = 0;
-	src.w = size.w;
-    src.h = size.h;
 }
 
 void GameObject::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
@@ -72,4 +57,23 @@ CollisionInfo GameObject::isColliding(const GameObject &obj2)
 		return info;
 	}
 	return CollisionInfo{};
+}
+
+// Used for rendering culling
+bool GameObject::shouldCull(Camera& camera)
+{
+    const Vec2 val = getPos(camera);
+    return (val.x + size.w < 0 || val.y + size.h < 0) // Upper-left culling
+        || (val.x - size.w > camera.getWidth() || val.y - size.h > camera.getHeight()); // Bottom-right culling
+}
+
+#endif
+
+
+void GameObject::update()
+{
+	src.x = 0;
+	src.y = 0;
+	src.w = size.w;
+    src.h = size.h;
 }

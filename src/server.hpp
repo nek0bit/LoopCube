@@ -21,12 +21,13 @@
 #include "timer.hpp"
 
 // Messages
-constexpr const char* _MSG_SUCCESS = "ACK"; // This shouldn't be sent very often!
-constexpr const char* _MSG_FAIL = "FAIL";
+constexpr const char* _COMMAND_SUCCESS = "ACK"; // This shouldn't be sent very often!
+constexpr const char* _COMMAND_FAIL = "FAIL";
 
-constexpr const char* MSG_QUIT = "QUIT";
-constexpr const char* MSG_PING = "PING";
-constexpr const char* MSG_PLAYER_POS = "PPOS";
+constexpr const char* COMMAND_QUIT = "QUIT";
+constexpr const char* COMMAND_PING = "PING";
+constexpr const char* COMMAND_PLAYER_POS = "PPOS";
+constexpr const char* COMMAND_GET_CHUNK = "GC";
 
 struct Server;
 struct ServerThreadItem;

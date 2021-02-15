@@ -2,7 +2,7 @@
 
 #include <chrono>
 #include <iostream>
-#include <SDL2/SDL.h>
+#include <cmath>
 
 struct Timer
 {

@@ -1,10 +1,23 @@
 #pragma once
 
+#ifndef __HEADLESS
 #include <SDL2/SDL.h>
+#include "texturehandler.hpp"
+#endif
+
+#ifdef __HEADLESS
+struct SDL_Rect
+{
+    int x;
+    int y;
+    int w;
+    int h;
+};
+#endif
+
 #include <cmath>
 #include <cstdint>
 
-#include "texturehandler.hpp"
 #include "vector.hpp"
 #include "size.hpp"
 
@@ -30,6 +43,7 @@ namespace Generic
 
     GridCollision_t gridCollision(unsigned int width, unsigned int height, Vec2 box, const Size& size);
 
+#ifndef __HEADLESS
     namespace Render
     {
         void renderRepeating(SDL_Renderer* renderer, TextureHandler& textures,
@@ -38,4 +52,5 @@ namespace Generic
                              int width, int height, int gap, int top,
                              bool verticle = false, int srcW = -1, int srcH = -1);
     }
+#endif
 }
