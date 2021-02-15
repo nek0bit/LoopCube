@@ -1,4 +1,8 @@
 #pragma once
+#include <iostream>
+#include <string>
+#include <cstdint>
+#include <array>
 #include "gameobj.hpp"
 #include "vector.hpp"
 #include "constants.hpp"
@@ -15,6 +19,9 @@ struct Block: public GameObject
     void updateSrc();
     void renderShadow(SDL_Renderer* renderer, Camera& camera) const;
 #endif
+
+    unsigned char* serialize();
+    void deserialize(const std::string& str);
 
 	const BlockInfo* blockinfo;
     
