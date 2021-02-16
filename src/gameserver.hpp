@@ -18,7 +18,7 @@ struct GameServer
     ~GameServer();
 
     void update(Timer& timer);
-    std::string getChunkAt(const long int x, const long int y);
+    std::vector<unsigned char> checkChunkAt(const long int x, const long int y);
 
     std::mutex chunkLock;
 private:

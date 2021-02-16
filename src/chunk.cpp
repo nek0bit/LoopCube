@@ -227,6 +227,34 @@ std::shared_ptr<Block> Chunk::getBorderBlock(const int x, const int y) const
     return nullptr;
 }
 
+std::vector<unsigned char> Chunk::serialize() const
+{
+    std::vector<unsigned char> byteList;
+
+    for (unsigned i = 0; i < constants::chunkWidth; ++i)
+    {
+        for (unsigned j = 0; j < constants::chunkHeight; ++j)
+        {
+            if (data[posToIndex(i, j)] == nullptr)
+            {
+                byteList.insert(byteList.end(), {255});
+            }
+            else
+            {
+                std::array<unsigned char, 10> block_s = data[posToIndex(i, j)]->serialize();
+                byteList.insert(byteList.end(), block_s.begin(), block_s.end());
+            }
+        }
+    }
+
+    return byteList;
+}
+
+void deserialize(std::vector<unsigned char>& value)
+{
+    
+}
+
 void Chunk::generateChunk()
 {
     chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {

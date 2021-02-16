@@ -15,11 +15,11 @@ void GameServer::update(Timer& timer)
     
 }
 
-std::string GameServer::getChunkAt(const long int x, const long int y)
+std::vector<unsigned char> GameServer::checkChunkAt(const long int x, const long int y)
 {
     chunkLock.lock();
     std::shared_ptr<Chunk> cget;
-    std::string sget("");
+    std::vector<unsigned char> get_s;
     if ((cget = chunks.getChunkAt(x, y)) == nullptr)
     {
         chunks.generateChunkAt(x, y);
@@ -29,9 +29,9 @@ std::string GameServer::getChunkAt(const long int x, const long int y)
     if (cget)
     {
         // Call a function that stringifies the chunk
-        sget = "Some chunk data";
+        get_s = cget->serialize();
     }
     chunkLock.unlock();
 
-    return sget;
+    return get_s;
 }

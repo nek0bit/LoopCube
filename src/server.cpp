@@ -274,7 +274,7 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
             removeConnection(item, index);
         }
         // *** ARG COMMANDS ***
-        else if (msgSplit.at(0) == COMMAND_PING)
+        else if (msgSplit.at(0) == COMMAND_ECHO)
         {
             std::string comb = combineString(msgSplit.begin()+1, msgSplit.end(), " ");
             send(fd, comb.c_str(), comb.length(), 0);
@@ -295,7 +295,8 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
             {
                 const long int x = std::stol(msgSplit.at(1));
                 const long int y = std::stol(msgSplit.at(2));
-                game.getChunkAt(x, y);
+                std::vector<unsigned char> data = game.checkChunkAt(x, y);
+                send(fd, &data[0], data.size(), 0);
             }
             catch (const std::invalid_argument& err) {}
         }

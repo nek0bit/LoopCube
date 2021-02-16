@@ -52,7 +52,7 @@ void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const
 }
 #endif
 
-std::array<unsigned char, 10> Block::serialize()
+std::array<unsigned char, 10> Block::serialize() const
 {
     constexpr uint8_t idSize = 2;
     constexpr uint8_t valSize = 4;
@@ -86,7 +86,7 @@ std::array<unsigned char, 10> Block::serialize()
     return fullRes;
 }
 
-void Block::deserialize(const std::string& str)
+void Block::deserialize(const std::array<unsigned char, 10>& value)
 {
 
 }

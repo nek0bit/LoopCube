@@ -20,8 +20,8 @@ struct Block: public GameObject
     void renderShadow(SDL_Renderer* renderer, Camera& camera) const;
 #endif
 
-    std::array<unsigned char, 10> serialize();
-    void deserialize(const std::string& str);
+    std::array<unsigned char, 10> serialize() const;
+    void deserialize(const std::array<unsigned char, 10>& value);
 
 	const BlockInfo* blockinfo;
     

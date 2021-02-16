@@ -66,6 +66,9 @@ struct Chunk
 
     // Designed for updating block borders
     std::shared_ptr<Block> getBorderBlock(const int x, const int y) const;
+
+    std::vector<unsigned char> serialize() const;
+    void deserialize(std::vector<unsigned char>& value) const;
     
     // Chunk position
     const long int x;
