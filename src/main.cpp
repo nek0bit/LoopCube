@@ -1,7 +1,7 @@
 #include "main.hpp"
 
 void gameLoop() {
-    Timer timer{180};
+    Timer timer{120};
 	Game game{timer};
 	
 	game.init(false);

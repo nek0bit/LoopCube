@@ -30,18 +30,26 @@
 #include "time.hpp"
 #include "timer.hpp"
 
+struct SelectInfo
+{
+    int x;
+    int y;
+};
+
 struct GameClient
 {
     GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize);
     ~GameClient();
 
     void update(EventWrapper& events);
-    void render(SDL_Renderer* renderer, TextureHandler& textures);
+    void render(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events);
 private:
     WinSize& winSize;
+    SelectInfo getSelection(EventWrapper& events);
+    void drawSelection(SDL_Renderer* renderer, const SelectInfo pos);
     void handleCamera();
     void deadParticles();
-    void mouseEvents();
+    void mouseEvents(EventWrapper& events);
 
     //std::unique_ptr<Inventory> inv;
     ChunkGroup serverChunks;
@@ -50,6 +58,10 @@ private:
     // Entities
     Player mainPlayer;
     std::vector<std::shared_ptr<Entity>> entities;
+
+    Animation fade;
+
+    std::vector<GravityParticle> particles;
 
     Time time;
     Timer& timer;

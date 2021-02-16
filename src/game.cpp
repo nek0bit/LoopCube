@@ -101,11 +101,11 @@ void Game::render() {
     {
         switch(state.top()) {
         case STATE_MAIN_MENU:
-            if (game != nullptr) game->render(renderer, *textures);
+            if (game != nullptr) game->render(renderer, *textures, events);
             if (menu != nullptr) menu->render();
             break;
         case STATE_PLAYING:
-            if (game != nullptr) game->render(renderer, *textures);
+            if (game != nullptr) game->render(renderer, *textures, events);
             break;
         default:
             break;
@@ -141,7 +141,7 @@ void Game::init(bool fullscreen = false) {
 	win_flags = win_flags | SDL_WINDOW_RESIZABLE;
 
 	rend_flags = rend_flags | SDL_RENDERER_ACCELERATED;
-	rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
+	//rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
 
     SDL_StartTextInput();
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) == 0) {
