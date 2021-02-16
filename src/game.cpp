@@ -72,12 +72,12 @@ void Game::update()
         case STATE_PLAYING:
             // Check if the game is nullptr, then create it
             if (game == nullptr) {
-                game = std::shared_ptr<Play>(new Play(renderer, *textures, events, timer, winSize));
+                game = std::shared_ptr<GameClient>(new GameClient("127.0.0.1", 8726, timer, winSize));
                 // Let's pre-load a frame so everything can generate and render
                 // This may need to change depending on world generation in the future
-                game->update();
+                game->update(events);
             } else {
-                game->update();
+                game->update(events);
             }
             break;
         default:
@@ -101,11 +101,11 @@ void Game::render() {
     {
         switch(state.top()) {
         case STATE_MAIN_MENU:
-            if (game != nullptr) game->render();
+            if (game != nullptr) game->render(renderer, *textures);
             if (menu != nullptr) menu->render();
             break;
         case STATE_PLAYING:
-            if (game != nullptr) game->render();
+            if (game != nullptr) game->render(renderer, *textures);
             break;
         default:
             break;

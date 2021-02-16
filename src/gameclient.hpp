@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstdint>
 #include <random>
 #include <cmath>
 #include <ctime>
@@ -29,39 +30,23 @@
 #include "time.hpp"
 #include "timer.hpp"
 
-struct Play
+struct GameClient
 {
-	Play(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize);
-	~Play();
+    GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize);
+    ~GameClient();
 
-	void render();
-	void update();
+    void update(EventWrapper& events);
+    void render(SDL_Renderer* renderer, TextureHandler& textures);
 private:
     WinSize& winSize;
-	void handleCamera();
-	void drawSelection(int* p1, int* p2);
-	void deadParticles();
-	void mouseEvents();
-	
-    SDL_Renderer* renderer;
-    TextureHandler& textures;
-	EventWrapper& events;
-    std::shared_ptr<ChunkGen> generator;
-	ChunkGroup chunks;
-	std::unique_ptr<Inventory> inv;
-	Camera camera;
+    void handleCamera();
+    void deadParticles();
+    void mouseEvents();
 
-	// Entities
-	Player player;
-	std::vector<Entity*> entities;
+    //std::unique_ptr<Inventory> inv;
+    ChunkGroup serverChunks;
+    Camera camera;
 
-	// Animations
-	Animation fade;
-	std::vector<GravityParticle> particles;
-
-	Time time;
+    Time time;
     Timer& timer;
-
-    std::shared_ptr<Background> background;
-	std::vector<Structure*> structures;
 };
