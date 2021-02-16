@@ -47,6 +47,10 @@ private:
     ChunkGroup serverChunks;
     Camera camera;
 
+    // Entities
+    Player mainPlayer;
+    std::vector<std::shared_ptr<Entity>> entities;
+
     Time time;
     Timer& timer;
 };

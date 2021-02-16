@@ -22,7 +22,7 @@ Player::Player()
 Player::~Player()
 {}
 
-void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<Entity*> entities)
+void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<std::shared_ptr<Entity>> entities)
 {
 	updateBasicPhysics(chunks, timer);
 	frame.tick(timer, 50);
@@ -69,7 +69,7 @@ void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<Entity*> entit
 	src.h = sprite.height;
 
 	// See if touching entities
-	for (auto*& entity: entities)
+	for (auto& entity: entities)
     {
 		CollisionInfo info = isColliding(*entity);
 		if (info.colliding)

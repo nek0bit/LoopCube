@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <memory>
 #include <cmath>
 
 #include "entity.hpp"
@@ -12,7 +13,7 @@ struct Player: public Entity
 	Player();
 	~Player();
 
-	void update(ChunkGroup &chunks, Timer& timer, std::vector<Entity*> entities);
+	void update(ChunkGroup &chunks, Timer& timer, std::vector<std::shared_ptr<Entity>> entities);
 	
 	// Movement
 	void jump(ChunkGroup &chunks, Timer& timer);

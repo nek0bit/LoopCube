@@ -257,10 +257,12 @@ void deserialize(std::vector<unsigned char>& value)
 }
 
 void Chunk::generateChunk()
-{
+{    
     if (chunkGen != nullptr) chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {
         placeBlock(id, x, y);
     }, MAX_WIDTH, MAX_HEIGHT);
+    else
+        placeBlock(0, 0, 0);
 
 }
 

@@ -38,11 +38,15 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 
     for (auto& chunk: inChunks)
     {
+        if (chunk == nullptr) continue;
         t_blockCollection& data = chunk->data;
+        
         for (auto& block: data) {
             if (block == nullptr) continue;
+            
             auto blockinfo = block->blockinfo;
             CollisionInfo info = isColliding(*block);
+            
             while (info == true && blockinfo->noCollision != true) {
                 return info;
             }

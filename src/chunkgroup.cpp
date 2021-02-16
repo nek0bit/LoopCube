@@ -276,7 +276,10 @@ ChunkGroup::checkSplitGenerate(long int x)
     if (ind == data.end())
     {
         // Generate the split
-        data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance, chunkGen)});
+        if (isClient)
+            data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance)});
+        else
+            data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance, chunkGen)});
         auto ret = data.find(x);
 
         auto splitLeft = data.find(x - 1),
