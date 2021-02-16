@@ -31,7 +31,7 @@ void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& te
                                       int texture, int clipWidth,
                                       int clipHeight, int offsetX, int offsetY,
                                       int width, int height, int gap, int top,
-                                      bool verticle, int srcW, int srcH)
+                                      bool verticle, int srcX, int srcY, int srcW, int srcH)
 {
     srcW = srcW == -1 ? width : srcW;
     srcH = srcH == -1 ? height : srcH;
@@ -41,7 +41,7 @@ void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& te
     {
 		for (int j = -1; verticle ? (height + gap) * j < clipHeight + (height + gap) : j < 0; j++) // Vertical grid
         {
-			SDL_Rect src{0, 0, srcW, srcH};
+			SDL_Rect src{srcX, srcY, srcW, srcH};
             
 		    SDL_Rect block{(offsetX % (width + gap)) + ((width + gap) * i),
 				verticle ? ((offsetY % (height + gap)) + top) + ((height + gap) * j) : top + offsetY,

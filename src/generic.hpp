@@ -50,7 +50,8 @@ namespace Generic
                              int texture, int clipWidth,
                              int clipHeight, int offsetX, int offsetY,
                              int width, int height, int gap, int top,
-                             bool verticle = false, int srcW = -1, int srcH = -1);
+                             bool verticle = false, int srcX = 0, int srcY = 0,
+                             int srcW = -1, int srcH = -1);
     }
 #endif
 }

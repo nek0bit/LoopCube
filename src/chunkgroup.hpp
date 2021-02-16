@@ -39,6 +39,7 @@ struct ChunkData
 
 struct _ChunkDataSplit
 {
+    _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance);
     _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
                     std::shared_ptr<ChunkGen> chunkGen);
     ~_ChunkDataSplit() = default;
@@ -60,6 +61,7 @@ struct _ChunkDataSplit
     std::shared_ptr<_ChunkDataSplit> left;
     std::shared_ptr<_ChunkDataSplit> right;
 private:
+    bool isClient;
     void prepareLoaded();
     const long int x;
     std::shared_ptr<ChunkGen> chunkGen;
@@ -71,6 +73,7 @@ private:
 
 struct ChunkGroup
 {
+    ChunkGroup();
     ChunkGroup(std::shared_ptr<ChunkGen> chunkGen);
     ~ChunkGroup() = default;
 
@@ -88,6 +91,7 @@ struct ChunkGroup
     LoadPtr loadPtr;
     LoadDistance& loadDistance;
 private:
+    bool isClient; // Client chunks work differently from server chunks
     std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>>::iterator
         checkSplitGenerate(long int x);
     void updateLoaded();

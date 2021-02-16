@@ -3,6 +3,19 @@
 //***************************************
 // _ChunkDataSplit: For vertical chunks
 //***************************************
+_ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance)
+    : loadPtr{loadPtr},
+      loadDistance{loadDistance},
+      loadedChunks{},
+      left{nullptr},
+      right{nullptr},
+      isClient{true},
+      x{x},
+      chunkGen{nullptr}
+{
+    prepareLoaded();
+}
+
 _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
                                  std::shared_ptr<ChunkGen> chunkGen)
     : loadPtr{loadPtr},
@@ -10,13 +23,10 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
       loadedChunks{},
       left{nullptr},
       right{nullptr},
+      isClient{false},
       x{x},
       chunkGen{chunkGen}
-{
-#ifndef __HEADLESS
-    prepareLoaded();
-#endif
-}
+{}
 
 // Generates a chunk if it isn't loaded
 std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate(long int y)
@@ -137,19 +147,26 @@ void _ChunkDataSplit::prepareLoaded()
 // Handles most abstractions
 //***************************************************
 
+ChunkGroup::ChunkGroup()
+    : loadPtr{0, 0},
+      loadDistance{constants::loadDistance},
+      isClient{true},
+      chunkGen{nullptr},
+      loadedSplits{},
+      data{}
+{
+    prepareLoaded();
+    updateLoaded();
+}
+
 ChunkGroup::ChunkGroup(std::shared_ptr<ChunkGen> chunkGen)
-    :  loadPtr{-5, -5},
+    :  loadPtr{0, 0},
        loadDistance{constants::loadDistance},
+       isClient{false},
        chunkGen{chunkGen},
        loadedSplits{},
        data{}
-{
-    // Generate vertical splits
-#ifndef __HEADLESS
-    prepareLoaded();
-    updateLoaded();
-#endif
-}
+{}
       
 void ChunkGroup::updateLoaded()
 {
@@ -258,7 +275,7 @@ ChunkGroup::checkSplitGenerate(long int x)
     // Check if element doesn't exists
     if (ind == data.end())
     {
-        // Generate the chunk
+        // Generate the split
         data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance, chunkGen)});
         auto ret = data.find(x);
 

@@ -124,6 +124,7 @@ void Chunk::updateBlockBorders(const int x, const int y, const bool recurseOnce)
         center = getBorderBlock(x, y);
         
     // Enjoy this ugly bit of code :)
+    // TODO use bitmasks here (would clean this up A LOT)
     
     // None on all sides
     if (!left && !right && !bottom && !top && center) center->typeX = 15;
@@ -257,7 +258,7 @@ void deserialize(std::vector<unsigned char>& value)
 
 void Chunk::generateChunk()
 {
-    chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {
+    if (chunkGen != nullptr) chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {
         placeBlock(id, x, y);
     }, MAX_WIDTH, MAX_HEIGHT);
 

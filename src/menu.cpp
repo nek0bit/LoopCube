@@ -247,9 +247,10 @@ void Menu::renderConfigMenu()
 void Menu::renderBackground()
 {
     bgX += 100 * timer.deltaTime;
-    Generic::Render::renderRepeating(renderer, textures, TEXTURE_TITLE_1, winSize.w, winSize.h,
+    Generic::Render::renderRepeating(renderer, textures, TEXTURE_MOON_BLOCK, winSize.w, winSize.h,
                                      bgX, bgY, 40, 40, 0, 0,
-                                     true, constants::blockImgSize, constants::blockImgSize);
+                                     true, 4*constants::blockImgSize, 0,
+                                     constants::blockImgSize, constants::blockImgSize);
 }
 
 void Menu::render()
