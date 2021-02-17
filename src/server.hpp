@@ -88,6 +88,9 @@ struct Server
     void startServer(const size_t threadCount = 1); // Note: Blocking
     void serverThread(const size_t index) noexcept;
     void startGameThread() noexcept;
+    
+    std::atomic<bool> exit;
+    int fd;
 private:
     template <typename Iterator>
     std::string combineString(Iterator begin,
@@ -112,10 +115,8 @@ private:
     std::string address;
     std::vector<ServerThreadItem> threadPool;
     std::mutex tpLock; // threadPoolLock
-    std::atomic<bool> exit;
     std::thread gameThread;
     GameServer game;
-    int fd;
     addrinfo opts, *info;
 
     bool verbose;

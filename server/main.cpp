@@ -23,6 +23,7 @@ int main()
         ServLog::log("Trying to initialize server...");
         serverPtr = new Server(DEFAULT_PORT);
 
+        // TODO make this startServer call exit (it does not for some reason)
         // Note: Blocks here
         serverPtr->startServer(4);
     }

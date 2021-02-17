@@ -1,7 +1,9 @@
 #include "gameclient.hpp"
 
-GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize)
-    : clientSocket{std::make_shared<ClientSocket>(address, port)},
+GameClient::GameClient(Timer& timer, WinSize& winSize)
+    : server{nullptr},
+      clientSocket{nullptr},
+      serverThread{},
       winSize{winSize},
       serverChunks{},
       camera{&winSize},
@@ -12,12 +14,59 @@ GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize
       time{8600, 28500, 8600, 22000, 1700, 1700},
       timer{timer}
 {
-    camera.x = 150;
-    camera.y = 450;
+    camera.x = 0;
+    camera.y = 0;
+
+    try {
+        server = std::make_shared<Server>(8726);
+        serverThread = std::thread(&GameClient::serverThreadFunction, this);
+        clientSocket = std::make_shared<ClientSocket>("127.0.0.1", 8726);
+    }
+    catch (const std::exception& error)
+    {
+        std::cout << error.what() << std::endl;
+    }
+}
+
+GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize)
+    : server{nullptr},
+      clientSocket{nullptr},
+      serverThread{},
+      winSize{winSize},
+      serverChunks{},
+      camera{&winSize},
+      mainPlayer{},
+      entities{},
+      fade{60},
+      particles{},
+      time{8600, 28500, 8600, 22000, 1700, 1700},
+      timer{timer}
+{
+    camera.x = 0;
+    camera.y = 0;
+
+    clientSocket = std::make_shared<ClientSocket>(address, port);
 }
 
 GameClient::~GameClient()
-{}
+{
+    server.reset();
+    server = nullptr;
+
+    if (serverThread.joinable()) serverThread.join();
+}
+
+void GameClient::serverThreadFunction()
+{
+    try
+    {
+        server->startServer(1);
+    }
+    catch(const NetworkError& err)
+    {
+        std::cerr << "Server thread error: " << err.what() << std::endl;
+    }
+}
 
 void GameClient::update(EventWrapper& events)
 {

@@ -15,6 +15,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "server.hpp"
 #include "clientsocket.hpp"
 #include "winsize.hpp"
 #include "eventwrapper.hpp"
@@ -43,15 +44,22 @@ struct SelectInfo
 
 struct GameClient
 {
+    GameClient(Timer& timer, WinSize& winSize);
     GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize);
     ~GameClient();
 
     void update(EventWrapper& events);
     void render(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events);
 private:
+    // Threading
+    std::shared_ptr<Server> server;
     std::shared_ptr<ClientSocket> clientSocket;
+    std::thread serverThread;
+    std::mutex csLock;
+    
     WinSize& winSize;
     SelectInfo getSelection(EventWrapper& events);
+    void serverThreadFunction();
     void drawSelection(SDL_Renderer* renderer, const SelectInfo pos);
     void handleCamera();
     void deadParticles();

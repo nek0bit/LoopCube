@@ -31,6 +31,7 @@ struct ClientSocket
     ClientSocket(const std::string address, const uint16_t port);
     ~ClientSocket();
 
+    void startListening();
 private:
     void closeSocket();
 

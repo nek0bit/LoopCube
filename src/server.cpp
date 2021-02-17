@@ -13,6 +13,8 @@ Server::Server(const uint32_t port, bool verbose)
     : port{port},
       address{},
       threadPool{},
+      tpLock{},
+      exit{false},
       gameThread{},
       game{},
       fd{},
@@ -20,6 +22,7 @@ Server::Server(const uint32_t port, bool verbose)
       info{nullptr},
       verbose{verbose}
 {
+    constexpr int QUEUE = 10;
     int yes = 1, no = 0, err;
     // Clear hints struct
     memset(&opts, 0, sizeof opts);
@@ -87,7 +90,21 @@ Server::Server(const uint32_t port, bool verbose)
 #ifndef __NOIPLOG__
         address = getAddress(cur->ai_addr);
 #endif
-    }    
+    }
+
+    // Start listening for connections
+    if (listen(fd, QUEUE) == -1)
+    {
+        std::string msg = "Failed to listen: ";
+        msg += strerror(errno);
+        throw NetworkError(NLISTEN_ERROR, msg.c_str());
+    }
+    else
+    {
+        std::string msg = "Server listening at ";
+        msg += address + std::string(":") + std::to_string(port);
+        ServLog::info(msg);
+    }
 }
 
 Server::~Server()
@@ -122,6 +139,7 @@ Server::~Server()
     verbose && ServLog::log("Waiting for GameServer thread to finish...");
     if (gameThread.joinable()) gameThread.join();
     
+    shutdown(fd, SHUT_RDWR); // Stop all accept calls and stuff
     close(fd);
 }
 
@@ -155,7 +173,7 @@ void Server::startGameThread() noexcept
 {
     Timer TPS = 30;
     
-    while (!exit.load())
+    while (exit.load() == false)
     {
         TPS.setTime();
 
@@ -168,24 +186,9 @@ void Server::startGameThread() noexcept
 
 void Server::startServer(const size_t threadCount)
 {
-    constexpr int QUEUE = 10;
-
     // Start the game server + it's thread
     gameThread = std::thread(&Server::startGameThread, this);
     
-    // Start listening for connections
-    if (listen(fd, QUEUE) == -1)
-    {
-        std::string msg = "Failed to listen: ";
-        msg += strerror(errno);
-        throw NetworkError(NLISTEN_ERROR, msg.c_str());
-    }
-    else
-    {
-        std::string msg = "Server listening at ";
-        msg += address + std::string(":") + std::to_string(port);
-        ServLog::info(msg);
-    }
 
     // Create threadpool
     for (size_t i = 0; i < threadCount; ++i)
@@ -206,9 +209,8 @@ void Server::startServer(const size_t threadCount)
 
         if ((connection = accept(fd, (sockaddr*)&incoming, &sin_size)) == -1)
         {
-            std::string msg = "Failed to accept connection: ";
-            msg += strerror(errno);
-            ServLog::warn(msg);
+            if (exit.load() == true)
+                break;
             continue;
         }
         else
