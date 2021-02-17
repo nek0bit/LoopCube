@@ -1,7 +1,8 @@
 #include "gameclient.hpp"
 
 GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize)
-    : winSize{winSize},
+    : clientSocket{std::make_shared<ClientSocket>(address, port)},
+      winSize{winSize},
       serverChunks{},
       camera{&winSize},
       mainPlayer{},
@@ -16,8 +17,7 @@ GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize
 }
 
 GameClient::~GameClient()
-{
-}
+{}
 
 void GameClient::update(EventWrapper& events)
 {

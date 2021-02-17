@@ -2,6 +2,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
+#include <thread>
+#include <mutex>
+#include <atomic>
 #include <cstdint>
 #include <random>
 #include <cmath>
@@ -11,6 +15,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "clientsocket.hpp"
 #include "winsize.hpp"
 #include "eventwrapper.hpp"
 #include "constants.hpp"
@@ -44,6 +49,7 @@ struct GameClient
     void update(EventWrapper& events);
     void render(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events);
 private:
+    std::shared_ptr<ClientSocket> clientSocket;
     WinSize& winSize;
     SelectInfo getSelection(EventWrapper& events);
     void drawSelection(SDL_Renderer* renderer, const SelectInfo pos);
