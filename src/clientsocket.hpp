@@ -28,14 +28,14 @@ private:
 
 struct ClientSocket
 {
-    ClientSocket(const std::string address, const uint16_t port);
+    ClientSocket(const char* address, const uint16_t port);
     ~ClientSocket();
 
     void startListening();
 private:
     void closeSocket();
 
-    const std::string address;
+    std::string address;
     const uint16_t port;
     
     int fd;

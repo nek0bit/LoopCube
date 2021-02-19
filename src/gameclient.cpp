@@ -17,14 +17,15 @@ GameClient::GameClient(Timer& timer, WinSize& winSize)
     camera.x = 0;
     camera.y = 0;
 
-    try {
+    try
+    {
         server = std::make_shared<Server>(8726);
         serverThread = std::thread(&GameClient::serverThreadFunction, this);
-        clientSocket = std::make_shared<ClientSocket>("127.0.0.1", 8726);
+        clientSocket = std::make_shared<ClientSocket>(nullptr, 8726);
     }
     catch (const std::exception& error)
     {
-        std::cout << error.what() << std::endl;
+        std::cout << "Exception: " << error.what() << std::endl;
     }
 }
 
@@ -45,7 +46,7 @@ GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize
     camera.x = 0;
     camera.y = 0;
 
-    clientSocket = std::make_shared<ClientSocket>(address, port);
+    clientSocket = std::make_shared<ClientSocket>(address.c_str(), port);
 }
 
 GameClient::~GameClient()
