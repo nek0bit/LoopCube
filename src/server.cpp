@@ -38,8 +38,8 @@ Server::Server(const uint32_t port, bool verbose)
 
     // Loop through resolution entries
     std::string tryingOther = (verbose ? "\nTrying another one if available..." : "");
-    addrinfo* cur = nullptr;
-    for (cur = info; cur != nullptr; cur = cur->ai_next)
+    addrinfo* cur = info;
+    for (; cur != nullptr; cur = cur->ai_next)
     {
         if ((fd = socket(cur->ai_family, cur->ai_socktype, cur->ai_protocol)) == -1)
         {
@@ -254,7 +254,7 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
     
     // KEEP ME COMMENTED OUT
     // Telnet debugger
-    if(*(msg.end()-1)=='\n'&&*(msg.end()-2)=='\r'){msg.erase(msg.end()-2, msg.end());}
+    //if(*(msg.end()-1)=='\n'&&*(msg.end()-2)=='\r'){msg.erase(msg.end()-2, msg.end());}
 
     // Split a string
     std::istringstream sm(msg);
@@ -273,6 +273,7 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
         // *** SINGLE COMMANDS ***
         if (msg == COMMAND_QUIT)
         {
+            // If our client is a good boy!
             removeConnection(item, index);
         }
         // *** ARG COMMANDS ***

@@ -4,6 +4,7 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
     : address{},
       port{port}
 {
+    int no = 0;
     std::string strPort = std::to_string(port);
 
     if (address != NULL) this->address = std::string(address);
@@ -30,17 +31,20 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
     if (cur == nullptr)
         throw ConnectionError("lookup: Failed to connect to server.");
 
-    // Now we start recieving!
+    
+#ifndef __NONODELAY__
+    // Disables the Nagle algorithm, disables verification
+    if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &no, sizeof(no)) == -1)
+    {
+        close(fd);
+        throw ConnectionError(strerror(errno));
+    }
+#endif
 }
 
 ClientSocket::~ClientSocket()
 {
     closeSocket();
-}
-
-void ClientSocket::startListening()
-{
-
 }
 
 void ClientSocket::closeSocket()

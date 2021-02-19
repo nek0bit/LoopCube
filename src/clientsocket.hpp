@@ -11,11 +11,7 @@
 #include <memory>
 #include <unistd.h>
 
-#include <netdb.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
+#include "socketwrapper.hpp"
 
 struct ConnectionError: public std::exception
 {
@@ -31,14 +27,13 @@ struct ClientSocket
     ClientSocket(const char* address, const uint16_t port);
     ~ClientSocket();
 
-    void startListening();
+    int fd;
 private:
     void closeSocket();
 
     std::string address;
     const uint16_t port;
     
-    int fd;
     addrinfo hints, *serverinfo;
     
 };
