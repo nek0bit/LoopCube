@@ -31,7 +31,17 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
     if (cur == nullptr)
         throw ConnectionError("lookup: Failed to connect to server.");
 
-    fcntl(fd, F_SETFL, O_NONBLOCK);
+    // Make socket non-blocking
+    int flags;
+    if ((flags = fcntl(fd, F_GETFL)) == -1)
+        throw ConnectionError(strerror(errno));
+    else
+        flags |= O_NONBLOCK;
+
+    if (fcntl(fd, F_SETFL, flags) == -1)
+    {
+        throw ConnectionError(strerror(errno));
+    }
     
 #ifndef __NONODELAY__
     // Disables the Nagle algorithm, disables verification

@@ -117,6 +117,7 @@ private:
     std::vector<ServerThreadItem> threadPool;
     std::mutex tpLock; // threadPoolLock
     std::thread gameThread;
+    fd_set checkaccept; // For accept checking
     GameServer game;
     addrinfo opts, *info;
 

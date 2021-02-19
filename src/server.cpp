@@ -85,7 +85,6 @@ Server::Server(const uint32_t port, bool verbose)
     }
     else
     {
-        /*
         int flags;
         if ((flags = fcntl(fd, F_GETFL)) == -1)
         {
@@ -99,8 +98,6 @@ Server::Server(const uint32_t port, bool verbose)
         {
             throw NetworkError(NSOCKBIND_ERROR, strerror(errno));
         }
-        */
-        // This causes accept to be non-blocking, which is good but spikes cpu usage completely...
         
         verbose && ServLog::log(std::string{"Successfully opened socket at file descriptor "} +
                                 std::to_string(fd) + std::string{"."});
@@ -123,6 +120,9 @@ Server::Server(const uint32_t port, bool verbose)
         msg += address + std::string(":") + std::to_string(port);
         ServLog::info(msg);
     }
+
+    FD_ZERO(&checkaccept);
+    FD_SET(fd, &checkaccept);
 }
 
 Server::~Server()
@@ -219,64 +219,73 @@ void Server::startServer(const size_t threadCount)
         tpLock.unlock();
     }
 
+    
     while (!exit.load())
     {
         sockaddr_storage incoming;
         socklen_t sin_size = sizeof(incoming);
         int connection;
 
-        if ((connection = accept(fd, (sockaddr*)&incoming, &sin_size)) == -1)
-        {
-            if (exit.load() == true)
-                break;
-            continue;
-        }
-        else
-        {
-            if (verbose)
-            {
-                std::string msg = "Incoming connection at file descriptor ";
-                ServLog::log(msg + std::to_string(connection));
-            }
+        fd_set check_copy = checkaccept;
+        timeval time{5, 0};
 
-            int flags;
-            if ((flags = fcntl(connection, F_GETFL)) == -1)
+        if (select(fd+1, &check_copy, NULL, NULL, &time) != -1 &&
+            FD_ISSET(fd, &check_copy)) // Only polling one item
+        {
+            if ((connection = accept(fd, (sockaddr*)&incoming, &sin_size)) == -1)
             {
                 if (exit.load() == true)
                     break;
                 continue;
             }
             else
-                flags |= O_NONBLOCK;
-            
-            
-            if (fcntl(connection, F_SETFL, flags) == -1)
             {
-                if (exit.load() == true)
-                    break;
-                continue;
-            }
-        }
-        
+                if (verbose)
+                {
+                    std::string msg = "Incoming connection at file descriptor ";
+                    ServLog::log(msg + std::to_string(connection));
+                }
+
+                int flags;
+                if ((flags = fcntl(connection, F_GETFL)) == -1)
+                {
+                    if (exit.load() == true)
+                        break;
+                    continue;
+                }
+                else
+                    flags |= O_NONBLOCK;
+            
+            
+                if (fcntl(connection, F_SETFL, flags) == -1)
+                {
+                    if (exit.load() == true)
+                        break;
+                    continue;
+                }
+
+                
 #ifndef __NOIPLOG__
-        // Print information regarding new connection
-        std::string ipMsg = "Server: Got connection from ";
-        ipMsg += getAddress((sockaddr*)&incoming);
-        ServLog::log(ipMsg);
+                // Print information regarding new connection
+                std::string ipMsg = "Server: Got connection from ";
+                ipMsg += getAddress((sockaddr*)&incoming);
+                ServLog::log(ipMsg);
 #endif
         
-        // Add to smallest thread
-        ServerThreadItem& low = minThreadCount();
+                // Add to smallest thread
+                ServerThreadItem& low = minThreadCount();
 
-        tpLock.lock();
-        // Add poll to pollfd vector
-        pollfd newPoll;
-        newPoll.fd = connection;
-        newPoll.events = POLLIN;
+                tpLock.lock();
+                // Add poll to pollfd vector
+                pollfd newPoll;
+                newPoll.fd = connection;
+                newPoll.events = POLLIN;
         
-        low.connections.push_back(newPoll);
-        low.connectionData.push_back({"", 0.0, 0.0});
-        tpLock.unlock();
+                low.connections.push_back(newPoll);
+                low.connectionData.push_back({"", 0.0, 0.0});
+                tpLock.unlock();
+            }
+        }        
     }
 }
 
@@ -389,8 +398,7 @@ void Server::serverThread(const size_t index) noexcept
             ServerThreadItem& item = threadPool.at(index);
             tpLock.unlock();
 
-            std::cout << "Thread poll" << std::endl;
-            int pl = poll(&item.connections[0], item.connections.size(), 5000);
+            int pl = poll(&item.connections[0], item.connections.size(), 300);
             
             if (pl == -1)
             {
