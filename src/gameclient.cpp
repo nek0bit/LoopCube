@@ -22,6 +22,7 @@ GameClient::GameClient(Timer& timer, WinSize& winSize)
         server = std::make_shared<Server>(8726);
         serverThread = std::thread(&GameClient::serverThreadFunction, this);
         clientSocket = std::make_shared<ClientSocket>(nullptr, 8726);
+        serverChunks.setFd(clientSocket->fd);
     }
     catch (const std::exception& error)
     {

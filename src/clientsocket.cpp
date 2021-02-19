@@ -58,10 +58,26 @@ ClientSocket::~ClientSocket()
 
 void ClientSocket::checkSocket(ChunkGroup& chunks)
 {
-    char msg[256];
-    if (recv(fd, msg, sizeof(msg), 0) != -1)
+    constexpr size_t BUF_SIZE = 2048;
+    int bc;
+    char buf[BUF_SIZE];
+    if ((bc = recv(fd, buf, BUF_SIZE-1, 0)) != -1)
     {
-        std::cout << "Got data!: " << msg << std::endl;
+        buf[bc] = '\0';
+        char* noByte = buf;
+        noByte++; // Skips the action
+        switch (buf[0])
+        {
+        case ACTION_ECHO:
+            std::cout << "Recieved ECHO: " << noByte << std::endl;
+            break;
+        case ACTION_GET_CHUNK:
+            std::cout << "Recieved GET_CHUNK: " << noByte << std::endl;
+            chunks;
+            break;
+        default:
+            break;
+        }
     }
 }
 

@@ -324,7 +324,8 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
         // *** ARG COMMANDS ***
         else if (msgSplit.at(0) == COMMAND_ECHO)
         {
-            std::string comb = combineString(msgSplit.begin()+1, msgSplit.end(), " ");
+            std::string comb = std::string{ACTION_ECHO} +
+                combineString(msgSplit.begin()+1, msgSplit.end(), " ");
             send(fd, comb.c_str(), comb.length(), 0);
         }
         else if (msgSplit.at(0) == COMMAND_PLAYER_POS)
@@ -343,7 +344,9 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
             {
                 const long int x = std::stol(msgSplit.at(1));
                 const long int y = std::stol(msgSplit.at(2));
-                std::vector<unsigned char> data = game.checkChunkAt(x, y);
+                std::vector<unsigned char> data = {ACTION_GET_CHUNK};
+                std::vector<unsigned char> getChunkAt = game.checkChunkAt(x, y);
+                data.insert(data.end(), getChunkAt.begin(), getChunkAt.end());
                 send(fd, &data[0], data.size(), 0);
             }
             catch (const std::invalid_argument& err) {}
@@ -398,7 +401,7 @@ void Server::serverThread(const size_t index) noexcept
             ServerThreadItem& item = threadPool.at(index);
             tpLock.unlock();
 
-            int pl = poll(&item.connections[0], item.connections.size(), 300);
+            int pl = poll(&item.connections[0], item.connections.size(), 100);
             
             if (pl == -1)
             {

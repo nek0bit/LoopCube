@@ -12,6 +12,7 @@
 #include "texturehandler.hpp"
 #endif
 
+#include "api.hpp"
 #include "chunkgen.hpp"
 #include "chunk.hpp"
 #include "constants.hpp"
@@ -39,9 +40,11 @@ struct ChunkData
 
 struct _ChunkDataSplit
 {
-    _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance);
     _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
-                    std::shared_ptr<ChunkGen> chunkGen);
+                    int& fd, bool& isFdSet, bool& chunkReady);
+    _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
+                    std::shared_ptr<ChunkGen> chunkGen, int& fd,
+                    bool& isFdSet, bool& chunkReady);
     ~_ChunkDataSplit() = default;
 
     void updateLoaded();
@@ -61,6 +64,9 @@ struct _ChunkDataSplit
     std::shared_ptr<_ChunkDataSplit> left;
     std::shared_ptr<_ChunkDataSplit> right;
 private:
+    bool& isFdSet;
+    bool& chunkReady;
+    int& fd;
     bool isClient;
     void prepareLoaded();
     const long int x;
@@ -85,12 +91,18 @@ struct ChunkGroup
     std::shared_ptr<Chunk> getChunkAt(const long x, const long y);
     std::vector<std::shared_ptr<Chunk>> isWithinChunks(const Vec2& vec, const Size& size);
     void generateChunkAt(const long x, const long y);
+    void loadFromDeserialize(std::vector<unsigned char>& value, bool ignoreFirstByte = true);
+
+    void setFd(const int fd);
 
     ChunkPos posToChunkPos(double x, double y) const;
 
     LoadPtr loadPtr;
     LoadDistance& loadDistance;
+    bool chunkReady;
 private:
+    bool isFdSet;
+    int fd;
     bool isClient; // Client chunks work differently from server chunks
     std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>>::iterator
         checkSplitGenerate(long int x);

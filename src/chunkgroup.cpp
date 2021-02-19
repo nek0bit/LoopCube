@@ -3,12 +3,16 @@
 //***************************************
 // _ChunkDataSplit: For vertical chunks
 //***************************************
-_ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance)
+_ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
+                                 int& fd, bool& isFdSet, bool& chunkReady)
     : loadPtr{loadPtr},
       loadDistance{loadDistance},
       loadedChunks{},
       left{nullptr},
       right{nullptr},
+      isFdSet{isFdSet},
+      chunkReady{chunkReady},
+      fd{fd},
       isClient{true},
       x{x},
       chunkGen{nullptr}
@@ -17,12 +21,16 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
 }
 
 _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
-                                 std::shared_ptr<ChunkGen> chunkGen)
+                                 std::shared_ptr<ChunkGen> chunkGen, int& fd,
+                                 bool& isFdSet, bool& chunkReady)
     : loadPtr{loadPtr},
       loadDistance{loadDistance},
       loadedChunks{},
       left{nullptr},
       right{nullptr},
+      isFdSet{isFdSet},
+      chunkReady{chunkReady},
+      fd{fd},
       isClient{false},
       x{x},
       chunkGen{chunkGen}
@@ -35,54 +43,67 @@ std::unordered_map<long int, ChunkData>::iterator _ChunkDataSplit::checkGenerate
     // Check if element doesn't exists
     if (ind == data.end())
     {
-        // Generate the chunk
-        data.insert({y, ChunkData{true, std::make_shared<Chunk>(Chunk{chunkGen, x, y})}});
-        auto current = data.find(y);
-
-        std::shared_ptr<Chunk>& newChunk = current->second.data;
-
-        auto chunkAbove = data.find(y - 1),
-            chunkBelow = data.find(y + 1);
-
-        if (chunkAbove != data.end())
+        // If we're a client, send a request to fetch the chunk from the server
+        // We'll recieve it later and handle it
+        if (isClient)
         {
-            newChunk->borders.top = chunkAbove->second.data;
-            newChunk->regenBlockBorders();
-            chunkAbove->second.data->borders.bottom = newChunk;
-            chunkAbove->second.data->regenBlockBorders();
-        }
-        
-        if (chunkBelow != data.end())
-        {
-            newChunk->borders.bottom = chunkBelow->second.data;
-            newChunk->regenBlockBorders();
-            chunkBelow->second.data->borders.top = newChunk;
-            chunkBelow->second.data->regenBlockBorders();
-        }
-
-        if (left != nullptr)
-        {
-            std::shared_ptr<Chunk> chunkLeft = left->getData(y);
-            if (chunkLeft != nullptr)
+            if (isFdSet && chunkReady)
             {
-                chunkLeft->borders.right = newChunk;
-                chunkLeft->regenBlockBorders();
-                newChunk->borders.left = chunkLeft;
+                Api::sendRecvChunk(fd, x, y);
+                chunkReady = false;
             }
         }
-
-        if (right != nullptr)
+        else // Server side, generate the chunk
         {
-            std::shared_ptr<Chunk> chunkRight = right->getData(y);
-            if (chunkRight != nullptr)
+            // Generate the chunk
+            data.insert({y, ChunkData{true, std::make_shared<Chunk>(Chunk{chunkGen, x, y})}});
+            auto current = data.find(y);
+
+            std::shared_ptr<Chunk>& newChunk = current->second.data;
+
+            auto chunkAbove = data.find(y - 1),
+                chunkBelow = data.find(y + 1);
+
+            if (chunkAbove != data.end())
             {
-                chunkRight->borders.left = newChunk;
-                chunkRight->regenBlockBorders();
-                newChunk->borders.right = chunkRight;
+                newChunk->borders.top = chunkAbove->second.data;
+                newChunk->regenBlockBorders();
+                chunkAbove->second.data->borders.bottom = newChunk;
+                chunkAbove->second.data->regenBlockBorders();
             }
-        }
         
-        return current;
+            if (chunkBelow != data.end())
+            {
+                newChunk->borders.bottom = chunkBelow->second.data;
+                newChunk->regenBlockBorders();
+                chunkBelow->second.data->borders.top = newChunk;
+                chunkBelow->second.data->regenBlockBorders();
+            }
+
+            if (left != nullptr)
+            {
+                std::shared_ptr<Chunk> chunkLeft = left->getData(y);
+                if (chunkLeft != nullptr)
+                {
+                    chunkLeft->borders.right = newChunk;
+                    chunkLeft->regenBlockBorders();
+                    newChunk->borders.left = chunkLeft;
+                }
+            }
+
+            if (right != nullptr)
+            {
+                std::shared_ptr<Chunk> chunkRight = right->getData(y);
+                if (chunkRight != nullptr)
+                {
+                    chunkRight->borders.left = newChunk;
+                    chunkRight->regenBlockBorders();
+                    newChunk->borders.right = chunkRight;
+                }
+            }
+        
+            return current;
+        }
     }
     return ind;
 }
@@ -97,11 +118,13 @@ void _ChunkDataSplit::updateLoaded()
         
         // Generate if nullptr (might want to remove this later)
         if (dataReceived == nullptr)
-        {            
-            dataReceived = checkGenerate(chunkPos)->second.data;
+        {
+            auto get = checkGenerate(chunkPos);
+            
+            if (get != data.end()) dataReceived = get->second.data;
         }
         
-        loadedChunks[i] = dataReceived;
+        if (dataReceived != nullptr) loadedChunks[i] = dataReceived;
     }
 }
 
@@ -114,7 +137,7 @@ void _ChunkDataSplit::updateSplit(Camera& camera)
     
     for (auto& chunk: loadedChunks)
     {
-        chunk->updateAll(camera);
+        if (chunk != nullptr) chunk->updateAll(camera);
     }
 }
 
@@ -124,7 +147,7 @@ void _ChunkDataSplit::renderSplit(SDL_Renderer* renderer, TextureHandler& textur
     for (auto& chunk: loadedChunks)
     {
         //chunk->renderAllShadows(renderer, camera);
-        chunk->renderAllBlocks(renderer, textures, camera);
+        if (chunk != nullptr) chunk->renderAllBlocks(renderer, textures, camera);
     }
 }
 #endif
@@ -150,6 +173,9 @@ void _ChunkDataSplit::prepareLoaded()
 ChunkGroup::ChunkGroup()
     : loadPtr{0, 0},
       loadDistance{constants::loadDistance},
+      chunkReady{true},
+      isFdSet{false},
+      fd{0},
       isClient{true},
       chunkGen{nullptr},
       loadedSplits{},
@@ -162,6 +188,9 @@ ChunkGroup::ChunkGroup()
 ChunkGroup::ChunkGroup(std::shared_ptr<ChunkGen> chunkGen)
     :  loadPtr{0, 0},
        loadDistance{constants::loadDistance},
+       chunkReady{false},
+       isFdSet{false},
+       fd{0},
        isClient{false},
        chunkGen{chunkGen},
        loadedSplits{},
@@ -177,11 +206,12 @@ void ChunkGroup::updateLoaded()
         
         // Generate if nullptr (might want to remove this later)
         if (dataReceived == nullptr)
-        {            
-            dataReceived = checkSplitGenerate(chunkPos)->second;
+        {
+            auto get = checkSplitGenerate(chunkPos);
+            if (get != data.end()) dataReceived = get->second;
         }
         
-        loadedSplits[i] = dataReceived;
+        if (dataReceived != nullptr) loadedSplits[i] = dataReceived;
     }    
 }
 
@@ -206,8 +236,7 @@ void ChunkGroup::update(Camera& camera)
 
     for (auto& split: loadedSplits)
     {
-        if (split == nullptr) continue;
-        split->updateSplit(camera);
+        if (split != nullptr) split->updateSplit(camera);
     }
 }
 
@@ -215,8 +244,7 @@ void ChunkGroup::render(SDL_Renderer* renderer, TextureHandler& textures, Camera
 {
     for (auto& split: loadedSplits)
     {
-        if (split == nullptr) continue;
-        split->renderSplit(renderer, textures, camera);
+        if (split != nullptr) split->renderSplit(renderer, textures, camera);
     }
 }
 #endif
@@ -249,10 +277,21 @@ std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, 
     return ch;
 }
 
+void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
+{
+    // Work on me
+}
+
 void ChunkGroup::generateChunkAt(const long x, const long y)
 {
     auto splitX = checkSplitGenerate(x);
     splitX->second->checkGenerate(y);
+}
+
+void ChunkGroup::setFd(const int fd)
+{
+    this->fd = fd;
+    isFdSet = true;
 }
 
 ChunkPos ChunkGroup::posToChunkPos(double x, double y) const
@@ -277,30 +316,38 @@ ChunkGroup::checkSplitGenerate(long int x)
     {
         // Generate the split
         if (isClient)
-            data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance)});
+        {
+            data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance,
+                                                              fd, isFdSet, chunkReady)});
+            return ind;
+        }
         else
-            data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance, chunkGen)});
-        auto ret = data.find(x);
-
-        auto splitLeft = data.find(x - 1),
-            splitRight = data.find(x + 1);
-
-        if (splitLeft != data.end())
         {
-            ret->second->left = splitLeft->second;
-            splitLeft->second->right = ret->second;
-        }
-        
-        if (splitRight != data.end())
-        {
-            ret->second->right = splitRight->second;
-            splitRight->second->left = ret->second;
-        }
+            data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance,
+                                                              chunkGen, fd, isFdSet, chunkReady)});
 
-        // Get chunks to generate
-        ret->second->updateLoaded();
+            auto ret = data.find(x);
+
+            auto splitLeft = data.find(x - 1),
+                splitRight = data.find(x + 1);
+
+            if (splitLeft != data.end())
+            {
+                ret->second->left = splitLeft->second;
+                splitLeft->second->right = ret->second;
+            }
         
-        return data.find(x);
+            if (splitRight != data.end())
+            {
+                ret->second->right = splitRight->second;
+                splitRight->second->left = ret->second;
+            }
+
+            // Get chunks to generate
+            ret->second->updateLoaded();
+
+            return data.find(x);
+        }        
     }
     return ind;
 }

@@ -12,7 +12,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#include "server.hpp"
+#include "command_constants.hpp"
 
 namespace Api
 {

@@ -24,7 +24,6 @@ std::vector<unsigned char> GameServer::checkChunkAt(const long int x, const long
     {
         chunks.generateChunkAt(x, y);
         cget = chunks.getChunkAt(x, y);
-        std::cout << "Chunk at " << x << " and " << y << " generated..." << std::endl;
     }
     if (cget)
     {
@@ -32,9 +31,6 @@ std::vector<unsigned char> GameServer::checkChunkAt(const long int x, const long
         get_s = cget->serialize();
     }
     chunkLock.unlock();
-
-    std::cout << "Deserialize!" << std::endl;
-    cget->deserialize(get_s, false);
 
     return get_s;
 }

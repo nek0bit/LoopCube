@@ -13,7 +13,7 @@
 #include <fcntl.h>
 
 #include "socketwrapper.hpp"
-
+#include "command_constants.hpp"
 #include "chunkgroup.hpp"
 
 struct ConnectionError: public std::exception

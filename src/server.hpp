@@ -17,18 +17,10 @@
 #include <poll.h>
 #include <fcntl.h>
 
+#include "command_constants.hpp"
 #include "socketwrapper.hpp"
 #include "gameserver.hpp"
 #include "timer.hpp"
-
-// Messages
-constexpr const char* _COMMAND_SUCCESS = "ACK"; // This shouldn't be sent very often!
-constexpr const char* _COMMAND_FAIL = "NACK";
-
-constexpr const char* COMMAND_QUIT = "QUIT";
-constexpr const char* COMMAND_ECHO = "ECHO";
-constexpr const char* COMMAND_PLAYER_POS = "PPOS";
-constexpr const char* COMMAND_GET_CHUNK = "GC";
 
 struct Server;
 struct ServerThreadItem;
