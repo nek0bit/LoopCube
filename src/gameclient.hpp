@@ -15,6 +15,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "api.hpp"
 #include "server.hpp"
 #include "clientsocket.hpp"
 #include "winsize.hpp"

@@ -40,11 +40,33 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
         throw ConnectionError(strerror(errno));
     }
 #endif
+
+    FD_ZERO(&checksock);
+
+    FD_SET(fd, &checksock);
 }
 
 ClientSocket::~ClientSocket()
 {
     closeSocket();
+}
+
+void ClientSocket::checkSocket(ChunkGroup& chunks)
+{
+    
+    // Copy checksock, since select corrupts the value passed into it
+    fd_set check_copy = checksock;
+    
+    timeval time{0, 0};
+    
+    if (select(fd+1, &check_copy, NULL, NULL, &time) != -1)
+    {
+        if (FD_ISSET(fd, &check_copy))
+        {
+            // *shrug*
+            recv(fd, NULL, 0, 0);
+        }
+    }
 }
 
 void ClientSocket::closeSocket()

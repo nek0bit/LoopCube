@@ -71,6 +71,8 @@ void GameClient::serverThreadFunction()
 
 void GameClient::update(EventWrapper& events)
 {
+    clientSocket->checkSocket(serverChunks);
+    
     //**************************************************
     // Chunks
     //**************************************************
@@ -99,6 +101,12 @@ void GameClient::update(EventWrapper& events)
 	// 	entities.push_back(new TestEntity(mainPlayer.position.x, mainPlayer.position.y-30));
 	// }
 
+    if (events.keyState[16])
+    {
+        Api::sendEcho(clientSocket->fd, "Send it!");
+        particles.push_back(GravityParticle(0, 1, 0, 0, mainPlayer.position.x, mainPlayer.position.y, 30, 30));
+    }
+    
 	// Jump (A)
 	if (events.buttonState[4])
     {

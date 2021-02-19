@@ -9,9 +9,13 @@
 #include <atomic>
 #include <cstdint>
 #include <memory>
+#include <sys/time.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #include "socketwrapper.hpp"
+
+#include "chunkgroup.hpp"
 
 struct ConnectionError: public std::exception
 {
@@ -27,6 +31,8 @@ struct ClientSocket
     ClientSocket(const char* address, const uint16_t port);
     ~ClientSocket();
 
+    void checkSocket(ChunkGroup& chunks);
+    
     int fd;
 private:
     void closeSocket();
@@ -35,5 +41,6 @@ private:
     const uint16_t port;
     
     addrinfo hints, *serverinfo;
-    
+
+    fd_set checksock;
 };
