@@ -35,6 +35,12 @@ struct BorderingChunks
 // 2D array[y][x] flattened to 1D array
 typedef std::vector<std::shared_ptr<Block>> t_blockCollection;
 
+struct indPos
+{
+    long int x;
+    long int y;
+};
+
 struct Chunk
 {
     Chunk(std::shared_ptr<ChunkGen> chunkGen, long int x, long int y);
@@ -68,7 +74,7 @@ struct Chunk
     std::shared_ptr<Block> getBorderBlock(const int x, const int y) const;
 
     std::vector<unsigned char> serialize() const;
-    void deserialize(std::vector<unsigned char>& value) const;
+    void deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte = true);
     
     // Chunk position
     const long int x;
@@ -83,6 +89,7 @@ struct Chunk
     BorderingChunks borders;
 private:
     size_t posToIndex(const unsigned int x, const unsigned int y) const;
+    indPos indexToPos(const size_t index) const;
 #ifndef __HEADLESS
     bool chunkInView(Camera& camera) const;
     SDL_Rect getChunkRect(Camera& camera) const;

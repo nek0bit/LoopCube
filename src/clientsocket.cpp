@@ -35,13 +35,11 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
     int flags;
     if ((flags = fcntl(fd, F_GETFL)) == -1)
         throw ConnectionError(strerror(errno));
-    else
-        flags |= O_NONBLOCK;
+    
+    flags |= O_NONBLOCK;
 
     if (fcntl(fd, F_SETFL, flags) == -1)
-    {
         throw ConnectionError(strerror(errno));
-    }
     
 #ifndef __NONODELAY__
     // Disables the Nagle algorithm, disables verification

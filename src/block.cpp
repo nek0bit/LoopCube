@@ -8,8 +8,8 @@ Block::Block()
 Block::Block(int id, int x, int y, unsigned int typeX)
 	: GameObject{0, static_cast<double>(x * constants::blockW),
     static_cast<double>(y * constants::blockH),
-    constants::blockW,
-    constants::blockH},
+    static_cast<double>(constants::blockW),
+    static_cast<double>(constants::blockH)},
       blockinfo{nullptr},
       typeX{typeX}
 {
@@ -52,41 +52,60 @@ void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const
 }
 #endif
 
-std::array<unsigned char, 10> Block::serialize() const
+std::vector<unsigned char> Block::serialize() const
 {
-    constexpr uint8_t idSize = 2;
-    constexpr uint8_t valSize = 4;
-    std::array<unsigned char, 10> fullRes;
+    // TODO determine the minimum size we can fit it into (set bits/8)
+    // Example: block at position 1 can fit into uint8 and 256 into uint16
+    std::vector<unsigned char> fullRes;
+    constexpr uint8_t BYTE_SIZE = sizeof(unsigned char) * 8;
+    const uint8_t idLen = sizeof(blockinfo->id); // For now, we'll kind of use fixed lengths
+    const uint8_t xLen = sizeof(uint32_t);
+    const uint8_t yLen = sizeof(uint32_t);
+    uint16_t maxLen = idLen+1;
 
-    // Id serialize
-    uint16_t valueid = blockinfo->id;
-    // fill char array with segmant of binary per valueid
-    fullRes[0] = (valueid>>8) & 0xff; // i use 0xff because it makes me look cooler
-    fullRes[1] = valueid & 0xff;
-
-
-    // Serialize both positionX and positionY
-    int32_t posWork = position.x / constants::blockW;
+    fullRes.push_back(idLen);
     
-    for (int i = 0, j = idSize; i <= 1; ++i)
+    // Store id
+    for (int in = 0, maxIdLen = 0; maxIdLen < idLen; ++maxIdLen)
     {
-        fullRes[j] = (posWork>>24) & 0xff;
-        fullRes[j+1] = (posWork>>16) & 0xff;
-        fullRes[j+2] = (posWork>>8) & 0xff;
-        fullRes[j+3] = posWork & 0xff;
-        
-        // flip bit at position
-        fullRes[j] ^= (posWork<0)<<7;
-
-        
-        posWork = position.y / constants::blockH;
-        j += valSize;
+        fullRes.push_back((blockinfo->id >> in) & 0xff);
+        in += BYTE_SIZE;
     }
+
+    fullRes.push_back(xLen);
+
+    // Store X
+    int32_t convertX_s = position.x / constants::blockW;
+    uint32_t convertX = std::abs(convertX_s);
+    for (int in = 0, maxXLen = 0; maxXLen < xLen; ++maxXLen)
+    {
+        fullRes.push_back((convertX >> in) & 0xff);
+        in += BYTE_SIZE;
+    }
+    fullRes[maxLen+xLen] ^= (convertX_s<0)<<7;
+    maxLen += xLen+1;
+    
+    fullRes.push_back(yLen);
+    
+    // Store Y
+    int32_t convertY_s = position.y / constants::blockH;
+    uint32_t convertY = std::abs(convertY_s);
+    for (int in = 0, maxYLen = 0; maxYLen < yLen; ++maxYLen)
+    {
+        fullRes.push_back((convertY >> in) & 0xff);
+        in += BYTE_SIZE;
+    }
+    fullRes[maxLen+yLen] ^= (convertY_s<0)<<7;
+    maxLen += yLen+1;
+
+    // Push back stop byte
+    fullRes.push_back(255);
     
     return fullRes;
 }
 
 void Block::deserialize(const std::array<unsigned char, 10>& value)
 {
-
+    uint32_t res = 0;
+    
 }

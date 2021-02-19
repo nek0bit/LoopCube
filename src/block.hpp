@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <cstdint>
-#include <array>
+#include <vector>
 #include "gameobj.hpp"
 #include "vector.hpp"
 #include "constants.hpp"
@@ -20,7 +20,7 @@ struct Block: public GameObject
     void renderShadow(SDL_Renderer* renderer, Camera& camera) const;
 #endif
 
-    std::array<unsigned char, 10> serialize() const;
+    std::vector<unsigned char> serialize() const;
     void deserialize(const std::array<unsigned char, 10>& value);
 
 	const BlockInfo* blockinfo;

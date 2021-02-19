@@ -232,9 +232,9 @@ std::vector<unsigned char> Chunk::serialize() const
 {
     std::vector<unsigned char> byteList;
 
-    for (unsigned i = 0; i < constants::chunkWidth; ++i)
+    for (int i = 0; i < constants::chunkWidth; ++i)
     {
-        for (unsigned j = 0; j < constants::chunkHeight; ++j)
+        for (int j = 0; j < constants::chunkHeight; ++j)
         {
             if (data[posToIndex(i, j)] == nullptr)
             {
@@ -242,7 +242,7 @@ std::vector<unsigned char> Chunk::serialize() const
             }
             else
             {
-                std::array<unsigned char, 10> block_s = data[posToIndex(i, j)]->serialize();
+                std::vector<unsigned char> block_s = data[posToIndex(i, j)]->serialize();
                 byteList.insert(byteList.end(), block_s.begin(), block_s.end());
             }
         }
@@ -251,9 +251,39 @@ std::vector<unsigned char> Chunk::serialize() const
     return byteList;
 }
 
-void deserialize(std::vector<unsigned char>& value)
+void Chunk::deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
 {
-    
+    // Extract data from value passed
+/*
+    constexpr uint16_t skip = 10;
+
+    // ignroeFirstByte is appropriately either 0 or 1 so we can cast it
+    for (size_t at = static_cast<size_t>(ignoreFirstByte), bl = 0;
+         at < value.size(); at += skip)
+    {
+        std::vector<unsigned char, 10> bdata{}; // Data passed into block deserialize
+        
+        for (unsigned char& ch: bdata)
+        {
+            ch = value[at];
+        }
+
+        indPos pos = indexToPos(bl);
+        data[bl] = std::make_shared<Block>(0, pos.x, pos.y);
+
+        data[bl]->deserialize(bdata);
+
+        bl++;
+    }
+*/
+}
+
+indPos Chunk::indexToPos(const size_t index) const
+{
+    uint16_t x = index % constants::chunkWidth;
+    uint16_t y = std::floor(index / constants::chunkWidth);
+
+    return {x, y};
 }
 
 void Chunk::generateChunk()
