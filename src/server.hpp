@@ -15,6 +15,7 @@
 #include <cstdint>
 #include <exception>
 #include <poll.h>
+#include <fcntl.h>
 
 #include "socketwrapper.hpp"
 #include "gameserver.hpp"

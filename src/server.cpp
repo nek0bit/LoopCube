@@ -48,6 +48,7 @@ Server::Server(const uint32_t port, bool verbose)
             continue;
         }
 
+
         // Allow reuse of this file descriptor
         if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1)
         {
@@ -84,6 +85,23 @@ Server::Server(const uint32_t port, bool verbose)
     }
     else
     {
+        /*
+        int flags;
+        if ((flags = fcntl(fd, F_GETFL)) == -1)
+        {
+            throw NetworkError(NSOCKBIND_ERROR, strerror(errno));
+        }
+        else
+            flags |= O_NONBLOCK;
+        
+        
+        if (fcntl(fd, F_SETFL, flags) == -1)
+        {
+            throw NetworkError(NSOCKBIND_ERROR, strerror(errno));
+        }
+        */
+        // This causes accept to be non-blocking, which is good but spikes cpu usage completely...
+        
         verbose && ServLog::log(std::string{"Successfully opened socket at file descriptor "} +
                                 std::to_string(fd) + std::string{"."});
         
@@ -220,6 +238,24 @@ void Server::startServer(const size_t threadCount)
                 std::string msg = "Incoming connection at file descriptor ";
                 ServLog::log(msg + std::to_string(connection));
             }
+
+            int flags;
+            if ((flags = fcntl(connection, F_GETFL)) == -1)
+            {
+                if (exit.load() == true)
+                    break;
+                continue;
+            }
+            else
+                flags |= O_NONBLOCK;
+            
+            
+            if (fcntl(connection, F_SETFL, flags) == -1)
+            {
+                if (exit.load() == true)
+                    break;
+                continue;
+            }
         }
         
 #ifndef __NOIPLOG__
@@ -352,8 +388,9 @@ void Server::serverThread(const size_t index) noexcept
         {
             ServerThreadItem& item = threadPool.at(index);
             tpLock.unlock();
-            
-            int pl = poll(&item.connections[0], item.connections.size(), 300);
+
+            std::cout << "Thread poll" << std::endl;
+            int pl = poll(&item.connections[0], item.connections.size(), 5000);
             
             if (pl == -1)
             {

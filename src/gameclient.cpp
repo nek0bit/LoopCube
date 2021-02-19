@@ -103,7 +103,7 @@ void GameClient::update(EventWrapper& events)
 
     if (events.keyState[16])
     {
-        Api::sendEcho(clientSocket->fd, "Send it!");
+        Api::sendEcho(clientSocket->fd, "Hello server");
         particles.push_back(GravityParticle(0, 1, 0, 0, mainPlayer.position.x, mainPlayer.position.y, 30, 30));
     }
     

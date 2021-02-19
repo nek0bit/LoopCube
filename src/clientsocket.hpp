@@ -9,9 +9,8 @@
 #include <atomic>
 #include <cstdint>
 #include <memory>
-#include <sys/time.h>
-#include <sys/types.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include "socketwrapper.hpp"
 
@@ -41,6 +40,4 @@ private:
     const uint16_t port;
     
     addrinfo hints, *serverinfo;
-
-    fd_set checksock;
 };

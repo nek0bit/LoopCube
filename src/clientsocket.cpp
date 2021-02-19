@@ -31,6 +31,7 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
     if (cur == nullptr)
         throw ConnectionError("lookup: Failed to connect to server.");
 
+    fcntl(fd, F_SETFL, O_NONBLOCK);
     
 #ifndef __NONODELAY__
     // Disables the Nagle algorithm, disables verification
@@ -40,10 +41,6 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
         throw ConnectionError(strerror(errno));
     }
 #endif
-
-    FD_ZERO(&checksock);
-
-    FD_SET(fd, &checksock);
 }
 
 ClientSocket::~ClientSocket()
@@ -53,19 +50,10 @@ ClientSocket::~ClientSocket()
 
 void ClientSocket::checkSocket(ChunkGroup& chunks)
 {
-    
-    // Copy checksock, since select corrupts the value passed into it
-    fd_set check_copy = checksock;
-    
-    timeval time{0, 0};
-    
-    if (select(fd+1, &check_copy, NULL, NULL, &time) != -1)
+    char msg[256];
+    if (recv(fd, msg, sizeof(msg), 0) != -1)
     {
-        if (FD_ISSET(fd, &check_copy))
-        {
-            // *shrug*
-            recv(fd, NULL, 0, 0);
-        }
+        std::cout << "Got data!: " << msg << std::endl;
     }
 }
 
