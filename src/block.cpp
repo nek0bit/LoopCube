@@ -13,14 +13,7 @@ Block::Block(int id, int x, int y, unsigned int typeX)
       blockinfo{nullptr},
       typeX{typeX}
 {
-    // TODO don't search
-	for (auto &i: constants::blockInfo) {
-		if (i.id == id) {
-			this->textureId = i.textureId;
-			this->blockinfo = &i;
-		}
-	}
-
+    setBlockId(id);
     
 	src.h = constants::blockImgSize;
 	src.w = constants::blockImgSize;
@@ -52,26 +45,42 @@ void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const
 }
 #endif
 
+void Block::setBlockId(const uint32_t id)
+{
+    try
+    {
+        blockinfo = &constants::blockInfo.at(id);
+        textureId = this->blockinfo->id;
+    } catch (const std::out_of_range& err) {}
+}
+
+
 std::vector<unsigned char> Block::serialize() const
 {
     // TODO determine the minimum size we can fit it into (set bits/8)
     // Example: block at position 1 can fit into uint8 and 256 into uint16
     std::vector<unsigned char> fullRes;
     constexpr uint8_t BYTE_SIZE = sizeof(unsigned char) * 8;
+    uint16_t maxLen = 0;
     const uint8_t idLen = sizeof(blockinfo->id); // For now, we'll kind of use fixed lengths
-    const uint8_t xLen = sizeof(uint32_t);
-    const uint8_t yLen = sizeof(uint32_t);
-    uint16_t maxLen = idLen+1;
+    //const uint8_t xLen = sizeof(uint32_t);
+    //const uint8_t yLen = sizeof(uint32_t);
 
+    // Push back the id so we can know its length for deserialization!
     fullRes.push_back(idLen);
     
-    // Store id
+    // Store id values
     for (int in = 0, maxIdLen = 0; maxIdLen < idLen; ++maxIdLen)
     {
         fullRes.push_back((blockinfo->id >> in) & 0xff);
         in += BYTE_SIZE;
     }
 
+    maxLen += idLen + 1;
+
+    // Note: Below is unneccesary, but very useful, so I kept it commented for now
+    
+    /*
     fullRes.push_back(xLen);
 
     // Store X
@@ -97,15 +106,26 @@ std::vector<unsigned char> Block::serialize() const
     }
     fullRes[maxLen+yLen] ^= (convertY_s<0)<<7;
     maxLen += yLen+1;
-
-    // Push back stop byte
-    fullRes.push_back(255);
+    */
     
     return fullRes;
 }
 
-void Block::deserialize(const std::array<unsigned char, 10>& value)
+void Block::deserialize(const std::vector<unsigned char>& value)
 {
-    uint32_t res = 0;
+    // I don't believe we need to use hton- because bit shifting is the same independently
+    constexpr int BYTE_SIZE = sizeof(uint8_t) * 8;
+    const uint8_t idSize = value.at(0);
+
+    // Values
+    uint32_t fullId = 0;
     
+    // Deserialize the id
+    for (uint8_t i = 0; i < idSize; ++i)
+    {
+        uint8_t val = value.at(i + 1);
+        fullId |= val<<(i*BYTE_SIZE);
+    }
+
+    setBlockId(fullId);
 }

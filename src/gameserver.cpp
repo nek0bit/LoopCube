@@ -33,5 +33,8 @@ std::vector<unsigned char> GameServer::checkChunkAt(const long int x, const long
     }
     chunkLock.unlock();
 
+    std::cout << "Deserialize!" << std::endl;
+    cget->deserialize(get_s, false);
+
     return get_s;
 }

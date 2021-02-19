@@ -254,28 +254,45 @@ std::vector<unsigned char> Chunk::serialize() const
 void Chunk::deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
 {
     // Extract data from value passed
-/*
-    constexpr uint16_t skip = 10;
+    size_t at = static_cast<size_t>(ignoreFirstByte);
+    uint16_t bl = 0;
 
-    // ignroeFirstByte is appropriately either 0 or 1 so we can cast it
-    for (size_t at = static_cast<size_t>(ignoreFirstByte), bl = 0;
-         at < value.size(); at += skip)
+    try
     {
-        std::vector<unsigned char, 10> bdata{}; // Data passed into block deserialize
-        
-        for (unsigned char& ch: bdata)
+        while (bl < (constants::chunkWidth * constants::chunkHeight))
         {
-            ch = value[at];
+            std::vector<unsigned char> dataDes;// dataDeserialize
+            // Block isn't here
+            if (value[at] == 0)
+            {
+                data.at(bl) = nullptr;
+                at += 2;
+                bl++;
+                continue;
+            }
+
+            uint8_t idSize = value.at(at)+1;
+
+            // Examples of other values...
+            //uint8_t xSize = value.at(at+idSize)+1;
+            //uint8_t ySize = value.at(at+xSize)+1;
+
+            for (uint8_t i = 0; i < idSize /* + otherSizes */; ++i)
+            {
+                dataDes.push_back(value[i+at]);
+            }
+            
+            indPos pos = indexToPos(bl);
+            data.at(bl) = std::make_shared<Block>(0, pos.x, pos.y);
+            data[bl]->deserialize(dataDes);
+
+            at += idSize; /* + otherSizes */
+            bl++;
         }
-
-        indPos pos = indexToPos(bl);
-        data[bl] = std::make_shared<Block>(0, pos.x, pos.y);
-
-        data[bl]->deserialize(bdata);
-
-        bl++;
+    } // Lets catch anything here incase of malicious attempts
+    catch (const std::exception& err) {
+        std::cout << "Chunk Error: " << err.what() << std::endl;
     }
-*/
 }
 
 indPos Chunk::indexToPos(const size_t index) const

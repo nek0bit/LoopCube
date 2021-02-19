@@ -12,7 +12,14 @@ void ChunkGen::generateChunk(std::function<void(unsigned, unsigned, unsigned)> p
     {
         for (unsigned int x = 0; x < HEIGHT; ++x)
         {
-            placeBlockFunctor(BLOCK_MOON_BLOCK, x, y);
+            if ((x+1) * (y+1) == WIDTH*HEIGHT)
+            {
+                placeBlockFunctor(BLOCK_WOOD, x, y); // Temporarily make the last block unique!!
+            }
+            else
+            {
+                placeBlockFunctor(BLOCK_MOON_BLOCK, x, y);
+            }
         }
     }
 }
