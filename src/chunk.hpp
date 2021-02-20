@@ -54,7 +54,7 @@ struct Chunk
     void renderAllShadows(SDL_Renderer* renderer, Camera& camera);
     void renderAllBlocks(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
 #endif
-
+o
     // Block modification
     bool placeBlock(unsigned int id, unsigned int x, unsigned int y);
     void placeBlockFast(unsigned int id, unsigned int x, unsigned int y);
