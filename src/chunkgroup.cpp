@@ -86,7 +86,7 @@ void _ChunkDataSplit::updateLoaded()
             
             if (get != data.end()) dataReceived = get->second.data;
         }
-        
+
         if (dataReceived != nullptr) loadedChunks[i] = dataReceived;
     }
 }
@@ -95,6 +95,7 @@ void _ChunkDataSplit::updateLoaded()
 void _ChunkDataSplit::updateBorderedChunks(std::unordered_map<long int,
                                            ChunkData>::iterator current, const long y)
 {
+    if (current == data.end()) return;
     std::shared_ptr<Chunk>& newChunk = current->second.data;
 
     auto chunkAbove = data.find(y - 1),
@@ -309,6 +310,7 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ign
     for (uint8_t i = 0; i < chunkXSize; ++i)
     {
         uint8_t val = value.at(at + i + 1);
+        // if its the last element, make it unsigned
         chunkX |= (i+1 == chunkXSize ? val & 127 : val) << (i*8);
     }
 
@@ -317,24 +319,34 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ign
     for (uint8_t i = 0; i < chunkYSize; ++i)
     {
         uint8_t val = value.at(at + chunkYSize + i + 2);
+        // If its the last element, make it unsigned
         chunkY |= (i+1 == chunkYSize ? val & 127 : val) << (i*8);
     }
 
     // Change to negatives if needed
     if (isNegativeX) resX = -((int64_t)chunkX);
+    else resX = chunkX;
     if (isNegativeY) resY = -((int64_t)chunkY);
+    else resY = chunkY;
+
+    // Fix negative values
+    if (resX<0)
+        ; // FIX ME
 
     auto splitX = checkSplitGenerate(resX);
     if (splitX != data.end())
     {
         auto splitY = splitX->second;
+        //splitY->updateBorderedChunks(splitY->data.find(resY), resY);
 
-        if (splitY != nullptr) splitY->checkGenerate(resY,
-                                                     std::make_shared<Chunk>(nullptr, resX, resY),
-                                                     false);
 
-        auto chunkAt = splitX->second->getData(resY);
+        splitY->checkGenerate(resY,
+                              std::make_shared<Chunk>(chunkGen, splitX->second->x, resY),
+                              false);
+        
+        auto chunkAt = splitY->getData(resY);
         chunkAt->deserialize(value, true);
+
     }
 }
 
@@ -401,7 +413,7 @@ ChunkGroup::checkSplitGenerate(long int x)
         }
 
         // Get chunks to generate
-        if (!isClient) ret->second->updateLoaded();
+        ret->second->updateLoaded();
         
         return data.find(x);
     }

@@ -67,16 +67,17 @@ struct _ChunkDataSplit
     // Access pointers
     std::shared_ptr<_ChunkDataSplit> left;
     std::shared_ptr<_ChunkDataSplit> right;
+    
+    const long int x;
+    std::unordered_map<long int, ChunkData> data;
 private:
     bool& isFdSet;
     bool& chunkReady;
     int& fd;
     bool isClient;
     void prepareLoaded();
-    const long int x;
     std::shared_ptr<ChunkGen> chunkGen;
     // int = y
-    std::unordered_map<long int, ChunkData> data;
 };
 
 //**************************************************

@@ -63,8 +63,6 @@ std::vector<unsigned char> Block::serialize() const
     constexpr uint8_t BYTE_SIZE = sizeof(unsigned char) * 8;
     uint16_t maxLen = 0;
     const uint8_t idLen = sizeof(blockinfo->id); // For now, we'll kind of use fixed lengths
-    //const uint8_t xLen = sizeof(uint32_t);
-    //const uint8_t yLen = sizeof(uint32_t);
 
     // Push back the id so we can know its length for deserialization!
     fullRes.push_back(idLen);
@@ -77,36 +75,6 @@ std::vector<unsigned char> Block::serialize() const
     }
 
     maxLen += idLen + 1;
-
-    // Note: Below is unneccesary, but very useful, so I kept it commented for now
-    
-    /*
-    fullRes.push_back(xLen);
-
-    // Store X
-    int32_t convertX_s = position.x / constants::blockW;
-    uint32_t convertX = std::abs(convertX_s);
-    for (int in = 0, maxXLen = 0; maxXLen < xLen; ++maxXLen)
-    {
-        fullRes.push_back((convertX >> in) & 0xff);
-        in += BYTE_SIZE;
-    }
-    fullRes[maxLen+xLen] ^= (convertX_s<0)<<7;
-    maxLen += xLen+1;
-    
-    fullRes.push_back(yLen);
-    
-    // Store Y
-    int32_t convertY_s = position.y / constants::blockH;
-    uint32_t convertY = std::abs(convertY_s);
-    for (int in = 0, maxYLen = 0; maxYLen < yLen; ++maxYLen)
-    {
-        fullRes.push_back((convertY >> in) & 0xff);
-        in += BYTE_SIZE;
-    }
-    fullRes[maxLen+yLen] ^= (convertY_s<0)<<7;
-    maxLen += yLen+1;
-    */
     
     return fullRes;
 }
