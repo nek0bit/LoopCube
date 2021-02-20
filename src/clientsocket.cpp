@@ -58,11 +58,10 @@ ClientSocket::~ClientSocket()
 
 void ClientSocket::checkSocket(ChunkGroup& chunks)
 {
-    constexpr size_t BUF_SIZE = 2048;
+    constexpr size_t BUF_SIZE = 4096;
     int bc;
     unsigned char buf[BUF_SIZE];
     
-    std::vector<unsigned char> deserializeMe{std::begin(buf), std::end(buf)};
     if ((bc = recv(fd, buf, BUF_SIZE-1, 0)) != -1)
     {
         buf[bc] = '\0';
@@ -73,9 +72,12 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
         case ACTION_ECHO:
             break;
         case ACTION_GET_CHUNK:
+        {
+            std::vector<unsigned char> deserializeMe{std::begin(buf), std::end(buf)};
             chunks.loadFromDeserialize(deserializeMe, true);
             chunks.chunkReady = true;
-            break;
+        }
+        break;
         default:
             break;
         }
