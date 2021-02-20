@@ -5,9 +5,9 @@ Chunk::Chunk(std::shared_ptr<ChunkGen> chunkGen, long int x, long int y)
       y{y},
       MAX_WIDTH{static_cast<unsigned>(constants::chunkWidth)},
       MAX_HEIGHT{static_cast<unsigned>(constants::chunkHeight)},
-      chunkGen{chunkGen},
       data{},
-      borders{nullptr, nullptr, nullptr, nullptr}
+      borders{nullptr, nullptr, nullptr, nullptr},
+      chunkGen{chunkGen}
 {
     data.resize(MAX_WIDTH*MAX_HEIGHT, nullptr);
 
@@ -324,7 +324,7 @@ void Chunk::deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
             }
             
             indPos pos = indexToPos(bl);
-            data.at(bl) = std::make_shared<Block>(0, pos.x, pos.y);
+            placeBlock(0, pos.x, pos.y);
             data.at(bl)->deserialize(dataDes);
 
             at += idSize; /* + otherSizes */

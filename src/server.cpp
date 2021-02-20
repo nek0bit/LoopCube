@@ -227,7 +227,7 @@ void Server::startServer(const size_t threadCount)
         int connection;
 
         fd_set check_copy = checkaccept;
-        timeval time{5, 0};
+        timeval time{0, 200000};
 
         if (select(fd+1, &check_copy, NULL, NULL, &time) != -1 &&
             FD_ISSET(fd, &check_copy)) // Only polling one item

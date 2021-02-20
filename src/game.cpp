@@ -94,7 +94,7 @@ void Game::update()
 // Draw objects to screen
 void Game::render() {
     // Clear screen
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
     SDL_RenderClear(renderer);
 
     if (state.size() > 0)

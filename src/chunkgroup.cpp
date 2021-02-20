@@ -10,11 +10,11 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
       loadedChunks{},
       left{nullptr},
       right{nullptr},
+      x{x},
       isFdSet{isFdSet},
       chunkReady{chunkReady},
       fd{fd},
       isClient{true},
-      x{x},
       chunkGen{nullptr}
 {
     prepareLoaded();
@@ -28,11 +28,11 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
       loadedChunks{},
       left{nullptr},
       right{nullptr},
+      x{x},
       isFdSet{isFdSet},
       chunkReady{chunkReady},
       fd{fd},
       isClient{false},
-      x{x},
       chunkGen{chunkGen}
 {}
 
@@ -330,15 +330,13 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ign
     else resY = chunkY;
 
     // Fix negative values
-    if (resX<0)
-        ; // FIX ME
+    //if (resX<0) resX -= constants::chunkWidth + 1; // FIX ME
+    if (resY < 0) resY = -resY;
 
     auto splitX = checkSplitGenerate(resX);
     if (splitX != data.end())
     {
         auto splitY = splitX->second;
-        //splitY->updateBorderedChunks(splitY->data.find(resY), resY);
-
 
         splitY->checkGenerate(resY,
                               std::make_shared<Chunk>(chunkGen, splitX->second->x, resY),
@@ -387,7 +385,6 @@ ChunkGroup::checkSplitGenerate(long int x)
         {
             data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance,
                                                               fd, isFdSet, chunkReady)});
-            return ind;
         }
         else
         {
