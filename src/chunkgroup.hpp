@@ -48,11 +48,15 @@ struct _ChunkDataSplit
     ~_ChunkDataSplit() = default;
 
     void updateLoaded();
-    std::unordered_map<long int, ChunkData>::iterator checkGenerate(long int y);
+    std::unordered_map<long int, ChunkData>::iterator checkGenerate(long int y,
+                                                                    std::shared_ptr<Chunk> toInsert,
+                                                                    bool isClient = false);
 #ifndef __HEADLESS
     void updateSplit(Camera& camera);
     void renderSplit(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
 #endif
+
+    void updateBorderedChunks(std::unordered_map<long int, ChunkData>::iterator current, const long y);
     
     std::shared_ptr<Chunk> getData(long int y);
     

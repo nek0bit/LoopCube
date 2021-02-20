@@ -232,13 +232,44 @@ std::vector<unsigned char> Chunk::serialize() const
 {
     std::vector<unsigned char> byteList;
 
+    // These are useful for when a server sends a packet and the client doesn't know
+    // what the chunk happens to be for
+    const uint8_t chunkXLen = sizeof(x);
+    const uint8_t chunkYLen = sizeof(y);
+
+    // Push back Chunk X Length
+    byteList.push_back(chunkXLen);
+
+    // TODO put this generic for loop into function
+    int64_t convertX_s = x;
+    uint64_t convertX = std::abs(convertX_s);
+    for (int in = 0, maxLen = 0; maxLen < chunkXLen; ++maxLen)
+    {
+        byteList.push_back((convertX >> in) & 0xff);
+        in += 8; // bits
+    }
+    byteList[chunkXLen] ^= (convertX_s<0)<<7;
+
+    // Push back Chunk X Length
+    byteList.push_back(chunkYLen);
+
+    // TODO put this generic for loop into function
+    int64_t convertY_s = y;
+    uint64_t convertY = std::abs(convertY_s);
+    for (int in = 0, maxLen = 0; maxLen < chunkYLen; ++maxLen)
+    {
+        byteList.push_back((convertY >> in) & 0xff);
+        in += 8; // bits
+    }
+    byteList[chunkXLen+chunkYLen+1] ^= (convertY_s<0)<<7;
+    
     for (int i = 0; i < constants::chunkWidth; ++i)
     {
         for (int j = 0; j < constants::chunkHeight; ++j)
         {
             if (data[posToIndex(i, j)] == nullptr)
             {
-                byteList.insert(byteList.end(), {255});
+                byteList.insert(byteList.end(), {0});
             }
             else
             {
@@ -254,7 +285,16 @@ std::vector<unsigned char> Chunk::serialize() const
 void Chunk::deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
 {
     // Extract data from value passed
+    
+    // Skip over chunk position since it's basically useless here
+    
     size_t at = static_cast<size_t>(ignoreFirstByte);
+
+    uint8_t skipSizeX = value[at]; // Ex: 4 bytes
+    uint8_t skipSizeY = value[at+skipSizeX+1]; // Ex: 4 bytes
+
+    at += skipSizeX + skipSizeY + 2;
+    
     uint16_t bl = 0;
 
     try
@@ -262,8 +302,9 @@ void Chunk::deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
         while (bl < (constants::chunkWidth * constants::chunkHeight))
         {
             std::vector<unsigned char> dataDes;// dataDeserialize
+            
             // Block isn't here
-            if (value[at] == 0)
+            if (value.at(at) == 0)
             {
                 data.at(bl) = nullptr;
                 at += 2;
@@ -279,12 +320,12 @@ void Chunk::deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
 
             for (uint8_t i = 0; i < idSize /* + otherSizes */; ++i)
             {
-                dataDes.push_back(value[i+at]);
+                dataDes.push_back(value.at(i+at));
             }
             
             indPos pos = indexToPos(bl);
             data.at(bl) = std::make_shared<Block>(0, pos.x, pos.y);
-            data[bl]->deserialize(dataDes);
+            data.at(bl)->deserialize(dataDes);
 
             at += idSize; /* + otherSizes */
             bl++;

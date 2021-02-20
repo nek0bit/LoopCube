@@ -60,20 +60,21 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
 {
     constexpr size_t BUF_SIZE = 2048;
     int bc;
-    char buf[BUF_SIZE];
+    unsigned char buf[BUF_SIZE];
+    
+    std::vector<unsigned char> deserializeMe{std::begin(buf), std::end(buf)};
     if ((bc = recv(fd, buf, BUF_SIZE-1, 0)) != -1)
     {
         buf[bc] = '\0';
-        char* noByte = buf;
+        unsigned char* noByte = buf;
         noByte++; // Skips the action
         switch (buf[0])
         {
         case ACTION_ECHO:
-            std::cout << "Recieved ECHO: " << noByte << std::endl;
             break;
         case ACTION_GET_CHUNK:
-            std::cout << "Recieved GET_CHUNK: " << noByte << std::endl;
-            chunks;
+            chunks.loadFromDeserialize(deserializeMe, true);
+            chunks.chunkReady = true;
             break;
         default:
             break;

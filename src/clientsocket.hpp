@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <cstring>
+#include <iterator>
 #include <vector>
 #include <thread>
 #include <mutex>

@@ -16,6 +16,7 @@ SRC = $(SRC_DIR)/server.cpp \
       $(SRC_DIR)/block.cpp \
       $(SRC_DIR)/gameobj.cpp \
       $(SRC_DIR)/chunkgen.cpp \
+      $(SRC_DIR)/api.cpp \
       $(SRC_DIR)/timer.cpp \
       $(SERVER_DIR)/main.cpp
 OBJ = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SRC))
