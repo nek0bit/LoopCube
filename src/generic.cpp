@@ -26,20 +26,31 @@ GridCollision_t Generic::gridCollision(unsigned int width, unsigned int height, 
         static_cast<unsigned>(((size.h + box.y) / height) + ((add & 2) == 2))};
 }
 
-void Generic::serializeUnsigned(const int value, const int length, std::function<void(uint8_t)> appendData)
+void Generic::serializeUnsigned(const unsigned value, const unsigned length,
+                                std::function<void(uint8_t)> appendData)
 {
     constexpr uint8_t BYTE_SIZE = 8;
 
-    for (int in = 0, maxLen = 0; maxLen < length; ++maxLen)
+    for (unsigned in = 0, maxLen = 0; maxLen < length; ++maxLen)
     {
         appendData(static_cast<uint8_t>((value >> in) & 0xff));
         in += BYTE_SIZE;
     }
 }
 
-void Generic::deserializeUnsigned()
+void Generic::serializeSigned(const int value, const unsigned length,
+                              std::function<void(uint8_t)> appendData)
 {
-
+    constexpr uint8_t BYTE_SIZE = 8;
+    
+    unsigned value_Uint = std::abs(value);
+    for (unsigned in = 0, maxLen = 0; maxLen < length; ++maxLen)
+    {
+        uint8_t data = (value_Uint >> in) & 0xff;
+        if (maxLen+1 == length) data ^= (value<0)<<7;
+        appendData(data);
+        in += BYTE_SIZE;
+    }
 }
 
 #ifndef __HEADLESS

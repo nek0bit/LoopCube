@@ -15,6 +15,7 @@ struct SDL_Rect
 };
 #endif
 
+#include <iostream>
 #include <cmath>
 #include <cstdint>
 #include <functional>
@@ -44,8 +45,42 @@ namespace Generic
 
     GridCollision_t gridCollision(unsigned int width, unsigned int height, Vec2 box, const Size& size);
 
-    void serializeUnsigned(const int value, const int length, std::function<void(uint8_t)> appendData);
-    void deserializeUnsigned();
+    void serializeUnsigned(const unsigned value, const unsigned length,
+                           std::function<void(uint8_t)> appendData);
+
+    template <typename Container, typename Type>
+    Type deserializeUnsigned(const Container& value, const size_t begIndex, const uint8_t length)
+    {
+        constexpr uint8_t BYTE_SIZE = 8;
+        Type result = 0;
+
+        for (uint8_t i = 0; i < length; ++i)
+        {
+            uint8_t val = value.at(i+begIndex);
+            result |= val<<(i*BYTE_SIZE);
+        }
+
+        return result;
+    }
+
+    void serializeSigned(const int value, const unsigned length, std::function<void(uint8_t)> appendData);
+
+    template <typename Container, typename Type>
+    Type deserializeSigned(const Container& value, const size_t begIndex, const uint8_t length)
+    {
+        constexpr uint8_t BYTE_SIZE = 8;
+        Type result = 0;
+
+        bool isNegative = (value.at(begIndex + length - 1) & 128) == 128;
+        for (uint8_t i = 0; i < length; ++i)
+        {
+            uint8_t val = value.at(begIndex + i);
+            result |= (i+1 == length ? val & 127 : val) << (i * BYTE_SIZE);
+        }
+        
+        return isNegative ? -result : result;
+    }
+    
 
 #ifndef __HEADLESS
     namespace Render

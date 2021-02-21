@@ -291,10 +291,7 @@ std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, 
 
 void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
 {
-    uint64_t chunkX = 0;
-    uint64_t chunkY = 0;
-    int64_t resX = 0;
-    int64_t resY = 0;
+    int64_t resX = 0, resY = 0;
     
 
     int at = static_cast<int>(ignoreFirstByte);
@@ -305,29 +302,10 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ign
 
     // Deserialize chunk positions
     // X
-    // Check if negative
-    bool isNegativeX = (value.at(at + chunkXSize) & 128) == 128;
-    for (uint8_t i = 0; i < chunkXSize; ++i)
-    {
-        uint8_t val = value.at(at + i + 1);
-        // if its the last element, make it unsigned
-        chunkX |= (i+1 == chunkXSize ? val & 127 : val) << (i*8);
-    }
+    resX = Generic::deserializeSigned<std::vector<unsigned char>, long>(value, at+1, chunkXSize);
 
     // Y
-    bool isNegativeY = (value.at(at + chunkXSize + chunkYSize + 1) & 128) == 128;
-    for (uint8_t i = 0; i < chunkYSize; ++i)
-    {
-        uint8_t val = value.at(at + chunkXSize + i + 2);
-        // If its the last element, make it unsigned
-        chunkY |= (i+1 == chunkYSize ? val & 127 : val) << (i*8);
-    }
-
-    // Change to negatives if needed
-    if (isNegativeX) resX = -((int64_t)chunkX);
-    else resX = chunkX;
-    if (isNegativeY) resY = -((int64_t)chunkY);
-    else resY = chunkY;
+    resY = Generic::deserializeSigned<std::vector<unsigned char>, long>(value, at+chunkXSize+2, chunkYSize);
     
     auto splitX = checkSplitGenerate(resX);
     

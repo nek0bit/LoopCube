@@ -60,6 +60,7 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
 {
     constexpr size_t BUF_SIZE = 4096;
     int bc;
+    // TODO don't recreate this buffer
     unsigned char buf[BUF_SIZE];
     
     if ((bc = recv(fd, buf, BUF_SIZE-1, 0)) != -1)

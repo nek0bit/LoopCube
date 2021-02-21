@@ -8,6 +8,7 @@
 #include <atomic>
 #include <cstdint>
 
+#include "generic.hpp"
 #include "chunkgen.hpp"
 #include "chunkgroup.hpp"
 #include "timer.hpp"

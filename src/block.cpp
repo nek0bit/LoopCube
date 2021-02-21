@@ -75,18 +75,14 @@ std::vector<unsigned char> Block::serialize() const
 void Block::deserialize(const std::vector<unsigned char>& value)
 {
     // I don't believe we need to use hton- because bit shifting is the same independently
-    constexpr int BYTE_SIZE = sizeof(uint8_t) * 8;
     const uint8_t idSize = value.at(0);
 
-    // Values
-    uint32_t fullId = 0;
-    
-    // Deserialize the id
-    for (uint8_t i = 0; i < idSize; ++i)
+    try
     {
-        uint8_t val = value.at(i + 1);
-        fullId |= val<<(i*BYTE_SIZE);
+        setBlockId(Generic::deserializeUnsigned<std::vector<uint8_t>, uint8_t>(value, 1, idSize));
     }
-
-    setBlockId(fullId);
+    catch (const std::out_of_range& err)
+    {
+        std::cerr << "Failed to deserialize block: " << err.what() << std::endl;
+    }
 }

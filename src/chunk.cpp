@@ -239,29 +239,17 @@ std::vector<unsigned char> Chunk::serialize() const
 
     // Push back Chunk X Length
     byteList.push_back(chunkXLen);
-
-    // TODO put this generic for loop into function
-    int64_t convertX_s = x;
-    uint64_t convertX = std::abs(convertX_s);
-    for (int in = 0, maxLen = 0; maxLen < chunkXLen; ++maxLen)
-    {
-        byteList.push_back((convertX >> in) & 0xff);
-        in += 8; // bits
-    }
-    byteList[chunkXLen] ^= (convertX_s<0)<<7;
+    
+    Generic::serializeSigned(x, chunkXLen, [&byteList](uint8_t back)->void {
+        byteList.push_back(back);
+    });
 
     // Push back Chunk X Length
     byteList.push_back(chunkYLen);
-
-    // TODO put this generic for loop into function
-    int64_t convertY_s = y;
-    uint64_t convertY = std::abs(convertY_s);
-    for (int in = 0, maxLen = 0; maxLen < chunkYLen; ++maxLen)
-    {
-        byteList.push_back((convertY >> in) & 0xff);
-        in += 8; // bits
-    }
-    byteList[chunkXLen+chunkYLen+1] ^= (convertY_s<0)<<7;
+    
+    Generic::serializeSigned(y, chunkYLen, [&byteList](uint8_t back)->void {
+        byteList.push_back(back);
+    });
     
     for (int j = 0; j < constants::chunkHeight; ++j)
     {

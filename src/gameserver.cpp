@@ -89,8 +89,8 @@ void GameServer::modifyBlock(const int currFd, const std::vector<ServerThreadIte
         {
             for (const pollfd& pfd: item.connections)
             {
-                std::cout << "Sending to ..." << pfd.fd << ".." << std::endl;
-                send(pfd.fd, &res[0], res.size(), 0);
+                // Send to everyone excluding sender
+                if (pfd.fd != currFd) send(pfd.fd, &res[0], res.size(), 0);
             }
         }
     }
