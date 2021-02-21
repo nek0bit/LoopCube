@@ -80,11 +80,46 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
         }
         break;
         case ACTION_PLACE_BLOCK:
-            std::cout << "Block placed" << std::endl;
-            break;
         case ACTION_DESTROY_BLOCK:
-            std::cout << "Block removed" << std::endl;
-            break;
+        {
+            // Extract info
+            std::vector<unsigned char> deserializeMe{std::begin(buf), std::end(buf)};
+
+            try
+            {
+                const int chunkXSize = deserializeMe.at(1);
+                const int chunkYSize = deserializeMe.at(deserializeMe.at(1)+2);
+                const uint8_t blockX = deserializeMe.at(chunkXSize + chunkYSize + 3);
+                const uint8_t blockY = deserializeMe.at(chunkXSize + chunkYSize + 4);
+
+                // Extract chunkX and chunkY
+                long chunkX = Generic::deserializeSigned<std::vector<unsigned char>,
+                                                         long>(deserializeMe, 2, chunkXSize);
+                long chunkY = Generic::deserializeSigned<std::vector<unsigned char>,
+                                                         long>(deserializeMe,
+                                                               chunkXSize + 3,
+                                                               chunkYSize);
+
+                std::shared_ptr<Chunk> chk = chunks.getChunkAt(chunkX, chunkY);
+                if (chk != nullptr)
+                {
+                    if (buf[0] == ACTION_PLACE_BLOCK)
+                    {
+                        chk->placeBlock(0, blockX, blockY);
+                    }
+                    else // Destroy Block
+                    {
+                        chk->destroyBlock(blockX, blockY);
+                    }
+                        
+                }
+            }
+            catch (const std::out_of_range& err)
+            {
+                std::cerr << "[Warning] Recieved incorrect block" << std::endl;
+            }
+        }
+        break;
         default:
             break;
         }

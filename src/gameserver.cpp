@@ -70,13 +70,13 @@ void GameServer::modifyBlock(const int currFd, const std::vector<ServerThreadIte
 
         // Insert chunk X
         res.push_back(sizeof(chunkX));
-        Generic::serializeUnsigned(chunkX, sizeof(chunkX), [&res](uint8_t back)->void {
+        Generic::serializeSigned(chunkX, sizeof(chunkX), [&res](uint8_t back)->void {
             res.push_back(back);
         });
 
         // Insert chunk Y
         res.push_back(sizeof(chunkY));
-        Generic::serializeUnsigned(chunkX, sizeof(chunkY), [&res](uint8_t back)->void {
+        Generic::serializeSigned(chunkY, sizeof(chunkY), [&res](uint8_t back)->void {
             res.push_back(back);
         });
 
