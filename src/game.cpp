@@ -1,7 +1,9 @@
 #include "game.hpp"
 
-Game::Game(Timer& timer)
-    : title{"LoopCube"},
+Game::Game(Timer& timer, int argc, char** argv)
+    : argc{argc},
+      argv{argv},
+      title{"LoopCube"},
       state{},
       game{nullptr},
       menu{nullptr},
@@ -72,7 +74,32 @@ void Game::update()
         case STATE_PLAYING:
             // Check if the game is nullptr, then create it
             if (game == nullptr) {
-                game = std::shared_ptr<GameClient>(new GameClient(timer, winSize));
+                if (argc >= 3)
+                {
+                    try
+                    {
+                        std::string address = argv[1];
+                        uint16_t port = std::stoi(std::string(argv[2]));
+                        
+                        game = std::shared_ptr<GameClient>(new GameClient(address, port, timer, winSize));
+                    }
+                    catch (const std::invalid_argument& err)
+                    {
+                        isRunning = false;
+                        std::cerr << "[Error] Port must be a valid number" << std::endl;
+                        return;
+                    }
+                    catch (const ConnectionError& err)
+                    {
+                        isRunning = false;
+                        std::cerr << "[Error] Couldn't connect to server: " << err.what() << std::endl;
+                        return;
+                    }
+                }
+                else
+                {
+                    game = std::shared_ptr<GameClient>(new GameClient(timer, winSize));
+                }
                 // Let's pre-load a frame so everything can generate and render
                 // This may need to change depending on world generation in the future
                 game->update(events);

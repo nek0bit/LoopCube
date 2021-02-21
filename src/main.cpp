@@ -1,8 +1,8 @@
 #include "main.hpp"
 
-void gameLoop() {
+void gameLoop(int argc, char* argv[]) {
     Timer timer{120};
-	Game game{timer};
+	Game game{timer, argc, argv};
 	
 	game.init(false);
 	
@@ -20,7 +20,7 @@ void gameLoop() {
 	game.free();
 }
 
-int main(/* int argc, char* argv[] */) {
+int main(int argc, char* argv[]) {
 // Main applet loop for nintendo switch
 #ifdef __SWITCH__	 
 	hidScanInput();
@@ -35,7 +35,7 @@ int main(/* int argc, char* argv[] */) {
 		romfsInit();
 #endif
 
-	gameLoop();
+        gameLoop(argc, argv);
 
 // End main applet loop for nintendo switch
 #ifdef __SWITCH__

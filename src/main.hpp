@@ -13,5 +13,5 @@
 #include <chrono>
 #include <random>
 
-int main();
-void gameLoop();
+int main(int argc, char* argv[]);
+void gameLoop(int argc, char* argv[]);

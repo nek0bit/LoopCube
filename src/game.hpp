@@ -28,7 +28,7 @@ enum GAME_STATE {
 
 struct Game
 {
-	Game(Timer& timer);
+	Game(Timer& timer, int argc, char* argv[]);
 	~Game();
 
 	void init(bool fullscreen);
@@ -40,6 +40,8 @@ struct Game
 
     bool isRunning = false;
 private:
+    int argc;
+    char** argv;
 	const char* title;
 	
 	bool hasFreed = false;

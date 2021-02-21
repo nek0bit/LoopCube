@@ -59,6 +59,7 @@ GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize
     camera.y = 0;
 
     clientSocket = std::make_shared<ClientSocket>(address.c_str(), port);
+    serverChunks.setFd(clientSocket->fd);
 }
 
 GameClient::~GameClient()
@@ -67,6 +68,7 @@ GameClient::~GameClient()
     server = nullptr;
 
     if (serverThread.joinable()) serverThread.join();
+    
 }
 
 void GameClient::serverThreadFunction()
