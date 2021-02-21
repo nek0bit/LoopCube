@@ -315,10 +315,10 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ign
     }
 
     // Y
-    bool isNegativeY = (value.at(at + chunkYSize) & 128) == 128;
+    bool isNegativeY = (value.at(at + chunkXSize + chunkYSize + 1) & 128) == 128;
     for (uint8_t i = 0; i < chunkYSize; ++i)
     {
-        uint8_t val = value.at(at + chunkYSize + i + 2);
+        uint8_t val = value.at(at + chunkXSize + i + 2);
         // If its the last element, make it unsigned
         chunkY |= (i+1 == chunkYSize ? val & 127 : val) << (i*8);
     }
@@ -328,23 +328,19 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ign
     else resX = chunkX;
     if (isNegativeY) resY = -((int64_t)chunkY);
     else resY = chunkY;
-
-    // Fix negative values
-    //if (resX<0) resX -= constants::chunkWidth + 1; // FIX ME
-    if (resY < 0) resY = -resY;
-
+    
     auto splitX = checkSplitGenerate(resX);
+    
     if (splitX != data.end())
     {
         auto splitY = splitX->second;
 
         splitY->checkGenerate(resY,
-                              std::make_shared<Chunk>(chunkGen, splitX->second->x, resY),
+                              std::make_shared<Chunk>(nullptr, resX, resY),
                               false);
         
         auto chunkAt = splitY->getData(resY);
         chunkAt->deserialize(value, true);
-
     }
 }
 

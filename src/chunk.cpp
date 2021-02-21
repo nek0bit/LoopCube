@@ -307,18 +307,18 @@ void Chunk::deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
             if (value.at(at) == 0)
             {
                 data.at(bl) = nullptr;
-                at += 2;
+                at++;
                 bl++;
                 continue;
             }
 
-            uint8_t idSize = value.at(at)+1;
+            uint8_t idSize = value.at(at);
 
             // Examples of other values...
             //uint8_t xSize = value.at(at+idSize)+1;
             //uint8_t ySize = value.at(at+xSize)+1;
 
-            for (uint8_t i = 0; i < idSize /* + otherSizes */; ++i)
+            for (uint8_t i = 0; i < idSize+1 /* + otherSizes */; ++i)
             {
                 dataDes.push_back(value.at(i+at));
             }
@@ -327,7 +327,7 @@ void Chunk::deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
             placeBlock(0, pos.x, pos.y);
             data.at(bl)->deserialize(dataDes);
 
-            at += idSize; /* + otherSizes */
+            at += idSize+1; /* + otherSizes */
             bl++;
         }
     } // Lets catch anything here incase of malicious attempts
@@ -346,12 +346,12 @@ indPos Chunk::indexToPos(const size_t index) const
 
 void Chunk::generateChunk()
 {    
-    if (chunkGen != nullptr) chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {
-        placeBlock(id, x, y);
-    }, MAX_WIDTH, MAX_HEIGHT);
-    else
-        placeBlock(0, 0, 0);
-
+    if (chunkGen != nullptr)
+    {
+        chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {
+            placeBlock(id, x, y);
+        }, MAX_WIDTH, MAX_HEIGHT);
+    }
 }
 
 // A little slow, not recommended except for when joining chunks

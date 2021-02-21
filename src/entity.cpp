@@ -31,7 +31,7 @@ void Entity::collisionTop() {}
 
 CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 {
-    // TODO URGENT optimize entity position to work within blocks instead of chunks
+    // TODO optimize entity position to work within blocks instead of chunks
     // It's 100% easy and possible and should optimize a lot
 
     std::vector<std::shared_ptr<Chunk>> inChunks = chunks.isWithinChunks(position, size);
@@ -69,23 +69,12 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
 
 	// Check X velocity
 	if (infoX == true) {
-		if (velX == 0) {
-			// If entity happens to get stuck in the wall then push them out
-			if (lastPos == 1) {
-			    position.x -= 5;
-			} else if (lastPos == 3) {
-			    position.x += 5;
-			} else {
-			    position.x += 5;
-			}
-				
-		}
-		if (infoX.left != -1) {
-		    position.x -= infoX.left;
-		}
-		if (infoX.right != -1) {
-		    position.x += infoX.right;
-		}
+        if (infoX.left != -1) {
+            position.x -= infoX.left;
+        }
+        if (infoX.right != -1) {
+            position.x += infoX.right;
+        }
 		velX = 0;
 		onGround = true;
 	}

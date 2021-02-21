@@ -8,9 +8,9 @@ void ChunkGen::generateChunk(std::function<void(unsigned, unsigned, unsigned)> p
                              const unsigned WIDTH,
                              const unsigned HEIGHT)
 {
-    for (unsigned int y = 0; y < WIDTH; ++y)
+    for (unsigned int y = 0; y < HEIGHT; ++y)
     {
-        for (unsigned int x = 0; x < HEIGHT; ++x)
+        for (unsigned int x = 0; x < WIDTH; ++x)
         {
             placeBlockFunctor(BLOCK_MOON_BLOCK, x, y);
         }
