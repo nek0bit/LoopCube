@@ -59,7 +59,15 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
     const int cap = 2000.0f;
     constexpr float friction = 20.0f;
-    
+
+    // Don't do anything if not in any chunks
+    int count = 0;
+    std::vector<std::shared_ptr<Chunk>> inChunks = chunks.isWithinChunks(position, size);
+    for (auto& chunk: inChunks)
+    {
+        if (chunk != nullptr) count++;
+    }
+    if (count == 0) return;
 	
 	velX *= 1 / (1 + (timer.deltaTime * friction));
 		

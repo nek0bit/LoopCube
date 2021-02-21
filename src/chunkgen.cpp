@@ -5,14 +5,20 @@ ChunkGen::ChunkGen(int seed)
 {}
 
 void ChunkGen::generateChunk(std::function<void(unsigned, unsigned, unsigned)> placeBlockFunctor,
+                             const long chunkX,
+                             const long chunkY,
                              const unsigned WIDTH,
                              const unsigned HEIGHT)
 {
-    for (unsigned int y = 0; y < HEIGHT; ++y)
+    // Don't spawn within player spawn
+    if (!(chunkX == 0 && chunkY == 0))
     {
-        for (unsigned int x = 0; x < WIDTH; ++x)
+        for (unsigned int y = 0; y < HEIGHT; ++y)
         {
-            placeBlockFunctor(BLOCK_MOON_BLOCK, x, y);
+            for (unsigned int x = 0; x < WIDTH; ++x)
+            {
+                placeBlockFunctor(BLOCK_MOON_BLOCK, x, y);
+            }
         }
     }
 }

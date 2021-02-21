@@ -10,6 +10,8 @@ struct ChunkGen
     virtual ~ChunkGen() = default;
 
     virtual void generateChunk(std::function<void(unsigned, unsigned, unsigned)> placeBlockFunctor,
+                               const long chunkX,
+                               const long chunkY,
                                const unsigned WIDTH,
                                const unsigned HEIGHT);
     

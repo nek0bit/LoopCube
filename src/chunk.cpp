@@ -350,7 +350,7 @@ void Chunk::generateChunk()
     {
         chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {
             placeBlock(id, x, y);
-        }, MAX_WIDTH, MAX_HEIGHT);
+        }, x, y, MAX_WIDTH, MAX_HEIGHT);
     }
 }
 
