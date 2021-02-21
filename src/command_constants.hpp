@@ -14,6 +14,9 @@ constexpr const char* COMMAND_DESTROY_BLOCK_ABSOLUTE = "DBA";
 
 enum command_actions
 {
+    ACTION_ZERO,
     ACTION_ECHO,
-    ACTION_GET_CHUNK
+    ACTION_GET_CHUNK,
+    ACTION_PLACE_BLOCK,
+    ACTION_DESTROY_BLOCK
 };

@@ -17,6 +17,7 @@ struct SDL_Rect
 
 #include <cmath>
 #include <cstdint>
+#include <functional>
 
 #include "vector.hpp"
 #include "size.hpp"
@@ -42,6 +43,9 @@ namespace Generic
     bool collision(SDL_Rect r1, SDL_Rect r2);
 
     GridCollision_t gridCollision(unsigned int width, unsigned int height, Vec2 box, const Size& size);
+
+    void serializeUnsigned(const int value, const int length, std::function<void(uint8_t)> appendData);
+    void deserializeUnsigned();
 
 #ifndef __HEADLESS
     namespace Render

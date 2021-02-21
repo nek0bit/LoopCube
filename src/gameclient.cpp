@@ -22,15 +22,22 @@ GameClient::GameClient(Timer& timer, WinSize& winSize)
         // Create server
         server = std::make_shared<Server>(8726);
         serverThread = std::thread(&GameClient::serverThreadFunction, this);
+    }
+    catch (const std::exception& err)
+    {
+        std::cout << "Exception: " << err.what() << std::endl;
+        server = nullptr;
+    }
 
+    try
+    {
         // Connect to server
         clientSocket = std::make_shared<ClientSocket>(nullptr, 8726);
         serverChunks.setFd(clientSocket->fd);
     }
-    catch (const std::exception& error)
+    catch (const std::exception& err)
     {
-        std::cout << "Exception: " << error.what() << std::endl;
-        server = nullptr;
+        std::cout << "Error connecting to server: " << err.what() << std::endl;
     }
 }
 
@@ -66,7 +73,7 @@ void GameClient::serverThreadFunction()
 {
     try
     {
-        server->startServer(1);
+        if (server != nullptr) server->startServer(1);
     }
     catch(const NetworkError& err)
     {

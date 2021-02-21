@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdint>
 #include <vector>
+
+#include "generic.hpp"
 #include "gameobj.hpp"
 #include "vector.hpp"
 #include "constants.hpp"

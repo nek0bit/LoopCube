@@ -22,8 +22,24 @@ GridCollision_t Generic::gridCollision(unsigned int width, unsigned int height, 
     box.x = std::fmod(box.x, width);
     box.y = std::fmod(box.y, height);
 
-    return {((size.w + box.x) / width) + ((add & 1) == 1),
-        ((size.h + box.y) / height) + ((add & 2) == 2)};
+    return {static_cast<unsigned>(((size.w + box.x) / width) + ((add & 1) == 1)),
+        static_cast<unsigned>(((size.h + box.y) / height) + ((add & 2) == 2))};
+}
+
+void Generic::serializeUnsigned(const int value, const int length, std::function<void(uint8_t)> appendData)
+{
+    constexpr uint8_t BYTE_SIZE = 8;
+
+    for (int in = 0, maxLen = 0; maxLen < length; ++maxLen)
+    {
+        appendData(static_cast<uint8_t>((value >> in) & 0xff));
+        in += BYTE_SIZE;
+    }
+}
+
+void Generic::deserializeUnsigned()
+{
+
 }
 
 #ifndef __HEADLESS

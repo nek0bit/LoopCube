@@ -21,28 +21,12 @@
 #include "socketwrapper.hpp"
 #include "gameserver.hpp"
 #include "timer.hpp"
+#include "serverheader.hpp"
 
 struct Server;
 struct ServerThreadItem;
 struct ThreadData;
 struct NetworkError;
-
-struct ConnectionData
-{
-    std::string username;
-    double playerX;
-    double playerY;
-};
-
-// Struct for thread items
-struct ServerThreadItem
-{
-    uint16_t id;
-    std::thread thread;
-    uint32_t count;
-    std::vector<pollfd> connections; // Must be pollfd's or poll won't work
-    std::vector<ConnectionData> connectionData; // Alligned to connections vector
-};
 
 // Error handling
 enum NERROR_TYPE

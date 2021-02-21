@@ -12,6 +12,7 @@
 #include "chunkgroup.hpp"
 #include "timer.hpp"
 #include "player.hpp"
+#include "serverheader.hpp"
 
 struct GameServer
 {
@@ -20,7 +21,8 @@ struct GameServer
 
     void update(Timer& timer);
     std::vector<unsigned char> checkChunkAt(const long int x, const long int y);
-    void modifyBlock(const uint32_t id,
+    void modifyBlock(const int currFd, const std::vector<ServerThreadItem>& threads,
+                     const uint32_t id,
                      int64_t chunkX, int64_t chunkY,
                      uint64_t x, uint64_t y,
                      bool createOrDestroy);

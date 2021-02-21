@@ -360,7 +360,7 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
                 const long chunkY = std::stoi(msgSplit.at(3));
                 const long x = std::stoi(msgSplit.at(4));
                 const long y = std::stoi(msgSplit.at(5));
-                game.modifyBlock(id, chunkX, chunkY, x, y, false);
+                game.modifyBlock(fd, threadPool, id, chunkX, chunkY, x, y, false);
             }
             catch (const std::invalid_argument& err) {}
         }
@@ -372,7 +372,7 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
                 const long chunkY = std::stoi(msgSplit.at(2));
                 const long x = std::stoi(msgSplit.at(3));
                 const long y = std::stoi(msgSplit.at(4));
-                game.modifyBlock(-1, chunkX, chunkY, x, y, true);
+                game.modifyBlock(fd, threadPool, -1, chunkX, chunkY, x, y, true);
             }
             catch (const std::invalid_argument& err) {}
         }

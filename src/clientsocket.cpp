@@ -78,6 +78,12 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
             chunks.chunkReady = true;
         }
         break;
+        case ACTION_PLACE_BLOCK:
+            std::cout << "Block placed" << std::endl;
+            break;
+        case ACTION_DESTROY_BLOCK:
+            std::cout << "Block removed" << std::endl;
+            break;
         default:
             break;
         }

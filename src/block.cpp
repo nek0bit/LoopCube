@@ -59,22 +59,15 @@ std::vector<unsigned char> Block::serialize() const
 {
     // TODO determine the minimum size we can fit it into (set bits/8)
     // Example: block at position 1 can fit into uint8 and 256 into uint16
-    std::vector<unsigned char> fullRes;
-    constexpr uint8_t BYTE_SIZE = sizeof(unsigned char) * 8;
-    uint16_t maxLen = 0;
+    std::vector<uint8_t> fullRes;
     const uint8_t idLen = sizeof(blockinfo->id); // For now, we'll kind of use fixed lengths
 
     // Push back the id so we can know its length for deserialization!
     fullRes.push_back(idLen);
-    
-    // Store id values
-    for (int in = 0, maxIdLen = 0; maxIdLen < idLen; ++maxIdLen)
-    {
-        fullRes.push_back((blockinfo->id >> in) & 0xff);
-        in += BYTE_SIZE;
-    }
 
-    maxLen += idLen + 1;
+    Generic::serializeUnsigned(blockinfo->id, idLen, [&fullRes](uint8_t back)->void {
+            fullRes.push_back(back);
+        });
     
     return fullRes;
 }
