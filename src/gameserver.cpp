@@ -34,3 +34,25 @@ std::vector<unsigned char> GameServer::checkChunkAt(const long int x, const long
 
     return get_s;
 }
+
+void GameServer::modifyBlock(const uint32_t id,
+                             int64_t chunkX, int64_t chunkY,
+                             uint64_t x, uint64_t y,
+                             bool createOrDestroy)
+{
+    std::lock_guard<std::mutex> lg(chunkLock);
+
+    std::shared_ptr<Chunk> cget;
+
+    if ((cget = chunks.getChunkAt(chunkX, chunkY)) != nullptr)
+    {
+        if (createOrDestroy == false) // Create
+        {
+            cget->placeBlock(id, x, y);
+        }
+        else // Destroy
+        {
+            cget->destroyBlock(x, y);
+        }
+    }
+}

@@ -8,6 +8,9 @@ constexpr const char* COMMAND_QUIT = "QUIT";
 constexpr const char* COMMAND_ECHO = "ECHO";
 constexpr const char* COMMAND_PLAYER_POS = "PPOS";
 constexpr const char* COMMAND_GET_CHUNK = "GC";
+constexpr const char* COMMAND_GET_PLAYERS = "GP";
+constexpr const char* COMMAND_PLACE_BLOCK_ABSOLUTE = "PBA";
+constexpr const char* COMMAND_DESTROY_BLOCK_ABSOLUTE = "DBA";
 
 enum command_actions
 {

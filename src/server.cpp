@@ -351,6 +351,31 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
             }
             catch (const std::invalid_argument& err) {}
         }
+        else if (msgSplit.at(0) == COMMAND_PLACE_BLOCK_ABSOLUTE)
+        {
+            try
+            {
+                const long id = std::stoi(msgSplit.at(1));
+                const long chunkX = std::stoi(msgSplit.at(2));
+                const long chunkY = std::stoi(msgSplit.at(3));
+                const long x = std::stoi(msgSplit.at(4));
+                const long y = std::stoi(msgSplit.at(5));
+                game.modifyBlock(id, chunkX, chunkY, x, y, false);
+            }
+            catch (const std::invalid_argument& err) {}
+        }
+        else if (msgSplit.at(0) == COMMAND_DESTROY_BLOCK_ABSOLUTE)
+        {
+            try
+            {
+                const long chunkX = std::stoi(msgSplit.at(1));
+                const long chunkY = std::stoi(msgSplit.at(2));
+                const long x = std::stoi(msgSplit.at(3));
+                const long y = std::stoi(msgSplit.at(4));
+                game.modifyBlock(-1, chunkX, chunkY, x, y, true);
+            }
+            catch (const std::invalid_argument& err) {}
+        }
     }
     catch (const std::out_of_range& err) {} // Do nothing
 }

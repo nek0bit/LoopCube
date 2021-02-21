@@ -263,9 +263,9 @@ std::vector<unsigned char> Chunk::serialize() const
     }
     byteList[chunkXLen+chunkYLen+1] ^= (convertY_s<0)<<7;
     
-    for (int i = 0; i < constants::chunkWidth; ++i)
+    for (int j = 0; j < constants::chunkHeight; ++j)
     {
-        for (int j = 0; j < constants::chunkHeight; ++j)
+        for (int i = 0; i < constants::chunkWidth; ++i)
         {
             if (data[posToIndex(i, j)] == nullptr)
             {

@@ -19,14 +19,18 @@ GameClient::GameClient(Timer& timer, WinSize& winSize)
 
     try
     {
+        // Create server
         server = std::make_shared<Server>(8726);
         serverThread = std::thread(&GameClient::serverThreadFunction, this);
+
+        // Connect to server
         clientSocket = std::make_shared<ClientSocket>(nullptr, 8726);
         serverChunks.setFd(clientSocket->fd);
     }
     catch (const std::exception& error)
     {
         std::cout << "Exception: " << error.what() << std::endl;
+        server = nullptr;
     }
 }
 
@@ -207,8 +211,10 @@ void GameClient::mouseEvents(EventWrapper& events)
     } else {
         withinY = pos.y % constants::chunkHeight;
     }
-    
-    std::shared_ptr<Chunk> chunk = serverChunks.getChunkAt(p1Fixed / constants::chunkWidth, p2Fixed / constants::chunkHeight);
+
+    int chunkX = p1Fixed / constants::chunkWidth;
+    int chunkY = p2Fixed / constants::chunkHeight;
+    std::shared_ptr<Chunk> chunk = serverChunks.getChunkAt(chunkX, chunkY);
     if (chunk != nullptr)
     {
         switch(events.vmouse.down)
@@ -219,6 +225,8 @@ void GameClient::mouseEvents(EventWrapper& events)
             
             // Check if block found
             if (block != nullptr) {
+                // Send request to destroy block on server side
+                Api::sendDestroyBlock(clientSocket->fd, chunkX, chunkY, withinX, withinY);
                 // Generate particles
                 if (constants::config.getInt(CONFIG_SHOW_PARTICLES)) {
                     for (size_t i = 0; i < MAX_PARTICLES; ++i)
@@ -227,8 +235,10 @@ void GameClient::mouseEvents(EventWrapper& events)
                             .3 + (static_cast<float>(rand() % 100) / 100.0f),
                             rand() % 2 == 1 ? -230.0f : 230.0f,
                             -180.0f,
-                            pos.x * constants::blockW + (rand() % static_cast<int>(constants::blockW)),
-                            pos.y * constants::blockH + (rand() % static_cast<int>(constants::blockH)),
+                            (double)pos.x * constants::blockW +
+                            (rand() % static_cast<int>(constants::blockW)),
+                            (double)pos.y * constants::blockH +
+                            (rand() % static_cast<int>(constants::blockH)),
                             8,
                             6};
                         particles.push_back(temp);
@@ -240,12 +250,13 @@ void GameClient::mouseEvents(EventWrapper& events)
         case 3:
         {
             //Item& item = inv->getSelectedItem();
-            //if (item.enabled) {
+            //if (item.enabled)
             //BlockInfo& b_info = item.block;
+            //item.addCount(-1);
+            
             if (chunk->placeBlock(0, withinX, withinY)) {
-                //item.addCount(-1);
+                Api::sendPlaceBlock(clientSocket->fd, 0, chunkX, chunkY, withinX, withinY);
             }
-            //}
         }
         break;
         default:
