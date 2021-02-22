@@ -289,6 +289,7 @@ std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, 
     return ch;
 }
 
+// BUG freezes on invalid data
 void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
 {
     int64_t resX = 0, resY = 0;
@@ -318,7 +319,7 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ign
                               false);
         
         auto chunkAt = splitY->getData(resY);
-        chunkAt->deserialize(value, true);
+        if (chunkAt) chunkAt->deserialize(value, true);
     }
 }
 

@@ -58,71 +58,103 @@ ClientSocket::~ClientSocket()
 
 void ClientSocket::checkSocket(ChunkGroup& chunks)
 {
-    constexpr size_t BUF_SIZE = 4096;
-    int bc;
-    // TODO don't recreate this buffer
-    unsigned char buf[BUF_SIZE];
-    
-    if ((bc = recv(fd, buf, BUF_SIZE-1, 0)) != -1)
+    constexpr size_t BUF_SIZE = 2048;
+    int res;
+
+    try
     {
-        buf[bc] = '\0';
-        unsigned char* noByte = buf;
-        noByte++; // Skips the action
-        switch (buf[0])
+        do
         {
-        case ACTION_ECHO:
-            break;
-        case ACTION_GET_CHUNK:
-        {
-            std::vector<unsigned char> deserializeMe{std::begin(buf), std::end(buf)};
-            chunks.loadFromDeserialize(deserializeMe, true);
-            chunks.chunkReady = true;
-        }
-        break;
-        case ACTION_PLACE_BLOCK:
-        case ACTION_DESTROY_BLOCK:
-        {
-            // Extract info
-            std::vector<unsigned char> deserializeMe{std::begin(buf), std::end(buf)};
+            unsigned char buffer[2048];
+            int sizeByte = recv(fd, buffer, 2, 0);
 
+            if (sizeByte <= 0)
+                return;
+
+            std::vector<unsigned char> readInto(std::begin(buffer), std::begin(buffer)+2);
+
+            uint16_t dataLength = Generic::deserializeUnsigned<std::vector<unsigned char>, uint16_t>
+                (readInto, 0, 2);
+
+        
+            res = recv(fd, &buffer[0], dataLength, 0);
+
+            // One more time
+            if (res <= 0)
+                return;
+
+            
+            std::cout << dataLength << std::endl;
+        
+            std::vector<unsigned char> value(std::begin(buffer), std::begin(buffer)+dataLength-2);
+        
+            // DEBUGGING
+            // for (auto& i: value)
+            // {
+            //     std::cout << (int)i << " ";
+            // }
+            // std::cout << std::endl;
+            // END DEBUG
+        
             try
-            {
-                const int chunkXSize = deserializeMe.at(1);
-                const int chunkYSize = deserializeMe.at(deserializeMe.at(1)+2);
-                const uint8_t blockX = deserializeMe.at(chunkXSize + chunkYSize + 3);
-                const uint8_t blockY = deserializeMe.at(chunkXSize + chunkYSize + 4);
-
-                // Extract chunkX and chunkY
-                long chunkX = Generic::deserializeSigned<std::vector<unsigned char>,
-                                                         long>(deserializeMe, 2, chunkXSize);
-                long chunkY = Generic::deserializeSigned<std::vector<unsigned char>,
-                                                         long>(deserializeMe,
-                                                               chunkXSize + 3,
-                                                               chunkYSize);
-
-                std::shared_ptr<Chunk> chk = chunks.getChunkAt(chunkX, chunkY);
-                if (chk != nullptr)
+            {   
+                switch(value.at(0))
                 {
-                    if (buf[0] == ACTION_PLACE_BLOCK)
+                case ACTION_GET_CHUNK:
+                {
+                    chunks.loadFromDeserialize(value, true);
+                    chunks.chunkReady = true;
+                }
+                break;
+                case ACTION_PLACE_BLOCK:
+                case ACTION_DESTROY_BLOCK:
+                {
+                    // Extract info
+                    try
                     {
-                        chk->placeBlock(0, blockX, blockY);
-                    }
-                    else // Destroy Block
-                    {
-                        chk->destroyBlock(blockX, blockY);
-                    }
+                        const int chunkXSize = value.at(1);
+                        const int chunkYSize = value.at(value.at(1)+2);
+                        const uint8_t blockX = value.at(chunkXSize + chunkYSize + 3);
+                        const uint8_t blockY = value.at(chunkXSize + chunkYSize + 4);
+
+                        // Extract chunkX and chunkY
+                        long chunkX = Generic::deserializeSigned<std::vector<unsigned char>,
+                                                                 long>(value, 2, chunkXSize);
+                        long chunkY = Generic::deserializeSigned<std::vector<unsigned char>,
+                                                                 long>(value,
+                                                                       chunkXSize + 3,
+                                                                       chunkYSize);
+
+                        std::shared_ptr<Chunk> chk = chunks.getChunkAt(chunkX, chunkY);
+                        if (chk != nullptr)
+                        {
+                            if (value.at(0) == ACTION_PLACE_BLOCK)
+                            {
+                                chk->placeBlock(0, blockX, blockY);
+                            }
+                            else // Destroy Block
+                            {
+                                chk->destroyBlock(blockX, blockY);
+                            }
                         
+                        }
+                    }
+                    catch (const std::out_of_range& err)
+                    {
+                        std::cerr << "[Warning] Recieved incorrect block" << std::endl;
+                    }
+                }
+                break;
+                default:
+                    break;
                 }
             }
-            catch (const std::out_of_range& err)
-            {
-                std::cerr << "[Warning] Recieved incorrect block" << std::endl;
-            }
-        }
-        break;
-        default:
-            break;
-        }
+            catch (const std::out_of_range& err) {}
+        } while (!(res == -1 || res == 0));
+    }
+    catch (const std::exception& err)
+    {
+        std::cerr << "Caught exception: " << err.what() << std::endl;
     }
 }
 

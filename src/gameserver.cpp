@@ -17,9 +17,12 @@ void GameServer::update(Timer& timer)
 
 std::vector<unsigned char> GameServer::checkChunkAt(const long int x, const long int y)
 {
-    chunkLock.lock();
+    std::lock_guard<std::mutex> lg(chunkLock);
+    
     std::shared_ptr<Chunk> cget;
+    
     std::vector<unsigned char> get_s;
+    
     if ((cget = chunks.getChunkAt(x, y)) == nullptr)
     {
         chunks.generateChunkAt(x, y);
@@ -29,9 +32,8 @@ std::vector<unsigned char> GameServer::checkChunkAt(const long int x, const long
     {
         // Call a function that stringifies the chunk
         get_s = cget->serialize();
-    }
-    chunkLock.unlock();
-
+    }    
+    
     return get_s;
 }
 
@@ -65,6 +67,13 @@ void GameServer::modifyBlock(const int currFd, const std::vector<ServerThreadIte
     if (action != ACTION_ZERO)
     {
         std::vector<unsigned char> res;
+
+        const uint16_t fullSize = sizeof(chunkX)+sizeof(chunkY)+8;
+
+        // We don't need to push the size, because data can only be less than 65535
+        // and there is no way anyone on earth should send that much data...
+        Generic::serializeSigned(fullSize, 2, [&](uint8_t back)
+            { res.push_back(back); });
         
         res.push_back(static_cast<unsigned char>(action) & 0xff);
 
@@ -84,13 +93,16 @@ void GameServer::modifyBlock(const int currFd, const std::vector<ServerThreadIte
         res.push_back(x & 0xff);
         res.push_back(y & 0xff);
 
+
+        res.push_back(0xff);
+
         // Send the action to every connected player
         for (const ServerThreadItem& item: threads)
         {
             for (const pollfd& pfd: item.connections)
             {
                 // Send to everyone excluding sender
-                if (pfd.fd != currFd) send(pfd.fd, &res[0], res.size(), 0);
+                /*if (pfd.fd != currFd)*/ send(pfd.fd, &res[0], fullSize+1, 0);
             }
         }
     }
