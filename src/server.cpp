@@ -351,7 +351,7 @@ void Server::handleCommand(ServerThreadItem& item, const size_t index)
             }
             
             // Read the first bit
-            switch(value[1])
+            switch(value.at(1))
             {
             case COMMAND_QUIT:
                 removeConnection(item, index);
@@ -367,12 +367,12 @@ void Server::handleCommand(ServerThreadItem& item, const size_t index)
                     //connectionData.playerY = std::stod(msgSplit.at(2));
                 }
                 catch (const std::invalid_argument& err) {}
-                
+                break;
             case COMMAND_GET_CHUNK:
                 try
                 {
-                    const uint8_t chunkXSize = value[2];
-                    const uint8_t chunkYSize = value[2+chunkXSize+1];
+                    const uint8_t chunkXSize = value.at(2);
+                    const uint8_t chunkYSize = value.at(2+chunkXSize+1);
                     long chunkX = Generic::deserializeSigned<std::vector<unsigned char>, long>(value,
                                                                                                3, // index at first
                                                                                                chunkXSize);
@@ -387,34 +387,61 @@ void Server::handleCommand(ServerThreadItem& item, const size_t index)
                     send(fd, &data[0], data.size(), 0);
                 }
                 catch (const std::invalid_argument& err) {}
+                break;
             case COMMAND_PLACE_BLOCK_ABSOLUTE:
                 try
                 {
-                    // const long id = std::stoi(msgSplit.at(1));
-                    // const long chunkX = std::stoi(msgSplit.at(2));
-                    // const long chunkY = std::stoi(msgSplit.at(3));
-                    // const long x = std::stoi(msgSplit.at(4));
-                    // const long y = std::stoi(msgSplit.at(5));
-                    // game.modifyBlock(fd, threadPool, id, chunkX, chunkY, x, y, false);
+                    
+                    // Notice a pattern here...
+                    const uint8_t idSize = value.at(2);
+                    const uint8_t chunkXSize = value.at(2+idSize+1);
+                    const uint8_t chunkYSize = value.at(2+idSize+chunkXSize+2);
+                    const uint8_t blockXSize = value.at(2+idSize+chunkXSize+chunkYSize+3);
+                    const uint8_t blockYSize = value.at(2+idSize+chunkXSize+chunkYSize+blockXSize+4);
+
+                    uint32_t id = Generic::deserializeUnsigned<std::vector<unsigned char>, uint32_t>
+                        (value, 3, idSize);
+                    int64_t chunkX = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
+                        (value, 2+idSize+2, chunkXSize);
+                    int64_t chunkY = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
+                        (value, 2+idSize+chunkXSize+3, chunkYSize);
+                    uint8_t blockX = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
+                        (value, 2+idSize+chunkXSize+chunkYSize+4, blockXSize);
+                    uint8_t blockY = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
+                        (value, 2+idSize+chunkYSize+chunkYSize+blockXSize+5, blockYSize);
+                                        
+                    game.modifyBlock(fd, threadPool, id, chunkX, chunkY, blockX, blockY, false);
                 }
-                catch (const std::invalid_argument& err) {}
+                catch (const std::out_of_range& err) {}
+                break;                    
             case COMMAND_DESTROY_BLOCK_ABSOLUTE:
                 try
                 {
-                    // const long chunkX = std::stoi(msgSplit.at(1));
-                    // const long chunkY = std::stoi(msgSplit.at(2));
-                    // const long x = std::stoi(msgSplit.at(3));
-                    // const long y = std::stoi(msgSplit.at(4));
-                    // game.modifyBlock(fd, threadPool, -1, chunkX, chunkY, x, y, true);
+                    
+                    // Notice a pattern here...
+                    const uint8_t chunkXSize = value.at(2);
+                    const uint8_t chunkYSize = value.at(2+chunkXSize+1);
+                    const uint8_t blockXSize = value.at(2+chunkXSize+chunkYSize+2);
+                    const uint8_t blockYSize = value.at(2+chunkXSize+chunkYSize+blockXSize+3);
+
+                    int64_t chunkX = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
+                        (value, 3, chunkXSize);
+                    int64_t chunkY = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
+                        (value, 2+chunkXSize+2, chunkYSize);
+                    uint8_t blockX = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
+                        (value, 2+chunkXSize+chunkYSize+3, blockXSize);
+                    uint8_t blockY = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
+                        (value, 2+chunkYSize+chunkYSize+blockXSize+4, blockYSize);
+                                                            
+                    game.modifyBlock(fd, threadPool, -1, chunkX, chunkY, blockX, blockY, true);
                 }
-                catch (const std::invalid_argument& err) {}
+                catch (const std::out_of_range& err) {}
+                break;
             default:
                 break;
             }
         }
         catch (const std::out_of_range& err) {
-            // Client did something shady, kick them!!!
-            removeConnection(item, index);
             break;
         } // Do nothing
     } while (res != -1);

@@ -24,8 +24,8 @@ void Api::sendRecvChunk(const int fd, const long chunkX, const long chunkY)
     Generic::serializeSigned(chunkY, chunkYSize, gen);
     
     // Finally, concat the size of everything
-    // 2 = total, 1 is command
-    uint8_t totalSize = chunkXSize + chunkYSize + 5; // 2 + 1 
+    // 2 = total, 3 for rest of data
+    uint8_t totalSize = chunkXSize + chunkYSize + 5; // 2 + 3
 
     // Put at beginning
     result.insert(result.begin(), totalSize);
@@ -48,7 +48,6 @@ void Api::sendPlaceBlock(const int fd, const uint32_t id,
     std::vector<uint8_t> result{};
     std::function<void(uint8_t)> gen = [&result](uint8_t back)->void { result.push_back(back); };
 
-
     // The command
     result.push_back(static_cast<uint8_t>(COMMAND_PLACE_BLOCK_ABSOLUTE));
 
@@ -68,12 +67,15 @@ void Api::sendPlaceBlock(const int fd, const uint32_t id,
     Generic::serializeSigned(y, ySize, gen);
     
     // Finally, append the size of everything
-    // 5 = total, 1 is command
-    uint8_t totalSize = idSize + chunkXSize + chunkYSize + xSize + ySize + (sizeof(uint8_t)*6); 
+    // 5 = total, 3 for rest of data
+    uint8_t totalSize = idSize + chunkXSize + chunkYSize + xSize + ySize + 8; // 5 + 3
 
+    // Size of all data
     result.insert(result.begin(), totalSize);
+
+    result.push_back(0xff); // End
     
-    send(fd, &result[0], result.size(), 0);
+    send(fd, &result[0], totalSize+1, 0);
 }
 
 void Api::sendDestroyBlock(const int fd,
@@ -105,10 +107,13 @@ void Api::sendDestroyBlock(const int fd,
     Generic::serializeSigned(y, ySize, gen);
     
     // Finally, append the size of everything
-    // 4 = total, 1 is command
-    uint8_t totalSize = chunkXSize + chunkYSize + xSize + ySize + (sizeof(uint8_t)*5);
+    // 4 = total, 3 for rest of data
+    uint8_t totalSize = chunkXSize + chunkYSize + xSize + ySize + 7;
 
+    // Put at beginning
     result.insert(result.begin(), totalSize);
+
+    result.push_back(0xff); // End
     
-    send(fd, &result[0], totalSize, 0);
+    send(fd, &result[0], totalSize+1, 0);
 }
