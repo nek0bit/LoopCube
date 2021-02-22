@@ -4,15 +4,16 @@
 // _ChunkDataSplit: For vertical chunks
 //***************************************
 _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
-                                 int& fd, bool& isFdSet, bool& chunkReady)
+                                 int& fd, bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk)
     : loadPtr{loadPtr},
       loadDistance{loadDistance},
       loadedChunks{},
       left{nullptr},
       right{nullptr},
       x{x},
-      isFdSet{isFdSet},
       chunkReady{chunkReady},
+      pendingChunk{pendingChunk},
+      isFdSet{isFdSet},
       fd{fd},
       isClient{true},
       chunkGen{nullptr}
@@ -22,15 +23,16 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
 
 _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
                                  std::shared_ptr<ChunkGen> chunkGen, int& fd,
-                                 bool& isFdSet, bool& chunkReady)
+                                 bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk)
     : loadPtr{loadPtr},
       loadDistance{loadDistance},
       loadedChunks{},
       left{nullptr},
       right{nullptr},
       x{x},
-      isFdSet{isFdSet},
       chunkReady{chunkReady},
+      pendingChunk{pendingChunk},
+      isFdSet{isFdSet},
       fd{fd},
       isClient{false},
       chunkGen{chunkGen}
@@ -53,6 +55,8 @@ _ChunkDataSplit::checkGenerate(long int y,
             if (isFdSet && chunkReady)
             {
                 Api::sendRecvChunk(fd, x, y);
+                pendingChunk.x = x;
+                pendingChunk.y = y;
                 chunkReady = false;
             }
         }
@@ -186,6 +190,7 @@ ChunkGroup::ChunkGroup()
     : loadPtr{0, 0},
       loadDistance{constants::loadDistance},
       chunkReady{true},
+      pendingChunk{},
       isFdSet{false},
       fd{0},
       isClient{true},
@@ -201,6 +206,7 @@ ChunkGroup::ChunkGroup(std::shared_ptr<ChunkGen> chunkGen)
     :  loadPtr{0, 0},
        loadDistance{constants::loadDistance},
        chunkReady{false},
+       pendingChunk{},
        isFdSet{false},
        fd{0},
        isClient{false},
@@ -308,18 +314,23 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ign
     // Y
     resY = Generic::deserializeSigned<std::vector<unsigned char>, long>(value, at+chunkXSize+2, chunkYSize);
     
-    auto splitX = checkSplitGenerate(resX);
+    auto splitX = checkSplitGenerate(pendingChunk.x);
     
     if (splitX != data.end())
     {
         auto splitY = splitX->second;
 
         splitY->checkGenerate(resY,
-                              std::make_shared<Chunk>(nullptr, resX, resY),
+                              std::make_shared<Chunk>(nullptr, pendingChunk.x, pendingChunk.y),
                               false);
         
-        auto chunkAt = splitY->getData(resY);
-        if (chunkAt) chunkAt->deserialize(value, true);
+        auto chunkAt = splitY->getData(pendingChunk.y);
+        chunkReady = true;
+        chunkAt->deserialize(value, true);
+    }
+    else
+    {
+        chunkReady = true;
     }
 }
 
@@ -359,12 +370,13 @@ ChunkGroup::checkSplitGenerate(long int x)
         if (isClient)
         {
             data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance,
-                                                              fd, isFdSet, chunkReady)});
+                                                              fd, isFdSet, chunkReady, pendingChunk)});
         }
         else
         {
             data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance,
-                                                              chunkGen, fd, isFdSet, chunkReady)});
+                                                              chunkGen, fd, isFdSet, chunkReady,
+                                                              pendingChunk)});
         }
         
         auto ret = data.find(x);

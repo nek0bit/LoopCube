@@ -77,24 +77,15 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
                 (readInto, 0, 2);
 
         
-            res = recv(fd, &buffer[0], dataLength, 0);
+            res = recv(fd, buffer, dataLength-2, 0);
 
-            // One more time
             if (res <= 0)
                 return;
-
-            
-            std::cout << dataLength << std::endl;
         
             std::vector<unsigned char> value(std::begin(buffer), std::begin(buffer)+dataLength-2);
-        
-            // DEBUGGING
-            // for (auto& i: value)
-            // {
-            //     std::cout << (int)i << " ";
-            // }
-            // std::cout << std::endl;
-            // END DEBUG
+
+            if (value.at(dataLength-3) != 0xff)
+                return;
         
             try
             {   
@@ -103,7 +94,6 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
                 case ACTION_GET_CHUNK:
                 {
                     chunks.loadFromDeserialize(value, true);
-                    chunks.chunkReady = true;
                 }
                 break;
                 case ACTION_PLACE_BLOCK:
@@ -150,7 +140,7 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
                 }
             }
             catch (const std::out_of_range& err) {}
-        } while (!(res == -1 || res == 0));
+        } while (res > 0);
     }
     catch (const std::exception& err)
     {

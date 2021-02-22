@@ -41,10 +41,10 @@ struct ChunkData
 struct _ChunkDataSplit
 {
     _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
-                    int& fd, bool& isFdSet, bool& chunkReady);
+                    int& fd, bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk);
     _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
                     std::shared_ptr<ChunkGen> chunkGen, int& fd,
-                    bool& isFdSet, bool& chunkReady);
+                    bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk);
     ~_ChunkDataSplit() = default;
 
     void updateLoaded();
@@ -70,9 +70,10 @@ struct _ChunkDataSplit
     
     const long int x;
     std::unordered_map<long int, ChunkData> data;
+    bool& chunkReady;
+    ChunkPos& pendingChunk;
 private:
     bool& isFdSet;
-    bool& chunkReady;
     int& fd;
     bool isClient;
     void prepareLoaded();
@@ -106,6 +107,7 @@ struct ChunkGroup
     LoadDistance& loadDistance;
     bool chunkReady;
 private:
+    ChunkPos pendingChunk;
     bool isFdSet;
     int fd;
     bool isClient; // Client chunks work differently from server chunks
