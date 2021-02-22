@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <memory>
 #include <unistd.h>
+#include <functional>
 
 #include <netdb.h>
 #include <sys/types.h>
@@ -13,12 +14,12 @@
 #include <arpa/inet.h>
 
 #include "command_constants.hpp"
+#include "generic.hpp"
 
 namespace Api
 {
-    void sendEcho(const int fd, const std::string data);
     void sendPlayerPos(const int fd, const double x, const double y);
-    void sendRecvChunk(const int fd, const long x, const long y);
+    void sendRecvChunk(const int fd, const long chunkX, const long chunkY);
     void sendPlaceBlock(const int fd, const uint32_t id,
                         const int64_t chunkX, const int64_t chunkY,
                         const uint16_t x, const uint16_t y);

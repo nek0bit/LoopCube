@@ -289,26 +289,10 @@ void Server::startServer(const size_t threadCount)
     }
 }
 
-void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t index)
+void Server::handleCommand(unsigned char* buffer, ServerThreadItem& item, const size_t index)
 {
     const int& fd = item.connections[index].fd;
     ConnectionData& data = item.connectionData[index];
-    
-    std::string msg = buffer;
-    std::vector<std::string> msgSplit;
-    
-    // KEEP ME COMMENTED OUT
-    // Telnet debugger
-    //if(*(msg.end()-1)=='\n'&&*(msg.end()-2)=='\r'){msg.erase(msg.end()-2, msg.end());}
-
-    // Split a string
-    std::istringstream sm(msg);
-    std::string back;
-    while (std::getline(sm, back, ' '))
-    {
-        msgSplit.push_back(back);
-    }
-    // ... man I love this language
 
     //******************************
     // COMMANDS
@@ -321,17 +305,11 @@ void Server::handleCommand(char* buffer, ServerThreadItem& item, const size_t in
             // If our client is a good boy!
             removeConnection(item, index);
         }
-        // *** ARG COMMANDS ***
-        else if (msgSplit.at(0) == COMMAND_ECHO)
-        {
-            std::string comb = std::string{ACTION_ECHO} +
-                combineString(msgSplit.begin()+1, msgSplit.end(), " ");
-            send(fd, comb.c_str(), comb.length(), 0);
-        }
         else if (msgSplit.at(0) == COMMAND_PLAYER_POS)
         {
             try
             {
+                // oh god, I gotta serialize a double!
                 // Game internally uses doubles, not floats
                 data.playerX = std::stod(msgSplit.at(1));
                 data.playerY = std::stod(msgSplit.at(2));
@@ -416,7 +394,7 @@ ServerThreadItem& Server::minThreadCount()
 
 void Server::serverThread(const size_t index) noexcept
 {
-    char buffer[256];
+    unsigned char buffer[256];
     while (!exit.load())
     {
         tpLock.lock(); // Ensure threadPool has been created
