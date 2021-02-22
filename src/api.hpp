@@ -6,6 +6,7 @@
 #include <memory>
 #include <unistd.h>
 #include <functional>
+#include <vector>
 
 #include <netdb.h>
 #include <sys/types.h>

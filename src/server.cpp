@@ -289,73 +289,135 @@ void Server::startServer(const size_t threadCount)
     }
 }
 
-void Server::handleCommand(unsigned char* buffer, ServerThreadItem& item, const size_t index)
+void Server::handleCommand(ServerThreadItem& item, const size_t index)
 {
     const int& fd = item.connections[index].fd;
-    ConnectionData& data = item.connectionData[index];
+    ConnectionData& connectionData = item.connectionData[index];
 
-    //******************************
-    // COMMANDS
-    //******************************
-    try
+    int res;
+
+    // Fetch first byte, see if we even can
+    do
     {
-        // *** SINGLE COMMANDS ***
-        if (msg == COMMAND_QUIT)
+        char buffer[2048];
+        int sizeByte = recv(fd, buffer, 1, 0);
+        int dataLength = buffer[0];
+
+        // Connection closed... or error occured
+        if (sizeByte <= 0)
         {
-            // If our client is a good boy!
+            if (sizeByte == 0)
+            {
+                ServLog::info(std::string{"Disconnect from fd "} +
+                              std::to_string(fd));
+                removeConnection(item, index);
+            }
+            return;
+        }
+
+        // Read offset first
+        res = recv(fd, &buffer[1], dataLength, 0);
+
+        if (res != -1)
+        {
+            buffer[res] = '\0';
+        } else return;
+        
+        // Convert it into a vector
+        std::vector<unsigned char> value(std::begin(buffer), std::begin(buffer)+dataLength);        
+
+        // DEBUGGING
+        for (auto& i: value)
+        {
+            std::cout << (int)i << " ";
+        }
+        std::cout << std::endl;
+        // END DEBUG
+
+        
+
+        // Read values until we run out of data to read!
+        //******************************
+        // COMMANDS
+        //******************************
+        try
+        {
+            // This should be 0xff!
+            if (value.at(dataLength-1) != 0xff)
+            {
+                // Perhaps a mistake was made?
+                std::cout << "Mistake?" << std::endl;
+                continue;
+            }
+            
+            // Read the first bit
+            switch(value[1])
+            {
+            case COMMAND_QUIT:
+                removeConnection(item, index);
+                break;
+            case COMMAND_PLAYER_POS:
+                // TODO
+                try
+                {
+                    // oh god, I gotta serialize a double!
+                    // Game internally uses doubles, not floats
+                
+                    //connectionData.playerX = std::stod(msgSplit.at(1));
+                    //connectionData.playerY = std::stod(msgSplit.at(2));
+                }
+                catch (const std::invalid_argument& err) {}
+                
+            case COMMAND_GET_CHUNK:
+                try
+                {
+                    const uint8_t chunkXSize = value[2];
+                    const uint8_t chunkYSize = value[2+chunkXSize+1];
+                    long chunkX = Generic::deserializeSigned<std::vector<unsigned char>, long>(value,
+                                                                                               3, // index at first
+                                                                                               chunkXSize);
+                    long chunkY = Generic::deserializeSigned<std::vector<unsigned char>, long>(value,
+                                                                                               2+chunkXSize+2, // index at first
+                                                                                               chunkYSize);
+                    
+                    // TODO send size for client to read
+                    std::vector<unsigned char> data = {ACTION_GET_CHUNK};
+                    std::vector<unsigned char> getChunkAt = game.checkChunkAt(chunkX, chunkY);
+                    data.insert(data.end(), getChunkAt.begin(), getChunkAt.end());
+                    send(fd, &data[0], data.size(), 0);
+                }
+                catch (const std::invalid_argument& err) {}
+            case COMMAND_PLACE_BLOCK_ABSOLUTE:
+                try
+                {
+                    // const long id = std::stoi(msgSplit.at(1));
+                    // const long chunkX = std::stoi(msgSplit.at(2));
+                    // const long chunkY = std::stoi(msgSplit.at(3));
+                    // const long x = std::stoi(msgSplit.at(4));
+                    // const long y = std::stoi(msgSplit.at(5));
+                    // game.modifyBlock(fd, threadPool, id, chunkX, chunkY, x, y, false);
+                }
+                catch (const std::invalid_argument& err) {}
+            case COMMAND_DESTROY_BLOCK_ABSOLUTE:
+                try
+                {
+                    // const long chunkX = std::stoi(msgSplit.at(1));
+                    // const long chunkY = std::stoi(msgSplit.at(2));
+                    // const long x = std::stoi(msgSplit.at(3));
+                    // const long y = std::stoi(msgSplit.at(4));
+                    // game.modifyBlock(fd, threadPool, -1, chunkX, chunkY, x, y, true);
+                }
+                catch (const std::invalid_argument& err) {}
+            default:
+                break;
+            }
+        }
+        catch (const std::out_of_range& err) {
+            // Client did something shady, kick them!!!
             removeConnection(item, index);
-        }
-        else if (msgSplit.at(0) == COMMAND_PLAYER_POS)
-        {
-            try
-            {
-                // oh god, I gotta serialize a double!
-                // Game internally uses doubles, not floats
-                data.playerX = std::stod(msgSplit.at(1));
-                data.playerY = std::stod(msgSplit.at(2));
-            }
-            catch (const std::invalid_argument& err) {}
-        }
-        else if (msgSplit.at(0) == COMMAND_GET_CHUNK)
-        {
-            try
-            {
-                const long int x = std::stol(msgSplit.at(1));
-                const long int y = std::stol(msgSplit.at(2));
-                std::vector<unsigned char> data = {ACTION_GET_CHUNK};
-                std::vector<unsigned char> getChunkAt = game.checkChunkAt(x, y);
-                data.insert(data.end(), getChunkAt.begin(), getChunkAt.end());
-                send(fd, &data[0], data.size(), 0);
-            }
-            catch (const std::invalid_argument& err) {}
-        }
-        else if (msgSplit.at(0) == COMMAND_PLACE_BLOCK_ABSOLUTE)
-        {
-            try
-            {
-                const long id = std::stoi(msgSplit.at(1));
-                const long chunkX = std::stoi(msgSplit.at(2));
-                const long chunkY = std::stoi(msgSplit.at(3));
-                const long x = std::stoi(msgSplit.at(4));
-                const long y = std::stoi(msgSplit.at(5));
-                game.modifyBlock(fd, threadPool, id, chunkX, chunkY, x, y, false);
-            }
-            catch (const std::invalid_argument& err) {}
-        }
-        else if (msgSplit.at(0) == COMMAND_DESTROY_BLOCK_ABSOLUTE)
-        {
-            try
-            {
-                const long chunkX = std::stoi(msgSplit.at(1));
-                const long chunkY = std::stoi(msgSplit.at(2));
-                const long x = std::stoi(msgSplit.at(3));
-                const long y = std::stoi(msgSplit.at(4));
-                game.modifyBlock(fd, threadPool, -1, chunkX, chunkY, x, y, true);
-            }
-            catch (const std::invalid_argument& err) {}
-        }
-    }
-    catch (const std::out_of_range& err) {} // Do nothing
+            break;
+        } // Do nothing
+    } while (res != -1);
 }
 
 void Server::removeConnection(ServerThreadItem& item, const size_t index)
@@ -419,30 +481,7 @@ void Server::serverThread(const size_t index) noexcept
                     // Recieved data
                     if (con.revents & POLLIN)
                     {
-                        int bytes = recv(con.fd, buffer, sizeof(buffer), 0);
-
-                        // Connection closed... or error occured
-                        if (bytes <= 0)
-                        {
-                            if (bytes == 0)
-                            {
-                                ServLog::info(std::string{"Disconnect from fd "} +
-                                              std::to_string(con.fd));
-                            }
-                            else
-                            {
-                                ServLog::warn(std::string{"Recv: "} + std::string{strerror(errno)});
-                            }
-
-                            removeConnection(item, i);
-                        }
-                        else // Data is recieved
-                        {
-                            // Cap data
-                            buffer[bytes] = '\0';
-
-                            handleCommand(buffer, item, i);
-                        }
+                        handleCommand(item, i);
                     }
                 }
             }

@@ -83,7 +83,7 @@ private:
         return str.str();
     }
     void removeConnection(ServerThreadItem& item, const size_t index);
-    void handleCommand(unsigned char* buffer, ServerThreadItem& item, const size_t index);
+    void handleCommand(ServerThreadItem& item, const size_t index);
     ServerThreadItem& minThreadCount();
 #ifndef __NOIPLOG__
     std::string getAddress(sockaddr* info);

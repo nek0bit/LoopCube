@@ -23,13 +23,16 @@ void Api::sendRecvChunk(const int fd, const long chunkX, const long chunkY)
     result.push_back(chunkYSize);
     Generic::serializeSigned(chunkY, chunkYSize, gen);
     
-    // Finally, append the size of everything
+    // Finally, concat the size of everything
     // 2 = total, 1 is command
-    uint8_t totalSize = chunkXSize + chunkYSize + (sizeof(uint8_t)*3); // 2 + 1 
+    uint8_t totalSize = chunkXSize + chunkYSize + 5; // 2 + 1 
 
+    // Put at beginning
     result.insert(result.begin(), totalSize);
+
+    result.push_back(0xff); // End
     
-    send(fd, &result[0], result.size(), 0);
+    send(fd, &result[0], totalSize+1, 0);
 }
 
 void Api::sendPlaceBlock(const int fd, const uint32_t id,
