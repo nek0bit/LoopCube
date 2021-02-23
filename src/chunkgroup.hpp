@@ -33,7 +33,7 @@ struct ChunkPos
 struct ChunkData
 {
     bool generated;
-    std::shared_ptr<Chunk> data = nullptr;
+    std::shared_ptr<Chunk> data;
 };
 
 //**************************************************
@@ -45,7 +45,7 @@ struct _ChunkDataSplit
     _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
                     std::shared_ptr<ChunkGen> chunkGen, int& fd,
                     bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk);
-    ~_ChunkDataSplit() = default;
+    ~_ChunkDataSplit();
 
     void updateLoaded();
     std::unordered_map<long int, ChunkData>::iterator checkGenerate(long int y,
@@ -58,15 +58,15 @@ struct _ChunkDataSplit
 
     void updateBorderedChunks(std::unordered_map<long int, ChunkData>::iterator current, const long y);
     
-    std::shared_ptr<Chunk> getData(long int y);
+    Chunk* getData(long int y);
     
     LoadPtr& loadPtr;
     LoadDistance& loadDistance;
-    std::vector<std::shared_ptr<Chunk>> loadedChunks;
+    std::vector<Chunk*> loadedChunks;
 
     // Access pointers
-    std::shared_ptr<_ChunkDataSplit> left;
-    std::shared_ptr<_ChunkDataSplit> right;
+    _ChunkDataSplit* left;
+    _ChunkDataSplit* right;
     
     const long int x;
     std::unordered_map<long int, ChunkData> data;
@@ -87,15 +87,15 @@ struct ChunkGroup
 {
     ChunkGroup();
     ChunkGroup(std::shared_ptr<ChunkGen> chunkGen);
-    ~ChunkGroup() = default;
+    ~ChunkGroup();
 
 #ifndef __HEADLESS
     void update(Camera& camera);
     void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
 #endif
 
-    std::shared_ptr<Chunk> getChunkAt(const long x, const long y);
-    std::vector<std::shared_ptr<Chunk>> isWithinChunks(const Vec2& vec, const Size& size);
+    Chunk* getChunkAt(const long x, const long y);
+    std::vector<Chunk*> isWithinChunks(const Vec2& vec, const Size& size);
     void generateChunkAt(const long x, const long y);
     void loadFromDeserialize(std::vector<unsigned char>& value, int start = 1);
 
@@ -115,9 +115,9 @@ private:
         checkSplitGenerate(long int x);
     void updateLoaded();
     void prepareLoaded();
-    std::shared_ptr<_ChunkDataSplit> getData(long int x);
+    _ChunkDataSplit* getData(long int x);
     
     std::shared_ptr<ChunkGen> chunkGen;
-    std::vector<std::shared_ptr<_ChunkDataSplit>> loadedSplits;
+    std::vector<_ChunkDataSplit*> loadedSplits;
     std::unordered_map<long int, std::shared_ptr<_ChunkDataSplit>> data;
 };

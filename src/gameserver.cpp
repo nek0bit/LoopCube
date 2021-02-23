@@ -19,7 +19,7 @@ std::vector<unsigned char> GameServer::checkChunkAt(const long int x, const long
 {
     std::lock_guard<std::mutex> lg(chunkLock);
     
-    std::shared_ptr<Chunk> cget;
+    Chunk* cget = nullptr;
     
     std::vector<unsigned char> get_s;
     
@@ -45,7 +45,7 @@ void GameServer::modifyBlock(const int currFd, const std::vector<ServerThreadIte
 {
     std::lock_guard<std::mutex> lg(chunkLock);
 
-    std::shared_ptr<Chunk> cget;
+    Chunk* cget = nullptr;
 
     command_actions action = ACTION_ZERO;
 

@@ -34,7 +34,7 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
     // TODO optimize entity position to work within blocks instead of chunks
     // It's 100% easy and possible and should optimize a lot
 
-    std::vector<std::shared_ptr<Chunk>> inChunks = chunks.isWithinChunks(position, size);
+    std::vector<Chunk*> inChunks = chunks.isWithinChunks(position, size);
 
     for (auto& chunk: inChunks)
     {
@@ -61,7 +61,7 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
     constexpr float friction = 20.0f;
 
     // Return if not within valid chunks
-    std::vector<std::shared_ptr<Chunk>> inChunks = chunks.isWithinChunks(position, size);
+    std::vector<Chunk*> inChunks = chunks.isWithinChunks(position, size);
     for (auto& chunk: inChunks)
     {
         if (chunk == nullptr) return;

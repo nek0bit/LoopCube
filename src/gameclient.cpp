@@ -74,7 +74,6 @@ GameClient::~GameClient()
     server = nullptr;
 
     if (serverThread.joinable()) serverThread.join();
-    
 }
 
 void GameClient::init()
@@ -236,7 +235,7 @@ void GameClient::mouseEvents(EventWrapper& events)
 
     int chunkX = p1Fixed / constants::chunkWidth;
     int chunkY = p2Fixed / constants::chunkHeight;
-    std::shared_ptr<Chunk> chunk = serverChunks.getChunkAt(chunkX, chunkY);
+    Chunk* chunk = serverChunks.getChunkAt(chunkX, chunkY);
     if (chunk != nullptr)
     {
         switch(events.vmouse.down)

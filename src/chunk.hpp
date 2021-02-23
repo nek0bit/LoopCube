@@ -26,10 +26,10 @@
 struct Chunk;
 struct BorderingChunks
 {
-    std::shared_ptr<Chunk> left;
-    std::shared_ptr<Chunk> right;
-    std::shared_ptr<Chunk> top;
-    std::shared_ptr<Chunk> bottom;
+    Chunk* left;
+    Chunk* right;
+    Chunk* top;
+    Chunk* bottom;
 };
 
 // 2D array[y][x] flattened to 1D array
@@ -71,7 +71,7 @@ struct Chunk
     long int getChunkY(const int y = 0) const;
 
     // Designed for updating block borders
-    std::shared_ptr<Block> getBorderBlock(const int x, const int y) const;
+    Block* getBorderBlock(const int x, const int y) const;
 
     std::vector<unsigned char> serialize() const;
     void deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte = true);

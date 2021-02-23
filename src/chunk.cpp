@@ -92,15 +92,14 @@ bool Chunk::placeBlock(unsigned int id, unsigned int x, unsigned int y)
 // Is actually used by the slower placeBlock
 void Chunk::placeBlockFast(unsigned int id, unsigned int x, unsigned int y)
 {    
-    data[posToIndex(x, y)] = std::make_shared<Block>(
-        Block{static_cast<int>(id), static_cast<int>(getChunkX(x)), static_cast<int>(getChunkY(y)), 4});
+    data[posToIndex(x, y)] = std::make_shared<Block>(static_cast<int>(id), static_cast<int>(getChunkX(x)), static_cast<int>(getChunkY(y)), 4);
 
     updateBlockBorders(x, y, true);
 }
 
 const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y)
 {    
-    std::shared_ptr<Block>& block = data[posToIndex(x, y)];
+    Block* block = data[posToIndex(x, y)].get();
     
     if (block == nullptr) return nullptr;
     
@@ -116,11 +115,11 @@ const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y)
 
 void Chunk::updateBlockBorders(const int x, const int y, const bool recurseOnce)
 {
-    std::shared_ptr<Block> left = getBorderBlock(x - 1, y),
-        right = getBorderBlock(x + 1, y),
-        top = getBorderBlock(x, y - 1),
-        bottom = getBorderBlock(x, y + 1),
-        center = getBorderBlock(x, y);
+    Block* left = getBorderBlock(x - 1, y),
+        * right = getBorderBlock(x + 1, y),
+        * top = getBorderBlock(x, y - 1),
+        * bottom = getBorderBlock(x, y + 1),
+        * center = getBorderBlock(x, y);
         
     // Enjoy this ugly bit of code :)
     // TODO use bitmasks here (would clean this up A LOT)
@@ -179,7 +178,7 @@ void Chunk::updateBlockBorders(const int x, const int y, const bool recurseOnce)
     }
 }
 
-std::shared_ptr<Block> Chunk::getBorderBlock(const int x, const int y) const
+Block* Chunk::getBorderBlock(const int x, const int y) const
 {
     try
     {
@@ -187,35 +186,35 @@ std::shared_ptr<Block> Chunk::getBorderBlock(const int x, const int y) const
         if (x >= 0 && x < constants::chunkWidth &&
             y >= 0 && y < constants::chunkHeight)
         {
-            return data.at(posToIndex(x, y));
+            return data.at(posToIndex(x, y)).get();
         }
 
         // Return fixed chunk at left chunk
         if (x < 0)
         {
             if (borders.left == nullptr) return nullptr;
-            return borders.left->data.at(posToIndex(x + constants::chunkWidth, y));
+            return borders.left->data.at(posToIndex(x + constants::chunkWidth, y)).get();
         }
 
         // Return fixed chunk at right chunk
         if (x >= constants::chunkWidth)
         {
             if (borders.right == nullptr) return nullptr;
-            return borders.right->data.at(posToIndex(x - constants::chunkWidth, y));
+            return borders.right->data.at(posToIndex(x - constants::chunkWidth, y)).get();
         }
 
         // Return fixed chunk at top chunk
         if (y < 0)
         {
             if (borders.top == nullptr) return nullptr;
-            return borders.top->data.at(posToIndex(x, y + constants::chunkHeight));
+            return borders.top->data.at(posToIndex(x, y + constants::chunkHeight)).get();
         }
 
         // Return fixed chunk at bottom chunk
         if (y >= constants::chunkHeight)
         {
             if (borders.bottom == nullptr) return nullptr;
-            return borders.bottom->data.at(posToIndex(x, y - constants::chunkHeight));
+            return borders.bottom->data.at(posToIndex(x, y - constants::chunkHeight)).get();
         }
     }
     catch(const std::out_of_range& err)

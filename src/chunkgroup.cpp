@@ -38,6 +38,9 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
       chunkGen{chunkGen}
 {}
 
+_ChunkDataSplit::~_ChunkDataSplit()
+{}
+
 // Generates a chunk if it isn't loaded
 std::unordered_map<long int, ChunkData>::iterator
 _ChunkDataSplit::checkGenerate(long int y,
@@ -86,14 +89,14 @@ void _ChunkDataSplit::updateLoaded()
     for (size_t i = 0; i < loadedChunks.size(); ++i)
     {
         const int chunkPos = -loadPtr.y + i;
-        std::shared_ptr<Chunk> dataReceived = getData(chunkPos);
+        Chunk* dataReceived = getData(chunkPos);
         
         // Generate if nullptr (might want to remove this later)
         if (dataReceived == nullptr)
         {
             auto get = checkGenerate(chunkPos, nullptr, isClient);
             
-            if (get != data.end()) dataReceived = get->second.data;
+            if (get != data.end()) dataReceived = get->second.data.get();
         }
 
         if (dataReceived != nullptr) loadedChunks[i] = dataReceived;
@@ -105,14 +108,14 @@ void _ChunkDataSplit::updateBorderedChunks(std::unordered_map<long int,
                                            ChunkData>::iterator current, const long y)
 {
     if (current == data.end()) return;
-    std::shared_ptr<Chunk>& newChunk = current->second.data;
+    Chunk* newChunk = current->second.data.get();
 
     auto chunkAbove = data.find(y - 1),
         chunkBelow = data.find(y + 1);
 
     if (chunkAbove != data.end())
     {
-        newChunk->borders.top = chunkAbove->second.data;
+        newChunk->borders.top = chunkAbove->second.data.get();
         newChunk->regenBlockBorders();
         chunkAbove->second.data->borders.bottom = newChunk;
         chunkAbove->second.data->regenBlockBorders();
@@ -120,7 +123,7 @@ void _ChunkDataSplit::updateBorderedChunks(std::unordered_map<long int,
         
     if (chunkBelow != data.end())
     {
-        newChunk->borders.bottom = chunkBelow->second.data;
+        newChunk->borders.bottom = chunkBelow->second.data.get();
         newChunk->regenBlockBorders();
         chunkBelow->second.data->borders.top = newChunk;
         chunkBelow->second.data->regenBlockBorders();
@@ -128,7 +131,7 @@ void _ChunkDataSplit::updateBorderedChunks(std::unordered_map<long int,
 
     if (left != nullptr)
     {
-        std::shared_ptr<Chunk> chunkLeft = left->getData(y);
+        Chunk* chunkLeft = left->getData(y);
         if (chunkLeft != nullptr)
         {
             chunkLeft->borders.right = newChunk;
@@ -139,7 +142,7 @@ void _ChunkDataSplit::updateBorderedChunks(std::unordered_map<long int,
 
     if (right != nullptr)
     {
-        std::shared_ptr<Chunk> chunkRight = right->getData(y);
+        Chunk* chunkRight = right->getData(y);
         if (chunkRight != nullptr)
         {
             chunkRight->borders.left = newChunk;
@@ -173,9 +176,9 @@ void _ChunkDataSplit::renderSplit(SDL_Renderer* renderer, TextureHandler& textur
 }
 #endif
 
-std::shared_ptr<Chunk> _ChunkDataSplit::getData(long int y)
+Chunk* _ChunkDataSplit::getData(long int y)
 {
-    try { return data.at(y).data; }
+    try { return data.at(y).data.get(); }
     catch (std::out_of_range& err) { return nullptr; }
 }
 
@@ -219,19 +222,22 @@ ChunkGroup::ChunkGroup(std::shared_ptr<ChunkGen> chunkGen)
        loadedSplits{},
        data{}
 {}
+
+ChunkGroup::~ChunkGroup()
+{}
       
 void ChunkGroup::updateLoaded()
 {
     for (size_t i = 0; i < loadedSplits.size(); ++i)
     {
         const int chunkPos = loadPtr.x + i;
-        std::shared_ptr<_ChunkDataSplit> dataReceived = getData(chunkPos);
+        _ChunkDataSplit* dataReceived = getData(chunkPos);
         
         // Generate if nullptr (might want to remove this later)
         if (dataReceived == nullptr)
         {
             auto get = checkSplitGenerate(chunkPos);
-            if (get != data.end()) dataReceived = get->second;
+            if (get != data.end()) dataReceived = get->second.get();
         }
         
         if (dataReceived != nullptr) loadedSplits[i] = dataReceived;
@@ -245,9 +251,9 @@ void ChunkGroup::prepareLoaded()
 }
 
 // Cleaner way to get at data
-std::shared_ptr<_ChunkDataSplit> ChunkGroup::getData(long int x)
+_ChunkDataSplit* ChunkGroup::getData(long int x)
 {
-    try { return data.at(x); }
+    try { return data.at(x).get(); }
     catch (const std::out_of_range& err) { return nullptr; }
 }
 
@@ -273,21 +279,21 @@ void ChunkGroup::render(SDL_Renderer* renderer, TextureHandler& textures, Camera
 #endif
 
 // Wrapper for multiple getData calls
-std::shared_ptr<Chunk> ChunkGroup::getChunkAt(const long int x, const long int y)
+Chunk* ChunkGroup::getChunkAt(const long int x, const long int y)
 {
-    std::shared_ptr<_ChunkDataSplit> call = getData(x);
+    _ChunkDataSplit* call = getData(x);
     
     return call == nullptr ? nullptr : getData(x)->getData(y);
 }
 
-std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, const Size& size)
+std::vector<Chunk*> ChunkGroup::isWithinChunks(const Vec2& vec, const Size& size)
 {
     ChunkPos inChunk = posToChunkPos(vec.x, vec.y);
     GridCollision_t col = Generic::gridCollision(constants::chunkWidth * constants::blockW,
                                                  constants::chunkHeight * constants::blockH,
                                                  vec, size);
 
-    std::vector<std::shared_ptr<Chunk>> ch{};
+    std::vector<Chunk*> ch{};
 
     for (size_t i = 0; i < col.width + 1; ++i)
     {
@@ -379,14 +385,14 @@ ChunkGroup::checkSplitGenerate(long int x)
 
         if (splitLeft != data.end())
         {
-            ret->second->left = splitLeft->second;
-            splitLeft->second->right = ret->second;
+            ret->second->left = splitLeft->second.get();
+            splitLeft->second->right = ret->second.get();
         }
         
         if (splitRight != data.end())
         {
-            ret->second->right = splitRight->second;
-            splitRight->second->left = ret->second;
+            ret->second->right = splitRight->second.get();
+            splitRight->second->left = ret->second.get();
         }
 
         // Get chunks to generate

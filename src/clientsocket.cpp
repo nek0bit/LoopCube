@@ -120,7 +120,7 @@ void ClientSocket::checkSocket(std::function<void(void)>& disconnectCallback, Ch
                                                                        chunkXSize + 3,
                                                                        chunkYSize);
 
-                        std::shared_ptr<Chunk> chk = chunks.getChunkAt(chunkX, chunkY);
+                        Chunk* chk = chunks.getChunkAt(chunkX, chunkY);
                         if (chk != nullptr)
                         {
                             if (value.at(0) == ACTION_PLACE_BLOCK)

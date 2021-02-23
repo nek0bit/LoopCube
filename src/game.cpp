@@ -18,6 +18,7 @@ Game::~Game()
 {
 	// Clean up all game objects/SDL stuff to prevent memory leakage
 	free();
+    game = nullptr;
 }
 
 // Game related stuff below
@@ -34,7 +35,7 @@ void Game::gameInit()
     constants::fontHandler.addFontByFilename(constants::rootPath+"fonts/liberation-sans/LiberationSans-Regular.ttf",
                                              {10, 12, 14, 16, 18, 32});
 	
-	menu = std::shared_ptr<Menu>(new Menu(renderer, *textures, events, timer, winSize));
+	menu = std::make_shared<Menu>(renderer, *textures, events, timer, winSize);
 }
 
 // Game related loop stuff
@@ -81,7 +82,7 @@ void Game::update()
                         std::string address = argv[1];
                         uint16_t port = std::stoi(std::string(argv[2]));
                         
-                        game = std::shared_ptr<GameClient>(new GameClient(address, port, timer, winSize));
+                        game = std::make_shared<GameClient>(address, port, timer, winSize);
                     }
                     catch (const std::invalid_argument& err)
                     {
@@ -98,7 +99,7 @@ void Game::update()
                 }
                 else
                 {
-                    game = std::shared_ptr<GameClient>(new GameClient(timer, winSize));
+                    game = std::make_shared<GameClient>(timer, winSize);
                 }
                 // Let's pre-load a frame so everything can generate and render
                 // This may need to change depending on world generation in the future
@@ -121,8 +122,6 @@ void Game::update()
 	// Update screen size
     SDL_GetWindowSize(window, &winSize.w, &winSize.h);
 }
-
-
 
 // Draw objects to screen
 void Game::render() {
@@ -194,7 +193,7 @@ void Game::init(bool fullscreen = false) {
 		throw std::runtime_error(error);
 	}
 
-    textures = std::shared_ptr<TextureHandler>(new TextureHandler(renderer));
+    textures = std::make_shared<TextureHandler>(renderer);
 
     // Enable images
 	int img_flags = IMG_INIT_PNG;
