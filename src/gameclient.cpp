@@ -57,7 +57,8 @@ GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize
       fade{60},
       particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
-      timer{timer}
+      timer{timer},
+      background{std::make_shared<BackgroundOverworld>()}
 {
     camera.x = 0;
     camera.y = 0;
@@ -162,7 +163,7 @@ void GameClient::update(EventWrapper& events)
     
     handleCamera();
 
-    background->update(camera, time);
+    if (background) background->update(camera, time);
 
     mouseEvents(events);
 
@@ -183,7 +184,7 @@ void GameClient::update(EventWrapper& events)
 
 void GameClient::render(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events)
 {
-    background->render(renderer, textures);
+    if (background) background->render(renderer, textures);
     
     serverChunks.render(renderer, textures, camera);
 
