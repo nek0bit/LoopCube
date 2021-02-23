@@ -56,7 +56,7 @@ ClientSocket::~ClientSocket()
     closeSocket();
 }
 
-void ClientSocket::checkSocket(ChunkGroup& chunks)
+void ClientSocket::checkSocket(std::function<void(void)>& disconnectCallback, ChunkGroup& chunks)
 {
     constexpr size_t BUF_SIZE = 2048;
     int res;
@@ -67,6 +67,12 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
         {
             unsigned char buffer[BUF_SIZE];
             int sizeByte = recv(fd, buffer, 2, 0);
+
+            if (sizeByte == 0)
+            {
+                disconnectCallback();
+                return;
+            }
 
             if (sizeByte <= 0) return;
 

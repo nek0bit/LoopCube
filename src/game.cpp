@@ -112,6 +112,12 @@ void Game::update()
         }
     }
 
+    if (game != nullptr && game->exit)
+    {
+        game = nullptr;
+        state.pop(); // Switch game state to menu
+    }
+
 	// Update screen size
     SDL_GetWindowSize(window, &winSize.w, &winSize.h);
 }

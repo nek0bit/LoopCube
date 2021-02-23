@@ -1,9 +1,11 @@
 #include "gameclient.hpp"
 
 GameClient::GameClient(Timer& timer, WinSize& winSize)
-    : server{nullptr},
+    : exit{false},
+      server{nullptr},
       clientSocket{nullptr},
       serverThread{},
+      disconnectCallback{},
       winSize{winSize},
       serverChunks{},
       camera{&winSize},
@@ -15,9 +17,7 @@ GameClient::GameClient(Timer& timer, WinSize& winSize)
       timer{timer},
       background{std::make_shared<BackgroundOverworld>()}
 {
-    camera.x = 0;
-    camera.y = 0;
-
+    
     try
     {
         // Create server
@@ -40,10 +40,13 @@ GameClient::GameClient(Timer& timer, WinSize& winSize)
     {
         std::cout << "Error connecting to server: " << err.what() << std::endl;
     }
+
+    init();
 }
 
 GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize)
-    : server{nullptr},
+    : exit{false},
+      server{nullptr},
       clientSocket{nullptr},
       serverThread{},
       winSize{winSize},
@@ -61,6 +64,8 @@ GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize
 
     clientSocket = std::make_shared<ClientSocket>(address.c_str(), port);
     serverChunks.setFd(clientSocket->fd);
+
+    init();
 }
 
 GameClient::~GameClient()
@@ -70,6 +75,14 @@ GameClient::~GameClient()
 
     if (serverThread.joinable()) serverThread.join();
     
+}
+
+void GameClient::init()
+{
+    disconnectCallback = [&]()->void {
+        exit = true;
+        std::cout << "[Debug] Connection closed" << std::endl;
+    };
 }
 
 void GameClient::serverThreadFunction()
@@ -95,7 +108,7 @@ void GameClient::update(EventWrapper& events)
     
     serverChunks.update(camera);
 
-    clientSocket->checkSocket(serverChunks);
+    clientSocket->checkSocket(disconnectCallback, serverChunks);
 
     //**************************************************
     // Player

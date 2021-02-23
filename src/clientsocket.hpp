@@ -4,6 +4,7 @@
 #include <string>
 #include <cstring>
 #include <iterator>
+#include <functional>
 #include <vector>
 #include <thread>
 #include <mutex>
@@ -31,7 +32,7 @@ struct ClientSocket
     ClientSocket(const char* address, const uint16_t port);
     ~ClientSocket();
 
-    void checkSocket(ChunkGroup& chunks);
+    void checkSocket(std::function<void(void)>& disconnectCallback, ChunkGroup& chunks);
     
     int fd;
 private:

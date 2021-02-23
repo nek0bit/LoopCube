@@ -51,12 +51,17 @@ struct GameClient
 
     void update(EventWrapper& events);
     void render(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events);
+    bool exit;
 private:
+    void init();
+    
     // Threading
     std::shared_ptr<Server> server;
     std::shared_ptr<ClientSocket> clientSocket;
     std::thread serverThread;
     std::mutex csLock;
+
+    std::function<void(void)> disconnectCallback;
     
     WinSize& winSize;
     SelectInfo getSelection(EventWrapper& events);
