@@ -303,32 +303,26 @@ std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, 
 // BUG freezes on invalid data
 void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, int start)
 {
-    int64_t resX = 0, resY = 0;
-    
-
     int at = start;
     
     const uint8_t chunkXSize = value.at(at);
     const uint8_t chunkYSize = value.at(at+chunkXSize+1);
 
     // Deserialize chunk positions
-    // X
-    resX = Generic::deserializeSigned<std::vector<unsigned char>, long>(value, at+1, chunkXSize);
-
-    // Y
-    resY = Generic::deserializeSigned<std::vector<unsigned char>, long>(value, at+chunkXSize+2, chunkYSize);
+    int resX = Generic::deserializeSigned<std::vector<unsigned char>, long>(value, at+1, chunkXSize);
+    int resY = Generic::deserializeSigned<std::vector<unsigned char>, long>(value, at+chunkXSize+2, chunkYSize);
     
-    auto splitX = checkSplitGenerate(pendingChunk.x);
+    auto splitX = checkSplitGenerate(resX);
     
     if (splitX != data.end())
     {
         auto splitY = splitX->second;
 
         splitY->checkGenerate(resY,
-                              std::make_shared<Chunk>(nullptr, pendingChunk.x, pendingChunk.y),
+                              std::make_shared<Chunk>(nullptr, resX, resY),
                               false);
         
-        auto chunkAt = splitY->getData(pendingChunk.y);
+        auto chunkAt = splitY->getData(resY);
         chunkAt->deserialize(value, true);
     }
 }

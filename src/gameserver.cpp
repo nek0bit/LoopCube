@@ -102,7 +102,7 @@ void GameServer::modifyBlock(const int currFd, const std::vector<ServerThreadIte
             for (const pollfd& pfd: item.connections)
             {
                 // Send to everyone excluding sender
-                /*if (pfd.fd != currFd)*/ send(pfd.fd, &res[0], fullSize, 0);
+                if (pfd.fd != currFd) send(pfd.fd, &res[0], fullSize, 0);
             }
         }
     }

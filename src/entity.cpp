@@ -60,14 +60,12 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
     const int cap = 2000.0f;
     constexpr float friction = 20.0f;
 
-    // Don't do anything if not in any chunks
-    int count = 0;
+    // Return if not within valid chunks
     std::vector<std::shared_ptr<Chunk>> inChunks = chunks.isWithinChunks(position, size);
     for (auto& chunk: inChunks)
     {
-        if (chunk != nullptr) count++;
+        if (chunk == nullptr) return;
     }
-    if (count == 0) return;
 	
 	velX *= 1 / (1 + (timer.deltaTime * friction));
 		
@@ -99,11 +97,11 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
 		
 	// Check Y velocity
 	if (infoY == true) {
-		if (infoY.bottom != -1) {
-		    position.y += infoY.bottom;
-		}
 		if (infoY.top != -1) {
 		    position.y -= infoY.top;
+		}
+		if (infoY.bottom != -1) {
+		    position.y += infoY.bottom;
 		}
 		velY = 0;
 		onGround = true;

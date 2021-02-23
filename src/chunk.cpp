@@ -99,7 +99,7 @@ void Chunk::placeBlockFast(unsigned int id, unsigned int x, unsigned int y)
 }
 
 const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y)
-{
+{    
     std::shared_ptr<Block>& block = data[posToIndex(x, y)];
     
     if (block == nullptr) return nullptr;
@@ -109,7 +109,6 @@ const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y)
     // Delete the block (since its a shared ptr, it will be deleted when reassigned)
     block = nullptr;
 
-    //regenBlockBorders();
     updateBlockBorders(x, y, true);
     
     return info;
