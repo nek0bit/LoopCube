@@ -1,7 +1,7 @@
 #include "api.hpp"
 
 
-void Api::sendPlayerPos(const int fd, const double x, const double y)
+void Api::sendPlayerPos(const int, const double, const double)
 {
     ;
 }

@@ -1,7 +1,7 @@
 #include "textbox.hpp"
 
 Textbox::Textbox(int id, int x, int y, int width, int height)
-	: text{}, id{id}, x{x}, y{y}, width{width}, height{height}, focused{false}, textbox_text{nullptr}, blink{20}
+	: x{x}, y{y}, text{}, id{id}, width{width}, height{height}, focused{false}, textbox_text{nullptr}, blink{20}
 #ifdef __SWITCH__
 	, rc{0}, kbd{}
 #endif
@@ -57,7 +57,7 @@ void Textbox::handle_keyboard(EventWrapper& events) {
 	}
 }
 
-void Textbox::render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y) {
+void Textbox::render(SDL_Renderer* renderer, TextureHandler&, int offset_x, int offset_y) {
     SDL_Rect box{x+offset_x, y+offset_y, width, height};
 	
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);

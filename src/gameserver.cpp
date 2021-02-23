@@ -10,7 +10,7 @@ GameServer::~GameServer()
 
 }
 
-void GameServer::update(Timer& timer)
+void GameServer::update(Timer&)
 {
     
 }

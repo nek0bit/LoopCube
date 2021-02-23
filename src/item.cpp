@@ -3,8 +3,8 @@
 Item::Item() : enabled{false} {}
 
 Item::Item(SDL_Renderer* renderer, int id)
-    : enabled{true},
-      count{}
+    : count{},
+      enabled{true}
 {
 	for (auto &i: constants::blockInfo)
     {
@@ -34,8 +34,8 @@ void Item::addCount(int amount)
 void Item::render(SDL_Renderer* renderer, TextureHandler& textures,
                   int x, int y, int width = 35, int height = 35)
 {
-	int offset_y = -10;
-	SDL_Rect src{0, 0, constants::blockImgSize, constants::blockImgSize};
+	constexpr int offset_y = -10;
+	SDL_Rect src{4*constants::blockImgSize, 0, constants::blockImgSize, constants::blockImgSize};
     SDL_Rect block{x, y, width, height};
     SDL_RenderCopy(renderer, textures.getTexture(this->block.textureId)->texture, &src, &block);
     

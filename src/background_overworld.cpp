@@ -12,11 +12,9 @@ BackgroundOverworld::BackgroundOverworld()
       bgMoonDest{},
       bgCloudOffset{0, 0},
       bgHillsOffset{0, 0},
-      bgCave{0, 0},
       bgShine{10, 150},
       bgCloud{450, 100},
       bgHills{450*2, 114*2},
-      bgCaveBlock{60, 60},
       bgLight{100, 100},
       skyColor{0, 0, 0, 255}
 {}
@@ -147,11 +145,11 @@ void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& texture
 	// Repeatedly render clouds and hills
     Generic::Render::renderRepeating(renderer, textures, TEXTURE_BG_CLOUD_LOOP, winWidth, winHeight, bgCloudOffset.x, bgCloudOffset.y,
 					 bgCloud.w, bgCloud.h, 60, cloudOffset);
-    Generic::Render::renderRepeating(renderer, textures, TEXTURE_BG_HILLS, winWidth, winHeight, bgHillsOffset.x, bgHillsOffset.y,
+    Generic::Render::renderRepeating(renderer, textures, TEXTURE_BG_HILLS_HQ, winWidth, winHeight, bgHillsOffset.x, bgHillsOffset.y,
 					 bgHills.w, bgHills.h, 0, hillOffset);
 
 	SDL_Rect after{0, afterHillsTop, winWidth, winHeight-afterHillsTop};
-    SDL_SetRenderDrawColor(renderer, 131, 131, 131, 255);
+    SDL_SetRenderDrawColor(renderer, 111, 106, 98, 255);
     SDL_RenderFillRect(renderer, &after);
 }
 

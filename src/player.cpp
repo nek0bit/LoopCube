@@ -112,7 +112,7 @@ void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<std::shared_pt
 	canJump = true;
 }
 
-void Player::jump(ChunkGroup &chunks, Timer& timer)
+void Player::jump(ChunkGroup &chunks, Timer&)
 {
 	position.y += 1;
 	if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {

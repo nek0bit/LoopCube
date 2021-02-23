@@ -80,4 +80,6 @@ private:
 
     Time time;
     Timer& timer;
+
+    std::shared_ptr<Background> background;
 };

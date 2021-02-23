@@ -14,13 +14,13 @@ enum CONFIG_ID
 };
 
 Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize)
-    : state{0},
+    : showPlayBuffer{false},
+      state{0},
       winSize{winSize},
       timer{timer},
       offsetX{0},
       offsetY{0},
       BUTTON_W{200},
-      showPlayBuffer{false},
       bgX{0},
       bgY{0},
       backButton{nullptr},
@@ -33,9 +33,9 @@ Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
       prevMidLeft{0},
       midLeft{0},
       contentLeft{0},
-      padLeft{180},
       header{nullptr},
-      paragraph{nullptr}
+      paragraph{nullptr},
+      padLeft{180}
 {		
 	//************************************************
 	// Resize optionState to match optionStr size
@@ -79,7 +79,9 @@ Menu::Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& event
 	//************************************************
 	std::random_device dev;
 	std::mt19937 rng(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> dist(0, constants::blockInfo.size()-1);
+    // When tree texture comes back, uncomment me!!!
+	//std::uniform_int_distribution<std::mt19937::result_type> dist(0, constants::blockInfo.size()-1);
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0, 0);
 
 	int rand_id = constants::blockInfo[dist(rng)].id;
 	randomBlock = Item(renderer, rand_id);

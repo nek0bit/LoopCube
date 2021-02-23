@@ -33,13 +33,11 @@ private:
     // Coordinates
     BGCoord bgCloudOffset;
     BGCoord bgHillsOffset;
-    BGCoord bgCave;
 
     // Size
     BGSize bgShine;
     BGSize bgCloud;
     BGSize bgHills;
-    BGSize bgCaveBlock;
     BGSize bgLight;
 
     // Sky

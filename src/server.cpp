@@ -10,14 +10,15 @@ bool ServLog::log(const std::string msg)
     { std::cout << "[Log] " << msg << std::endl; return true; }
 
 Server::Server(const uint32_t port, bool verbose)
-    : port{port},
+    : exit{false},
+      fd{},
+      port{port},
       address{},
       threadPool{},
       tpLock{},
-      exit{false},
       gameThread{},
+      checkaccept{},
       game{},
-      fd{},
       opts{},
       info{nullptr},
       verbose{verbose}
@@ -293,7 +294,9 @@ void Server::handleCommand(ServerThreadItem& item, const size_t index)
 {
     constexpr size_t MAX_BUFFER = 2048;
     const int& fd = item.connections[index].fd;
-    ConnectionData& connectionData = item.connectionData[index];
+    // UNUSED
+    //ConnectionData& connectionData = item.connectionData[index];
+    
 
     int res;
 
@@ -319,7 +322,9 @@ void Server::handleCommand(ServerThreadItem& item, const size_t index)
             }
 
             // Read offset first
-            res = recv(fd, &buffer[1], dataLength >= MAX_BUFFER ? MAX_BUFFER-1 : dataLength, 0);
+            res = recv(fd, &buffer[1],
+                       static_cast<size_t>(dataLength) >= MAX_BUFFER ?
+                       MAX_BUFFER-1 : dataLength, 0);
         
             // Convert it into a vector
             std::vector<unsigned char> value(std::begin(buffer), std::begin(buffer)+dataLength);        
@@ -489,7 +494,6 @@ ServerThreadItem& Server::minThreadCount()
 
 void Server::serverThread(const size_t index) noexcept
 {
-    unsigned char buffer[256];
     while (!exit.load())
     {
         tpLock.lock(); // Ensure threadPool has been created

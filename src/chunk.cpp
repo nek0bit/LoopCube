@@ -344,9 +344,9 @@ void Chunk::generateChunk()
 // A little slow, not recommended except for when joining chunks
 void Chunk::regenBlockBorders()
 {
-    for (unsigned int i = 0; i < constants::chunkWidth; ++i)
+    for (unsigned i = 0; i < static_cast<unsigned>(constants::chunkWidth); ++i)
     {
-        for (unsigned int j = 0; j < constants::chunkHeight; ++j)
+        for (unsigned j = 0; j < static_cast<unsigned>(constants::chunkHeight); ++j)
         {
             if (data.at(posToIndex(i, j)) != nullptr) updateBlockBorders(i, j, false);
         }

@@ -1,10 +1,10 @@
 #include "eventwrapper.hpp"
 
 EventWrapper::EventWrapper()
-    : quit{false},
+    : textMode{false},
+      quit{false},
       vmouse{0, 0, 0, 0, 0},
-      controller{nullptr},
-      textMode{false}
+      controller{nullptr}
 #ifdef __SWITCH__
      ,conID{hidGetHandheldMode() ? CONTROLLER_HANDHELD : CONTROLLER_PLAYER_1}
 #endif

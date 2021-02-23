@@ -5,7 +5,7 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
       port{port}
 {
     int no = 0;
-    std::string strPort = std::to_string(port);
+    std::string strPort = std::to_string(this->port);
 
     if (address != NULL) this->address = std::string(address);
     memset(&hints, 0, sizeof(hints));

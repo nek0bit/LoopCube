@@ -39,7 +39,7 @@ bool Checkbox::toggle()
 	return checked;
 }
 
-void Checkbox::update(EventWrapper& events, Timer& timer, int offsetX, int offsetY)
+void Checkbox::update(EventWrapper& events, Timer&, int offsetX, int offsetY)
 {
 	// Clear changed
 	changed = false;
@@ -57,7 +57,7 @@ void Checkbox::update(EventWrapper& events, Timer& timer, int offsetX, int offse
 	dest.h = size;
 }
 
-void Checkbox::render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX, int offsetY)
+void Checkbox::render(SDL_Renderer* renderer, TextureHandler&, int offsetX, int offsetY)
 {
 	SDL_Rect mod_dest{offsetX+dest.x, offsetY+dest.y, dest.w, dest.h};
 	// Draw box behind check

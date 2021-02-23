@@ -15,6 +15,6 @@ struct GravityParticle: public Entity
 	// Appropriate to destruct or quit rendering when done.
 	bool isDead() const;
 private:
-    float time;
-    float timeTotal;
+    double time;
+    double timeTotal;
 };
