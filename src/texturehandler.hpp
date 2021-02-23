@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <algorithm>
+#include <memory>
 #include <vector>
 #include <utility>
 #include <string>
@@ -16,9 +17,7 @@ struct TextureHandler
     TextureHandler(SDL_Renderer* renderer);
 	~TextureHandler();
 
-    Texture* getTexture(size_t id);
-    
-	void freeTextures();
+    Texture* getTexture(size_t id);    
 private:
-	std::vector<std::pair<int, Texture*>> textures;
+	std::vector<std::pair<int, std::shared_ptr<Texture>>> textures;
 };

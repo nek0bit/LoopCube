@@ -99,7 +99,7 @@ void Chunk::placeBlockFast(unsigned int id, unsigned int x, unsigned int y)
 
 const BlockInfo* Chunk::destroyBlock(unsigned int x, unsigned int y)
 {    
-    Block* block = data[posToIndex(x, y)].get();
+    std::shared_ptr<Block>& block = data[posToIndex(x, y)];
     
     if (block == nullptr) return nullptr;
     
