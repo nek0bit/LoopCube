@@ -97,7 +97,7 @@ struct ChunkGroup
     std::shared_ptr<Chunk> getChunkAt(const long x, const long y);
     std::vector<std::shared_ptr<Chunk>> isWithinChunks(const Vec2& vec, const Size& size);
     void generateChunkAt(const long x, const long y);
-    void loadFromDeserialize(std::vector<unsigned char>& value, bool ignoreFirstByte = true);
+    void loadFromDeserialize(std::vector<unsigned char>& value, int start = 1);
 
     void setFd(const int fd);
 

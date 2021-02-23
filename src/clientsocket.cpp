@@ -61,15 +61,20 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
     constexpr size_t BUF_SIZE = 2048;
     int res;
 
+    int count = 0;
+
     try
     {
         do
         {
-            unsigned char buffer[2048];
+            ++count;
+            unsigned char buffer[BUF_SIZE];
             int sizeByte = recv(fd, buffer, 2, 0);
 
             if (sizeByte <= 0)
+            {
                 return;
+            }
 
             std::vector<unsigned char> readInto(std::begin(buffer), std::begin(buffer)+2);
 
@@ -77,15 +82,20 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
                 (readInto, 0, 2);
 
         
-            res = recv(fd, buffer, dataLength-2, 0);
+            res = recv(fd, &buffer[2], dataLength-2, 0);
 
             if (res <= 0)
+            {
                 return;
-        
-            std::vector<unsigned char> value(std::begin(buffer), std::begin(buffer)+dataLength-2);
+            }
 
+            std::vector<unsigned char> value(std::begin(buffer)+2, std::begin(buffer)+res+2);
+            
             if (value.at(dataLength-3) != 0xff)
+            {
+                std::cout << "Error occur" << std::endl;
                 return;
+            }
         
             try
             {   
@@ -93,7 +103,8 @@ void ClientSocket::checkSocket(ChunkGroup& chunks)
                 {
                 case ACTION_GET_CHUNK:
                 {
-                    chunks.loadFromDeserialize(value, true);
+                    chunks.loadFromDeserialize(value);
+                    chunks.chunkReady = true;
                 }
                 break;
                 case ACTION_PLACE_BLOCK:

@@ -335,7 +335,6 @@ void Server::handleCommand(ServerThreadItem& item, const size_t index)
                 if (value.at(dataLength-1) != 0xff)
                 {
                     // Perhaps a mistake was made?
-                    std::cout << "Mistake?" << std::endl;
                     return;
                 }
             

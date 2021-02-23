@@ -58,6 +58,11 @@ _ChunkDataSplit::checkGenerate(long int y,
                 pendingChunk.x = x;
                 pendingChunk.y = y;
                 chunkReady = false;
+                return data.end();
+            }
+            else
+            {
+                return data.end();
             }
         }
         else // Server side, generate the chunk
@@ -296,16 +301,15 @@ std::vector<std::shared_ptr<Chunk>> ChunkGroup::isWithinChunks(const Vec2& vec, 
 }
 
 // BUG freezes on invalid data
-void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
+void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, int start)
 {
     int64_t resX = 0, resY = 0;
     
 
-    int at = static_cast<int>(ignoreFirstByte);
+    int at = start;
     
     const uint8_t chunkXSize = value.at(at);
     const uint8_t chunkYSize = value.at(at+chunkXSize+1);
-
 
     // Deserialize chunk positions
     // X
@@ -325,12 +329,7 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, bool ign
                               false);
         
         auto chunkAt = splitY->getData(pendingChunk.y);
-        chunkReady = true;
         chunkAt->deserialize(value, true);
-    }
-    else
-    {
-        chunkReady = true;
     }
 }
 

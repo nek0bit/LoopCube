@@ -81,12 +81,11 @@ void GameClient::serverThreadFunction()
     {
         std::cerr << "Server thread error: " << err.what() << std::endl;
     }
+    std::cout << "Server done" << std::endl;
 }
 
 void GameClient::update(EventWrapper& events)
-{
-    clientSocket->checkSocket(serverChunks);
-    
+{    
     //**************************************************
     // Chunks
     //**************************************************
@@ -95,6 +94,8 @@ void GameClient::update(EventWrapper& events)
     serverChunks.loadPtr.y = chunkPlayer.y + (serverChunks.loadDistance.y / 2);
     
     serverChunks.update(camera);
+
+    clientSocket->checkSocket(serverChunks);
 
     //**************************************************
     // Player
@@ -118,7 +119,9 @@ void GameClient::update(EventWrapper& events)
     if (events.keyState[16])
     {
         // *shrug*
-        particles.push_back(GravityParticle(0, 1, 0, 0, mainPlayer.position.x, mainPlayer.position.y, 30, 30));
+        particles.push_back(
+            GravityParticle(0, 1, 0, 0, mainPlayer.position.x, mainPlayer.position.y, 30, 30));
+        serverChunks.chunkReady = true;
     }
     
 	// Jump (A)
