@@ -25,6 +25,7 @@ void Entity::update(ChunkGroup& chunks, Timer& timer)
 	updateBasicPhysics(chunks, timer);
 }
 
+#ifndef __HEADLESS
 void Entity::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
 {
     const Vec2 val = displayPosition + camera;
@@ -34,6 +35,7 @@ void Entity::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& ca
         static_cast<int>(size.h)};
     SDL_RenderCopy(renderer, textures.getTexture(textureId)->texture, &src, &dest);
 }
+#endif
 
 void Entity::collisionLeft() {}
 void Entity::collisionRight() {}

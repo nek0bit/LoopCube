@@ -16,8 +16,11 @@ struct Entity: public GameObject
 	virtual ~Entity();
 
 	virtual void update(ChunkGroup& chunks, Timer& timer);
+
+#ifndef __HEADLESS
     virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
         override;
+#endif
     void dummyInterpolate(Timer& timer);
 
 
