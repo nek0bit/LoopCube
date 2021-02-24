@@ -74,6 +74,7 @@ namespace constants
 
 	extern const std::string rootPath;
 	extern const std::string path;
+    extern const std::string shaderPath;
 
 	// Please add comment with index for code readability
 	extern const std::vector<TextureInfo> textureInfo;

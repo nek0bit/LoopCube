@@ -6,12 +6,13 @@
 #include <memory>
 #include <stack>
 
-#include "glad.h"
+#include <glad/glad.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_image.h>
 
+#include "graphics.hpp"
 #include "timer.hpp"
 #include "config.hpp"
 #include "constants.hpp"
@@ -57,7 +58,8 @@ private:
 
     Timer& timer;
     EventWrapper events;
-    SDL_Window* window;
-    SDL_GLContext context;
+    Graphics graphics;
+
+    // Textures
     std::shared_ptr<TextureHandler> textures;
 };

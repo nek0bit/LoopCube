@@ -12,7 +12,8 @@ namespace constants
 	const std::string versionStr = "v0.5-git";
 
 	const std::string rootPath = DATA_LOCATION "/data/";
-	const std::string path = rootPath+"img/";
+	const std::string path = rootPath + "img/";
+    const std::string shaderPath = rootPath + "shaders/";
 
 	// Please add comment with index for code readability
 	const std::vector<TextureInfo> textureInfo = {

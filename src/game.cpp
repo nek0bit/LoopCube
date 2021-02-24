@@ -9,6 +9,7 @@ Game::Game(Timer& timer, int argc, char** argv)
       menu{nullptr},
       winSize{},
       timer{timer},
+      graphics{nullptr},
       textures{nullptr}
 {
     state.push(STATE_MAIN_MENU);
@@ -122,8 +123,11 @@ void Game::update()
     }
 #endif
 
+    // TEMP FOCUS ON CODE BELOW
+    
+    
 	// Update screen size
-    SDL_GetWindowSize(window, &winSize.w, &winSize.h);
+    SDL_GetWindowSize(graphics.window, &winSize.w, &winSize.h);
     
 }
 
@@ -159,8 +163,18 @@ void Game::render() {
 	SDL_RenderFillRect(renderer, &cursor_hover);
 #endif
 
+    // FOCUS on CODE BELOW
 
-    SDL_GL_SwapWindow(window);
+    float vertices[] = {
+        0.0f, 0.5f,
+        0.5f, -0.5f,
+        -0.5f, -0.5f
+    };
+
+    graphics.bindBuffer();
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    
+    SDL_GL_SwapWindow(graphics.window);
 }
 
 // SDL2 related stuff below
@@ -194,44 +208,51 @@ void Game::init(bool fullscreen = false) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-    // Initialize GLAD
-    if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
-    {
-        throw std::runtime_error("Failed to initialize GLAD");
-    }
-
     // Initialize SDL2 Window
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) == 0) {
-        window = SDL_CreateWindow(title,
-                                  SDL_WINDOWPOS_UNDEFINED,
-                                  SDL_WINDOWPOS_UNDEFINED,
-                                  defWidth, defHeight, win_flags);
+        graphics.window = SDL_CreateWindow(title,
+                                           SDL_WINDOWPOS_UNDEFINED,
+                                           SDL_WINDOWPOS_UNDEFINED,
+                                           defWidth, defHeight, win_flags);
 
         // Create OpenGL context
-        context = SDL_GL_CreateContext(window);
+        graphics.context = SDL_GL_CreateContext(graphics.window);
     } else {
         char error[] = "SDL_Init failed: ";
         strcat(error, SDL_GetError());
         throw std::runtime_error(error);
     }
 
+    
+    // Initialize GLAD
+    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
+    {
+        throw std::runtime_error("Failed to initialize GLAD");
+    }
 
-    //textures = std::make_shared<TextureHandler>(renderer);
+    // Initialize OpenGL calls
+    graphics.init();
 
-    // Enable images
+    graphics.loadShaders(constants::shaderPath + "vertex.glsl",
+                         constants::shaderPath + "frag.glsl");
+
+    // Initiates images and fonts
     int img_flags = IMG_INIT_PNG;
     if ((IMG_Init(img_flags) & img_flags) != img_flags) {
         char error[] = "IMG_Init failed: ";
         strcat(error, IMG_GetError());
         throw std::runtime_error(error);
     }
-
     TTF_Init();
 
+    // Setup any connected gamepads
     events.updateControllers();
 
-    gameInit();
+    // Load textures on startup
+    //textures = std::make_shared<TextureHandler>(renderer);
 
+    // Start game!
+    gameInit();
     isRunning = true;
 }
 
@@ -258,9 +279,7 @@ void Game::free() {
 	// Incase user manually runs this method and then the destructor calls this afterwards
 	if (!hasFreed) {
         SDL_StopTextInput();
-        SDL_DestroyWindow(window);
         SDL_Quit();
-        SDL_GL_DeleteContext(context);
 	}
 
 	hasFreed = true;
