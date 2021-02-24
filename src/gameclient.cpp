@@ -4,20 +4,20 @@ GameClient::GameClient(Timer& timer, WinSize& winSize)
     : exit{false},
       server{nullptr},
       clientSocket{nullptr},
-      serverThread{},
       disconnectCallback{},
       winSize{winSize},
+      serverPlayers{},
       serverChunks{},
       camera{&winSize},
       mainPlayer{},
       entities{},
       fade{60},
+      playerPosUpdate{6},
       particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
       timer{timer},
       background{std::make_shared<BackgroundOverworld>()}
-{
-    
+{    
     try
     {
         // Create server
@@ -50,11 +50,13 @@ GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize
       clientSocket{nullptr},
       serverThread{},
       winSize{winSize},
+      serverPlayers{},
       serverChunks{},
       camera{&winSize},
       mainPlayer{},
       entities{},
       fade{60},
+      playerPosUpdate{6},
       particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
       timer{timer},
@@ -98,7 +100,14 @@ void GameClient::serverThreadFunction()
 }
 
 void GameClient::update(EventWrapper& events)
-{    
+{
+    //**************************************************
+    // Multiplayer Groups
+    //**************************************************
+
+    clientSocket->checkSocket(disconnectCallback, serverPlayers, serverChunks);
+    serverPlayers.updatePlayers(serverChunks, timer, entities);
+    
     //**************************************************
     // Chunks
     //**************************************************
@@ -108,7 +117,6 @@ void GameClient::update(EventWrapper& events)
     
     serverChunks.update(camera);
 
-    clientSocket->checkSocket(disconnectCallback, serverChunks);
 
     //**************************************************
     // Player
@@ -122,44 +130,32 @@ void GameClient::update(EventWrapper& events)
 			mainPlayer.directPlayer(i, serverChunks, timer);
 		}
 	}
-
-    if (events.keyState[16])
-    {
-        // *shrug*
-        particles.push_back(
-            GravityParticle(0, 1, 0, 0, mainPlayer.position.x, mainPlayer.position.y, 30, 30));
-    }
     
 	// Jump (A)
 	if (events.buttonState[4])
     {
 		mainPlayer.directPlayer(0, serverChunks, timer);
 	}
-
 	// Down
 	if (events.buttonState[0])
     {
 		mainPlayer.directPlayer(2, serverChunks, timer);
 	}
-
 	// Right
 	if (events.buttonState[1])
     {
 		mainPlayer.directPlayer(1, serverChunks, timer);
 	}
-
 	// Left
 	if (events.buttonState[2])
     {
 		mainPlayer.directPlayer(3, serverChunks, timer);
 	}
-
 	// Up
 	if (events.buttonState[3])
     {
 		mainPlayer.directPlayer(0, serverChunks, timer);
 	}
-
     
     handleCamera();
 
@@ -179,6 +175,11 @@ void GameClient::update(EventWrapper& events)
     time.tick(timer, 40);
     fade.tick(timer, 40);
 
+    if (playerPosUpdate.tick(timer, 120))
+    {
+        Api::sendPlayerPos(clientSocket->fd, mainPlayer.position.x, mainPlayer.position.y);
+    }
+
     deadParticles();
 }
 
@@ -187,6 +188,8 @@ void GameClient::render(SDL_Renderer* renderer, TextureHandler& textures, EventW
     if (background) background->render(renderer, textures);
     
     serverChunks.render(renderer, textures, camera);
+
+    serverPlayers.renderPlayers(renderer, textures, camera);
 
     mainPlayer.render(renderer, textures, camera);
 

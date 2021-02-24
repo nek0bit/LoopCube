@@ -15,7 +15,7 @@ Vec2 GameObject::getPos(Camera& camera) const
 
 void GameObject::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
 {
-    const Vec2 val = getPos(camera);
+    const Vec2 val = position + camera;
 	SDL_Rect dest{static_cast<int>(val.x),
         static_cast<int>(val.y),
         static_cast<int>(size.w),
@@ -62,7 +62,7 @@ CollisionInfo GameObject::isColliding(const GameObject &obj2)
 // Used for rendering culling
 bool GameObject::shouldCull(Camera& camera)
 {
-    const Vec2 val = getPos(camera);
+    const Vec2 val = position + camera;
     return (val.x + size.w < 0 || val.y + size.h < 0) // Upper-left culling
         || (val.x - size.w > camera.getWidth() || val.y - size.h > camera.getHeight()); // Bottom-right culling
 }

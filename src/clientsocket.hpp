@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <cstring>
+#include <iomanip>
 #include <iterator>
 #include <functional>
 #include <vector>
@@ -17,6 +18,7 @@
 #include "socketwrapper.hpp"
 #include "command_constants.hpp"
 #include "chunkgroup.hpp"
+#include "player_group.hpp"
 
 struct ConnectionError: public std::exception
 {
@@ -32,7 +34,8 @@ struct ClientSocket
     ClientSocket(const char* address, const uint16_t port);
     ~ClientSocket();
 
-    void checkSocket(std::function<void(void)>& disconnectCallback, ChunkGroup& chunks);
+    void checkSocket(std::function<void(void)>& disconnectCallback,
+                     PlayerGroup& players, ChunkGroup& chunks);
     
     int fd;
 private:

@@ -8,8 +8,8 @@
 struct ConnectionData
 {
     std::string username;
-    double playerX;
-    double playerY;
+    int roundPlayerX;
+    int roundPlayerY;
 };
 
 // Struct for thread items

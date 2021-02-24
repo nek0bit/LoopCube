@@ -19,7 +19,7 @@
 
 namespace Api
 {
-    void sendPlayerPos(const int fd, const double x, const double y);
+    void sendPlayerPos(const int fd, const int x, const int y);
     void sendRecvChunk(const int fd, const long chunkX, const long chunkY);
     void sendPlaceBlock(const int fd, const uint32_t id,
                         const int64_t chunkX, const int64_t chunkY,

@@ -53,6 +53,11 @@ void Generic::serializeSigned(const int value, const unsigned length,
     }
 }
 
+double Generic::lerp(double v1, double v2, double t)
+{
+    return v1 + t * (v2 - v1);
+}
+
 #ifndef __HEADLESS
 void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& textures,
                                       int texture, int clipWidth,

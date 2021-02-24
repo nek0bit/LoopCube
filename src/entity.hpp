@@ -16,6 +16,9 @@ struct Entity: public GameObject
 	virtual ~Entity();
 
 	virtual void update(ChunkGroup& chunks, Timer& timer);
+    virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
+        override;
+    void dummyInterpolate(Timer& timer);
 
 
 	// Collision functions
@@ -29,6 +32,8 @@ struct Entity: public GameObject
 protected:
 	void updateBasicPhysics(ChunkGroup& chunks, Timer& timer);
 	CollisionInfo checkBlockCollision(ChunkGroup &chunks);
+
+    Vec2 displayPosition;
 
 	// Physics
 	double velXSpeed;

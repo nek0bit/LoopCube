@@ -12,7 +12,8 @@ int Animation::tick(Timer& timer, float amount)
 	if (frame > maxFrames)
     {
 		frame = 0;
+        return true;
 	}
 
-	return frame;
+	return false;
 }

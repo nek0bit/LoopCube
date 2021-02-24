@@ -88,11 +88,25 @@ private:
 #ifndef __NOIPLOG__
     std::string getAddress(sockaddr* info);
 #endif
+
+    // Commands
+    void commandGetChunk(const int fd, const std::vector<unsigned char>& value);
+    void commandPlaceBlockAbsolute(const int fd, const std::vector<ServerThreadItem>& threadPool,
+                                   const std::vector<unsigned char>& value);
+    void commandDestroyBlockAbsolute(const int fd, const std::vector<ServerThreadItem>& threadPool,
+                                     const std::vector<unsigned char>& value);
+    void commandPlayerPosition(const int fd, const std::vector<unsigned char>& value,
+                               const std::vector<ServerThreadItem>& threadPool,
+                               ConnectionData& connectionData);
+    
     const uint32_t port;
     std::string address;
+
+    // Threading
     std::vector<ServerThreadItem> threadPool;
     std::mutex tpLock; // threadPoolLock
     std::thread gameThread;
+    
     fd_set checkaccept; // For accept checking
     GameServer game;
     addrinfo opts, *info;

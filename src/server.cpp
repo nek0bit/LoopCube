@@ -283,10 +283,150 @@ void Server::startServer(const size_t threadCount)
                 newPoll.events = POLLIN;
         
                 low.connections.push_back(newPoll);
-                low.connectionData.push_back({"", 0.0, 0.0});
+                low.connectionData.push_back({"Unnamed", 0, 0});
                 tpLock.unlock();
             }
         }        
+    }
+}
+
+void Server::commandGetChunk(const int fd, const std::vector<unsigned char>& value)
+{
+    // Extract the size from value
+    const uint8_t chunkXSize = value.at(2);
+    const uint8_t chunkYSize = value.at(2+chunkXSize+1);
+
+    // Deserialize the data
+    long chunkX = Generic::deserializeSigned<std::vector<unsigned char>, long>
+        (value, 3, chunkXSize);
+    long chunkY = Generic::deserializeSigned<std::vector<unsigned char>, long>
+        (value, 2+chunkXSize+2, chunkYSize);
+
+    // Encode full size
+    // push back ACTION_GET_CHUNK
+    std::vector<unsigned char> getChunkAt = game.checkChunkAt(chunkX, chunkY);
+                    
+    // add 4 to account for 2 bytes of data size, 1 byte of 0xff at end, and 1 byte action
+    const uint16_t dataSize = getChunkAt.size()+4;
+
+    std::vector<unsigned char> data{};
+
+    // I don't expect data to be larger then 65535, so 2 bytes should be enough...
+    Generic::serializeUnsigned(dataSize, 2, [&data](uint8_t back)
+        { data.push_back(back); });
+
+    // Push back action name for client to use
+    data.push_back(ACTION_GET_CHUNK);
+
+    // Insert chunk data
+    data.insert(data.end(), getChunkAt.begin(), getChunkAt.end());
+
+    data.push_back(0xff); // End
+    
+    send(fd, &data[0], dataSize, 0);
+}
+
+void Server::commandPlaceBlockAbsolute(const int fd, const std::vector<ServerThreadItem>& threadPool,
+                                       const std::vector<unsigned char>& value)
+{
+    // Notice a pattern here...
+    const uint8_t idSize = value.at(2);
+    const uint8_t chunkXSize = value.at(2+idSize+1);
+    const uint8_t chunkYSize = value.at(2+idSize+chunkXSize+2);
+    const uint8_t blockXSize = value.at(2+idSize+chunkXSize+chunkYSize+3);
+    const uint8_t blockYSize = value.at(2+idSize+chunkXSize+chunkYSize+blockXSize+4);
+
+    uint32_t id = Generic::deserializeUnsigned<std::vector<unsigned char>, uint32_t>
+        (value, 3, idSize);
+    int64_t chunkX = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
+        (value, 2+idSize+2, chunkXSize);
+    int64_t chunkY = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
+        (value, 2+idSize+chunkXSize+3, chunkYSize);
+    uint8_t blockX = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
+        (value, 2+idSize+chunkXSize+chunkYSize+4, blockXSize);
+    uint8_t blockY = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
+        (value, 2+idSize+chunkYSize+chunkYSize+blockXSize+5, blockYSize);
+                        
+    game.modifyBlock(fd, threadPool, id, chunkX, chunkY, blockX, blockY, false);
+}
+
+void Server::commandDestroyBlockAbsolute(const int fd, const std::vector<ServerThreadItem>& threadPool,
+                                         const std::vector<unsigned char>& value)
+{
+    // Notice a pattern here...
+    const uint8_t chunkXSize = value.at(2);
+    const uint8_t chunkYSize = value.at(2+chunkXSize+1);
+    const uint8_t blockXSize = value.at(2+chunkXSize+chunkYSize+2);
+    const uint8_t blockYSize = value.at(2+chunkXSize+chunkYSize+blockXSize+3);
+
+    // Deserialize the chunk and block data in order
+    int64_t chunkX = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
+        (value, 3, chunkXSize);
+    
+    int64_t chunkY = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
+        (value, 2+chunkXSize+2, chunkYSize);
+    
+    uint8_t blockX = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
+        (value, 2+chunkXSize+chunkYSize+3, blockXSize);
+    
+    uint8_t blockY = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
+        (value, 2+chunkYSize+chunkYSize+blockXSize+4, blockYSize);
+                                                            
+    game.modifyBlock(fd, threadPool, -1, chunkX, chunkY, blockX, blockY, true);
+}
+
+void Server::commandPlayerPosition(const int fd, const std::vector<unsigned char>& value,
+                                   const std::vector<ServerThreadItem>& threadPool,
+                                   ConnectionData& connectionData)
+{
+    // Data to send back to client(s)
+    std::vector<unsigned char> sendBack{};
+
+    // Get index of size values
+    const uint8_t playerXSize = value.at(2);
+    const uint8_t playerYSize = value.at(2+playerXSize+1);
+
+    // Deserialize player
+    int playerX = Generic::deserializeSigned<std::vector<unsigned char>, long>
+        (value, 3, playerXSize);
+    int playerY = Generic::deserializeSigned<std::vector<unsigned char>, long>
+        (value, 2+playerXSize+2, playerYSize);
+
+    // Store data into connectionData
+    connectionData.roundPlayerX = playerX;
+    connectionData.roundPlayerY = playerY;
+
+    const uint16_t dataSize = sizeof(fd) +
+        sizeof(playerX) + sizeof(playerY) + 7;
+                        
+    Generic::serializeUnsigned(dataSize, 2, [&sendBack](uint8_t back)
+        { sendBack.push_back(back); });
+
+    sendBack.push_back(static_cast<unsigned char>(ACTION_PLAYER_UPDATE) & 0xff);
+
+    sendBack.push_back(sizeof(fd));
+    Generic::serializeSigned(fd, sizeof(fd), [&sendBack](uint8_t back) {
+        sendBack.push_back(back);
+    });
+
+    sendBack.push_back(sizeof(playerX));
+    Generic::serializeSigned(playerX, sizeof(playerX), [&sendBack](uint8_t back) {
+        sendBack.push_back(back);
+    });
+
+    sendBack.push_back(sizeof(playerY));
+    Generic::serializeSigned(playerY, sizeof(playerY), [&sendBack](uint8_t back) {
+        sendBack.push_back(back);
+    });
+
+    sendBack.push_back(0xff);
+
+    for (const ServerThreadItem& item: threadPool)
+    {
+        for (const pollfd& pfd: item.connections)
+        {
+            if (pfd.fd != fd) send(pfd.fd, &sendBack[0], dataSize, 0);
+        }
     }
 }
 
@@ -294,168 +434,76 @@ void Server::handleCommand(ServerThreadItem& item, const size_t index)
 {
     constexpr size_t MAX_BUFFER = 2048;
     const int& fd = item.connections[index].fd;
-    // UNUSED
-    //ConnectionData& connectionData = item.connectionData[index];
-    
-
+    ConnectionData& connectionData = item.connectionData[index];
     int res;
 
     // Fetch first byte, see if we even can
-    try
+    do
     {
-        do
-        {
-            unsigned char buffer[MAX_BUFFER];
-            int sizeByte = recv(fd, buffer, 1, 0);
-            int dataLength = buffer[0];
+        unsigned char buffer[MAX_BUFFER];
+        int sizeByte = recv(fd, buffer, 1, 0);
+        int dataLength = buffer[0];
 
-            // Connection closed... or error occured
-            if (sizeByte <= 0)
+        // Connection closed... or error occured
+        if (sizeByte <= 0)
+        {
+            if (sizeByte == 0)
             {
-                if (sizeByte == 0)
-                {
-                    ServLog::info(std::string{"Disconnect from fd "} +
-                                  std::to_string(fd));
-                    removeConnection(item, index);
-                }
+                ServLog::info(std::string{"Disconnect from fd "} +
+                              std::to_string(fd));
+                removeConnection(item, index);
+            }
+            return;
+        }
+
+        // Read offset first
+        res = recv(fd, &buffer[1],
+                   static_cast<size_t>(dataLength) >= MAX_BUFFER ?
+                   MAX_BUFFER-1 : dataLength, 0);
+        
+        // Convert it into a vector
+        std::vector<unsigned char> value(std::begin(buffer), std::begin(buffer)+dataLength);        
+        
+
+        // Read values until we run out of data to read!
+        //******************************
+        // COMMANDS
+        //******************************
+        try
+        {
+            // This should be 0xff!
+            if (value.at(dataLength-1) != 0xff)
+            {
+                // Perhaps a mistake was made?
                 return;
             }
-
-            // Read offset first
-            res = recv(fd, &buffer[1],
-                       static_cast<size_t>(dataLength) >= MAX_BUFFER ?
-                       MAX_BUFFER-1 : dataLength, 0);
-        
-            // Convert it into a vector
-            std::vector<unsigned char> value(std::begin(buffer), std::begin(buffer)+dataLength);        
-        
-
-            // Read values until we run out of data to read!
-            //******************************
-            // COMMANDS
-            //******************************
-            try
-            {
-                // This should be 0xff!
-                if (value.at(dataLength-1) != 0xff)
-                {
-                    // Perhaps a mistake was made?
-                    return;
-                }
             
-                // Read the first bit
-                switch(value.at(1))
-                {
-                case COMMAND_QUIT:
-                    removeConnection(item, index);
-                    break;
-                case COMMAND_PLAYER_POS:
-                    // TODO
-                    try
-                    {
-                        // oh god, I gotta serialize a double!
-                        // Game internally uses doubles, not floats
-                
-                        //connectionData.playerX = std::stod(msgSplit.at(1));
-                        //connectionData.playerY = std::stod(msgSplit.at(2));
-                    }
-                    catch (const std::invalid_argument& err) {}
-                    break;
-                case COMMAND_GET_CHUNK:
-                    try
-                    {
-                        const uint8_t chunkXSize = value.at(2);
-                        const uint8_t chunkYSize = value.at(2+chunkXSize+1);
-                        long chunkX = Generic::deserializeSigned<std::vector<unsigned char>, long>
-                            (value, 3, chunkXSize);
-                        long chunkY = Generic::deserializeSigned<std::vector<unsigned char>, long>
-                            (value, 2+chunkXSize+2, chunkYSize);
-
-                        // Encode full size
-                        // push back ACTION_GET_CHUNK
-                        std::vector<unsigned char> getChunkAt = game.checkChunkAt(chunkX, chunkY);
-                    
-                        // add 4 to account for 2 bytes of data size, 1 byte of 0xff at end, and 1 byte action
-                        const uint16_t dataSize = getChunkAt.size()+4;
-
-                        std::vector<unsigned char> data{};
-
-                        // I don't expect data to be larger then 65535, so 2 bytes should be enough...
-                        Generic::serializeUnsigned(dataSize, 2, [&data](uint8_t back)
-                            { data.push_back(back); });
-
-                        data.push_back(ACTION_GET_CHUNK);
-                    
-                        data.insert(data.end(), getChunkAt.begin(), getChunkAt.end());
-
-                        data.push_back(0xff);
-                    
-                        send(fd, &data[0], dataSize, 0);
-                    }
-                    catch (const std::invalid_argument& err) {}
-                    break;
-                case COMMAND_PLACE_BLOCK_ABSOLUTE:
-                    try
-                    {
-                    
-                        // Notice a pattern here...
-                        const uint8_t idSize = value.at(2);
-                        const uint8_t chunkXSize = value.at(2+idSize+1);
-                        const uint8_t chunkYSize = value.at(2+idSize+chunkXSize+2);
-                        const uint8_t blockXSize = value.at(2+idSize+chunkXSize+chunkYSize+3);
-                        const uint8_t blockYSize = value.at(2+idSize+chunkXSize+chunkYSize+blockXSize+4);
-
-                        uint32_t id = Generic::deserializeUnsigned<std::vector<unsigned char>, uint32_t>
-                            (value, 3, idSize);
-                        int64_t chunkX = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
-                            (value, 2+idSize+2, chunkXSize);
-                        int64_t chunkY = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
-                            (value, 2+idSize+chunkXSize+3, chunkYSize);
-                        uint8_t blockX = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
-                            (value, 2+idSize+chunkXSize+chunkYSize+4, blockXSize);
-                        uint8_t blockY = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
-                            (value, 2+idSize+chunkYSize+chunkYSize+blockXSize+5, blockYSize);
-                        
-                        game.modifyBlock(fd, threadPool, id, chunkX, chunkY, blockX, blockY, false);
-                    }
-                    catch (const std::out_of_range& err) {}
-                    break;                    
-                case COMMAND_DESTROY_BLOCK_ABSOLUTE:
-                    try
-                    {
-                    
-                        // Notice a pattern here...
-                        const uint8_t chunkXSize = value.at(2);
-                        const uint8_t chunkYSize = value.at(2+chunkXSize+1);
-                        const uint8_t blockXSize = value.at(2+chunkXSize+chunkYSize+2);
-                        const uint8_t blockYSize = value.at(2+chunkXSize+chunkYSize+blockXSize+3);
-
-                        int64_t chunkX = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
-                            (value, 3, chunkXSize);
-                        int64_t chunkY = Generic::deserializeSigned<std::vector<unsigned char>, int64_t>
-                            (value, 2+chunkXSize+2, chunkYSize);
-                        uint8_t blockX = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
-                            (value, 2+chunkXSize+chunkYSize+3, blockXSize);
-                        uint8_t blockY = Generic::deserializeUnsigned<std::vector<unsigned char>, uint8_t>
-                            (value, 2+chunkYSize+chunkYSize+blockXSize+4, blockYSize);
-                                                            
-                        game.modifyBlock(fd, threadPool, -1, chunkX, chunkY, blockX, blockY, true);
-                    }
-                    catch (const std::out_of_range& err) {}
-                    break;
-                default:
-                    break;
-                }
-            }
-            catch (const std::out_of_range& err) {
+            // Read the first byte
+            switch(value.at(1))
+            {
+            case COMMAND_QUIT:
+                removeConnection(item, index);
                 break;
-            } // Do nothing
-        } while (!(res == -1 || res == 0));
-    }
-    catch (const std::exception& err)
-    {
-        std::cerr << "Caught exception: " << err.what() << std::endl;
-    }
+            case COMMAND_GET_CHUNK:
+                commandGetChunk(fd, value);
+                break;
+            case COMMAND_PLACE_BLOCK_ABSOLUTE:
+                commandPlaceBlockAbsolute(fd, threadPool, value);
+                break;                    
+            case COMMAND_DESTROY_BLOCK_ABSOLUTE:
+                commandDestroyBlockAbsolute(fd, threadPool, value);
+                break;
+            case COMMAND_PLAYER_POS:
+                commandPlayerPosition(fd, value, threadPool, connectionData);
+                break;
+            default:
+                break;
+            }
+        }
+        catch (const std::out_of_range& err) {
+            break;
+        }
+    } while (!(res == -1 || res == 0)); // Loop until there is no data to read
 }
 
 void Server::removeConnection(ServerThreadItem& item, const size_t index)
@@ -496,8 +544,8 @@ void Server::serverThread(const size_t index) noexcept
 {
     while (!exit.load())
     {
-        tpLock.lock(); // Ensure threadPool has been created
-                       // also ensures threadPool cannot be modified
+        std::lock_guard<std::mutex> lg(tpLock);
+        
         try
         {
             ServerThreadItem& item = threadPool.at(index);
@@ -523,10 +571,6 @@ void Server::serverThread(const size_t index) noexcept
                 }
             }
         }
-        catch (const std::out_of_range& err)
-        {
-            tpLock.unlock();
-            continue;
-        }
+        catch (const std::out_of_range& err) { continue; }
     }
 }

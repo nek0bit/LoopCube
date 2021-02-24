@@ -1,9 +1,31 @@
 #include "api.hpp"
 
 
-void Api::sendPlayerPos(const int, const double, const double)
+void Api::sendPlayerPos(const int fd, const int playerX, const int playerY)
 {
-    ;
+    uint8_t playerXSize = sizeof(playerX);
+    uint8_t playerYSize = sizeof(playerY);
+    std::vector<uint8_t> result{};
+    std::function<void(uint8_t)> gen = [&result](uint8_t back)->void { result.push_back(back); };
+
+    // Store as int for now
+    // I don't really need the precision :)
+    
+    result.push_back(static_cast<uint8_t>(COMMAND_PLAYER_POS));
+
+    result.push_back(playerXSize);
+    Generic::serializeSigned(playerX, playerXSize, gen);
+
+    result.push_back(playerYSize);
+    Generic::serializeSigned(playerY, playerYSize, gen);
+
+    uint8_t totalSize = playerXSize + playerYSize + 5; // 2 + 3
+
+    result.insert(result.begin(), totalSize);
+
+    result.push_back(0xff);
+    
+    send(fd, &result[0], totalSize+1, 0);
 }
 
 void Api::sendRecvChunk(const int fd, const long chunkX, const long chunkY)

@@ -36,6 +36,7 @@
 #include "background_overworld.hpp"
 #include "time.hpp"
 #include "timer.hpp"
+#include "player_group.hpp"
 
 struct SelectInfo
 {
@@ -71,6 +72,8 @@ private:
     void deadParticles();
     void mouseEvents(EventWrapper& events);
 
+    PlayerGroup serverPlayers;
+
     //std::unique_ptr<Inventory> inv;
     ChunkGroup serverChunks;
     Camera camera;
@@ -80,6 +83,7 @@ private:
     std::vector<std::shared_ptr<Entity>> entities;
 
     Animation fade;
+    Animation playerPosUpdate;
 
     std::vector<GravityParticle> particles;
 

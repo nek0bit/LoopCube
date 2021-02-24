@@ -80,7 +80,10 @@ namespace Generic
         
         return isNegative ? -result : result;
     }
-    
+
+    void serializeDouble(const double val, std::function<void(uint8_t)> appendData);
+
+    double lerp(double v1, double v2, double t);
 
 #ifndef __HEADLESS
     namespace Render

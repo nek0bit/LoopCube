@@ -3,6 +3,7 @@
 #include <memory>
 #include <cmath>
 
+#include "generic.hpp"
 #include "entity.hpp"
 #include "collisioninfo.hpp"
 #include "animation.hpp"
@@ -13,7 +14,8 @@ struct Player: public Entity
 	Player();
 	~Player();
 
-	void update(ChunkGroup &chunks, Timer& timer, std::vector<std::shared_ptr<Entity>> entities);
+	void update(ChunkGroup &chunks, Timer& timer,
+                std::vector<std::shared_ptr<Entity>> entities, bool interpolate = false);
 	
 	// Movement
 	void jump(ChunkGroup &chunks, Timer& timer);

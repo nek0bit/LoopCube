@@ -22,9 +22,11 @@ Player::Player()
 Player::~Player()
 {}
 
-void Player::update(ChunkGroup& chunks, Timer& timer, std::vector<std::shared_ptr<Entity>> entities)
+void Player::update(ChunkGroup& chunks, Timer& timer,
+                    std::vector<std::shared_ptr<Entity>> entities, bool interpolate)
 {
-	updateBasicPhysics(chunks, timer);
+    if (!interpolate) updateBasicPhysics(chunks, timer);
+    else dummyInterpolate(timer);
 	frame.tick(timer, 50);
 
 	// Frame for when the character is looking the other way
