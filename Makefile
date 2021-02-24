@@ -1,12 +1,12 @@
 # -*- mode: makefile -*-
 CXX ?= g++
 CXXFLAGS += -std=c++14 -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
-LDFLAGS += -pthread $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
+LDFLAGS += -pthread -ldl -lGL $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
 SRC_DIR = src
 OBJ_DIR = obj
 TARGET = loopcube
 SRC = $(wildcard src/*.cpp)
-OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
+OBJ = $(patsubst %.cpp,obj/%.o,$(SRC)) obj/src/glad.o
 MAKE ?= make
 
 ifeq ($(strip $(DATA_LOCATION)),)
@@ -20,11 +20,13 @@ server:
 	@$(MAKE) -f Makefile.server all
 
 obj/%.o: %.cpp %.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ 
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+obj/src/glad.o: src/glad.c
+	$(CXX) $(LDFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJ)
 	$(CXX) -o $(TARGET) $^ $(LDFLAGS) 
-
 
 debug: CXXFLAGS += -g
 debug: setup
