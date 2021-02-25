@@ -4,10 +4,13 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #include <glad/glad.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+
+#include "generic.hpp"
 
 struct Graphics
 {
@@ -20,6 +23,7 @@ struct Graphics
     void bindVAO() const;
     void loadShaders(const std::string& vertShaderFilename,
                      const std::string& fragShaderFilename);
+    void postShader();
     void useShader() const;
     void setupVertexLayout();
 

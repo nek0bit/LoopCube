@@ -3,6 +3,10 @@
 #ifndef __HEADLESS
 #include <SDL2/SDL.h>
 #include "texturehandler.hpp"
+
+#include <glad/glad.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 #endif
 
 #ifdef __HEADLESS
@@ -85,7 +89,16 @@ namespace Generic
 
     double lerp(double v1, double v2, double t);
 
+
 #ifndef __HEADLESS
+    namespace GL
+    {
+        void uniform(GLint, float, float, float, float);
+        void uniform(GLint, float, float, float);
+        void uniform(GLint, float, float);
+        void uniform(GLint, float);
+    }
+    
     namespace Render
     {
         void renderRepeating(SDL_Renderer* renderer, TextureHandler& textures,

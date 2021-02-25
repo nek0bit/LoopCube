@@ -83,4 +83,10 @@ void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& te
 		}
 	}
 }
+
+// OpenGL wrappers
+void Generic::GL::uniform(GLint value, float x, float y, float z, float w) { glUniform4f(value, x, y, z, w); }
+void Generic::GL::uniform(GLint value, float x, float y, float z) { glUniform3f(value, x, y, z); }
+void Generic::GL::uniform(GLint value, float x, float y) { glUniform2f(value, x, y); }
+void Generic::GL::uniform(GLint value, float x) { glUniform1f(value, x); }
 #endif

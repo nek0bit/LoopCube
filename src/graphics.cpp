@@ -44,11 +44,20 @@ void Graphics::useShader() const
 
 void Graphics::setupVertexLayout()
 {
+    constexpr uint8_t Stride = 5;
     GLint positionAttribute = glGetAttribLocation(shader, "position");
+    GLint colorAttribute = glGetAttribLocation(shader, "color"); 
+
+    // Position
     glEnableVertexAttribArray(positionAttribute);
-    
     // InputAttrib - valSize - Type - shouldNormalize - Stride - Offset
-    glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, Stride * sizeof(float), 0);
+
+    // Color
+    glEnableVertexAttribArray(colorAttribute);
+    glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE,
+                          Stride * sizeof(float), (void*)(2 * sizeof(float)));
+    
 }
 
 void Graphics::loadShaders(const std::string& vertShaderFilename,
@@ -111,7 +120,7 @@ void Graphics::loadShaders(const std::string& vertShaderFilename,
     shader = glCreateProgram();
     glAttachShader(shader, vertShader);
     glAttachShader(shader, fragShader);
-    glBindFragDataLocation(shader, 0, "color");
+    glBindFragDataLocation(shader, 0, "outputColor");
     glLinkProgram(shader);
 
     // Check if linking was successful
@@ -122,8 +131,7 @@ void Graphics::loadShaders(const std::string& vertShaderFilename,
         std::cerr << "Error linking shader: " << info << std::endl;
     }
 
-    // Use it!
-    useShader();
+    postShader();
     
     // We're done with the files here
     vertShaderFile.close();
@@ -134,3 +142,11 @@ void Graphics::loadShaders(const std::string& vertShaderFilename,
     glDeleteShader(fragShader);
 }
 
+
+void Graphics::postShader()
+{    
+    // Use it!
+    useShader();
+
+    //Generic::GL::uniform(glGetUniformLocation(shader, "color"), 1.0f, 0.0f, 0.0f);
+}
