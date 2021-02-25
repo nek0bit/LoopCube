@@ -3,6 +3,7 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 #include <glad/glad.h>
 #include <SDL2/SDL.h>
@@ -14,14 +15,16 @@ struct Graphics
     ~Graphics();
 
     void init();
-    void createBuffers();
-    void bindBuffer() const;
+    void createVAO();
+    // Prefer the first one commonly
+    void bindVAO() const;
     void loadShaders(const std::string& vertShaderFilename,
                      const std::string& fragShaderFilename);
     void useShader() const;
+    void setupVertexLayout();
 
     SDL_Window* window;
     SDL_GLContext context;
     GLuint shader;
-    GLuint vbo;
+    GLuint vao;
 };

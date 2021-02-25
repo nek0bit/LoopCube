@@ -59,6 +59,9 @@ private:
     Timer& timer;
     EventWrapper events;
     Graphics graphics;
+    // TEMP delete me
+    GLuint vbo;
+
 
     // Textures
     std::shared_ptr<TextureHandler> textures;

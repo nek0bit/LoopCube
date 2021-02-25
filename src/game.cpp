@@ -38,12 +38,78 @@ void Game::gameInit()
                                              {10, 12, 14, 16, 18, 32});
 	
 	//menu = std::make_shared<Menu>(renderer, *textures, events, timer, winSize);
+
+    // REMOVE ME
+    glGenBuffers(1, &vbo);
+    GLfloat vertices[] = {
+        0.0f, 0.5f,
+        0.5f, -0.5f,
+        -1.0f, -1.0f
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    graphics.setupVertexLayout();
 }
+
+
+// Draw objects to screen
+void Game::render() {
+    // Clear screen
+    glClearColor(0.4f, 0.3f, 0.4f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    
+    SDL_GL_SwapWindow(graphics.window);
+
+    
+    /*
+      // Here's some old code kept for reference :^)
+
+
+    // Clear screen
+    SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+    SDL_RenderClear(renderer);
+
+    if (state.size() > 0)
+    {
+        switch(state.top()) {
+        case STATE_MAIN_MENU:
+            if (game != nullptr) game->render(renderer, *textures, events);
+            if (menu != nullptr) menu->render();
+            break;
+        case STATE_PLAYING:
+            if (game != nullptr) game->render(renderer, *textures, events);
+            break;
+        default:
+            break;
+        }
+    }
+    
+    SDL_RenderPresent(renderer);
+
+#if defined(__WIIU__) || defined(__SWITCH__)
+	SDL_Rect cursor_hover{events.vmouse.x, events.vmouse.y, 10, 10};
+
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
+	SDL_RenderFillRect(renderer, &cursor_hover);
+#endif
+    */
+
+}
+
 
 // Game related loop stuff
 void Game::update()
 {
-#if 0
+    // Update screen size
+    SDL_GetWindowSize(graphics.window, &winSize.w, &winSize.h);
+
+    
+    /*
+      // Here's some old code kept for reference, it will be back soon :^)
     if (state.size() > 0)
     {
         switch(state.top()) {
@@ -121,60 +187,8 @@ void Game::update()
         game = nullptr;
         state.pop(); // Switch game state to menu
     }
-#endif
-
-    // TEMP FOCUS ON CODE BELOW
+*/    
     
-    
-	// Update screen size
-    SDL_GetWindowSize(graphics.window, &winSize.w, &winSize.h);
-    
-}
-
-// Draw objects to screen
-void Game::render() {
-#if 0
-    // Clear screen
-    SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-    SDL_RenderClear(renderer);
-
-    if (state.size() > 0)
-    {
-        switch(state.top()) {
-        case STATE_MAIN_MENU:
-            if (game != nullptr) game->render(renderer, *textures, events);
-            if (menu != nullptr) menu->render();
-            break;
-        case STATE_PLAYING:
-            if (game != nullptr) game->render(renderer, *textures, events);
-            break;
-        default:
-            break;
-        }
-    }
-    
-    SDL_RenderPresent(renderer);
-#endif
-
-#if defined(__WIIU__) || defined(__SWITCH__)
-	SDL_Rect cursor_hover{events.vmouse.x, events.vmouse.y, 10, 10};
-
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
-	SDL_RenderFillRect(renderer, &cursor_hover);
-#endif
-
-    // FOCUS on CODE BELOW
-
-    float vertices[] = {
-        0.0f, 0.5f,
-        0.5f, -0.5f,
-        -0.5f, -0.5f
-    };
-
-    graphics.bindBuffer();
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
-    SDL_GL_SwapWindow(graphics.window);
 }
 
 // SDL2 related stuff below
@@ -202,7 +216,7 @@ void Game::init(bool fullscreen = false) {
 
     SDL_StartTextInput();
 
-    // Initialize OpenGL
+    // Initialize OpenGL options
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -222,7 +236,6 @@ void Game::init(bool fullscreen = false) {
         strcat(error, SDL_GetError());
         throw std::runtime_error(error);
     }
-
     
     // Initialize GLAD
     if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
@@ -233,6 +246,7 @@ void Game::init(bool fullscreen = false) {
     // Initialize OpenGL calls
     graphics.init();
 
+    // Shader is compiled and used
     graphics.loadShaders(constants::shaderPath + "vertex.glsl",
                          constants::shaderPath + "frag.glsl");
 
