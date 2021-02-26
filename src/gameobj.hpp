@@ -3,9 +3,14 @@
 
 #ifndef __HEADLESS
 #include <SDL2/SDL.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "graphics.hpp"
 #include "texturehandler.hpp"
 #include "camera.hpp"
-#endif
+#endif // __HEADLESS
 
 #include "generic.hpp"
 #include "size.hpp"

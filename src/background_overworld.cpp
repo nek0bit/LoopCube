@@ -24,17 +24,17 @@ BackgroundOverworld::~BackgroundOverworld()
 
 void BackgroundOverworld::update(Camera& camera, Time& time)
 {
-	const int lightCamLeft = (camera.getWidth() - bgLight.w) / 2;
+	const int lightCamLeft = (camera.size.w - bgLight.w) / 2;
 	constexpr int lightCamTop = 20;
 	constexpr int hillsOffset = -100;
 	const double timeOverMax = static_cast<double>(time.time) / static_cast<double>(time.maxTime);
-	const int horCircle = camera.getWidth() * .35;
-	const int vertCircle = camera.getHeight() / 4;
+	const int horCircle = camera.size.w * .35;
+	const int vertCircle = camera.size.h / 4;
     constexpr SDL_Color dayColor{106, 164, 222, 255};
 
     // Window size
-	winWidth = camera.getWidth();
-	winHeight = camera.getHeight();
+	winWidth = camera.size.w;
+	winHeight = camera.size.h;
     
 	// Update bgShine
 	bgShineSrc.x = 0;
@@ -44,16 +44,16 @@ void BackgroundOverworld::update(Camera& camera, Time& time)
 
 	bgShineDest.x = 0;
 	bgShineDest.y = 0;
-	bgShineDest.w = camera.getWidth();
-	bgShineDest.h = camera.getHeight();
+	bgShineDest.w = camera.size.w;
+	bgShineDest.h = camera.size.h;
 
 	// Update bgCloud
-	bgCloudOffset.x = camera.x / 10;
-	bgCloudOffset.y = camera.y / 30;
+	bgCloudOffset.x = camera.position.x / 10;
+	bgCloudOffset.y = camera.position.y / 30;
 
 	// Update hills
-	bgHillsOffset.x = camera.x / 15;
-	bgHillsOffset.y = (camera.getHeight() / 2) + hillsOffset;
+	bgHillsOffset.x = camera.position.x / 15;
+	bgHillsOffset.y = (camera.size.h / 2) + hillsOffset;
 
 	//********************************
 	//  Handle time

@@ -6,6 +6,7 @@
 #include <random>
 #include <memory>
 
+#include "camera.hpp"
 #include "graphics.hpp"
 #include "timer.hpp"
 #include "generic.hpp"
@@ -22,7 +23,11 @@
 
 struct Menu
 {
-	Menu(Graphics& graphics, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize);
+	Menu(Graphics& graphics,
+         TextureHandler& textures,
+         EventWrapper& events,
+         Timer& timer,
+         WinSize& winSize);
 	~Menu();
 
 	void update(bool update_animations = true);
@@ -36,6 +41,8 @@ struct Menu
 
     bool showPlayBuffer;
 private:
+    Camera camera;
+    
 	// Functions
 	static void updateConfigElements(int id, int value);
 	

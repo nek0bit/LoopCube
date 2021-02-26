@@ -36,11 +36,6 @@ void Graphics::bindVAO() const
     glBindVertexArray(vao);
 }
 
-void Graphics::useShader() const
-{
-    glUseProgram(shader);
-}
-
 void Graphics::setupVertexLayout()
 {
     constexpr uint8_t Stride = 5;
@@ -149,12 +144,3 @@ void Graphics::postShader()
     // Use it!
     useShader();
 }
-
-void Graphics::uniform(const char* value, const float x, const float y, const float z, const float w)
-    { glUniform4f(glGetUniformLocation(shader, value), x, y, z, w); }
-void Graphics::uniform(const char* value, const float x, const float y, const float z)
-    { glUniform3f(glGetUniformLocation(shader, value), x, y, z); }
-void Graphics::uniform(const char* value, const float x, const float y)
-    { glUniform2f(glGetUniformLocation(shader, value), x, y); }
-void Graphics::uniform(const char* value, const float x)
-    { glUniform1f(glGetUniformLocation(shader, value), x); }

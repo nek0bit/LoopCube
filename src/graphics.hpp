@@ -23,14 +23,18 @@ struct Graphics
     void loadShaders(const std::string& vertShaderFilename,
                      const std::string& fragShaderFilename);
     void postShader();
-    void useShader() const;
     void setupVertexLayout();
     
-    void uniform(const char* value, const float, const float, const float, const float);
-    void uniform(const char* value, const float, const float, const float);
-    void uniform(const char* value, const float, const float);
-    void uniform(const char* value, const float);
-
+    inline void useShader() const
+        {
+            glUseProgram(shader);
+        }
+    
+    inline GLint getUniformLocation(const char* val) const noexcept
+        {
+            return glGetUniformLocation(shader, val);
+        }
+    
     SDL_Window* window;
     SDL_GLContext context;
     GLuint shader;

@@ -13,8 +13,13 @@ enum CONFIG_ID
 	CB_SHOW_CHUNK_DEBUG,
 };
 
-Menu::Menu(Graphics& graphics, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize)
-    : showPlayBuffer{false},
+Menu::Menu(Graphics& graphics,
+           TextureHandler& textures,
+           EventWrapper& events,
+           Timer& timer,
+           WinSize& winSize)
+    : camera{winSize},
+      showPlayBuffer{false},
       state{0},
       winSize{winSize},
       timer{timer},
