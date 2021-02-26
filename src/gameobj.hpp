@@ -25,16 +25,17 @@ struct GameObject
 	virtual ~GameObject() = default;
 
     virtual void update();
+    
 #ifndef __HEADLESS
-    virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+    virtual void render(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const;
 
-	virtual bool shouldCull(Camera& camera);
+	virtual bool shouldCull(const Camera& camera) const;
 
 	// Return position
-	virtual Vec2 getPos(Camera& camera) const;
-#endif
+	virtual Vec2 getPos(const Camera& camera) const;
+#endif // __HEADLESS
 
-	CollisionInfo isColliding(const GameObject &obj2);
+	CollisionInfo isColliding(const GameObject &obj2) const;
 
     Vec2 position;
     Size size;

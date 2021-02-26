@@ -6,6 +6,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "graphics.hpp"
 #include "generic.hpp"
 #include "background.hpp"
 #include "constants.hpp"
@@ -19,8 +20,8 @@ struct BackgroundOverworld: public Background
 	BackgroundOverworld();
 	~BackgroundOverworld();
 	
-	void update(Camera& camera, Time& time) override;
-	void render(SDL_Renderer* renderer, TextureHandler& textures) override;
+	void update(const Camera& camera, Time& time) override;
+	void render(const Graphics& graphics, TextureHandler& textures) const override;
 private:
 	int winWidth;
 	int winHeight;

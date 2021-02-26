@@ -22,7 +22,7 @@ BackgroundOverworld::BackgroundOverworld()
 BackgroundOverworld::~BackgroundOverworld()
 {}
 
-void BackgroundOverworld::update(Camera& camera, Time& time)
+void BackgroundOverworld::update(const Camera& camera, Time& time)
 {
 	const int lightCamLeft = (camera.size.w - bgLight.w) / 2;
 	constexpr int lightCamTop = 20;
@@ -125,15 +125,16 @@ void BackgroundOverworld::update(Camera& camera, Time& time)
 	bgMoonDest.h = bgLight.h;
 }
 
-void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& textures) {
+void BackgroundOverworld::render(const Graphics& graphics, TextureHandler& textures) const
+{
     constexpr int cloudOffset = 240;
     constexpr int hillOffset = 0;
 	const int afterHillsTop = bgHillsOffset.y + bgHills.h + hillOffset;
 
 	// Render sky
 	SDL_Rect sky{0, 0, winWidth, winHeight};
-    SDL_SetRenderDrawColor(renderer, skyColor.r, skyColor.g, skyColor.b, 255);
-    SDL_RenderFillRect(renderer, &sky);
+    //SDL_SetRenderDrawColor(renderer, skyColor.r, skyColor.g, skyColor.b, 255);
+    //SDL_RenderFillRect(renderer, &sky);
 	
 	// Render bgShine
     //SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_BG_SHINE)->texture, &bgShineSrc, &bgShineDest);
@@ -151,7 +152,7 @@ void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& texture
     */
 
 	SDL_Rect after{0, afterHillsTop, winWidth, winHeight-afterHillsTop};
-    SDL_SetRenderDrawColor(renderer, 111, 106, 98, 255);
-    SDL_RenderFillRect(renderer, &after);
+    //SDL_SetRenderDrawColor(renderer, 111, 106, 98, 255);
+    //SDL_RenderFillRect(renderer, &after);
 }
 

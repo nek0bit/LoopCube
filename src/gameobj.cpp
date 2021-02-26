@@ -8,12 +8,12 @@ GameObject::GameObject(int textureId, double x, double y, double w, double h)
 {}
 
 #ifndef __HEADLESS
-Vec2 GameObject::getPos(Camera& camera) const
+Vec2 GameObject::getPos(const Camera& camera) const
 {
 	return position/* + camera*/;
 }
 
-void GameObject::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
+void GameObject::render(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const
 {
     const Vec2 val = position/* + camera*/;
 	SDL_Rect dest{static_cast<int>(val.x),
@@ -23,7 +23,7 @@ void GameObject::render(SDL_Renderer* renderer, TextureHandler& textures, Camera
     //SDL_RenderCopy(renderer, textures.getTexture(textureId)->texture, &src, &dest);
 }
 
-CollisionInfo GameObject::isColliding(const GameObject &obj2)
+CollisionInfo GameObject::isColliding(const GameObject &obj2) const
 {    
 	if (position.x < obj2.position.x + obj2.size.w &&
 		position.x + size.w > obj2.position.x &&
@@ -60,7 +60,7 @@ CollisionInfo GameObject::isColliding(const GameObject &obj2)
 }
 
 // Used for rendering culling
-bool GameObject::shouldCull(Camera& camera)
+bool GameObject::shouldCull(const Camera& camera) const
 {
     const Vec2 val = position/* + camera*/;
     return (val.x + size.w < 0 || val.y + size.h < 0) // Upper-left culling

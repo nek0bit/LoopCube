@@ -5,8 +5,8 @@ Background::Background()
 
 Background::~Background() {}
 
-void Background::update(Camera&, Time&)
+void Background::update(const Camera&, Time&)
 {}
 
-void Background::render(SDL_Renderer*, TextureHandler&)
+void Background::render(const Graphics&, TextureHandler&) const
 {}

@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-#include <SDL2/SDL.h>
-
+#include "graphics.hpp"
 #include "texturehandler.hpp"
 #include "camera.hpp"
 #include "time.hpp"
@@ -25,6 +24,6 @@ struct Background
     Background();
     virtual ~Background();
 
-    virtual void update(Camera&, Time&);
-    virtual void render(SDL_Renderer*, TextureHandler&);    
+    virtual void update(const Camera&, Time&);
+    virtual void render(const Graphics&, TextureHandler&) const;
 };

@@ -1,8 +1,8 @@
 #include "time.hpp"
 
-Time::Time(float startTime, float maxTime,
-		   float morningTime, float nightTime,
-		   float morningOffset, float nightOffset)
+Time::Time(const float startTime, const float maxTime,
+		   const float morningTime, const float nightTime,
+		   const float morningOffset, const float nightOffset) noexcept
     : time{startTime},
       maxTime{maxTime},
       morningTime{morningTime},
@@ -13,13 +13,17 @@ Time::Time(float startTime, float maxTime,
 
 Time::~Time() {}
 
-void Time::tick(Timer& timer, int amount) {
+void Time::tick(const Timer& timer, int amount) noexcept
+{
 	time += amount * timer.deltaTime;
 	if (time > maxTime) time = 0;
 
-	if (time > morningTime && time < nightTime) {
+	if (time > morningTime && time < nightTime)
+    {
 		state = TIME_DAY;
-	} else if (time > nightTime || time < morningTime) {
+	}
+    else if (time > nightTime || time < morningTime)
+    {
 		state = TIME_NIGHT;
 	}
 }

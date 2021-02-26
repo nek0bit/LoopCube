@@ -1,6 +1,6 @@
 #include "timer.hpp"
 
-Timer::Timer(int FPS)
+Timer::Timer(const int FPS)
     : FPS{0},
       deltaTime{},
       lastFrame{},
@@ -10,7 +10,7 @@ Timer::Timer(int FPS)
     lastFrame = std::chrono::high_resolution_clock::now().time_since_epoch();
 }
 
-void Timer::setFPS(int FPS)
+void Timer::setFPS(const int FPS) noexcept
 {
     this->FPS = 1000 / FPS;
 }
@@ -24,9 +24,4 @@ void Timer::setTime()
     deltaTime = deltaTimeTmp.count();
         
     lastFrame = currFrame;
-}
-
-int Timer::calcSleep()
-{
-    return std::floor(FPS - deltaTime);
 }

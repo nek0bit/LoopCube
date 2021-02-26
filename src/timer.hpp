@@ -6,12 +6,15 @@
 
 struct Timer
 {
-    Timer(int FPS);
+    Timer(const int FPS);
     ~Timer() = default;
 
-    void setFPS(int FPS);
+    void setFPS(const int FPS) noexcept;
     void setTime();
-    int calcSleep();
+    inline int calcSleep() const noexcept
+        {
+            return std::floor(FPS - deltaTime);
+        }
 
     double FPS;
     double deltaTime;

@@ -7,11 +7,11 @@ enum time_state {
 };
 
 struct Time {
-	Time(float startTime, float maxTime, float morningTime,
-         float nightTime, float morningOffset, float nightOffset);
+	Time(const float startTime, const float maxTime, const float morningTime,
+         const float nightTime, const float morningOffset, const float nightOffset) noexcept;
 	~Time();
 
-	void tick(Timer& timer, int amount = 1);
+	void tick(const Timer& timer, int amount = 1) noexcept;
 
     time_state state;
     float time;
