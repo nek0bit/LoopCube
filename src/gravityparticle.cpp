@@ -12,7 +12,3 @@ void GravityParticle::update(ChunkGroup& chunks, Timer& timer) {
 	time += timer.deltaTime;
 	updateBasicPhysics(chunks, timer);
 }
-	
-bool GravityParticle::isDead() const {
-	return time > timeTotal; 
-}

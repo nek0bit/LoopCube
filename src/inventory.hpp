@@ -14,6 +14,7 @@
 #include "item.hpp"
 #include "timer.hpp"
 
+// TODO clean me up
 struct Inventory
 {
 	Inventory(SDL_Renderer* renderer,

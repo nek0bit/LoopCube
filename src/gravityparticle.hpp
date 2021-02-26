@@ -13,7 +13,10 @@ struct GravityParticle: public Entity
 	
 	// Returns true if time reached
 	// Appropriate to destruct or quit rendering when done.
-	bool isDead() const;
+	inline bool isDead() const
+        {
+            return time > timeTotal;
+        }
 private:
     double time;
     double timeTotal;
