@@ -4,9 +4,11 @@
 #include <SDL2/SDL.h>
 #include "texturehandler.hpp"
 
-#include <glad/glad.h>
+#include "../include/glad/glad.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+#include "graphics.hpp"
 #endif
 
 #ifdef __HEADLESS
@@ -91,17 +93,10 @@ namespace Generic
 
 
 #ifndef __HEADLESS
-    namespace GL
-    {
-        void uniform(GLint, float, float, float, float);
-        void uniform(GLint, float, float, float);
-        void uniform(GLint, float, float);
-        void uniform(GLint, float);
-    }
     
     namespace Render
     {
-        void renderRepeating(SDL_Renderer* renderer, TextureHandler& textures,
+        void renderRepeating(const Graphics& graphics, TextureHandler& textures,
                              int texture, int clipWidth,
                              int clipHeight, int offsetX, int offsetY,
                              int width, int height, int gap, int top,

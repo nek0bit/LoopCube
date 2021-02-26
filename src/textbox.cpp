@@ -25,7 +25,7 @@ void Textbox::update(EventWrapper& events, Timer& timer, int offset_x, int offse
 			
 			text = std::string(tmp);
 			if (textbox_text != nullptr) {
-				textbox_text->setText(text);
+				//textbox_text->setText(text);
 			}
 			focused = false;
 #else
@@ -35,7 +35,7 @@ void Textbox::update(EventWrapper& events, Timer& timer, int offset_x, int offse
 #endif
 		} else {
 			focused = false;
-			textbox_text->setText(text);
+			//textbox_text->setText(text);
             events.textMode = false;
             events.textModeBuffer = "";
 		}
@@ -53,20 +53,20 @@ void Textbox::handle_keyboard(EventWrapper& events) {
 	}	
 	
 	if (textbox_text != nullptr) {
-		textbox_text->setText(events.textModeBuffer + (cursor ? "_" : ""));
+		//textbox_text->setText(events.textModeBuffer + (cursor ? "_" : ""));
 	}
 }
 
-void Textbox::render(SDL_Renderer* renderer, TextureHandler&, int offset_x, int offset_y) {
+void Textbox::render(const Graphics& renderer, TextureHandler&, int offset_x, int offset_y) {
     SDL_Rect box{x+offset_x, y+offset_y, width, height};
 	
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-    SDL_RenderFillRect(renderer, &box);
+    //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
+    //SDL_RenderFillRect(renderer, &box);
 	
 	if (textbox_text == nullptr) {
 		SDL_Color color{255, 255, 255, 255};
-		textbox_text = new Text(renderer, text, color, constants::fontHandler.getFont(0));
+		//textbox_text = new Text(renderer, text, color, constants::fontHandler.getFont(0));
 	} else {
-		textbox_text->draw(x+10, y+((height/2)-20 ));
+		//textbox_text->draw(x+10, y+((height/2)-20 ));
 	}
 }

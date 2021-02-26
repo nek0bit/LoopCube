@@ -6,11 +6,10 @@
 #include <vector>
 #include <cstdint>
 
-#include <glad/glad.h>
+#include "../include/glad/glad.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
-
-#include "generic.hpp"
 
 struct Graphics
 {
@@ -26,6 +25,11 @@ struct Graphics
     void postShader();
     void useShader() const;
     void setupVertexLayout();
+    
+    void uniform(const char* value, const float, const float, const float, const float);
+    void uniform(const char* value, const float, const float, const float);
+    void uniform(const char* value, const float, const float);
+    void uniform(const char* value, const float);
 
     SDL_Window* window;
     SDL_GLContext context;

@@ -1,14 +1,13 @@
 #include "text.hpp"
 
-Text::Text(SDL_Renderer* renderer,
+Text::Text(const Graphics& graphics,
 		   std::string text, 
 		   SDL_Color color,
 		   TTF_Font* font,
 		   int wrapWidth)
 	:  wrapWidth{wrapWidth},
        text{text},
-       color{color},
-       renderer{renderer}
+       color{color}
 {
 	this->font = font;
 
@@ -16,7 +15,7 @@ Text::Text(SDL_Renderer* renderer,
 		std::cerr << "[Error] TTF_OpenFont: " << TTF_GetError() << ".. expect dragons and segfaults" << std::endl;
 	}
 	updateSurface();
-	messageText = SDL_CreateTextureFromSurface(renderer, surface);
+	//messageText = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
 Text::~Text()
@@ -34,13 +33,13 @@ void Text::updateSurface()
 	}
 }
 
-void Text::setText(std::string text)
+void Text::setText(const Graphics& graphics, std::string text)
 {
 	this->text = text;
     SDL_FreeSurface(surface);
 	SDL_DestroyTexture(messageText);
     updateSurface();
-	messageText = SDL_CreateTextureFromSurface(renderer, surface);
+	//messageText = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
 int Text::getWidth()
@@ -55,7 +54,7 @@ int Text::getHeight()
 	return 0;
 }
 
-void Text::draw(int x, int y)
+void Text::draw(const Graphics& graphics, int x, int y)
 {
 	int w = 0, h = 0;
 	if (surface != nullptr) {
@@ -63,5 +62,5 @@ void Text::draw(int x, int y)
 		h = surface->h;
 	}
 	SDL_Rect pos{x, y, w, h};
-	SDL_RenderCopy(renderer, messageText, NULL, &pos);
+	//SDL_RenderCopy(renderer, messageText, NULL, &pos);
 }

@@ -25,13 +25,13 @@ void Box::updatePair()
 	};
 }
 
-void Box::render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX, int offsetY)
+void Box::render(const Graphics& renderer, TextureHandler& textures, int offsetX, int offsetY)
 {
 	for (auto& p: pos)
     {
 		SDL_Rect mod = p.second;
 		mod.x += offsetX;
 		mod.y += offsetY;
-        SDL_RenderCopy(renderer, textures.getTexture(p.first)->texture, &src, &mod);
+        //SDL_RenderCopy(renderer, textures.getTexture(p.first)->texture, &src, &mod);
 	}
 }

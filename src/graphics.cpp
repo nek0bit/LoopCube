@@ -16,8 +16,7 @@ Graphics::~Graphics()
     glDeleteProgram(shader);
     
     SDL_DestroyWindow(window);
-    SDL_GL_DeleteContext(context);
-    
+    SDL_GL_DeleteContext(context);    
 }
 
 void Graphics::init()
@@ -45,19 +44,21 @@ void Graphics::useShader() const
 void Graphics::setupVertexLayout()
 {
     constexpr uint8_t Stride = 5;
+    constexpr uint8_t positionSize = 3;
+    constexpr uint8_t texCoordOffset = 3;
+    constexpr uint8_t texCoordSize = 2;
     GLint positionAttribute = glGetAttribLocation(shader, "position");
-    GLint colorAttribute = glGetAttribLocation(shader, "color"); 
+    GLint texCoordAttribute = glGetAttribLocation(shader, "texCoord"); 
 
     // Position
     glEnableVertexAttribArray(positionAttribute);
     // InputAttrib - valSize - Type - shouldNormalize - Stride - Offset
-    glVertexAttribPointer(positionAttribute, 2, GL_FLOAT, GL_FALSE, Stride * sizeof(float), 0);
-
-    // Color
-    glEnableVertexAttribArray(colorAttribute);
-    glVertexAttribPointer(colorAttribute, 3, GL_FLOAT, GL_FALSE,
-                          Stride * sizeof(float), (void*)(2 * sizeof(float)));
+    glVertexAttribPointer(positionAttribute, positionSize, GL_FLOAT, GL_FALSE, Stride * sizeof(float), 0);
     
+    // texCoord
+    glEnableVertexAttribArray(texCoordAttribute);
+    glVertexAttribPointer(texCoordAttribute, texCoordSize, GL_FLOAT, GL_FALSE,
+                          Stride * sizeof(float), (void*)(texCoordOffset * sizeof(float)));
 }
 
 void Graphics::loadShaders(const std::string& vertShaderFilename,
@@ -147,6 +148,13 @@ void Graphics::postShader()
 {    
     // Use it!
     useShader();
-
-    //Generic::GL::uniform(glGetUniformLocation(shader, "color"), 1.0f, 0.0f, 0.0f);
 }
+
+void Graphics::uniform(const char* value, const float x, const float y, const float z, const float w)
+    { glUniform4f(glGetUniformLocation(shader, value), x, y, z, w); }
+void Graphics::uniform(const char* value, const float x, const float y, const float z)
+    { glUniform3f(glGetUniformLocation(shader, value), x, y, z); }
+void Graphics::uniform(const char* value, const float x, const float y)
+    { glUniform2f(glGetUniformLocation(shader, value), x, y); }
+void Graphics::uniform(const char* value, const float x)
+    { glUniform1f(glGetUniformLocation(shader, value), x); }

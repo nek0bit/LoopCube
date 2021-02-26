@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-#include <SDL2/SDL.h>
-
+#include "graphics.hpp"
 #include "texturehandler.hpp"
 #include "eventwrapper.hpp"
 #include "timer.hpp"
@@ -27,8 +26,8 @@ struct UiElement
 	virtual void update(EventWrapper& events, Timer& timer, int offsetX, int offsetY);
 	// Render functions
 	virtual void render();
-	virtual void render(SDL_Renderer* renderer, TextureHandler& textures);
-	virtual void render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX, int offsetY);
+	virtual void render(const Graphics& graphics, TextureHandler& textures);
+	virtual void render(const Graphics& graphics, TextureHandler& textures, int offsetX, int offsetY);
 
     unsigned int id;
 };

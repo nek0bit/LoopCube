@@ -59,7 +59,7 @@ double Generic::lerp(double v1, double v2, double t)
 }
 
 #ifndef __HEADLESS
-void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& textures,
+void Generic::Render::renderRepeating(const Graphics& graphics, TextureHandler& textures,
                                       int texture, int clipWidth,
                                       int clipHeight, int offsetX, int offsetY,
                                       int width, int height, int gap, int top,
@@ -79,14 +79,10 @@ void Generic::Render::renderRepeating(SDL_Renderer* renderer, TextureHandler& te
 				verticle ? ((offsetY % (height + gap)) + top) + ((height + gap) * j) : top + offsetY,
 				width, height};
 
-            SDL_RenderCopy(renderer, textures.getTexture(texture)->texture, &src, &block);
+            //SDL_RenderCopy(renderer, textures.getTexture(texture)->texture, &src, &block);
 		}
 	}
 }
 
 // OpenGL wrappers
-void Generic::GL::uniform(GLint value, float x, float y, float z, float w) { glUniform4f(value, x, y, z, w); }
-void Generic::GL::uniform(GLint value, float x, float y, float z) { glUniform3f(value, x, y, z); }
-void Generic::GL::uniform(GLint value, float x, float y) { glUniform2f(value, x, y); }
-void Generic::GL::uniform(GLint value, float x) { glUniform1f(value, x); }
 #endif

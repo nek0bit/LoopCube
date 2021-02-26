@@ -3,8 +3,7 @@
 #include <array>
 #include <utility>
 
-#include <SDL2/SDL.h>
-
+#include "graphics.hpp"
 #include "texturehandler.hpp"
 #include "constants.hpp"
 
@@ -18,7 +17,7 @@ struct Box
 	int h;
 
 	void updatePair();
-	void render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX = 0, int offsetY = 0);
+	void render(const Graphics& graphics, TextureHandler& textures, int offsetX = 0, int offsetY = 0);
 private:
 	std::array<std::pair<int, SDL_Rect>, 9> pos;
 	SDL_Rect src;

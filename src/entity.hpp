@@ -15,7 +15,7 @@ struct Entity: public GameObject
 		   double x, double y, double width, double height);
 	virtual ~Entity();
 
-	virtual void update(ChunkGroup& chunks, Timer& timer);
+    virtual void update(ChunkGroup& chunks, Timer& timer);
 
 #ifndef __HEADLESS
     virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)

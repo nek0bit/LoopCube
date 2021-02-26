@@ -3,8 +3,7 @@
 #include <string>
 #include <memory>
 
-#include <SDL2/SDL.h>
-
+#include "graphics.hpp"
 #include "generic.hpp"
 #include "uielement.hpp"
 #include "text.hpp"
@@ -13,7 +12,7 @@
 struct Checkbox: public UiElement
 {
 	Checkbox() = default;
-	Checkbox(SDL_Renderer* renderer, int id, std::string text, int x, int y, int size, bool checked=false);
+	Checkbox(Graphics& graphics, int id, std::string text, int x, int y, int size, bool checked=false);
     ~Checkbox() = default;
 
 	void onChange(void (*function)(int, int)) override;
@@ -26,7 +25,7 @@ struct Checkbox: public UiElement
 	void setX(int x) override;
 	void setY(int y) override;
 	void update(EventWrapper& events, Timer& timer, int offsetX = 0, int offsetY = 0) override;
-	void render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX = 0, int offsetY = 0) override;
+	void render(const Graphics& graphics, TextureHandler& textures, int offsetX = 0, int offsetY = 0) override;
 private:
 	bool changed;
 	std::string text;

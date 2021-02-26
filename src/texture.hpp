@@ -3,18 +3,22 @@
 #include <iostream>
 #include <string>
 
+#include "../include/glad/glad.h"
+
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_image.h>
 
 struct Texture
 {
-    Texture(SDL_Renderer* renderer, std::string filename, unsigned int w, unsigned int h);
+    Texture(const std::string filename);
     ~Texture();
 
+    void bind() const;
     void freeTexture();
     
-    SDL_Texture* texture;
+    GLuint texture;
 
-    unsigned int w;
-    unsigned int h;
+    unsigned w;
+    unsigned h;
 };

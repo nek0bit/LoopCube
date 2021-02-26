@@ -1,6 +1,6 @@
 #include "checkbox.hpp"
 
-Checkbox::Checkbox(SDL_Renderer* renderer, int id, std::string text, int x, int y, int size, bool checked)
+Checkbox::Checkbox(Graphics& graphics, int id, std::string text, int x, int y, int size, bool checked)
 	: UiElement{},
       checked{checked},
       changed{false},
@@ -13,7 +13,8 @@ Checkbox::Checkbox(SDL_Renderer* renderer, int id, std::string text, int x, int 
     this->id = id;
     
     SDL_Color color{255, 255, 255, 255};
-    textRender = std::shared_ptr<Text>(new Text{renderer, text, color, constants::fontHandler.getFont(2)});
+    //textRender = std::shared_ptr<Text>(new Text{renderer, text, color, constants::fontHandler.getFont(2)});
+    textRender = nullptr; // TODO remove me
 }
 
 void Checkbox::onChange(void (*function)(int, int))
@@ -57,22 +58,22 @@ void Checkbox::update(EventWrapper& events, Timer&, int offsetX, int offsetY)
 	dest.h = size;
 }
 
-void Checkbox::render(SDL_Renderer* renderer, TextureHandler&, int offsetX, int offsetY)
+void Checkbox::render(const Graphics& graphics, TextureHandler&, int offsetX, int offsetY)
 {
 	SDL_Rect mod_dest{offsetX+dest.x, offsetY+dest.y, dest.w, dest.h};
 	// Draw box behind check
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
-    SDL_RenderFillRect(renderer, &mod_dest);
+    //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
+    //SDL_RenderFillRect(renderer, &mod_dest);
 
 	// Draw check
 	if (checked)
     {
 	    SDL_Rect check{mod_dest.x+10, mod_dest.y+10, mod_dest.w-20, mod_dest.h-20};
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderFillRect(renderer, &check);
+        //SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        //SDL_RenderFillRect(renderer, &check);
 	}
 
-	textRender->draw(mod_dest.x+size+10, mod_dest.y+5);
+	textRender->draw(graphics, mod_dest.x+size+10, mod_dest.y+5);
 }
 
 

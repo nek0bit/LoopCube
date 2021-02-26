@@ -49,7 +49,7 @@ void Inventory::addItem(int id)
         {
 			if (!i.enabled)
             {
-				i = Item{renderer, id};
+				//i = Item{renderer, id};
 				break;
 			}
 		}
@@ -112,7 +112,7 @@ void Inventory::drawInventoryMenu()
 		// Render inventory menu
 		SDL_Rect src{0, 0, MENU_WIDTH, MENU_HEIGHT};
 		SDL_Rect dest{MAX_X, MAX_Y + static_cast<int>(slide), src.w * scale, src.h * scale};
-        SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_INVENTORY_MENU)->texture, &src, &dest);
+        //SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_INVENTORY_MENU)->texture, &src, &dest);
 
 		std::vector<int> pos = getHoveredPos(events.vmouse.x, events.vmouse.y,
                                                MAX_X, MAX_Y + slide, true);
@@ -136,7 +136,9 @@ void Inventory::drawInventoryMenu()
 		}
 		
 		if (itemHeld.enabled)
-            itemHeld.render(renderer, textures, events.vmouse.x-17, events.vmouse.y-17, 35, 35);
+        {
+            //itemHeld.render(renderer, textures, events.vmouse.x-17, events.vmouse.y-17, 35, 35);
+        }
 	}
 }
 
@@ -167,8 +169,8 @@ std::vector<int> Inventory::getHoveredPos(int x, int y, int cornerX, int cornerY
 			// Draw item
 			if (items[i + (j * hotbarSlots)].enabled)
             {
-				items[i + (j * hotbarSlots)].render(renderer, textures, new_x + 3, new_y + 3,
-                                                    TILE_SIZE - 7, TILE_SIZE - 7);
+				//items[i + (j * hotbarSlots)].render(renderer, textures, new_x + 3, new_y + 3,
+                //                                   TILE_SIZE - 7, TILE_SIZE - 7);
 			}
 
 			if (Generic::collision<int>(x, y, 1, 1,
@@ -213,10 +215,10 @@ void Inventory::drawHotbar()
 			src.y = 16;
 		}
 	    SDL_Rect block{i * (BLOCK_S + 3) + MAX_X, slide, BLOCK_S, BLOCK_S};
-        SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_HOTBAR_SLOT)->texture, &src, &block);
+        //SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_HOTBAR_SLOT)->texture, &src, &block);
 
 		if (items[i].enabled) {
-			items[i].render(renderer, textures, block.x + 5, slide + block.y + 5, 30, 30);
+			//items[i].render(renderer, textures, block.x + 5, slide + block.y + 5, 30, 30);
 		}
 	}
 }

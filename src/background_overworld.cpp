@@ -136,17 +136,19 @@ void BackgroundOverworld::render(SDL_Renderer* renderer, TextureHandler& texture
     SDL_RenderFillRect(renderer, &sky);
 	
 	// Render bgShine
-    SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_BG_SHINE)->texture, &bgShineSrc, &bgShineDest);
+    //SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_BG_SHINE)->texture, &bgShineSrc, &bgShineDest);
 
 	// Render sun/moon
-    SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_SUN)->texture, &bgLightSrc, &bgLightDest);
-    SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_MOON)->texture, &bgMoonSrc, &bgMoonDest);
+    //SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_SUN)->texture, &bgLightSrc, &bgLightDest);
+    //SDL_RenderCopy(renderer, textures.getTexture(TEXTURE_MOON)->texture, &bgMoonSrc, &bgMoonDest);
 
 	// Repeatedly render clouds and hills
+    /*
     Generic::Render::renderRepeating(renderer, textures, TEXTURE_BG_CLOUD_LOOP, winWidth, winHeight, bgCloudOffset.x, bgCloudOffset.y,
 					 bgCloud.w, bgCloud.h, 60, cloudOffset);
     Generic::Render::renderRepeating(renderer, textures, TEXTURE_BG_HILLS_HQ, winWidth, winHeight, bgHillsOffset.x, bgHillsOffset.y,
 					 bgHills.w, bgHills.h, 0, hillOffset);
+    */
 
 	SDL_Rect after{0, afterHillsTop, winWidth, winHeight-afterHillsTop};
     SDL_SetRenderDrawColor(renderer, 111, 106, 98, 255);

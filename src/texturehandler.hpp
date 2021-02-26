@@ -14,7 +14,7 @@
 
 struct TextureHandler
 {
-    TextureHandler(SDL_Renderer* renderer);
+    TextureHandler();
 	~TextureHandler();
 
     Texture* getTexture(size_t id);    

@@ -13,6 +13,6 @@ void UiElement::update() {}
 void UiElement::update(EventWrapper&, Timer&) {}
 void UiElement::update(EventWrapper&, Timer&, int, int) {}
 void UiElement::render() {}
-void UiElement::render(SDL_Renderer*, TextureHandler&) {}
-void UiElement::render(SDL_Renderer*, TextureHandler&, int, int) {}
+void UiElement::render(const Graphics&, TextureHandler&) {}
+void UiElement::render(const Graphics&, TextureHandler&, int, int) {}
 

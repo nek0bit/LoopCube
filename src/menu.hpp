@@ -6,6 +6,7 @@
 #include <random>
 #include <memory>
 
+#include "graphics.hpp"
 #include "timer.hpp"
 #include "generic.hpp"
 #include "box.hpp"
@@ -21,7 +22,7 @@
 
 struct Menu
 {
-	Menu(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize);
+	Menu(Graphics& graphics, TextureHandler& textures, EventWrapper& events, Timer& timer, WinSize& winSize);
 	~Menu();
 
 	void update(bool update_animations = true);
@@ -62,7 +63,7 @@ private:
 	std::vector<UiElement*> cElements;
 	
 	// Important setup
-	SDL_Renderer* renderer;
+    Graphics& graphics;
     TextureHandler& textures;
     EventWrapper& events;
 	Animation shift;

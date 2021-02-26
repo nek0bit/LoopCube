@@ -2,7 +2,7 @@
 
 Item::Item() : enabled{false} {}
 
-Item::Item(SDL_Renderer* renderer, int id)
+Item::Item(const Graphics& graphics, int id)
     : count{},
       enabled{true}
 {
@@ -15,7 +15,7 @@ Item::Item(SDL_Renderer* renderer, int id)
 	}
 
     SDL_Color t_Color{255, 255, 255, 255};
-    text = std::make_shared<Text>(Text{renderer, "", t_Color, constants::fontHandler.getFont(0)});
+    //text = std::make_shared<Text>(Text{renderer, "", t_Color, constants::fontHandler.getFont(0)});
     
 }
 
@@ -27,17 +27,17 @@ void Item::addCount(int amount)
 		enabled = false;
 	}
 
-    text->setText(count == 0 ? "" : std::to_string(count+1));
+    //if (text != nullptr) text->setText(count == 0 ? "" : std::to_string(count+1));
 
 }
 
-void Item::render(SDL_Renderer* renderer, TextureHandler& textures,
-                  int x, int y, int width = 35, int height = 35)
+void Item::render(const Graphics& graphics, TextureHandler& textures,
+                  int x, int y, int width = 35, int height = 35) const
 {
 	constexpr int offset_y = -10;
 	SDL_Rect src{4*constants::blockImgSize, 0, constants::blockImgSize, constants::blockImgSize};
     SDL_Rect block{x, y, width, height};
-    SDL_RenderCopy(renderer, textures.getTexture(this->block.textureId)->texture, &src, &block);
+    //SDL_RenderCopy(renderer, textures.getTexture(this->block.textureId)->texture, &src, &block);
     
-	text->draw(x, y + height + offset_y);
+	//text->draw(graphics, x, y + height + offset_y);
 }

@@ -20,7 +20,7 @@ void GameObject::render(SDL_Renderer* renderer, TextureHandler& textures, Camera
         static_cast<int>(val.y),
         static_cast<int>(size.w),
         static_cast<int>(size.h)};
-    SDL_RenderCopy(renderer, textures.getTexture(textureId)->texture, &src, &dest);
+    //SDL_RenderCopy(renderer, textures.getTexture(textureId)->texture, &src, &dest);
 }
 
 CollisionInfo GameObject::isColliding(const GameObject &obj2)

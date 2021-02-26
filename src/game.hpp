@@ -6,7 +6,7 @@
 #include <memory>
 #include <stack>
 
-#include <glad/glad.h>
+#include "../include/glad/glad.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
@@ -59,9 +59,6 @@ private:
     Timer& timer;
     EventWrapper events;
     Graphics graphics;
-    // TEMP delete me
-    GLuint vbo;
-
 
     // Textures
     std::shared_ptr<TextureHandler> textures;

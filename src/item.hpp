@@ -3,8 +3,7 @@
 #include <string>
 #include <memory>
 
-#include <SDL2/SDL.h>
-
+#include "graphics.hpp"
 #include "text.hpp"
 #include "constants.hpp"
 #include "blockinfo.hpp"
@@ -12,10 +11,10 @@
 
 struct Item {
 	Item();
-	Item(SDL_Renderer* renderer, int id);
+	Item(const Graphics& graphics, int id);
 	~Item() = default;
 
-	void render(SDL_Renderer* renderer, TextureHandler& textures, int x, int y, int width, int height);
+	void render(const Graphics& graphics, TextureHandler& textures, int x, int y, int width, int height) const;
 	void addCount(int amount = 1);
     int count;
     BlockInfo block;

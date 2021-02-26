@@ -33,7 +33,7 @@ void Entity::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& ca
         static_cast<int>(val.y),
         static_cast<int>(size.w),
         static_cast<int>(size.h)};
-    SDL_RenderCopy(renderer, textures.getTexture(textureId)->texture, &src, &dest);
+    //SDL_RenderCopy(renderer, textures.getTexture(textureId)->texture, &src, &dest);
 }
 #endif
 

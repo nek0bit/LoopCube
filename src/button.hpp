@@ -4,8 +4,6 @@
 #include <string>
 #include <memory>
 
-#include <SDL2/SDL.h>
-
 #include "generic.hpp"
 #include "eventwrapper.hpp"
 #include "texturehandler.hpp"
@@ -16,13 +14,13 @@
 struct Button: public UiElement
 {
 	Button() = default;
-	Button(SDL_Renderer* renderer, unsigned int id, int x, int y, int width, int height = 32);
+	Button(const Graphics& renderer, unsigned int id, int x, int y, int width, int height = 32);
 
-	void setX(int x);
-	void setY(int y);
+	void setX(int x) override;
+	void setY(int y) override;
     
-	void update(EventWrapper& events, Timer& timer, int offsetX = 0, int offsetY = 0);
-	void render(SDL_Renderer* renderer, TextureHandler& textures, int offsetX = 0, int offsetY = 0);
+	void update(EventWrapper& events, Timer& timer, int offsetX = 0, int offsetY = 0) override;
+	void render(const Graphics& graphics, TextureHandler& textures, int offsetX = 0, int offsetY = 0) override;
 
 	// Text
 	void setText(std::string text);

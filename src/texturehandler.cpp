@@ -1,15 +1,10 @@
 #include "texturehandler.hpp"
 
-TextureHandler::TextureHandler(SDL_Renderer* renderer)
+TextureHandler::TextureHandler()
 {
     for (size_t i = 0; i < constants::textureInfo.size(); ++i) {
         textures.push_back(
-            std::make_pair(i,
-                           std::make_shared<Texture>(renderer,
-                               constants::path + constants::textureInfo[i].textureFilename,
-                               constants::textureInfo[i].w,
-                               constants::textureInfo[i].h)
-                ));	
+            std::make_pair(i, std::make_shared<Texture>(constants::path + constants::textureInfo[i].textureFilename)));	
     }
 }
 

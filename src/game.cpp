@@ -37,71 +37,72 @@ void Game::gameInit()
     constants::fontHandler.addFontByFilename(constants::rootPath+"fonts/liberation-sans/LiberationSans-Regular.ttf",
                                              {10, 12, 14, 16, 18, 32});
 	
-	//menu = std::make_shared<Menu>(renderer, *textures, events, timer, winSize);
+	menu = std::make_shared<Menu>(graphics, *textures, events, timer, winSize);
 
     // REMOVE ME
+    /*
+      // Kept for reference
     glGenBuffers(1, &vbo);
-    GLfloat vertices[] = {
-        -1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-        -0.75f, 0.75f, 0.2f, 1.0f, 0.3f,
-        1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+    glGenBuffers(1, &ebo);
 
-        -1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-        0.75f, -0.75f, 0.8f, 0.4f, 0.1f,
-        1.0f, 1.0f, 0.0f, 0.0f, 1.0f
+    float vertices[] = {
+        // Position            Texture Coords
+        -0.5f,  0.5f, 0.0f,    0.0f, 0.0f,
+         0.5f,  0.5f, 0.0f,    1.0f, 0.0f,
+         0.5f, -0.5f, 0.0f,    1.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f,    0.0f, 1.0f
+    };
+    GLuint elements[] = {
+        0, 1, 2,
+        2, 3, 0
     };
 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     graphics.setupVertexLayout();
+    */
+
 }
 
 
 // Draw objects to screen
 void Game::render() {
     // Clear screen
-    glClearColor(0.4f, 0.3f, 0.4f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    
-    SDL_GL_SwapWindow(graphics.window);
 
     
-    /*
-      // Here's some old code kept for reference :^)
+    textures->getTexture(2)->bind();
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    
 
-
-    // Clear screen
-    SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-    SDL_RenderClear(renderer);
-
+    
     if (state.size() > 0)
     {
         switch(state.top()) {
         case STATE_MAIN_MENU:
-            if (game != nullptr) game->render(renderer, *textures, events);
+            //if (game != nullptr) game->render(graphics, *textures, events);
             if (menu != nullptr) menu->render();
             break;
         case STATE_PLAYING:
-            if (game != nullptr) game->render(renderer, *textures, events);
+            //if (game != nullptr) game->render(graphics, *textures, events);
             break;
         default:
             break;
         }
     }
     
-    SDL_RenderPresent(renderer);
-
 #if defined(__WIIU__) || defined(__SWITCH__)
 	SDL_Rect cursor_hover{events.vmouse.x, events.vmouse.y, 10, 10};
 
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
 	SDL_RenderFillRect(renderer, &cursor_hover);
 #endif
-    */
 
+    SDL_GL_SwapWindow(graphics.window);
 }
 
 
@@ -110,10 +111,7 @@ void Game::update()
 {
     // Update screen size
     SDL_GetWindowSize(graphics.window, &winSize.w, &winSize.h);
-
     
-    /*
-      // Here's some old code kept for reference, it will be back soon :^)
     if (state.size() > 0)
     {
         switch(state.top()) {
@@ -190,9 +188,7 @@ void Game::update()
     {
         game = nullptr;
         state.pop(); // Switch game state to menu
-    }
-*/    
-    
+    }    
 }
 
 // SDL2 related stuff below
@@ -267,7 +263,7 @@ void Game::init(bool fullscreen = false) {
     events.updateControllers();
 
     // Load textures on startup
-    //textures = std::make_shared<TextureHandler>(renderer);
+    textures = std::make_shared<TextureHandler>();
 
     // Start game!
     gameInit();

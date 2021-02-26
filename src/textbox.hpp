@@ -1,4 +1,3 @@
-// TODO for v0.4, clean me up a lot
 #pragma once
 #include <iostream>
 #include <string>
@@ -9,6 +8,7 @@
 
 #include <SDL2/SDL.h>
 
+#include "graphics.hpp"
 #include "generic.hpp"
 #include "eventwrapper.hpp"
 #include "uielement.hpp"
@@ -23,7 +23,7 @@ public:
 	~Textbox();
 
 	void update(EventWrapper& events, Timer& timer, int offset_x, int offset_y) override;
-	void render(SDL_Renderer* renderer, TextureHandler& textures, int offset_x, int offset_y) override;
+	void render(const Graphics& renderer, TextureHandler& textures, int offset_x, int offset_y) override;
     
 	int x;
 	int y;
