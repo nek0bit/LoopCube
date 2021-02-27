@@ -25,7 +25,7 @@ void Box::updatePair()
 	};
 }
 
-void Box::render(const Graphics& renderer, TextureHandler& textures, int offsetX, int offsetY)
+void Box::render(const Graphics& renderer, TextureHandler& textures, int offsetX, int offsetY) const noexcept
 {
 	for (auto& p: pos)
     {

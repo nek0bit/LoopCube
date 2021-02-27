@@ -52,8 +52,8 @@ struct _ChunkDataSplit
                                                                     std::shared_ptr<Chunk> toInsert,
                                                                     bool isClient = false);
 #ifndef __HEADLESS
-    void updateSplit(Camera& camera);
-    void renderSplit(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+    void updateSplit(const Camera& camera);
+    void renderSplit(const Graphics& renderer, TextureHandler& textures, const Camera& camera) const;
 #endif
 
     void updateBorderedChunks(std::unordered_map<long int, ChunkData>::iterator current, const long y);
@@ -90,8 +90,8 @@ struct ChunkGroup
     ~ChunkGroup();
 
 #ifndef __HEADLESS
-    void update(Camera& camera);
-    void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+    void update(const Camera& camera);
+    void render(const Graphics& renderer, TextureHandler& textures, const Camera& camera) const;
 #endif
 
     Chunk* getChunkAt(const long x, const long y);
@@ -101,7 +101,7 @@ struct ChunkGroup
 
     void setFd(const int fd);
 
-    ChunkPos posToChunkPos(double x, double y) const;
+    ChunkPos posToChunkPos(const double x, const double y) const;
 
     LoadPtr loadPtr;
     LoadDistance& loadDistance;

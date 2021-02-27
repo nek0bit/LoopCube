@@ -154,7 +154,7 @@ void _ChunkDataSplit::updateBorderedChunks(std::unordered_map<long int,
 
 // Update all loaded chunks in the split
 #ifndef __HEADLESS
-void _ChunkDataSplit::updateSplit(Camera& camera)
+void _ChunkDataSplit::updateSplit(const Camera& camera)
 {
     // TODO Remove me, just for debugging
     updateLoaded();
@@ -166,12 +166,11 @@ void _ChunkDataSplit::updateSplit(Camera& camera)
 }
 
 // Renders all loaded chunks in the split if visible
-void _ChunkDataSplit::renderSplit(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
+void _ChunkDataSplit::renderSplit(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const
 {
     for (auto& chunk: loadedChunks)
     {
-        //chunk->renderAllShadows(renderer, camera);
-        if (chunk != nullptr) chunk->renderAllBlocks(renderer, textures, camera);
+        if (chunk != nullptr) chunk->renderAllBlocks(graphics, textures, camera);
     }
 }
 #endif
@@ -258,7 +257,7 @@ _ChunkDataSplit* ChunkGroup::getData(long int x)
 }
 
 #ifndef __HEADLESS
-void ChunkGroup::update(Camera& camera)
+void ChunkGroup::update(const Camera& camera)
 {
     // TODO Remove me, just for testing things out
     updateLoaded();
@@ -269,11 +268,11 @@ void ChunkGroup::update(Camera& camera)
     }
 }
 
-void ChunkGroup::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
+void ChunkGroup::render(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const
 {
     for (auto& split: loadedSplits)
     {
-        if (split != nullptr) split->renderSplit(renderer, textures, camera);
+        if (split != nullptr) split->renderSplit(graphics, textures, camera);
     }
 }
 #endif

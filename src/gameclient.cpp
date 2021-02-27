@@ -8,7 +8,7 @@ GameClient::GameClient(Timer& timer, WinSize& winSize)
       winSize{winSize},
       serverPlayers{},
       serverChunks{},
-      camera{&winSize},
+      camera{winSize},
       mainPlayer{},
       entities{},
       fade{60},
@@ -52,7 +52,7 @@ GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize
       winSize{winSize},
       serverPlayers{},
       serverChunks{},
-      camera{&winSize},
+      camera{winSize},
       mainPlayer{},
       entities{},
       fade{60},
@@ -62,9 +62,6 @@ GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize
       timer{timer},
       background{std::make_shared<BackgroundOverworld>()}
 {
-    camera.x = 0;
-    camera.y = 0;
-
     clientSocket = std::make_shared<ClientSocket>(address.c_str(), port);
     serverChunks.setFd(clientSocket->fd);
 
@@ -183,26 +180,26 @@ void GameClient::update(EventWrapper& events)
     deadParticles();
 }
 
-void GameClient::render(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events)
+void GameClient::render(const Graphics& graphics, TextureHandler& textures, EventWrapper& events) const
 {
-    if (background) background->render(renderer, textures);
+    if (background) background->render(graphics, textures);
     
-    serverChunks.render(renderer, textures, camera);
+    serverChunks.render(graphics, textures, camera);
 
-    serverPlayers.renderPlayers(renderer, textures, camera);
+    serverPlayers.renderPlayers(graphics, textures, camera);
 
-    mainPlayer.render(renderer, textures, camera);
+    mainPlayer.render(graphics, textures, camera);
 
     // Draw particles
     if (constants::config.getInt(CONFIG_SHOW_PARTICLES))
     {
         for (auto& particle: particles)
         {
-            particle.render(renderer, textures, camera);
+            particle.render(graphics, textures, camera);
         }
     }
 
-    drawSelection(renderer, getSelection(events));
+    drawSelection(graphics, getSelection(events));
 }
 
 void GameClient::deadParticles()
@@ -290,24 +287,24 @@ void GameClient::mouseEvents(EventWrapper& events)
     }
 }
 
-SelectInfo GameClient::getSelection(EventWrapper& events)
+SelectInfo GameClient::getSelection(EventWrapper& events) const
 {
-    const int selX = floor((events.vmouse.x - camera.x) / constants::blockW);
-    const int selY = floor((events.vmouse.y - camera.y) / constants::blockH);
+    const int selX = floor((events.vmouse.x - camera.position.x) / constants::blockW);
+    const int selY = floor((events.vmouse.y - camera.position.y) / constants::blockH);
 
     return {selX, selY};
 }
 
-void GameClient::drawSelection(SDL_Renderer* renderer, const SelectInfo pos)
+void GameClient::drawSelection(const Graphics& graphics, const SelectInfo pos) const
 {
-    SDL_Rect selection{static_cast<int>(pos.x * constants::blockW + camera.x),
-        static_cast<int>(pos.y * constants::blockH + camera.y),
+    SDL_Rect selection{static_cast<int>(pos.x * constants::blockW + camera.position.x),
+        static_cast<int>(pos.y * constants::blockH + camera.position.x),
         constants::blockW, constants::blockH};
 
     int fadeAmount = std::abs(std::sin(fade.frame / 20.0f)) * 30.0f + 50.0f;
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, fadeAmount);
-    SDL_RenderFillRect(renderer, &selection);
+    //SDL_SetRenderDrawColor(graphics, 255, 255, 255, fadeAmount);
+    //SDL_RenderFillRect(graphics, &selection);
 }
 
 void GameClient::handleCamera()
@@ -322,6 +319,6 @@ void GameClient::handleCamera()
 	moveX += (x - moveX) * amount * timer.deltaTime;
 	moveY += (y - moveY) * amount * timer.deltaTime;
 	
-    camera.x = moveX;
-    camera.y = moveY;
+    camera.position.x = moveX;
+    camera.position.y = moveY;
 }

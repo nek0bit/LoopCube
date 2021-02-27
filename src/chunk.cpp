@@ -18,7 +18,7 @@ Chunk::~Chunk()
 {}
 
 #ifndef __HEADLESS
-void Chunk::updateAll(Camera& camera)
+void Chunk::updateAll(const Camera& camera)
 {
     iterateFunctor(camera, [&](Block& blk) {
         blk.update();
@@ -26,15 +26,15 @@ void Chunk::updateAll(Camera& camera)
 }
 
 // TODO render text
-void Chunk::renderInfo(SDL_Renderer* renderer, Camera& camera)
+void Chunk::renderInfo(const Graphics& graphics, const Camera& camera) const
 {
     if (chunkInView(camera))
     {
         constexpr int lineSize = 3;
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         
-
+/*
         SDL_Rect leftLine{static_cast<int>(getChunkX() * constants::blockW + camera.x),
             static_cast<int>(getChunkY() * constants::blockH + camera.y),
             lineSize,
@@ -55,6 +55,7 @@ void Chunk::renderInfo(SDL_Renderer* renderer, Camera& camera)
         SDL_RenderFillRect(renderer, &topLine);
         SDL_RenderFillRect(renderer, &rightLine);
         SDL_RenderFillRect(renderer, &bottomLine);
+*/
     }
 }
 
@@ -62,17 +63,17 @@ void Chunk::renderInfo(SDL_Renderer* renderer, Camera& camera)
 // so it basically multiplies the amount of render calls
 // If only SDL had a feature to mesh multiple blocks together :(
 // I think its possible with textures but it would take up a bit of memory
-void Chunk::renderAllShadows(SDL_Renderer* renderer, Camera& camera)
+void Chunk::renderAllShadows(const Graphics& graphics, const Camera& camera) const
 {
     iterateFunctor(camera, [&](Block& blk) {
-        blk.renderShadow(renderer, camera);
+        blk.renderShadow(graphics, camera);
     });
 }
 
-void Chunk::renderAllBlocks(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
+void Chunk::renderAllBlocks(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const
 {
     iterateFunctor(camera, [&](Block& blk) {
-        blk.render(renderer, textures, camera);
+        blk.render(graphics, textures, camera);
     });
 }
 #endif
@@ -368,26 +369,26 @@ size_t Chunk::posToIndex(const unsigned int x, const unsigned int y) const
 }
 
 #ifndef __HEADLESS
-bool Chunk::chunkInView(Camera& camera) const
+bool Chunk::chunkInView(const Camera& camera) const
 {
-    SDL_Rect windowRect{0, 0, camera.getWidth(), camera.getHeight()};
+    SDL_Rect windowRect{0, 0, camera.size.w, camera.size.h};
     return Generic::collision(getChunkRect(camera), windowRect);
 }
 
-SDL_Rect Chunk::getChunkRect(Camera& camera) const
+SDL_Rect Chunk::getChunkRect(const Camera& camera) const
 {
-    return SDL_Rect{static_cast<int>(getChunkX() * constants::blockW + camera.x),
-        static_cast<int>(getChunkY() * constants::blockH + camera.y),
+    return SDL_Rect{static_cast<int>(getChunkX() * constants::blockW + camera.position.x),
+        static_cast<int>(getChunkY() * constants::blockH + camera.position.y),
         static_cast<int>(MAX_WIDTH * constants::blockW),
         static_cast<int>(MAX_HEIGHT * constants::blockH)};
 }
 
-void Chunk::iterateFunctor(Camera& camera, std::function<void(Block&)> call)
+void Chunk::iterateFunctor(const Camera& camera, const std::function<void(Block&)> call) const
 {
     // Check if chunk is in view
     if (chunkInView(camera))
     {
-        for (std::shared_ptr<Block>& block: data)
+        for (const std::shared_ptr<Block>& block: data)
         {
             if (block == nullptr) continue;
             if (!block->shouldCull(camera))

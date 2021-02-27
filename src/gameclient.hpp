@@ -15,6 +15,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include "graphics.hpp"
 #include "api.hpp"
 #include "server.hpp"
 #include "clientsocket.hpp"
@@ -26,7 +27,6 @@
 #include "chunkgen.hpp"
 #include "chunkgroup.hpp"
 #include "player.hpp"
-#include "testentity.hpp"
 #include "animation.hpp"
 #include "inventory.hpp"
 #include "text.hpp"
@@ -51,7 +51,7 @@ struct GameClient
     ~GameClient();
 
     void update(EventWrapper& events);
-    void render(SDL_Renderer* renderer, TextureHandler& textures, EventWrapper& events);
+    void render(const Graphics& graphics, TextureHandler& textures, EventWrapper& events) const;
     bool exit;
 private:
     void init();
@@ -65,9 +65,9 @@ private:
     std::function<void(void)> disconnectCallback;
     
     WinSize& winSize;
-    SelectInfo getSelection(EventWrapper& events);
+    SelectInfo getSelection(EventWrapper& events) const;
     void serverThreadFunction();
-    void drawSelection(SDL_Renderer* renderer, const SelectInfo pos);
+    void drawSelection(const Graphics& graphics, const SelectInfo pos) const;
     void handleCamera();
     void deadParticles();
     void mouseEvents(EventWrapper& events);

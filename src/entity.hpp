@@ -15,13 +15,14 @@ struct Entity: public GameObject
 		   double x, double y, double width, double height);
 	virtual ~Entity();
 
-    virtual void update(ChunkGroup& chunks, Timer& timer);
+    void update() override;
+    virtual void update(ChunkGroup& chunks, const Timer& timer);
 
 #ifndef __HEADLESS
-    virtual void render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
-        override;
+    virtual void render(const Graphics& renderer, TextureHandler& textures, const Camera& camera)
+        const override;
 #endif
-    void dummyInterpolate(Timer& timer);
+    void dummyInterpolate(const Timer& timer);
 
 
 	// Collision functions
@@ -33,7 +34,7 @@ struct Entity: public GameObject
     double velX;
 	double velY;
 protected:
-	void updateBasicPhysics(ChunkGroup& chunks, Timer& timer);
+	void updateBasicPhysics(ChunkGroup& chunks, const Timer& timer);
 	CollisionInfo checkBlockCollision(ChunkGroup &chunks);
 
     Vec2 displayPosition;

@@ -20,8 +20,8 @@ void PlayerGroup::updatePlayers(ChunkGroup& chunks, Timer& timer,
     }
 }
 
-void PlayerGroup::renderPlayers(SDL_Renderer* renderer, TextureHandler& textures,
-                                Camera& camera)
+void PlayerGroup::renderPlayers(const Graphics& renderer, TextureHandler& textures,
+                                const Camera& camera) const
 {
     // Render players
     for (auto& p: players)

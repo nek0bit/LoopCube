@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "graphics.hpp"
 #include "generic.hpp"
 #include "gameobj.hpp"
 #include "vector.hpp"
@@ -19,7 +20,7 @@ struct Block: public GameObject
     void update();
 #ifndef __HEADLESS
     void updateSrc();
-    void renderShadow(SDL_Renderer* renderer, Camera& camera) const;
+    void renderShadow(const Graphics& graphics, const Camera& camera) const;
 #endif
 
     void setBlockId(const uint32_t id);

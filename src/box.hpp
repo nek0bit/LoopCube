@@ -17,7 +17,7 @@ struct Box
 	int h;
 
 	void updatePair();
-	void render(const Graphics& graphics, TextureHandler& textures, int offsetX = 0, int offsetY = 0);
+	void render(const Graphics& graphics, TextureHandler& textures, int offsetX = 0, int offsetY = 0) const noexcept;
 private:
 	std::array<std::pair<int, SDL_Rect>, 9> pos;
 	SDL_Rect src;

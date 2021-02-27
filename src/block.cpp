@@ -34,14 +34,14 @@ void Block::updateSrc()
     src.x = typeX * constants::blockImgSize;
 }
 
-void Block::renderShadow(SDL_Renderer* renderer, Camera& camera) const
+void Block::renderShadow(const Graphics& graphics, const Camera& camera) const
 {
     const Vec2 val = getPos(camera);
 	SDL_Rect shadow{static_cast<int>(val.x + 5), static_cast<int>(val.y + 5),
 		static_cast<int>(size.w), static_cast<int>(size.h)};
     
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 60);
-    SDL_RenderFillRect(renderer, &shadow);
+    //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 60);
+    //SDL_RenderFillRect(renderer, &shadow);
 }
 #endif
 

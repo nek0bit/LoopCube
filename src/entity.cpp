@@ -19,16 +19,18 @@ Entity::Entity(int textureId, double x, double y, double width, double height)
 Entity::~Entity()
 {}
 
-void Entity::update(ChunkGroup& chunks, Timer& timer)
+void Entity::update() {}
+
+void Entity::update(ChunkGroup& chunks, const Timer& timer)
 {
 	// Optional; You can use your own physics function
 	updateBasicPhysics(chunks, timer);
 }
 
 #ifndef __HEADLESS
-void Entity::render(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera)
+void Entity::render(const Graphics& renderer, TextureHandler& textures, const Camera& camera) const
 {
-    const Vec2 val = displayPosition + camera;
+    const Vec2 val = displayPosition/* + camera*/;
 	SDL_Rect dest{static_cast<int>(val.x),
         static_cast<int>(val.y),
         static_cast<int>(size.w),
@@ -69,7 +71,7 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 	return CollisionInfo{};
 }
 
-void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
+void Entity::updateBasicPhysics(ChunkGroup& chunks, const Timer& timer) {
     const int cap = 2000.0f;
     constexpr float friction = 20.0f;
 
@@ -126,7 +128,7 @@ void Entity::updateBasicPhysics(ChunkGroup& chunks, Timer& timer) {
     
 }
 
-void Entity::dummyInterpolate(Timer& timer)
+void Entity::dummyInterpolate(const Timer& timer)
 {
     displayPosition.x = Generic::lerp(displayPosition.x, position.x, .25);
     displayPosition.y = Generic::lerp(displayPosition.y, position.y, .25);

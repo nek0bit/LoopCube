@@ -47,12 +47,12 @@ struct Chunk
     ~Chunk();
 
 #ifndef __HEADLESS
-    void updateAll(Camera& camera);
+    void updateAll(const Camera& camera);
 
     // Renderer
-    void renderInfo(SDL_Renderer* renderer, Camera& camera);
-    void renderAllShadows(SDL_Renderer* renderer, Camera& camera);
-    void renderAllBlocks(SDL_Renderer* renderer, TextureHandler& textures, Camera& camera);
+    void renderInfo(const Graphics& graphics, const Camera& camera) const;
+    void renderAllShadows(const Graphics& graphics, const Camera& camera) const ;
+    void renderAllBlocks(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const;
 #endif
 
     // Block modification
@@ -91,9 +91,9 @@ private:
     size_t posToIndex(const unsigned int x, const unsigned int y) const;
     indPos indexToPos(const size_t index) const;
 #ifndef __HEADLESS
-    bool chunkInView(Camera& camera) const;
-    SDL_Rect getChunkRect(Camera& camera) const;
-    void iterateFunctor(Camera& camera, std::function<void(Block&)> call);
+    bool chunkInView(const Camera& camera) const;
+    SDL_Rect getChunkRect(const Camera& camera) const;
+    void iterateFunctor(const Camera& camera, const std::function<void(Block&)> call) const;
 #endif
 
     std::shared_ptr<ChunkGen> chunkGen;
