@@ -1,6 +1,6 @@
 #include "camera.hpp"
 
-Camera::Camera(WinSize& winSize) noexcept
+Camera::Camera(WinSize& winSize)
     : size{winSize},
       // Vec
       position{0.0f, 0.0f, 0.0f},
@@ -15,8 +15,9 @@ Camera::Camera(WinSize& winSize) noexcept
 
 Camera::~Camera() {}
 
-void Camera::updateProj() noexcept
+void Camera::updateProj()
 {
+    if (size.w == 0 || size.h == 0) return;
     projection = glm::perspective(glm::radians(45.0f),
                                   static_cast<float>(size.w) / static_cast<float>(size.h),
                                   1.0f, 10.0f);

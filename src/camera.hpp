@@ -9,10 +9,10 @@
 struct Camera
 {
 	Camera() = default;
-	Camera(WinSize& winSize) noexcept;
+	Camera(WinSize& winSize);
     ~Camera();
     
-    void updateProj() noexcept;
+    void updateProj();
     void bindCamera(Graphics& graphics) noexcept;
     
     inline void updateView() noexcept
