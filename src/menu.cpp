@@ -14,7 +14,6 @@ enum CONFIG_ID
 };
 
 Menu::Menu(Graphics& graphics,
-           TextureHandler& textures,
            EventWrapper& events,
            Timer& timer,
            WinSize& winSize)
@@ -30,7 +29,6 @@ Menu::Menu(Graphics& graphics,
       bgY{0},
       backButton{nullptr},
       graphics{graphics},
-      textures{textures},
       events{events},
       back{40, 40, 400, 400},
       boxWidth{660},
@@ -212,7 +210,7 @@ void Menu::renderSidebar()
     //SDL_RenderFillRect(renderer, &line);
 
 	// Lets render a random block and some text
-	randomBlock.render(graphics, textures, offsetX+contentLeft, offsetY+35, 60, 60);
+	randomBlock.render(graphics, graphics.textures, offsetX+contentLeft, offsetY+35, 60, 60);
 
 	header->draw(graphics, offsetX+contentLeft+70, offsetY+45);
 
@@ -237,24 +235,24 @@ void Menu::renderMainMenu()
 	// Render all buttons
 	for (auto &i: buttonGroup)
     {
-		i->render(graphics, textures, offsetX, offsetY);
+		i->render(graphics, graphics.textures, offsetX, offsetY);
 	}
 }
 
 void Menu::renderConfigMenu()
 {
-	backButton->render(graphics, textures, offsetX, offsetY);
+	backButton->render(graphics, graphics.textures, offsetX, offsetY);
 	// Render all elements, no matter the type
 	for (auto &i: cElements)
     {
-		i->render(graphics, textures, offsetX, offsetY);    
+		i->render(graphics, graphics.textures, offsetX, offsetY);    
 	}
 }
 
 void Menu::renderBackground()
 {
     bgX += 100 * timer.deltaTime;
-    Generic::Render::renderRepeating(graphics, textures, TEXTURE_MOON_BLOCK, winSize.w, winSize.h,
+    Generic::Render::renderRepeating(graphics, graphics.textures, TEXTURE_MOON_BLOCK, winSize.w, winSize.h,
                                      bgX, bgY, 40, 40, 0, 0,
                                      true, 4*constants::blockImgSize, 0,
                                      constants::blockImgSize, constants::blockImgSize);
@@ -274,7 +272,7 @@ void Menu::render()
         //SDL_RenderFillRect(renderer, &bg);
     }
     
-    back.render(graphics, textures, offsetX, offsetY);
+    back.render(graphics, graphics.textures, offsetX, offsetY);
 	renderSidebar();
 
 	if (state == MAIN_MENU)

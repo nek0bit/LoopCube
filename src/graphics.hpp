@@ -11,9 +11,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 
+#include "texturehandler.hpp"
+#include "camera.hpp"
+#include "winsize.hpp"
+
 struct Graphics
 {
-    Graphics(SDL_Window* window);
+    Graphics(SDL_Window* window, WinSize& winSize);
     ~Graphics();
 
     void init();
@@ -39,4 +43,8 @@ struct Graphics
     SDL_GLContext context;
     GLuint shader;
     GLuint vao;
+
+    // Other components
+    Camera camera;
+    TextureHandler textures;
 };

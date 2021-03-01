@@ -9,8 +9,7 @@ Game::Game(Timer& timer, int argc, char** argv)
       menu{nullptr},
       winSize{},
       timer{timer},
-      graphics{nullptr},
-      textures{nullptr}
+      graphics{nullptr, winSize}
 {
     state.push(STATE_MAIN_MENU);
 }
@@ -37,13 +36,7 @@ void Game::gameInit()
     constants::fontHandler.addFontByFilename(constants::rootPath+"fonts/liberation-sans/LiberationSans-Regular.ttf",
                                              {10, 12, 14, 16, 18, 32});
 	
-	menu = std::make_shared<Menu>(graphics, *textures, events, timer, winSize);
-
-    // REMOVE ME
-    /*
-      // Kept for reference
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ebo);
+	menu = std::make_shared<Menu>(graphics, events, timer, winSize);
 
     float vertices[] = {
         // Position            Texture Coords
@@ -52,19 +45,8 @@ void Game::gameInit()
          0.5f, -0.5f, 0.0f,    1.0f, 1.0f,
         -0.5f, -0.5f, 0.0f,    0.0f, 1.0f
     };
-    GLuint elements[] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     graphics.setupVertexLayout();
-    */
-
 }
 
 
@@ -74,8 +56,10 @@ void Game::render() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    graphics.camera.bindProj(graphics.shader);
+
     
-    textures->getTexture(2)->bind();
+    graphics.textures.getTexture(2)->bind();
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     
 
@@ -263,7 +247,7 @@ void Game::init(bool fullscreen = false) {
     events.updateControllers();
 
     // Load textures on startup
-    textures = std::make_shared<TextureHandler>();
+    graphics.textures.init();
 
     // Start game!
     gameInit();

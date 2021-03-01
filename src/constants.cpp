@@ -7,11 +7,7 @@
 // Texture stuff
 namespace constants
 {
-	
-	// TODO add enum for texture indexes
-	const std::string versionStr = "v0.5-git";
-
-	const std::string rootPath = DATA_LOCATION "/data/";
+	const std::string rootPath = ;
 	const std::string path = rootPath + "img/";
     const std::string shaderPath = rootPath + "shaders/";
 

@@ -59,7 +59,4 @@ private:
     Timer& timer;
     EventWrapper events;
     Graphics graphics;
-
-    // Textures
-    std::shared_ptr<TextureHandler> textures;
 };

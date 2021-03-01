@@ -18,13 +18,20 @@ Camera::~Camera() {}
 void Camera::updateProj()
 {
     if (size.w == 0 || size.h == 0) return;
-    projection = glm::perspective(glm::radians(45.0f),
+    /*projection = glm::perspective(glm::radians(45.0f),
                                   static_cast<float>(size.w) / static_cast<float>(size.h),
-                                  1.0f, 10.0f);
+                                  1.0f, 10.0f);*/
+    projection = glm::ortho(0.0f, static_cast<float>(size.w), 0.0f, static_cast<float>(size.h), 0.1f, 100.0f);
 }
 
-void Camera::bindCamera(Graphics& graphics) noexcept
+void Camera::bindProj(const unsigned& shader) noexcept
 {
-    GLint uView = graphics.getUniformLocation("view");
+    GLint uProj = glGetUniformLocation(shader, "projection");
+    glUniformMatrix4fv(uProj, 1, GL_FALSE, glm::value_ptr(projection));
+}
+
+void Camera::bindCamera(const unsigned& shader) noexcept
+{
+    GLint uView = glGetUniformLocation(shader, "view");
     glUniformMatrix4fv(uView, 1, GL_FALSE, glm::value_ptr(view));
 }

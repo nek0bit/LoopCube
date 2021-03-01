@@ -65,9 +65,9 @@ namespace constants
 	// Functions
 	
 	// Variables
-	extern const std::string versionStr;
+	constexpr char* versionStr = "v0.5";
 
-	extern const std::string rootPath;
+    constexpr char* rootPath = DATA_LOCATION "/data/";
 	extern const std::string path;
     extern const std::string shaderPath;
 

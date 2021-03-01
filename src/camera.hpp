@@ -3,17 +3,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "graphics.hpp"
+#include "../include/glad/glad.h"
+
 #include "winsize.hpp"
 
 struct Camera
 {
-	Camera() = default;
 	Camera(WinSize& winSize);
     ~Camera();
     
     void updateProj();
-    void bindCamera(Graphics& graphics) noexcept;
+    void bindProj(const unsigned& shader) noexcept;
+    void bindCamera(const unsigned& shader) noexcept;
     
     inline void updateView() noexcept
         {

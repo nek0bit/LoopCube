@@ -1,10 +1,12 @@
 #include "graphics.hpp"
 
-Graphics::Graphics(SDL_Window* window)
+Graphics::Graphics(SDL_Window* window, WinSize& winSize)
     : window{window},
       context{},
       shader{},
-      vao{}
+      vao{},
+      camera{winSize}
+      
 {}
 
 // Close things safely, including SDL windows
@@ -16,7 +18,7 @@ Graphics::~Graphics()
     glDeleteProgram(shader);
     
     SDL_DestroyWindow(window);
-    SDL_GL_DeleteContext(context);    
+    SDL_GL_DeleteContext(context);
 }
 
 void Graphics::init()
@@ -43,7 +45,7 @@ void Graphics::setupVertexLayout()
     constexpr uint8_t texCoordOffset = 3;
     constexpr uint8_t texCoordSize = 2;
     GLint positionAttribute = glGetAttribLocation(shader, "position");
-    GLint texCoordAttribute = glGetAttribLocation(shader, "texCoord"); 
+    GLint texCoordAttribute = glGetAttribLocation(shader, "texCoord");
 
     // Position
     glEnableVertexAttribArray(positionAttribute);

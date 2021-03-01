@@ -24,7 +24,6 @@
 struct Menu
 {
 	Menu(Graphics& graphics,
-         TextureHandler& textures,
          EventWrapper& events,
          Timer& timer,
          WinSize& winSize);
@@ -71,7 +70,6 @@ private:
 	
 	// Important setup
     Graphics& graphics;
-    TextureHandler& textures;
     EventWrapper& events;
 	Animation shift;
 

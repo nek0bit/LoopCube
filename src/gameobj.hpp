@@ -13,10 +13,10 @@
 #endif // __HEADLESS
 
 #include "generic.hpp"
-#include "size.hpp"
-#include "vector.hpp"
 #include "constants.hpp"
 #include "collisioninfo.hpp"
+
+
 
 struct GameObject
 {
@@ -37,8 +37,8 @@ struct GameObject
 
 	CollisionInfo isColliding(const GameObject &obj2) const;
 
-    Vec2 position;
-    Size size;
+    glm::vec3 position;
+    glm::vec3 size;
 protected:
 	int textureId;
     SDL_Rect src;

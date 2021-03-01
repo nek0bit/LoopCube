@@ -8,7 +8,7 @@ out vec2 inTexCoord;
 uniform mat4 projection;
 uniform mat4 view;
 uniform mat4 model;
-    
+
 void main()
 {
     inTexCoord = texCoord;
