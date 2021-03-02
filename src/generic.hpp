@@ -25,9 +25,7 @@ struct SDL_Rect
 #include <cmath>
 #include <cstdint>
 #include <functional>
-
-#include "vector.hpp"
-#include "size.hpp"
+#include <glm/glm.hpp>
 
 struct GridCollision_t
 {
@@ -49,7 +47,8 @@ namespace Generic
 
     bool collision(SDL_Rect r1, SDL_Rect r2);
 
-    GridCollision_t gridCollision(unsigned int width, unsigned int height, Vec2 box, const Size& size);
+    GridCollision_t gridCollision(const unsigned width, const unsigned height,
+                                  glm::vec2 box, const glm::vec2& size);
 
     void serializeUnsigned(const unsigned value, const unsigned length,
                            std::function<void(uint8_t)> appendData);
@@ -96,12 +95,12 @@ namespace Generic
     
     namespace Render
     {
-        void renderRepeating(const Graphics& graphics, TextureHandler& textures,
-                             int texture, int clipWidth,
-                             int clipHeight, int offsetX, int offsetY,
-                             int width, int height, int gap, int top,
-                             bool verticle = false, int srcX = 0, int srcY = 0,
-                             int srcW = -1, int srcH = -1);
+        void renderRepeating(const Graphics& graphics,
+                             const int texture, const int clipWidth,
+                             const int clipHeight, const int offsetX, const int offsetY,
+                             const int width, const int height, const int gap, const int top,
+                             const bool verticle = false, const int srcX = 0, const int srcY = 0,
+                             int srcW = -1, int srcH = -1) noexcept;
     }
 #endif
 }

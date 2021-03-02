@@ -4,10 +4,17 @@
 
 struct BlockInfo
 {
-	int id; // Identifier
-	std::string displayName;
-	int textureId;
-	bool noCollision;
+    constexpr BlockInfo(const int id, const char* displayName,
+                        const int textureId, const bool noCollision)
+        : id{id},
+          displayName{displayName},
+          textureId{textureId},
+          noCollision{noCollision} {}
+    
+	const int id; // Identifier
+	const char* displayName;
+	const int textureId;
+	const bool noCollision;
     
 	// Implementable stuff
 	//bool can_fall; // These blocks start in a falling state until collision, then they become normal

@@ -5,7 +5,8 @@ bool Generic::collision(SDL_Rect r1, SDL_Rect r2)
     return Generic::collision(r1.x, r1.y, r1.w, r1.h, r2.x, r2.y, r2.w, r2.h);
 }
 
-GridCollision_t Generic::gridCollision(unsigned int width, unsigned int height, Vec2 box, const Size& size)
+GridCollision_t Generic::gridCollision(const unsigned width, const unsigned height,
+                                       glm::vec2 box, const glm::vec2& size)
 {
     uint8_t add = 0; // 1 = X, 2 = Y, 3 = XY
     // negative fix
@@ -22,8 +23,8 @@ GridCollision_t Generic::gridCollision(unsigned int width, unsigned int height, 
     box.x = std::fmod(box.x, width);
     box.y = std::fmod(box.y, height);
 
-    return {static_cast<unsigned>(((size.w + box.x) / width) + ((add & 1) == 1)),
-        static_cast<unsigned>(((size.h + box.y) / height) + ((add & 2) == 2))};
+    return {static_cast<unsigned>(((size.x + box.x) / width) + ((add & 1) == 1)),
+        static_cast<unsigned>(((size.y + box.y) / height) + ((add & 2) == 2))};
 }
 
 void Generic::serializeUnsigned(const unsigned value, const unsigned length,
@@ -59,11 +60,12 @@ double Generic::lerp(double v1, double v2, double t)
 }
 
 #ifndef __HEADLESS
-void Generic::Render::renderRepeating(const Graphics& graphics, TextureHandler& textures,
-                                      int texture, int clipWidth,
-                                      int clipHeight, int offsetX, int offsetY,
-                                      int width, int height, int gap, int top,
-                                      bool verticle, int srcX, int srcY, int srcW, int srcH)
+void Generic::Render::renderRepeating(const Graphics& graphics,
+                                      const int texture, const int clipWidth,
+                                      const int clipHeight, const int offsetX, const int offsetY,
+                                      const int width, const int height, const int gap, const int top,
+                                      const bool verticle, const int srcX, const int srcY,
+                                      int srcW, int srcH) noexcept
 {
     srcW = srcW == -1 ? width : srcW;
     srcH = srcH == -1 ? height : srcH;

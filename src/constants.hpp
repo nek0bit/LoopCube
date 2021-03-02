@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <vector>
 #include <utility>
 #include <string>
@@ -11,6 +12,14 @@
 #include "textureinfo.hpp"
 #include "blockinfo.hpp"
 #include "config.hpp"
+
+#ifndef DATA_LOCATION
+#define DATA_LOCATION
+#endif
+
+#ifndef ROOT_PATH
+#define ROOT_PATH DATA_LOCATION "/data/"
+#endif
 
 enum block_enum
 {
@@ -62,28 +71,53 @@ struct LoadDistance
 
 namespace constants
 {
-	// Functions
-	
 	// Variables
-	constexpr char* versionStr = "v0.5";
-
-    constexpr char* rootPath = DATA_LOCATION "/data/";
-	extern const std::string path;
-    extern const std::string shaderPath;
+	constexpr char versionStr[] = "v0.5";
+    constexpr char rootPath[] = ROOT_PATH;
+    constexpr char path[] = ROOT_PATH "img/";
+    constexpr char shaderPath[] = ROOT_PATH "shaders/";
 
 	// Please add comment with index for code readability
-	extern const std::vector<TextureInfo> textureInfo;
+    constexpr std::array<TextureInfo, 24> textureInfo = {
+		TextureInfo{"moon_block.png", TEXTURE_MOON_BLOCK},
+        TextureInfo{"wood.png", TEXTURE_WOOD},
+		TextureInfo{"player.png", TEXTURE_PLAYER},
+		TextureInfo{"menu_solid.png", TEXTURE_MENU_SOLID},
+		TextureInfo{"menu_solid_left.png", TEXTURE_MENU_SOLID_LEFT},
+		TextureInfo{"menu_solid_right.png", TEXTURE_MENU_SOLID_RIGHT},
+		TextureInfo{"hotbar_slot.png", TEXTURE_HOTBAR_SLOT},
+		TextureInfo{"inventory_menu.png", TEXTURE_INVENTORY_MENU},
+		TextureInfo{"bg_shine.png", TEXTURE_BG_SHINE},
+		TextureInfo{"bg_cloud_loop.png", TEXTURE_BG_CLOUD_LOOP},
+		TextureInfo{"bg_hills.png", TEXTURE_BG_HILLS},
+		TextureInfo{"bg_hills_hq.png", TEXTURE_BG_HILLS_HQ},
+		TextureInfo{"cave_bg.png", TEXTURE_CAVE_BG},
+		TextureInfo{"sun.png", TEXTURE_SUN},
+		TextureInfo{"moon.png", TEXTURE_MOON},
+		TextureInfo{"box1.png", TEXTURE_BOX1},
+        TextureInfo{"box2.png", TEXTURE_BOX2},
+        TextureInfo{"box3.png", TEXTURE_BOX3},
+        TextureInfo{"box4.png", TEXTURE_BOX4},
+        TextureInfo{"box5.png", TEXTURE_BOX5},
+        TextureInfo{"box6.png", TEXTURE_BOX6},
+        TextureInfo{"box7.png", TEXTURE_BOX7},
+        TextureInfo{"box8.png", TEXTURE_BOX8},
+        TextureInfo{"box9.png", TEXTURE_BOX9}
+	};
 
-	extern const std::vector<BlockInfo> blockInfo;
+    constexpr std::array<BlockInfo, 2> blockInfo = {
+	    BlockInfo{BLOCK_MOON_BLOCK, "Moon Block", TEXTURE_MOON_BLOCK, false},
+		BlockInfo{BLOCK_WOOD, "Wood", TEXTURE_WOOD, true}
+    };
 
-	extern const int blockW;
-	extern const int blockH;
+	constexpr int blockW = 42;
+    constexpr int blockH = 42;
 
-	extern const int blockImgSize;
-	
-	extern const int chunkWidth;
-	extern const int chunkHeight;
-    
+    // Deprecated
+    constexpr int blockImgSize = 16;
+    constexpr int chunkWidth = 8;
+    constexpr int chunkHeight = 8;
+	    
 	extern LoadDistance loadDistance;
 
 	extern const std::string header;
