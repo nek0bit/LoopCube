@@ -14,6 +14,7 @@
 #include "texturehandler.hpp"
 #include "camera.hpp"
 #include "winsize.hpp"
+#include "modelgroup.hpp"
 
 struct Graphics
 {

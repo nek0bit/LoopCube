@@ -9,8 +9,11 @@ enum models_e
 };
 
 struct ModelGroup
-{  
-    void addModel(const Model& model);    
+{
+    ModelGroup();
+    ~ModelGroup();
+    
+    void addModel(const Model& model);
     const Model& getModel(const size_t index);
 private:
     std::vector<Model> models;

@@ -39,17 +39,20 @@ void Game::gameInit()
 	
 	menu = std::make_shared<Menu>(graphics, events, timer, winSize);
 
-    float vertices[] = {
-        // Position            Texture Coords
-        -0.5f,  0.5f, 0.0f,    0.0f, 0.0f,
-         0.5f,  0.5f, 0.0f,    1.0f, 0.0f,
-         0.5f, -0.5f, 0.0f,    1.0f, 1.0f,
-        -0.5f, -0.5f, 0.0f,    0.0f, 1.0f
-    };
 
-    graphics.setupVertexLayout();
 }
 
+void Game::createModels()
+{
+    graphics.models.addModel({{
+                {{-1.0f,  1.0f, 0.0f},    {0.0f, 0.0f}},
+                {{1.0f,  1.0f, 0.0f},    {1.0f, 0.0f}},
+                {{1.0f, -1.0f, 0.0f},    {1.0f, 1.0f}},
+                {{-1.0f, -1.0f, 0.0f},    {0.0f, 1.0f}}
+            }});
+    
+    graphics.setupVertexLayout();
+}
 
 // Draw objects to screen
 void Game::render() {

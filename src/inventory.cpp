@@ -36,7 +36,7 @@ void Inventory::addItem(int id)
 	auto found = std::find_if(items.begin(), items.end(), [&](Item item)
         {
             if (!item.enabled) return false; 
-            return item.block.id == id ? item.count < maxCount : false;
+            return item.getBlockInfo().id == id ? item.count < maxCount : false;
         });
 
 	if (found != items.end())
@@ -119,7 +119,7 @@ void Inventory::drawInventoryMenu()
 		
 		if (events.vmouse.clicked == 1 && pos[0] != -1 && pos[1] != -1)
         {
-			auto& it = items[pos[0] + (pos[1] * hotbarSlots)];
+		    auto& it = items[pos[0] + (pos[1] * hotbarSlots)];
 			if (!itemHeld.enabled)
             {
 				// Move item

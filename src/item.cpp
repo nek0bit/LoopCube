@@ -1,19 +1,12 @@
 #include "item.hpp"
 
-Item::Item() : enabled{false} {}
+Item::Item() : enabled{false}, id{0} {}
 
 Item::Item(const Graphics& graphics, int id)
     : count{},
-      enabled{true}
+      enabled{true},
+      id{id}
 {
-	for (auto &i: constants::blockInfo)
-    {
-		if (i.id == id)
-        {
-			block = i;
-		}
-	}
-
     SDL_Color t_Color{255, 255, 255, 255};
     //text = std::make_shared<Text>(Text{renderer, "", t_Color, constants::fontHandler.getFont(0)});
     
@@ -31,8 +24,12 @@ void Item::addCount(int amount)
 
 }
 
-void Item::render(const Graphics& graphics, TextureHandler& textures,
-                  int x, int y, int width = 35, int height = 35) const
+const BlockInfo& Item::getBlockInfo() const
+{
+    return constants::blockInfo[id];
+}
+
+void Item::render(const Graphics& graphics, int x, int y, int width = 35, int height = 35) const
 {
 	constexpr int offset_y = -10;
 	SDL_Rect src{4*constants::blockImgSize, 0, constants::blockImgSize, constants::blockImgSize};

@@ -11,7 +11,7 @@ enum Sprites
 };
 
 Player::Player()
-	: Entity{TEXTURE_PLAYER, 0, 0, 34, 66},
+	: Entity{0, TEXTURE_PLAYER, {0, 0, 0}, {34, 66}},
       sprite{17, 33},
       frame{40},
       jumping{false},

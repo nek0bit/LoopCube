@@ -12,6 +12,7 @@
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_image.h>
 
+#include "model.hpp"
 #include "graphics.hpp"
 #include "timer.hpp"
 #include "config.hpp"
@@ -44,6 +45,7 @@ struct Game
 
     bool isRunning = false;
 private:
+    void createModels();
     int argc;
     char** argv;
 	const char* title;

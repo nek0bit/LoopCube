@@ -3,6 +3,8 @@
 #include <memory>
 #include <cmath>
 
+#include <glm/glm.hpp>
+
 #include "generic.hpp"
 #include "entity.hpp"
 #include "collisioninfo.hpp"

@@ -210,7 +210,7 @@ void Menu::renderSidebar()
     //SDL_RenderFillRect(renderer, &line);
 
 	// Lets render a random block and some text
-	randomBlock.render(graphics, graphics.textures, offsetX+contentLeft, offsetY+35, 60, 60);
+	randomBlock.render(graphics, offsetX+contentLeft, offsetY+35, 60, 60);
 
 	header->draw(graphics, offsetX+contentLeft+70, offsetY+45);
 
@@ -252,7 +252,7 @@ void Menu::renderConfigMenu()
 void Menu::renderBackground()
 {
     bgX += 100 * timer.deltaTime;
-    Generic::Render::renderRepeating(graphics, graphics.textures, TEXTURE_MOON_BLOCK, winSize.w, winSize.h,
+    Generic::Render::renderRepeating(graphics, TEXTURE_MOON_BLOCK, winSize.w, winSize.h,
                                      bgX, bgY, 40, 40, 0, 0,
                                      true, 4*constants::blockImgSize, 0,
                                      constants::blockImgSize, constants::blockImgSize);

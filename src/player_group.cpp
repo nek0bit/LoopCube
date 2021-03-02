@@ -26,7 +26,7 @@ void PlayerGroup::renderPlayers(const Graphics& renderer, TextureHandler& textur
     // Render players
     for (auto& p: players)
     {
-        p.second.render(renderer, textures, camera);
+        p.second.render(renderer, camera);
     }
 }
 
