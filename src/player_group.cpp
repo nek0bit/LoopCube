@@ -20,8 +20,7 @@ void PlayerGroup::updatePlayers(ChunkGroup& chunks, Timer& timer,
     }
 }
 
-void PlayerGroup::renderPlayers(const Graphics& renderer, TextureHandler& textures,
-                                const Camera& camera) const
+void PlayerGroup::renderPlayers(const Graphics& renderer, const Camera& camera) const
 {
     // Render players
     for (auto& p: players)

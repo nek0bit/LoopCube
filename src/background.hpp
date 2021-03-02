@@ -25,5 +25,5 @@ struct Background
     virtual ~Background();
 
     virtual void update(const Camera&, Time&);
-    virtual void render(const Graphics&, TextureHandler&) const;
+    virtual void render(const Graphics&) const;
 };

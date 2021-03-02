@@ -39,17 +39,20 @@ void Game::gameInit()
 	
 	menu = std::make_shared<Menu>(graphics, events, timer, winSize);
 
-
+    createModels();
 }
 
 void Game::createModels()
 {
-    graphics.models.addModel({{
-                {{-1.0f,  1.0f, 0.0f},    {0.0f, 0.0f}},
-                {{1.0f,  1.0f, 0.0f},    {1.0f, 0.0f}},
-                {{1.0f, -1.0f, 0.0f},    {1.0f, 1.0f}},
-                {{-1.0f, -1.0f, 0.0f},    {0.0f, 1.0f}}
-            }});
+    graphics.models.addModel({
+            {{-1.0f, 1.0f, 0.0f},  {0.0f, 0.0f}},
+            {{1.0f, 1.0f, 0.0f},  {1.0f, 0.0f}},
+            {{1.0f, -1.0f, 0.0f},  {1.0f, 1.0f}},
+            
+            {{1.0f, -1.0f, 0.0f}, {1.0f, 1.0f}},
+            {{-1.0f, -1.0f, 0.0f}, {0.0f, 1.0f}},
+            {{-1.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}
+        });
     
     graphics.setupVertexLayout();
 }
@@ -57,26 +60,23 @@ void Game::createModels()
 // Draw objects to screen
 void Game::render() {
     // Clear screen
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     graphics.camera.bindProj(graphics.shader);
-
     
     graphics.textures.getTexture(2)->bind();
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    
-
+    graphics.models.getModel(0).bindDraw();
     
     if (state.size() > 0)
     {
         switch(state.top()) {
         case STATE_MAIN_MENU:
-            //if (game != nullptr) game->render(graphics, *textures, events);
+            if (game != nullptr) game->render(graphics, events);
             if (menu != nullptr) menu->render();
             break;
         case STATE_PLAYING:
-            //if (game != nullptr) game->render(graphics, *textures, events);
+            if (game != nullptr) game->render(graphics, events);
             break;
         default:
             break;

@@ -51,7 +51,7 @@ struct GameClient
     ~GameClient();
 
     void update(EventWrapper& events);
-    void render(const Graphics& graphics, TextureHandler& textures, EventWrapper& events) const;
+    void render(const Graphics& graphics, EventWrapper& events) const;
     bool exit;
 private:
     void init();

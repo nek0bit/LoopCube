@@ -12,6 +12,8 @@
 struct Texture
 {
     Texture(const std::string filename);
+    Texture(const Texture&) = delete;
+    Texture(Texture&& source);
     ~Texture();
 
     void bind() const;

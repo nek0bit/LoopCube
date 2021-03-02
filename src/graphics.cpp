@@ -5,8 +5,8 @@ Graphics::Graphics(SDL_Window* window, WinSize& winSize)
       context{},
       shader{},
       vao{},
-      camera{winSize}
-      
+      camera{winSize},
+      textures{}
 {}
 
 // Close things safely, including SDL windows
@@ -40,9 +40,9 @@ void Graphics::bindVAO() const
 
 void Graphics::setupVertexLayout()
 {
-    constexpr uint8_t Stride = 5;
+    constexpr uint8_t Stride = sizeof(Vertex);
     constexpr uint8_t positionSize = 3;
-    constexpr uint8_t texCoordOffset = 3;
+    constexpr uint8_t texCoordOffset = sizeof(glm::vec3); // First element in struct
     constexpr uint8_t texCoordSize = 2;
     GLint positionAttribute = glGetAttribLocation(shader, "position");
     GLint texCoordAttribute = glGetAttribLocation(shader, "texCoord");
@@ -50,12 +50,12 @@ void Graphics::setupVertexLayout()
     // Position
     glEnableVertexAttribArray(positionAttribute);
     // InputAttrib - valSize - Type - shouldNormalize - Stride - Offset
-    glVertexAttribPointer(positionAttribute, positionSize, GL_FLOAT, GL_FALSE, Stride * sizeof(float), 0);
+    glVertexAttribPointer(positionAttribute, positionSize, GL_FLOAT, GL_FALSE, Stride, 0);
     
     // texCoord
     glEnableVertexAttribArray(texCoordAttribute);
     glVertexAttribPointer(texCoordAttribute, texCoordSize, GL_FLOAT, GL_FALSE,
-                          Stride * sizeof(float), (void*)(texCoordOffset * sizeof(float)));
+                          Stride, (void*)(texCoordOffset));
 }
 
 void Graphics::loadShaders(const std::string& vertShaderFilename,

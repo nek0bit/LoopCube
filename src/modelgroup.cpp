@@ -11,7 +11,7 @@ ModelGroup::~ModelGroup()
 
 }
 
-void ModelGroup::addModel(const Model& model)
+void ModelGroup::addModel(const std::vector<Vertex>& model)
 {
     models.emplace_back(model);
 }

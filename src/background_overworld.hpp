@@ -21,7 +21,7 @@ struct BackgroundOverworld: public Background
 	~BackgroundOverworld();
 	
 	void update(const Camera& camera, Time& time) override;
-	void render(const Graphics& graphics, TextureHandler& textures) const override;
+	void render(const Graphics& graphics) const override;
 private:
 	int winWidth;
 	int winHeight;

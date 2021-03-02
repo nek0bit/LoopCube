@@ -1,11 +1,10 @@
 #include "texturehandler.hpp"
 
 TextureHandler::TextureHandler()
-{
-}
-
-TextureHandler::~TextureHandler()
+    : textures{}
 {}
+
+TextureHandler::~TextureHandler() {}
 
 void TextureHandler::init()
 {

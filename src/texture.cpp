@@ -30,14 +30,21 @@ Texture::Texture(const std::string filename)
     SDL_FreeSurface(image);
 }
 
-void Texture::bind() const
+// Move
+Texture::Texture(Texture&& source)
 {
-    glBindTexture(GL_TEXTURE_2D, texture);
+    texture = source.texture;
+    source.texture = 0;
 }
 
 Texture::~Texture()
 {
     freeTexture();
+}
+
+void Texture::bind() const
+{
+    glBindTexture(GL_TEXTURE_2D, texture);
 }
 
 void Texture::freeTexture()

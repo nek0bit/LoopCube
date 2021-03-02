@@ -180,13 +180,13 @@ void GameClient::update(EventWrapper& events)
     deadParticles();
 }
 
-void GameClient::render(const Graphics& graphics, TextureHandler& textures, EventWrapper& events) const
+void GameClient::render(const Graphics& graphics, EventWrapper& events) const
 {
-    if (background) background->render(graphics, textures);
+    if (background) background->render(graphics);
     
     serverChunks.render(graphics, camera);
 
-    serverPlayers.renderPlayers(graphics, textures, camera);
+    serverPlayers.renderPlayers(graphics, camera);
 
     mainPlayer.render(graphics, camera);
 

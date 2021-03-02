@@ -8,5 +8,5 @@ Background::~Background() {}
 void Background::update(const Camera&, Time&)
 {}
 
-void Background::render(const Graphics&, TextureHandler&) const
+void Background::render(const Graphics&) const
 {}

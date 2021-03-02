@@ -125,7 +125,7 @@ void BackgroundOverworld::update(const Camera& camera, Time& time)
 	bgMoonDest.h = bgLight.h;
 }
 
-void BackgroundOverworld::render(const Graphics& graphics, TextureHandler& textures) const
+void BackgroundOverworld::render(const Graphics& graphics) const
 {
     constexpr int cloudOffset = 240;
     constexpr int hillOffset = 0;

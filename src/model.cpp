@@ -15,7 +15,7 @@ void Model::setModel(const std::vector<Vertex>& vertices)
 {
     size = vertices.size();
     bind();
-    glBufferData(GL_ARRAY_BUFFER, sizeof(&vertices[0]), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 }
 
 void Model::bind() const noexcept
