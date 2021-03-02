@@ -184,18 +184,18 @@ void GameClient::render(const Graphics& graphics, TextureHandler& textures, Even
 {
     if (background) background->render(graphics, textures);
     
-    serverChunks.render(graphics, textures, camera);
+    serverChunks.render(graphics, camera);
 
     serverPlayers.renderPlayers(graphics, textures, camera);
 
-    mainPlayer.render(graphics, textures, camera);
+    mainPlayer.render(graphics, camera);
 
     // Draw particles
     if (constants::config.getInt(CONFIG_SHOW_PARTICLES))
     {
         for (auto& particle: particles)
         {
-            particle.render(graphics, textures, camera);
+            particle.render(graphics, camera);
         }
     }
 
@@ -309,8 +309,8 @@ void GameClient::drawSelection(const Graphics& graphics, const SelectInfo pos) c
 
 void GameClient::handleCamera()
 {
-	double x = -std::floor(mainPlayer.position.x) + (winSize.w / 2) - mainPlayer.size.w/2;
-	double y = -std::floor(mainPlayer.position.y) + (winSize.h / 2) - mainPlayer.size.h/2;
+	double x = -std::floor(mainPlayer.position.x) + (winSize.w / 2) - mainPlayer.size.x/2;
+	double y = -std::floor(mainPlayer.position.y) + (winSize.h / 2) - mainPlayer.size.y/2;
 	
 	static double moveX = x;
 	static double moveY = y;

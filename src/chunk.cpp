@@ -70,10 +70,10 @@ void Chunk::renderAllShadows(const Graphics& graphics, const Camera& camera) con
     });
 }
 
-void Chunk::renderAllBlocks(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const
+void Chunk::renderAllBlocks(const Graphics& graphics, const Camera& camera) const
 {
     iterateFunctor(camera, [&](Block& blk) {
-        blk.render(graphics, textures, camera);
+        blk.render(graphics, camera);
     });
 }
 #endif

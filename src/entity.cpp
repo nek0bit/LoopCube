@@ -1,7 +1,7 @@
 #include "entity.hpp"
 
-Entity::Entity(int textureId, double x, double y, double width, double height)
-	: GameObject{textureId, x, y, width, height},
+Entity::Entity(int modelId, int textureId, glm::vec3 position, glm::vec2 size)
+	: GameObject{modelId, textureId, position, size},
       velX{0},
       velY{0},
       displayPosition{0, 0},
@@ -12,8 +12,8 @@ Entity::Entity(int textureId, double x, double y, double width, double height)
 	// Update draw position
 	src.x = 0;
 	src.y = 0;
-    src.w = size.w;
-	src.h = size.h;
+    src.w = size.x;
+	src.h = size.y;
 }
 
 Entity::~Entity()
@@ -28,13 +28,13 @@ void Entity::update(ChunkGroup& chunks, const Timer& timer)
 }
 
 #ifndef __HEADLESS
-void Entity::render(const Graphics& renderer, TextureHandler& textures, const Camera& camera) const
+void Entity::render(const Graphics& renderer, const Camera& camera) const
 {
-    const Vec2 val = displayPosition/* + camera*/;
+    const glm::vec2 val = displayPosition + static_cast<glm::vec2>(camera.position);
 	SDL_Rect dest{static_cast<int>(val.x),
         static_cast<int>(val.y),
-        static_cast<int>(size.w),
-        static_cast<int>(size.h)};
+        static_cast<int>(size.x),
+        static_cast<int>(size.y)};
     //SDL_RenderCopy(renderer, textures.getTexture(textureId)->texture, &src, &dest);
 }
 #endif

@@ -1,5 +1,6 @@
 #include "constants.hpp"
 
+using namespace std::string_literals;
 
 // Texture stuff
 namespace constants
@@ -13,7 +14,7 @@ namespace constants
 	const std::string header = "LoopCube";
 	const std::vector<std::string> content = {
 		"Welcome to LoopCube!\n",
-		"Current Version: " + versionStr + "\n",
+		"Current Version: "s + versionStr + "\n",
         "\"Stable\" Multiplayer Edition\n"
 	};
 

@@ -1,8 +1,8 @@
 #include "gravityparticle.hpp"
 
-GravityParticle::GravityParticle(int textureId, double time, double startVelX, double startVelY,
+GravityParticle::GravityParticle(int modelId, int textureId, double time, double startVelX, double startVelY,
                                  double x, double y, double width, double height)
-	: Entity{textureId, x, y, width, height}, time{0}, timeTotal{time} {
+	: Entity{modelId, textureId, {x, y, 0}, {width, height}}, time{0}, timeTotal{time} {
 	velX = startVelX;
 	velY = startVelY;
     src.x = 4 * constants::blockImgSize;

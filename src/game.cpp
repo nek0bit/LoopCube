@@ -33,7 +33,8 @@ void Game::gameInit()
 	constants::config.set(CONFIG_SHOW_CHUNK_DEBUG, false);
 
     // Setup fonts
-    constants::fontHandler.addFontByFilename(constants::rootPath+"fonts/liberation-sans/LiberationSans-Regular.ttf",
+    constants::fontHandler.addFontByFilename(static_cast<std::string>(constants::rootPath) +
+                                             "fonts/liberation-sans/LiberationSans-Regular.ttf",
                                              {10, 12, 14, 16, 18, 32});
 	
 	menu = std::make_shared<Menu>(graphics, events, timer, winSize);
@@ -231,8 +232,8 @@ void Game::init(bool fullscreen = false) {
     graphics.init();
 
     // Shader is compiled and used
-    graphics.loadShaders(constants::shaderPath + "vertex.glsl",
-                         constants::shaderPath + "frag.glsl");
+    graphics.loadShaders(static_cast<std::string>(constants::shaderPath) + "vertex.glsl",
+                         static_cast<std::string>(constants::shaderPath) + "frag.glsl");
 
     // Initiates images and fonts
     int img_flags = IMG_INIT_PNG;

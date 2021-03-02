@@ -11,15 +11,14 @@
 struct Entity: public GameObject
 {
 	Entity() = default;
-	Entity(int textureId,
-		   double x, double y, double width, double height);
+	Entity(int modelId, int textureId, glm::vec3 position, glm::vec2 size);
 	virtual ~Entity();
 
     void update() override;
     virtual void update(ChunkGroup& chunks, const Timer& timer);
 
 #ifndef __HEADLESS
-    virtual void render(const Graphics& renderer, TextureHandler& textures, const Camera& camera)
+    virtual void render(const Graphics& renderer, const Camera& camera)
         const override;
 #endif
     void dummyInterpolate(const Timer& timer);
@@ -37,7 +36,7 @@ protected:
 	void updateBasicPhysics(ChunkGroup& chunks, const Timer& timer);
 	CollisionInfo checkBlockCollision(ChunkGroup &chunks);
 
-    Vec2 displayPosition;
+    glm::vec2 displayPosition;
 
 	// Physics
 	double velXSpeed;

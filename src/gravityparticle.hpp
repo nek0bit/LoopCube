@@ -5,7 +5,7 @@
 struct GravityParticle: public Entity
 {
 	GravityParticle() = default;
-	GravityParticle(int textureId, double time, double startVelX, double startVelY,
+	GravityParticle(int modelId, int textureId, double time, double startVelX, double startVelY,
                     double x, double y, double width = 10, double height = 10);
 	~GravityParticle() = default;
 	

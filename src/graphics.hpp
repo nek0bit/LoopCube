@@ -45,6 +45,7 @@ struct Graphics
     GLuint vao;
 
     // Other components
+    ModelGroup models;
     Camera camera;
     TextureHandler textures;
 };

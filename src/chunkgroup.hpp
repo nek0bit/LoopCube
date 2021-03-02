@@ -7,8 +7,8 @@
 
 #ifndef __HEADLESS
 #include <SDL2/SDL.h>
-#include "vector.hpp"
 #include "size.hpp"
+#include <glm/glm.hpp>
 #include "texturehandler.hpp"
 #endif
 
@@ -53,7 +53,7 @@ struct _ChunkDataSplit
                                                                     bool isClient = false);
 #ifndef __HEADLESS
     void updateSplit(const Camera& camera);
-    void renderSplit(const Graphics& renderer, TextureHandler& textures, const Camera& camera) const;
+    void renderSplit(const Graphics& renderer, const Camera& camera) const;
 #endif
 
     void updateBorderedChunks(std::unordered_map<long int, ChunkData>::iterator current, const long y);
@@ -91,11 +91,11 @@ struct ChunkGroup
 
 #ifndef __HEADLESS
     void update(const Camera& camera);
-    void render(const Graphics& renderer, TextureHandler& textures, const Camera& camera) const;
+    void render(const Graphics& renderer, const Camera& camera) const;
 #endif
 
     Chunk* getChunkAt(const long x, const long y);
-    std::vector<Chunk*> isWithinChunks(const Vec2& vec, const Size& size);
+    std::vector<Chunk*> isWithinChunks(const glm::vec2& vec, const glm::vec2& size);
     void generateChunkAt(const long x, const long y);
     void loadFromDeserialize(std::vector<unsigned char>& value, int start = 1);
 

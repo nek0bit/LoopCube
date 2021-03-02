@@ -12,7 +12,6 @@
 #include "texturehandler.hpp"
 #include "camera.hpp"
 #include "inventory.hpp"
-#include "vector.hpp"
 #include "size.hpp"
 #include "text.hpp"
 #endif
@@ -51,8 +50,8 @@ struct Chunk
 
     // Renderer
     void renderInfo(const Graphics& graphics, const Camera& camera) const;
-    void renderAllShadows(const Graphics& graphics, const Camera& camera) const ;
-    void renderAllBlocks(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const;
+    void renderAllShadows(const Graphics& graphics, const Camera& camera) const;
+    void renderAllBlocks(const Graphics& graphics, const Camera& camera) const;
 #endif
 
     // Block modification

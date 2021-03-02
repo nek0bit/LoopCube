@@ -21,24 +21,21 @@
 struct GameObject
 {
 	GameObject() = default;
-	GameObject(int textureId, double x, double y, double w, double h);
+	GameObject(int modelId, int textureId, glm::vec3 position, glm::vec2 size);
 	virtual ~GameObject() = default;
 
     virtual void update();
     
 #ifndef __HEADLESS
-    virtual void render(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const;
+    virtual void render(const Graphics& graphics, const Camera& camera) const;
 
 	virtual bool shouldCull(const Camera& camera) const;
-
-	// Return position
-	virtual Vec2 getPos(const Camera& camera) const;
 #endif // __HEADLESS
 
 	CollisionInfo isColliding(const GameObject &obj2) const;
 
     glm::vec3 position;
-    glm::vec3 size;
+    glm::vec2 size;
 protected:
 	int textureId;
     SDL_Rect src;

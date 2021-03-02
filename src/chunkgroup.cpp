@@ -166,11 +166,11 @@ void _ChunkDataSplit::updateSplit(const Camera& camera)
 }
 
 // Renders all loaded chunks in the split if visible
-void _ChunkDataSplit::renderSplit(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const
+void _ChunkDataSplit::renderSplit(const Graphics& graphics, const Camera& camera) const
 {
     for (auto& chunk: loadedChunks)
     {
-        if (chunk != nullptr) chunk->renderAllBlocks(graphics, textures, camera);
+        if (chunk != nullptr) chunk->renderAllBlocks(graphics, camera);
     }
 }
 #endif
@@ -268,11 +268,11 @@ void ChunkGroup::update(const Camera& camera)
     }
 }
 
-void ChunkGroup::render(const Graphics& graphics, TextureHandler& textures, const Camera& camera) const
+void ChunkGroup::render(const Graphics& graphics, const Camera& camera) const
 {
     for (auto& split: loadedSplits)
     {
-        if (split != nullptr) split->renderSplit(graphics, textures, camera);
+        if (split != nullptr) split->renderSplit(graphics, camera);
     }
 }
 #endif
@@ -285,7 +285,7 @@ Chunk* ChunkGroup::getChunkAt(const long int x, const long int y)
     return call == nullptr ? nullptr : getData(x)->getData(y);
 }
 
-std::vector<Chunk*> ChunkGroup::isWithinChunks(const Vec2& vec, const Size& size)
+std::vector<Chunk*> ChunkGroup::isWithinChunks(const glm::vec2& vec, const glm::vec2& size)
 {
     ChunkPos inChunk = posToChunkPos(vec.x, vec.y);
     GridCollision_t col = Generic::gridCollision(constants::chunkWidth * constants::blockW,

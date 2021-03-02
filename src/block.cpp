@@ -6,10 +6,10 @@ Block::Block()
 {}
 
 Block::Block(int id, int x, int y, unsigned int typeX)
-	: GameObject{0, static_cast<double>(x * constants::blockW),
-    static_cast<double>(y * constants::blockH),
-    static_cast<double>(constants::blockW),
-    static_cast<double>(constants::blockH)},
+	: 
+      GameObject(0, 0,
+                 glm::vec3(x * constants::blockW, y * constants::blockH, 0),
+                 glm::vec2(constants::blockW, constants::blockH)),
       blockinfo{nullptr},
       typeX{typeX}
 {
@@ -36,9 +36,9 @@ void Block::updateSrc()
 
 void Block::renderShadow(const Graphics& graphics, const Camera& camera) const
 {
-    const Vec2 val = getPos(camera);
+    const glm::vec2 val = position + camera.position;
 	SDL_Rect shadow{static_cast<int>(val.x + 5), static_cast<int>(val.y + 5),
-		static_cast<int>(size.w), static_cast<int>(size.h)};
+		static_cast<int>(size.x), static_cast<int>(size.y)};
     
     //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 60);
     //SDL_RenderFillRect(renderer, &shadow);
@@ -66,8 +66,8 @@ std::vector<unsigned char> Block::serialize() const
     fullRes.push_back(idLen);
 
     Generic::serializeUnsigned(blockinfo->id, idLen, [&fullRes](uint8_t back)->void {
-            fullRes.push_back(back);
-        });
+        fullRes.push_back(back);
+    });
     
     return fullRes;
 }
