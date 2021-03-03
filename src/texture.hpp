@@ -9,6 +9,20 @@
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_image.h>
 
+struct texcoord_info
+{
+    unsigned width;
+    unsigned height;
+    unsigned tileSizeW;
+    unsigned tileSizeH;
+};
+
+struct texcoord_t
+{
+    float texX;
+    float texY;
+};
+
 struct Texture
 {
     Texture(const std::string filename);
@@ -18,6 +32,8 @@ struct Texture
 
     void bind() const;
     void freeTexture();
+
+    static texcoord_t getTilemapCoord(const texcoord_info info, const unsigned tileX, const unsigned tileY) noexcept;
     
     GLuint texture;
 

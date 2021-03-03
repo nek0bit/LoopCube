@@ -37,6 +37,13 @@ Texture::Texture(Texture&& source)
     source.texture = 0;
 }
 
+
+texcoord_t Texture::getTilemapCoord(const texcoord_info info, const unsigned tileX, const unsigned tileY) noexcept
+{
+    return {static_cast<float>((tileX * info.tileSizeW) / static_cast<float>(info.width)),
+        static_cast<float>((tileY * info.tileSizeH) / static_cast<float>(info.height))};
+}
+
 Texture::~Texture()
 {
     freeTexture();
