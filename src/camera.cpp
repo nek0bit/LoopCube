@@ -5,7 +5,7 @@ Camera::Camera(WinSize& winSize)
       // Vec
       position{0.0f, 0.0f, 0.0f},
       center{0.0f, 0.0f, 0.0f},
-      up{0.0f, 0.0f, 1.0f},
+      up{0.0f, 1.0f, 0.0f},
       // Mat
       projection{1.0f},
       view{1.0f}
@@ -21,7 +21,9 @@ void Camera::updateProj()
     /*projection = glm::perspective(glm::radians(45.0f),
                                   static_cast<float>(size.w) / static_cast<float>(size.h),
                                   1.0f, 10.0f);*/
-    projection = glm::ortho(0.0f, static_cast<float>(size.w), 0.0f, static_cast<float>(size.h), 0.1f, 100.0f);
+    projection = glm::ortho(0.0f, static_cast<float>(size.w),
+                            0.0f, static_cast<float>(size.h),
+                            0.1f, 5000.0f);
 }
 
 void Camera::bindProj(const unsigned& shader) noexcept

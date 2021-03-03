@@ -63,10 +63,27 @@ void Game::render() {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    graphics.camera.bindProj(graphics.shader);
+    
+    
+    
     
     graphics.textures.getTexture(2)->bind();
-    graphics.models.getModel(0).bindDraw();
+    graphics.models.getModel(0).bind();
+    graphics.models.getModel(0).draw(glGetUniformLocation(graphics.shader, "model"),
+                                     {300.0f, -300.0f, 0.0f},
+                                     {300.0f, 300.0f, 0.0f});
+
+    graphics.camera.position = {-events.vmouse.x, events.vmouse.y, 100.0f};
+    graphics.camera.center = {-events.vmouse.x/2, events.vmouse.y/2, 0.0f};
+
+
+    // Update and bind camera
+    graphics.camera.updateProj();
+    graphics.camera.bindProj(graphics.shader);
+    
+    graphics.camera.updateView();
+    graphics.camera.bindCamera(graphics.shader);
+    
     
     if (state.size() > 0)
     {
@@ -176,7 +193,9 @@ void Game::update()
     {
         game = nullptr;
         state.pop(); // Switch game state to menu
-    }    
+    }
+
+    glViewport(0, 0, winSize.w, winSize.h);
 }
 
 // SDL2 related stuff below

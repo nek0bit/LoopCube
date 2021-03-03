@@ -17,8 +17,9 @@ struct Model
 
     void setModel(const std::vector<Vertex>& vertices);
     void bind() const noexcept;
-    void render() const noexcept;
-    void bindDraw() const noexcept;
+    void draw(const GLint& uniform,
+              const glm::vec3& translate = {0.0f, 0.0f, 0.0f},
+              const glm::vec3& scale = {0.0f, 0.0f, 0.0f}) const noexcept;
 private:
     uint16_t size;
     GLuint vbo;

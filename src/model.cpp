@@ -23,13 +23,15 @@ void Model::bind() const noexcept
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 }
 
-void Model::render() const noexcept
+void Model::draw(const GLint& uniform, const glm::vec3& translate, const glm::vec3& scale) const noexcept
 {
-    glDrawArrays(GL_TRIANGLES, 0, size);
-}
+    glm::mat4 model{1.0f};
 
-void Model::bindDraw() const noexcept
-{
-    bind();
-    render();
+    model = glm::translate(model, translate);
+    model = glm::scale(model, scale);
+    
+    
+    glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(model));
+    
+    glDrawArrays(GL_TRIANGLES, 0, size);
 }
