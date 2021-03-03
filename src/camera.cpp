@@ -26,14 +26,12 @@ void Camera::updateProj()
                             0.1f, 5000.0f);
 }
 
-void Camera::bindProj(const unsigned& shader) noexcept
+void Camera::bindProj(const GLint& uProj) noexcept
 {
-    GLint uProj = glGetUniformLocation(shader, "projection");
     glUniformMatrix4fv(uProj, 1, GL_FALSE, glm::value_ptr(projection));
 }
 
-void Camera::bindCamera(const unsigned& shader) noexcept
+void Camera::bindView(const GLint& uView) noexcept
 {
-    GLint uView = glGetUniformLocation(shader, "view");
     glUniformMatrix4fv(uView, 1, GL_FALSE, glm::value_ptr(view));
 }

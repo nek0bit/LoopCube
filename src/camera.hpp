@@ -13,8 +13,8 @@ struct Camera
     ~Camera();
     
     void updateProj();
-    void bindProj(const unsigned& shader) noexcept;
-    void bindCamera(const unsigned& shader) noexcept;
+    void bindProj(const GLint& uProj) noexcept;
+    void bindView(const GLint& uView) noexcept;
     
     inline void updateView() noexcept
         {

@@ -3,6 +3,7 @@
 Graphics::Graphics(SDL_Window* window, WinSize& winSize)
     : window{window},
       context{},
+      uniforms{0, 0, 0},
       shader{},
       vao{},
       camera{winSize},
@@ -140,9 +141,16 @@ void Graphics::loadShaders(const std::string& vertShaderFilename,
     glDeleteShader(fragShader);
 }
 
+void Graphics::setupUniforms()
+{
+    uniforms.model = glGetUniformLocation(shader, "model");
+    uniforms.proj = glGetUniformLocation(shader, "projection");
+    uniforms.view = glGetUniformLocation(shader, "view");
+}
 
 void Graphics::postShader()
 {    
     // Use it!
     useShader();
+    setupUniforms();
 }

@@ -36,7 +36,7 @@ protected:
 	void updateBasicPhysics(ChunkGroup& chunks, const Timer& timer);
 	CollisionInfo checkBlockCollision(ChunkGroup &chunks);
 
-    glm::vec2 displayPosition;
+    glm::vec3 displayPosition;
 
 	// Physics
 	double velXSpeed;

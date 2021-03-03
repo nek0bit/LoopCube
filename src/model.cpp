@@ -28,8 +28,7 @@ void Model::draw(const GLint& uniform, const glm::vec3& translate, const glm::ve
     glm::mat4 model{1.0f};
 
     model = glm::translate(model, translate);
-    model = glm::scale(model, scale);
-    
+    model = glm::scale(model, scale);    
     
     glUniformMatrix4fv(uniform, 1, GL_FALSE, glm::value_ptr(model));
     

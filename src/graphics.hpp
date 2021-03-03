@@ -16,6 +16,13 @@
 #include "winsize.hpp"
 #include "modelgroup.hpp"
 
+struct Uniforms
+{
+    GLint proj;
+    GLint view;
+    GLint model;
+};
+
 struct Graphics
 {
     Graphics(SDL_Window* window, WinSize& winSize);
@@ -29,6 +36,7 @@ struct Graphics
                      const std::string& fragShaderFilename);
     void postShader();
     void setupVertexLayout();
+    void setupUniforms();
     
     inline void useShader() const
         {
@@ -42,6 +50,7 @@ struct Graphics
     
     SDL_Window* window;
     SDL_GLContext context;
+    Uniforms uniforms;
     GLuint shader;
     GLuint vao;
 

@@ -14,7 +14,7 @@ struct ModelGroup
     ~ModelGroup();
     
     void addModel(const std::vector<Vertex>& model);
-    const Model& getModel(const size_t index);
+    const Model& getModel(const size_t index) const;
 private:
     std::vector<Model> models;
 };

@@ -1,21 +1,20 @@
 #include "gameobj.hpp"
 
-GameObject::GameObject(int modelId, int textureId, glm::vec3 position, glm::vec2 size)
+GameObject::GameObject(int modelId, int textureId, const glm::vec3& position, const glm::vec2& size)
     : position{position},
-      size{size},
-      textureId{textureId},
-      src{0, 0, 0, 0}
+      size{size.x, size.y, 0.0f},
+      modelId{modelId},
+      textureId{textureId}
 {}
 
 #ifndef __HEADLESS
 void GameObject::render(const Graphics& graphics, const Camera& camera) const
 {
-    const glm::vec3 val = position + camera.position;
-	SDL_Rect dest{static_cast<int>(val.x),
-        static_cast<int>(val.y),
-        static_cast<int>(size.x),
-        static_cast<int>(size.y)};
-    //SDL_RenderCopy(renderer, textures.getTexture(textureId)->texture, &src, &dest);
+    const Model& mod = graphics.models.getModel(modelId);
+
+    graphics.textures.getTexture(textureId)->bind();
+    mod.bind();
+    mod.draw(graphics.uniforms.model, position, size);
 }
 
 CollisionInfo GameObject::isColliding(const GameObject &obj2) const
@@ -67,8 +66,4 @@ bool GameObject::shouldCull(const Camera& camera) const
 
 void GameObject::update()
 {
-	src.x = 0;
-	src.y = 0;
-	src.w = size.x;
-    src.h = size.y;
 }

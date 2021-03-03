@@ -53,6 +53,12 @@ namespace Generic
     void serializeUnsigned(const unsigned value, const unsigned length,
                            std::function<void(uint8_t)> appendData);
 
+    template <typename T>
+    T topToBottomFlip(const T& val, const T& height) noexcept
+    {
+        return std::abs(height) - val;
+    }
+
     template <typename Container, typename Type>
     Type deserializeUnsigned(const Container& value, const size_t begIndex, const uint8_t length)
     {

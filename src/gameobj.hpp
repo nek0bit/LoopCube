@@ -21,7 +21,7 @@
 struct GameObject
 {
 	GameObject() = default;
-	GameObject(int modelId, int textureId, glm::vec3 position, glm::vec2 size);
+	GameObject(int modelId, int textureId, const glm::vec3& position, const glm::vec2& size);
 	virtual ~GameObject() = default;
 
     virtual void update();
@@ -35,8 +35,8 @@ struct GameObject
 	CollisionInfo isColliding(const GameObject &obj2) const;
 
     glm::vec3 position;
-    glm::vec2 size;
+    glm::vec3 size;
 protected:
-	int textureId;
-    SDL_Rect src;
+	int modelId, textureId;
+    SDL_Rect src; // Deprecated
 };

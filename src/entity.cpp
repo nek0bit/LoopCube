@@ -4,7 +4,7 @@ Entity::Entity(int modelId, int textureId, glm::vec3 position, glm::vec2 size)
 	: GameObject{modelId, textureId, position, size},
       velX{0},
       velY{0},
-      displayPosition{0, 0},
+      displayPosition{0.0f, 0.0f, 0.0f},
       velXSpeed{9000},
       onGround{false},
       lastPos{-1}
@@ -28,14 +28,13 @@ void Entity::update(ChunkGroup& chunks, const Timer& timer)
 }
 
 #ifndef __HEADLESS
-void Entity::render(const Graphics& renderer, const Camera& camera) const
+void Entity::render(const Graphics& graphics, const Camera& camera) const
 {
-    const glm::vec2 val = displayPosition + static_cast<glm::vec2>(camera.position);
-	SDL_Rect dest{static_cast<int>(val.x),
-        static_cast<int>(val.y),
-        static_cast<int>(size.x),
-        static_cast<int>(size.y)};
-    //SDL_RenderCopy(renderer, textures.getTexture(textureId)->texture, &src, &dest);
+    const Model& mod = graphics.models.getModel(modelId);
+
+    graphics.textures.getTexture(textureId)->bind();
+    mod.bind();
+    mod.draw(graphics.uniforms.model, displayPosition, size);
 }
 #endif
 
