@@ -44,7 +44,19 @@ void Game::gameInit()
 
 void Game::createModels()
 {
-    graphics.models.addModel({
+    const texcoord_info pModInfo = {
+        constants::textureInfo[TEXTURE_PLAYER].sizeX,
+        constants::textureInfo[TEXTURE_PLAYER].sizeY,
+        constants::textureInfo[TEXTURE_PLAYER].tilemapX,
+        constants::textureInfo[TEXTURE_PLAYER].tilemapY
+    };
+    
+    const texcoord_t pModGet = Texture::getTilemapCoord(pModInfo, 0, 0);
+
+        
+    // CUBE
+    graphics.models.addModel(
+        {
             {{-1.0f, 1.0f, 0.0f},  {0.0f, 0.0f}},
             {{1.0f, 1.0f, 0.0f},  {1.0f, 0.0f}},
             {{1.0f, -1.0f, 0.0f},  {1.0f, 1.0f}},
@@ -52,6 +64,19 @@ void Game::createModels()
             {{1.0f, -1.0f, 0.0f}, {1.0f, 1.0f}},
             {{-1.0f, -1.0f, 0.0f}, {0.0f, 1.0f}},
             {{-1.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}
+        });
+
+    
+    // PLAYER
+    graphics.models.addModel(
+        {
+            {{-1.0f, 1.0f, 0.0f},  {pModGet.begX, 0.0f}},
+            {{1.0f, 1.0f, 0.0f},  {pModGet.endX, 0.0f}},
+            {{1.0f, -1.0f, 0.0f},  {pModGet.endX, 1.0f}},
+            
+            {{1.0f, -1.0f, 0.0f}, {pModGet.endX, 1.0f}},
+            {{-1.0f, -1.0f, 0.0f}, {pModGet.begX, 1.0f}},
+            {{-1.0f, 1.0f, 0.0f}, {pModGet.begX, 0.0f}}
         });
     
     graphics.setupVertexLayout();

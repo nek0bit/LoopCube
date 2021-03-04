@@ -16,8 +16,6 @@
 #include "constants.hpp"
 #include "collisioninfo.hpp"
 
-
-
 struct GameObject
 {
 	GameObject() = default;

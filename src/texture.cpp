@@ -40,8 +40,20 @@ Texture::Texture(Texture&& source)
 
 texcoord_t Texture::getTilemapCoord(const texcoord_info info, const unsigned tileX, const unsigned tileY) noexcept
 {
-    return {static_cast<float>((tileX * info.tileSizeW) / static_cast<float>(info.width)),
-        static_cast<float>((tileY * info.tileSizeH) / static_cast<float>(info.height))};
+    // The base size (less than 1.0f);
+    const float baseX = static_cast<float>(info.tileSizeW) / static_cast<float>(info.width);
+    const float baseY = static_cast<float>(info.tileSizeH) / static_cast<float>(info.height);
+
+    // End results
+    const float resX = static_cast<float>((tileX+1) * info.tileSizeW) /
+        static_cast<float>(info.width);
+    const float resY = static_cast<float>((tileY+1) * info.tileSizeH) /
+        static_cast<float>(info.height);
+    
+    return {resX - baseX < 0 ? 0 : resX - baseX,
+        resX,
+        resY - baseY < 0 ? 0 : resY - baseY,
+        resY};
 }
 
 Texture::~Texture()

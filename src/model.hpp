@@ -13,14 +13,17 @@
 struct Model
 {
     Model(const std::vector<Vertex>& vertices);
+    Model(const Model&) = delete;
+    Model(Model&& source);
     ~Model();
 
     void setModel(const std::vector<Vertex>& vertices);
-    void bind() const noexcept;
-    void draw(const GLint& uniform,
+    void draw(const GLint& uModel,
+              const GLint& uTex,
               const glm::vec3& translate = {0.0f, 0.0f, 0.0f},
-              const glm::vec3& scale = {0.0f, 0.0f, 0.0f}) const noexcept;
-private:
-    uint16_t size;
+              const glm::vec3& scale = {0.0f, 0.0f, 0.0f},
+              const glm::vec2& texturePos = {1.0f, 1.0f}) const noexcept;
+
     GLuint vbo;
+    uint16_t size;
 };

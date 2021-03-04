@@ -13,8 +13,7 @@ void GameObject::render(const Graphics& graphics, const Camera& camera) const
     const Model& mod = graphics.models.getModel(modelId);
 
     graphics.textures.getTexture(textureId)->bind();
-    mod.bind();
-    mod.draw(graphics.uniforms.model, position, size);
+    mod.draw(graphics.uniforms.model, graphics.uniforms.tex, position, size);
 }
 
 CollisionInfo GameObject::isColliding(const GameObject &obj2) const

@@ -19,8 +19,10 @@ struct texcoord_info
 
 struct texcoord_t
 {
-    float texX;
-    float texY;
+    float begX;
+    float endX;
+    float begY;
+    float endY;
 };
 
 struct Texture

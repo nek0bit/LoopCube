@@ -21,6 +21,7 @@ struct Uniforms
     GLint proj;
     GLint view;
     GLint model;
+    GLint tex;
 };
 
 struct Graphics

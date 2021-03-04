@@ -33,8 +33,7 @@ void Entity::render(const Graphics& graphics, const Camera& camera) const
     const Model& mod = graphics.models.getModel(modelId);
 
     graphics.textures.getTexture(textureId)->bind();
-    mod.bind();
-    mod.draw(graphics.uniforms.model, displayPosition, size);
+    mod.draw(graphics.uniforms.model, graphics.uniforms.tex, displayPosition, size);
 }
 #endif
 

@@ -3,7 +3,6 @@
 ModelGroup::ModelGroup()
     : models{}
 {
-
 }
 
 ModelGroup::~ModelGroup()
