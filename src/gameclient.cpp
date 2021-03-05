@@ -287,8 +287,8 @@ void GameClient::mouseEvents(Camera& camera, EventWrapper& events)
 
 SelectInfo GameClient::getSelection(Camera& camera, EventWrapper& events) const
 {
-    const int selX = floor((events.vmouse.x - camera.position.x) / constants::blockW);
-    const int selY = floor((events.vmouse.y - camera.position.y) / constants::blockH);
+    const int selX = floor((events.vmouse.x + camera.position.x) / constants::blockW);
+    const int selY = floor((Generic::topToBottomFlip(events.vmouse.y, camera.size.h) + camera.position.y) / constants::blockH);
 
     return {selX, selY};
 }

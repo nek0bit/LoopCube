@@ -54,26 +54,26 @@ void Game::createModels()
     
     const texcoord_t pModGet = Texture::getTilemapCoord(pModInfo, 0, 0);
     
-    // CUBE
+    // BLOCK
     graphics.models.addModel(graphics.shader, {
-            {{-1.0f, 1.0f, 0.0f},  {0.0f, 0.0f}},
+            {{0.0f, 1.0f, 0.0f},  {0.0f, 0.0f}},
             {{1.0f, 1.0f, 0.0f},  {1.0f, 0.0f}},
-            {{1.0f, -1.0f, 0.0f},  {1.0f, 1.0f}},
+            {{1.0f, 0.0f, 0.0f},  {1.0f, 1.0f}},
             
-            {{1.0f, -1.0f, 0.0f}, {1.0f, 1.0f}},
-            {{-1.0f, -1.0f, 0.0f}, {0.0f, 1.0f}},
-            {{-1.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}
+            {{1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
+            {{0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+            {{0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}
         });
     
     // PLAYER
     graphics.models.addModel(graphics.shader, {
-            {{-1.0f, 1.0f, 0.0f},  {pModGet.begX, 0.0f}},
+            {{0.0f, 1.0f, 0.0f},  {pModGet.begX, 0.0f}},
             {{1.0f, 1.0f, 0.0f},  {pModGet.endX, 0.0f}},
-            {{1.0f, -1.0f, 0.0f},  {pModGet.endX, 1.0f}},
+            {{1.0f, 0.0f, 0.0f},  {pModGet.endX, 1.0f}},
             
-            {{1.0f, -1.0f, 0.0f}, {pModGet.endX, 1.0f}},
-            {{-1.0f, -1.0f, 0.0f}, {pModGet.begX, 1.0f}},
-            {{-1.0f, 1.0f, 0.0f}, {pModGet.begX, 0.0f}}
+            {{1.0f, 0.0f, 0.0f}, {pModGet.endX, 1.0f}},
+            {{0.0f, 0.0f, 0.0f}, {pModGet.begX, 1.0f}},
+            {{0.0f, 1.0f, 0.0f}, {pModGet.begX, 0.0f}}
         });
 }
 

@@ -371,8 +371,10 @@ size_t Chunk::posToIndex(const unsigned int x, const unsigned int y) const
 #ifndef __HEADLESS
 bool Chunk::chunkInView(const Camera& camera) const
 {
-    SDL_Rect windowRect{0, 0, camera.size.w, camera.size.h};
-    return Generic::collision(getChunkRect(camera), windowRect);
+    // Disable culling temporarily
+//    SDL_Rect windowRect{0, 0, camera.size.w, camera.size.h};
+//    return Generic::collision(getChunkRect(camera), windowRect);
+    return true;
 }
 
 SDL_Rect Chunk::getChunkRect(const Camera& camera) const
