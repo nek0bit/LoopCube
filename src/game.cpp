@@ -122,11 +122,10 @@ void Game::update()
 {
     // Update screen size
     SDL_GetWindowSize(graphics.window, &winSize.w, &winSize.h);
-
-    // TEMP set camera to mouse position
-    graphics.camera.position = {-events.vmouse.x, -Generic::topToBottomFlip(events.vmouse.y, winSize.h), 100.0f};
-    graphics.camera.center = {-events.vmouse.x, -Generic::topToBottomFlip(events.vmouse.y, winSize.h), 0.0f};
     
+    graphics.camera.position.z = 100.0f;
+
+    // TEMP set camera to mouse position    
     if (state.size() > 0)
     {
         switch(state.top()) {
@@ -189,9 +188,9 @@ void Game::update()
                 }
                 // Let's pre-load a frame so everything can generate and render
                 // This may need to change depending on world generation in the future
-                game->update(events);
+                game->update(graphics.camera, events);
             } else {
-                game->update(events);
+                game->update(graphics.camera, events);
             }
             break;
         default:
@@ -260,8 +259,7 @@ void Game::init(bool fullscreen = false) {
         throw std::runtime_error("Failed to initialize GLAD");
     }
 
-    init(); // Enables blending and any other features
-
+    graphics.init();
 
     // Shader is compiled and used
     graphics.loadShaders(static_cast<std::string>(constants::shaderPath) + "vertex.glsl",

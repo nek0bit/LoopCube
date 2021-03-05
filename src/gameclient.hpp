@@ -50,8 +50,8 @@ struct GameClient
     GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize);
     ~GameClient();
 
-    void update(EventWrapper& events);
-    void render(const Graphics& graphics, EventWrapper& events) const;
+    void update(Camera& camera, EventWrapper& events);
+    void render(Graphics& graphics, EventWrapper& events) const;
     bool exit;
 private:
     void init();
@@ -65,18 +65,17 @@ private:
     std::function<void(void)> disconnectCallback;
     
     WinSize& winSize;
-    SelectInfo getSelection(EventWrapper& events) const;
+    SelectInfo getSelection(Camera& camera, EventWrapper& events) const;
     void serverThreadFunction();
     void drawSelection(const Graphics& graphics, const SelectInfo pos) const;
-    void handleCamera();
+    void handleCamera(Camera& camera);
     void deadParticles();
-    void mouseEvents(EventWrapper& events);
+    void mouseEvents(Camera& camera, EventWrapper& events);
 
     PlayerGroup serverPlayers;
 
     //std::unique_ptr<Inventory> inv;
     ChunkGroup serverChunks;
-    Camera camera;
 
     // Entities
     Player mainPlayer;
