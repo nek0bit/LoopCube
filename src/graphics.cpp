@@ -19,6 +19,11 @@ Graphics::~Graphics()
     SDL_GL_DeleteContext(context);
 }
 
+void Graphics::init()
+{
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
 
 void Graphics::loadShaders(const std::string& vertShaderFilename,
                            const std::string& fragShaderFilename)

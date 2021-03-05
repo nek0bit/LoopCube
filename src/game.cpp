@@ -40,6 +40,7 @@ void Game::gameInit()
 	menu = std::make_shared<Menu>(graphics, events, timer, winSize);
     
     createModels();
+
 }
 
 void Game::createModels()
@@ -258,6 +259,9 @@ void Game::init(bool fullscreen = false) {
     {
         throw std::runtime_error("Failed to initialize GLAD");
     }
+
+    init(); // Enables blending and any other features
+
 
     // Shader is compiled and used
     graphics.loadShaders(static_cast<std::string>(constants::shaderPath) + "vertex.glsl",
