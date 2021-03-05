@@ -3,9 +3,8 @@
 Graphics::Graphics(SDL_Window* window, WinSize& winSize)
     : window{window},
       context{},
-      uniforms{0, 0, 0},
+      uniforms{0, 0, 0, 0},
       shader{},
-      vao{},
       camera{winSize},
       textures{}
 {}
@@ -14,50 +13,12 @@ Graphics::Graphics(SDL_Window* window, WinSize& winSize)
 // (which is currently the job of the Game class
 Graphics::~Graphics()
 {
-    glDeleteVertexArrays(1, &vao);
-    
     glDeleteProgram(shader);
     
     SDL_DestroyWindow(window);
     SDL_GL_DeleteContext(context);
 }
 
-void Graphics::init()
-{
-    createVAO();
-    bindVAO();
-}
-
-void Graphics::createVAO()
-{
-    // Create vertex buffer object
-    glGenVertexArrays(1, &vao);
-}
-
-void Graphics::bindVAO() const
-{
-    glBindVertexArray(vao);
-}
-
-void Graphics::setupVertexLayout()
-{
-    constexpr uint8_t Stride = sizeof(Vertex);
-    constexpr uint8_t positionSize = 3;
-    constexpr uint8_t texCoordOffset = sizeof(glm::vec3); // First element in struct
-    constexpr uint8_t texCoordSize = 2;
-    GLint positionAttribute = glGetAttribLocation(shader, "position");
-    GLint texCoordAttribute = glGetAttribLocation(shader, "texCoord");
-
-    // Position
-    glEnableVertexAttribArray(positionAttribute);
-    // InputAttrib - valSize - Type - shouldNormalize - Stride - Offset
-    glVertexAttribPointer(positionAttribute, positionSize, GL_FLOAT, GL_FALSE, Stride, 0);
-    
-    // texCoord
-    glEnableVertexAttribArray(texCoordAttribute);
-    glVertexAttribPointer(texCoordAttribute, texCoordSize, GL_FLOAT, GL_FALSE,
-                          Stride, (void*)(texCoordOffset));
-}
 
 void Graphics::loadShaders(const std::string& vertShaderFilename,
                            const std::string& fragShaderFilename)

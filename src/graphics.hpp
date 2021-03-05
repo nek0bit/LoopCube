@@ -30,13 +30,10 @@ struct Graphics
     ~Graphics();
 
     void init();
-    void createVAO();
     // Prefer the first one commonly
-    void bindVAO() const;
     void loadShaders(const std::string& vertShaderFilename,
                      const std::string& fragShaderFilename);
     void postShader();
-    void setupVertexLayout();
     void setupUniforms();
     
     inline void useShader() const
@@ -53,7 +50,7 @@ struct Graphics
     SDL_GLContext context;
     Uniforms uniforms;
     GLuint shader;
-    GLuint vao;
+    
 
     // Other components
     ModelGroup models;

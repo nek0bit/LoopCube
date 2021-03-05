@@ -7,7 +7,7 @@ Block::Block()
 
 Block::Block(int id, int x, int y, unsigned int typeX)
 	: 
-      GameObject(0, 0,
+      GameObject(MODEL_SQUARE, 0,
                  glm::vec3(x * constants::blockW, y * constants::blockH, 0),
                  glm::vec2(constants::blockW, constants::blockH)),
       blockinfo{nullptr},

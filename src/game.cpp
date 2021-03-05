@@ -38,7 +38,7 @@ void Game::gameInit()
                                              {10, 12, 14, 16, 18, 32});
 	
 	menu = std::make_shared<Menu>(graphics, events, timer, winSize);
-
+    
     createModels();
 }
 
@@ -52,11 +52,9 @@ void Game::createModels()
     };
     
     const texcoord_t pModGet = Texture::getTilemapCoord(pModInfo, 0, 0);
-
-        
+    
     // CUBE
-    graphics.models.addModel(
-        {
+    graphics.models.addModel(graphics.shader, {
             {{-1.0f, 1.0f, 0.0f},  {0.0f, 0.0f}},
             {{1.0f, 1.0f, 0.0f},  {1.0f, 0.0f}},
             {{1.0f, -1.0f, 0.0f},  {1.0f, 1.0f}},
@@ -65,11 +63,9 @@ void Game::createModels()
             {{-1.0f, -1.0f, 0.0f}, {0.0f, 1.0f}},
             {{-1.0f, 1.0f, 0.0f}, {0.0f, 0.0f}}
         });
-
     
     // PLAYER
-    graphics.models.addModel(
-        {
+    graphics.models.addModel(graphics.shader, {
             {{-1.0f, 1.0f, 0.0f},  {pModGet.begX, 0.0f}},
             {{1.0f, 1.0f, 0.0f},  {pModGet.endX, 0.0f}},
             {{1.0f, -1.0f, 0.0f},  {pModGet.endX, 1.0f}},
@@ -78,8 +74,6 @@ void Game::createModels()
             {{-1.0f, -1.0f, 0.0f}, {pModGet.begX, 1.0f}},
             {{-1.0f, 1.0f, 0.0f}, {pModGet.begX, 0.0f}}
         });
-    
-    graphics.setupVertexLayout();
 }
 
 // Draw objects to screen
@@ -264,9 +258,6 @@ void Game::init(bool fullscreen = false) {
     {
         throw std::runtime_error("Failed to initialize GLAD");
     }
-
-    // Initialize OpenGL calls
-    graphics.init();
 
     // Shader is compiled and used
     graphics.loadShaders(static_cast<std::string>(constants::shaderPath) + "vertex.glsl",

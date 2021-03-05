@@ -5,7 +5,8 @@
 
 enum models_e
 {
-    MODEL_SQUARE
+    MODEL_SQUARE,
+    MODEL_PLAYER
 };
 
 struct ModelGroup
@@ -13,8 +14,7 @@ struct ModelGroup
     ModelGroup();
     ~ModelGroup();
     
-    void addModel(const std::vector<Vertex>& model);
+    void addModel(const GLuint shader, const std::vector<Vertex>& model);
     const Model& getModel(const size_t index) const;
-private:
     std::vector<Model> models;
 };

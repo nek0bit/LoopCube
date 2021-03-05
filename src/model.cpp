@@ -1,34 +1,61 @@
 #include "model.hpp"
 
-Model::Model(const std::vector<Vertex>& vertices)
-    : vbo{0},
+Model::Model(const GLuint shader, const std::vector<Vertex>& vertices)
+    : vao{0},
+      vbo{0},
       size{0}
 {
+    glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
-    setModel(vertices);
+
+    // Bind both values
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    
+    size = vertices.size();
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+    setupVertexLayout(shader);
 }
 
 Model::~Model()
 {
     glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
 }
 
 // Move
 Model::Model(Model&& source)
 {
+    vao = source.vao;
     vbo = source.vbo;
     size = source.size;
 
-    // Sets source to 0 (glDeleteBuffers ignores 0)
+    // Sets source to 0 (glDeleteBuffers/VertexArrays ignores 0)
+    source.vao = 0;
     source.vbo = 0;
     source.size = 0;
 }
 
-void Model::setModel(const std::vector<Vertex>& vertices)
+void Model::setupVertexLayout(const GLuint shader)
 {
-    size = vertices.size();
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+    constexpr uint8_t Stride = sizeof(Vertex);
+    constexpr uint8_t positionSize = 3;
+    constexpr uint8_t texCoordOffset = sizeof(glm::vec3); // First element in struct
+    constexpr uint8_t texCoordSize = 2;
+    const GLuint positionAttribute = glGetAttribLocation(shader, "position");
+    const GLuint texCoordAttribute = glGetAttribLocation(shader, "texCoord");
+
+    // Position
+    // InputAttrib - valSize - Type - shouldNormalize - Stride - Offset
+    glVertexAttribPointer(positionAttribute, positionSize, GL_FLOAT, GL_FALSE, Stride, 0);
+    
+    // texCoord
+    glVertexAttribPointer(texCoordAttribute, texCoordSize, GL_FLOAT, GL_FALSE,
+                          Stride, (void*)(texCoordOffset));
+
+    // Enable Attrib Arrays
+    glEnableVertexAttribArray(positionAttribute);
+    glEnableVertexAttribArray(texCoordAttribute);
 }
 
 void Model::draw(const GLint& uModel,
@@ -37,7 +64,7 @@ void Model::draw(const GLint& uModel,
                  const glm::vec3& scale,
                  const glm::vec2& texturePos) const noexcept
 {
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindVertexArray(vao);
     glm::mat4 model{1.0f};
 
     model = glm::translate(model, translate);

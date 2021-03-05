@@ -57,7 +57,7 @@ bool GameObject::shouldCull(const Camera& camera) const
 {
     glm::vec3 val = position + camera.position;
     return (val.x + size.x < 0 || val.y + size.y < 0) // Upper-left culling
-        || (val.x - size.x > camera.size.h || val.y - size.y > camera.size.h); // Bottom-right culling
+        || (val.x - size.x > camera.size.w || val.y - size.y > camera.size.h); // Bottom-right culling
 }
 
 #endif
