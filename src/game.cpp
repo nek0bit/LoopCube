@@ -232,14 +232,15 @@ void Game::init(bool fullscreen = false) {
 
     SDL_StartTextInput();
 
-    // Initialize OpenGL options
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
     // Initialize SDL2 Window
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) == 0) {
+        // Initialize OpenGL options
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+        
         graphics.window = SDL_CreateWindow(title,
                                            SDL_WINDOWPOS_UNDEFINED,
                                            SDL_WINDOWPOS_UNDEFINED,
@@ -255,9 +256,7 @@ void Game::init(bool fullscreen = false) {
     
     // Initialize GLAD
     if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
-    {
         throw std::runtime_error("Failed to initialize GLAD");
-    }
 
     graphics.init();
 
