@@ -4,7 +4,7 @@
 // _ChunkDataSplit: For vertical chunks
 //***************************************
 _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
-                                 int& fd, bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk)
+                                 int& fd, bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk, GLuint shader)
     : loadPtr{loadPtr},
       loadDistance{loadDistance},
       loadedChunks{},
@@ -13,6 +13,7 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
       x{x},
       chunkReady{chunkReady},
       pendingChunk{pendingChunk},
+      shader{shader},
       isFdSet{isFdSet},
       fd{fd},
       isClient{true},
@@ -23,7 +24,7 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
 
 _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
                                  std::shared_ptr<ChunkGen> chunkGen, int& fd,
-                                 bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk)
+                                 bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk, GLuint shader)
     : loadPtr{loadPtr},
       loadDistance{loadDistance},
       loadedChunks{},
@@ -32,6 +33,7 @@ _ChunkDataSplit::_ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loa
       x{x},
       chunkReady{chunkReady},
       pendingChunk{pendingChunk},
+      shader{shader},
       isFdSet{isFdSet},
       fd{fd},
       isClient{false},
@@ -72,7 +74,7 @@ _ChunkDataSplit::checkGenerate(long int y,
         {
             // Generate the chunk
             data.insert({y, ChunkData{true, toInsert ? toInsert :
-                        std::make_shared<Chunk>(chunkGen, x, y)}});
+                        std::make_shared<Chunk>(shader, chunkGen, x, y)}});
             auto current = data.find(y);
 
             updateBorderedChunks(current, y);
@@ -193,10 +195,11 @@ void _ChunkDataSplit::prepareLoaded()
 // Handles most abstractions
 //***************************************************
 
-ChunkGroup::ChunkGroup()
+ChunkGroup::ChunkGroup(GLuint shader)
     : loadPtr{0, 0},
       loadDistance{constants::loadDistance},
       chunkReady{true},
+      shader{shader},
       pendingChunk{},
       isFdSet{false},
       fd{0},
@@ -209,10 +212,11 @@ ChunkGroup::ChunkGroup()
     updateLoaded();
 }
 
-ChunkGroup::ChunkGroup(std::shared_ptr<ChunkGen> chunkGen)
+ChunkGroup::ChunkGroup(std::shared_ptr<ChunkGen> chunkGen, GLuint shader)
     :  loadPtr{0, 0},
        loadDistance{constants::loadDistance},
        chunkReady{false},
+       shader{shader},
        pendingChunk{},
        isFdSet{false},
        fd{0},
@@ -324,7 +328,7 @@ void ChunkGroup::loadFromDeserialize(std::vector<unsigned char>& value, int star
         auto splitY = splitX->second;
 
         splitY->checkGenerate(resY,
-                              std::make_shared<Chunk>(nullptr, resX, resY),
+                              std::make_shared<Chunk>(shader, nullptr, resX, resY),
                               false);
         
         auto chunkAt = splitY->getData(resY);
@@ -368,13 +372,13 @@ ChunkGroup::checkSplitGenerate(long int x)
         if (isClient)
         {
             data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance,
-                                                              fd, isFdSet, chunkReady, pendingChunk)});
+                                                              fd, isFdSet, chunkReady, pendingChunk, shader)});
         }
         else
         {
             data.insert({x, std::make_shared<_ChunkDataSplit>(x, loadPtr, loadDistance,
                                                               chunkGen, fd, isFdSet, chunkReady,
-                                                              pendingChunk)});
+                                                              pendingChunk, shader)});
         }
         
         auto ret = data.find(x);

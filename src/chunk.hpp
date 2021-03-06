@@ -14,6 +14,8 @@
 #include "inventory.hpp"
 #include "size.hpp"
 #include "text.hpp"
+#include "model.hpp"
+#include "chunkmesh.hpp"
 #endif
 
 #include "block.hpp"
@@ -42,7 +44,7 @@ struct indPos
 
 struct Chunk
 {
-    Chunk(std::shared_ptr<ChunkGen> chunkGen, long int x, long int y);
+    Chunk(const GLuint shader, std::shared_ptr<ChunkGen> chunkGen, long int x, long int y);
     ~Chunk();
 
 #ifndef __HEADLESS
@@ -61,8 +63,9 @@ struct Chunk
 
     void updateBlockBorders(const int x, const int y, const bool recurseOnce = false);
 
+    // Generation
     void regenBlockBorders();
-
+    void generateChunkMesh();
     void generateChunk();
 
     // Common methods
@@ -95,5 +98,6 @@ private:
     void iterateFunctor(const Camera& camera, const std::function<void(Block&)> call) const;
 #endif
 
+    Model chunkMesh;
     std::shared_ptr<ChunkGen> chunkGen;
 };

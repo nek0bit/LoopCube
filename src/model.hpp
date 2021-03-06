@@ -14,12 +14,13 @@
 
 struct Model
 {
-    Model(const GLuint shader, const std::vector<Vertex>& vertices);
+    Model(const GLuint shader, const std::vector<Vertex>& vertices = {});
     Model(const Model&) = delete;
     Model(Model&& source);
     ~Model();
 
     void setupVertexLayout(const GLuint shader);
+    void setBufferData(const GLuint shader, const std::vector<Vertex>& vertices, const GLenum usage = GL_STATIC_DRAW);
     void draw(const GLint& uModel,
               const GLint& uTex,
               const glm::vec3& translate = {0.0f, 0.0f, 0.0f},

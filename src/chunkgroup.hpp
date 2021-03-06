@@ -41,10 +41,10 @@ struct ChunkData
 struct _ChunkDataSplit
 {
     _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
-                    int& fd, bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk);
+                    int& fd, bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk, GLuint shader);
     _ChunkDataSplit(long int x, LoadPtr& loadPtr, LoadDistance& loadDistance,
                     std::shared_ptr<ChunkGen> chunkGen, int& fd,
-                    bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk);
+                    bool& isFdSet, bool& chunkReady, ChunkPos& pendingChunk, GLuint shader);
     ~_ChunkDataSplit();
 
     void updateLoaded();
@@ -73,6 +73,7 @@ struct _ChunkDataSplit
     bool& chunkReady;
     ChunkPos& pendingChunk;
 private:
+    GLuint shader;
     bool& isFdSet;
     int& fd;
     bool isClient;
@@ -85,8 +86,8 @@ private:
 
 struct ChunkGroup
 {
-    ChunkGroup();
-    ChunkGroup(std::shared_ptr<ChunkGen> chunkGen);
+    ChunkGroup(GLuint shader = 0);
+    ChunkGroup(std::shared_ptr<ChunkGen> chunkGen, GLuint shader = 0);
     ~ChunkGroup();
 
 #ifndef __HEADLESS
@@ -107,6 +108,7 @@ struct ChunkGroup
     LoadDistance& loadDistance;
     bool chunkReady;
 private:
+    GLuint shader;
     ChunkPos pendingChunk;
     bool isFdSet;
     int fd;

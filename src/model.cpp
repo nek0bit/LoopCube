@@ -8,13 +8,8 @@ Model::Model(const GLuint shader, const std::vector<Vertex>& vertices)
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
 
-    // Bind both values
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    
-    size = vertices.size();
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-    setupVertexLayout(shader);
+    if (vertices.size() > 0)
+        setBufferData(shader, vertices);
 }
 
 Model::~Model()
@@ -34,6 +29,17 @@ Model::Model(Model&& source)
     source.vao = 0;
     source.vbo = 0;
     source.size = 0;
+}
+
+void Model::setBufferData(const GLuint shader, const std::vector<Vertex>& vertices, const GLenum usage)
+{
+    // Bind both values
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    
+    size = vertices.size(); // Used for glDrawArrays size
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], usage);
+    setupVertexLayout(shader);
 }
 
 void Model::setupVertexLayout(const GLuint shader)

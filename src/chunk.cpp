@@ -1,12 +1,13 @@
 #include "chunk.hpp"
 
-Chunk::Chunk(std::shared_ptr<ChunkGen> chunkGen, long int x, long int y)
+Chunk::Chunk(const GLuint shader, std::shared_ptr<ChunkGen> chunkGen, long int x, long int y)
     : x{x},
       y{y},
       MAX_WIDTH{static_cast<unsigned>(constants::chunkWidth)},
       MAX_HEIGHT{static_cast<unsigned>(constants::chunkHeight)},
       data{},
       borders{nullptr, nullptr, nullptr, nullptr},
+      chunkMesh{shader},
       chunkGen{chunkGen}
 {
     data.resize(MAX_WIDTH*MAX_HEIGHT, nullptr);
@@ -329,6 +330,11 @@ indPos Chunk::indexToPos(const size_t index) const
     uint16_t y = std::floor(index / constants::chunkWidth);
 
     return {x, y};
+}
+
+void Chunk::generateChunkMesh()
+{
+    ChunkMesh::mutableGenerateChunkMesh(chunkMesh, x, y);
 }
 
 void Chunk::generateChunk()
