@@ -46,8 +46,8 @@ struct SelectInfo
 
 struct GameClient
 {
-    GameClient(Timer& timer, WinSize& winSize);
-    GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize);
+    GameClient(const GLuint shader, Timer& timer, WinSize& winSize);
+    GameClient(const GLuint shader, std::string address, uint16_t port, Timer& timer, WinSize& winSize);
     ~GameClient();
 
     void update(Camera& camera, EventWrapper& events);

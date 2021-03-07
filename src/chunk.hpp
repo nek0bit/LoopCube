@@ -54,6 +54,7 @@ struct Chunk
     void renderInfo(const Graphics& graphics, const Camera& camera) const;
     void renderAllShadows(const Graphics& graphics, const Camera& camera) const;
     void renderAllBlocks(const Graphics& graphics, const Camera& camera) const;
+    void renderChunk(const Graphics& graphics, const Camera& camera) const;
 #endif
 
     // Block modification
@@ -96,8 +97,10 @@ private:
     bool chunkInView(const Camera& camera) const;
     SDL_Rect getChunkRect(const Camera& camera) const;
     void iterateFunctor(const Camera& camera, const std::function<void(Block&)> call) const;
-#endif
-
+    
     Model chunkMesh;
+#endif
+    
+    GLuint shader;
     std::shared_ptr<ChunkGen> chunkGen;
 };

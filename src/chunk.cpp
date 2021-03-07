@@ -77,6 +77,19 @@ void Chunk::renderAllBlocks(const Graphics& graphics, const Camera& camera) cons
         blk.render(graphics, camera);
     });
 }
+
+void Chunk::renderChunk(const Graphics& graphics, const Camera& camera) const
+{
+    if (chunkInView(camera))
+    {
+        graphics.textures.getTexture(TEXTURE_MOON_BLOCK)->bind();
+        chunkMesh.draw(graphics.uniforms.model, graphics.uniforms.tex, {
+                static_cast<float>(x * constants::blockW * constants::chunkWidth),
+                static_cast<float>(y * constants::blockH * constants::chunkHeight),
+                0.0f
+            });
+    }
+}
 #endif
 
 // Does checking, Slower (but not by that much)
@@ -122,37 +135,13 @@ void Chunk::updateBlockBorders(const int x, const int y, const bool recurseOnce)
         * top = getBorderBlock(x, y - 1),
         * bottom = getBorderBlock(x, y + 1),
         * center = getBorderBlock(x, y);
-        
-    // Enjoy this ugly bit of code :)
-    // TODO use bitmasks here (would clean this up A LOT)
     
-    // None on all sides
-    if (!left && !right && !bottom && !top && center) center->typeX = 15;
-
-    // On all sides
-    if ( left &&  right &&  bottom &&  top && center) center->typeX = 4;
-
-    // One on each side
-    if ( left && !right && !bottom && !top && center) center->typeX = 13;
-    if (!left &&  right && !bottom && !top && center) center->typeX = 11;
-    if (!left && !right &&  bottom && !top && center) center->typeX = 12;
-    if (!left && !right && !bottom &&  top && center) center->typeX = 14;
-
-    // On opposite sides
-    if ( left &&  right && !bottom && !top && center) center->typeX = 10;
-    if (!left && !right &&  bottom &&  top && center) center->typeX = 9;
-
-    // On corners/adjacent sides
-    if ( left && !right && !bottom &&  top && center) center->typeX = 8;
-    if ( left && !right &&  bottom && !top && center) center->typeX = 2;
-    if (!left &&  right && !bottom &&  top && center) center->typeX = 6;
-    if (!left &&  right &&  bottom && !top && center) center->typeX = 0;
-
-    // All but one side
-    if (!left &&  right &&  bottom &&  top && center) center->typeX = 3;
-    if ( left && !right &&  bottom &&  top && center) center->typeX = 5;
-    if ( left &&  right && !bottom &&  top && center) center->typeX = 7;
-    if ( left &&  right &&  bottom && !top && center) center->typeX = 1;
+    const uint8_t bitAtlas = 0 | static_cast<bool>(bottom) |
+        (static_cast<bool>(left) << 1) |
+        (static_cast<bool>(right) << 2) |
+        (static_cast<bool>(top) << 3);
+    
+    if (center) center->typeX = bitAtlas;
 
     // Sorry for the repetition, im lazy
 #ifndef __HEADLESS
@@ -167,16 +156,28 @@ void Chunk::updateBlockBorders(const int x, const int y, const bool recurseOnce)
     {
         // Go around each block and update it once more
         if (x - 1 != -1) updateBlockBorders(x - 1, y, false);
-        else if (borders.left) borders.left->updateBlockBorders(x - 1 + constants::chunkWidth, y, false);
+        else if (borders.left) {
+            borders.left->updateBlockBorders(x - 1 + constants::chunkWidth, y, false);
+            borders.left->generateChunkMesh();
+        }
 
         if (x + 1 != constants::chunkWidth) updateBlockBorders(x + 1, y, false);
-        else if (borders.right) borders.right->updateBlockBorders(0, y, false);
+        else if (borders.right) {
+            borders.right->updateBlockBorders(0, y, false);
+            borders.right->generateChunkMesh();
+        }
 
         if (y - 1 != -1) updateBlockBorders(x, y - 1, false);
-        else if (borders.top) borders.top->updateBlockBorders(x, y - 1 + constants::chunkHeight, false);
+        else if (borders.top) {
+            borders.top->updateBlockBorders(x, y - 1 + constants::chunkHeight, false);
+            borders.top->generateChunkMesh();
+        }
 
         if (y + 1 != constants::chunkHeight) updateBlockBorders(x, y + 1, false);
-        else if (borders.bottom) borders.bottom->updateBlockBorders(x, 0, false);
+        else if (borders.bottom) {
+            borders.bottom->updateBlockBorders(x, 0, false);
+            borders.bottom->generateChunkMesh();
+        }
     }
 }
 
@@ -318,6 +319,9 @@ void Chunk::deserialize(std::vector<unsigned char>& value, bool ignoreFirstByte)
             at += idSize+1; /* + otherSizes */
             bl++;
         }
+
+        
+        generateChunkMesh();
     } // Lets catch anything here incase of malicious attempts
     catch (const std::exception& err) {
         std::cout << "Chunk Error: " << err.what() << std::endl;
@@ -334,7 +338,7 @@ indPos Chunk::indexToPos(const size_t index) const
 
 void Chunk::generateChunkMesh()
 {
-    ChunkMesh::mutableGenerateChunkMesh(chunkMesh, x, y);
+    ChunkMesh::mutableGenerateChunkMesh(chunkMesh, data, x, y);
 }
 
 void Chunk::generateChunk()
@@ -342,7 +346,7 @@ void Chunk::generateChunk()
     if (chunkGen != nullptr)
     {
         chunkGen->generateChunk([&](unsigned id, unsigned x, unsigned y)->void {
-            placeBlock(id, x, y);
+            placeBlockFast(id, x, y);
         }, x, y, MAX_WIDTH, MAX_HEIGHT);
     }
 }
@@ -354,9 +358,20 @@ void Chunk::regenBlockBorders()
     {
         for (unsigned j = 0; j < static_cast<unsigned>(constants::chunkHeight); ++j)
         {
-            if (data.at(posToIndex(i, j)) != nullptr) updateBlockBorders(i, j, false);
+            if (data.at(posToIndex(i, j)) != nullptr)
+            {
+                updateBlockBorders(i, j, false);
+            }
         }
     }
+
+    // Lazily update each chunkMesh
+    if (borders.left) borders.left->generateChunkMesh();
+    if (borders.right) borders.right->generateChunkMesh();
+    if (borders.top) borders.top->generateChunkMesh();
+    if (borders.bottom) borders.bottom->generateChunkMesh();
+    
+    generateChunkMesh();
 }
 
 long int Chunk::getChunkX(const int x) const
@@ -378,15 +393,14 @@ size_t Chunk::posToIndex(const unsigned int x, const unsigned int y) const
 bool Chunk::chunkInView(const Camera& camera) const
 {
     // Disable culling temporarily
-//    SDL_Rect windowRect{0, 0, camera.size.w, camera.size.h};
-//    return Generic::collision(getChunkRect(camera), windowRect);
-    return true;
+    SDL_Rect windowRect{(int)camera.position.x, (int)camera.position.y, camera.size.w, camera.size.h};
+    return Generic::collision(getChunkRect(camera), windowRect);
 }
 
 SDL_Rect Chunk::getChunkRect(const Camera& camera) const
 {
-    return SDL_Rect{static_cast<int>(getChunkX() * constants::blockW + camera.position.x),
-        static_cast<int>(getChunkY() * constants::blockH + camera.position.y),
+    return SDL_Rect{static_cast<int>(getChunkX() * constants::blockW),
+        static_cast<int>(getChunkY() * constants::blockH),
         static_cast<int>(MAX_WIDTH * constants::blockW),
         static_cast<int>(MAX_HEIGHT * constants::blockH)};
 }

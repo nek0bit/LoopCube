@@ -3,13 +3,14 @@
 Model::Model(const GLuint shader, const std::vector<Vertex>& vertices)
     : vao{0},
       vbo{0},
-      size{0}
+      size{0},
+      shader{shader}
 {
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
 
     if (vertices.size() > 0)
-        setBufferData(shader, vertices);
+        setBufferData(vertices);
 }
 
 Model::~Model()
@@ -20,18 +21,18 @@ Model::~Model()
 
 // Move
 Model::Model(Model&& source)
+    : vao{source.vao},
+      vbo{source.vbo},
+      size{source.size},
+      shader{source.shader}
 {
-    vao = source.vao;
-    vbo = source.vbo;
-    size = source.size;
-
     // Sets source to 0 (glDeleteBuffers/VertexArrays ignores 0)
     source.vao = 0;
     source.vbo = 0;
     source.size = 0;
 }
 
-void Model::setBufferData(const GLuint shader, const std::vector<Vertex>& vertices, const GLenum usage)
+void Model::setBufferData(const std::vector<Vertex>& vertices, const GLenum usage)
 {
     // Bind both values
     glBindVertexArray(vao);
@@ -39,10 +40,10 @@ void Model::setBufferData(const GLuint shader, const std::vector<Vertex>& vertic
     
     size = vertices.size(); // Used for glDrawArrays size
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], usage);
-    setupVertexLayout(shader);
+    setupVertexLayout();
 }
 
-void Model::setupVertexLayout(const GLuint shader)
+void Model::setupVertexLayout()
 {
     constexpr uint8_t Stride = sizeof(Vertex);
     constexpr uint8_t positionSize = 3;
@@ -78,6 +79,6 @@ void Model::draw(const GLint& uModel,
     
     glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(model));
     glUniform2fv(uTex, 1, glm::value_ptr(texturePos));
-    
+
     glDrawArrays(GL_TRIANGLES, 0, size);
 }

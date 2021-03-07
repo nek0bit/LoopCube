@@ -168,7 +168,7 @@ void Game::update()
                         std::string address = argv[1];
                         uint16_t port = std::stoi(std::string(argv[2]));
                         
-                        game = std::make_shared<GameClient>(address, port, timer, winSize);
+                        game = std::make_shared<GameClient>(graphics.shader, address, port, timer, winSize);
                     }
                     catch (const std::invalid_argument& err)
                     {
@@ -185,7 +185,7 @@ void Game::update()
                 }
                 else
                 {
-                    game = std::make_shared<GameClient>(timer, winSize);
+                    game = std::make_shared<GameClient>(graphics.shader, timer, winSize);
                 }
                 // Let's pre-load a frame so everything can generate and render
                 // This may need to change depending on world generation in the future

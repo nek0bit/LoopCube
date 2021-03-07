@@ -34,7 +34,8 @@ struct GameObject
 
     glm::vec3 position;
     glm::vec3 size;
+
+    int modelId, textureId;
 protected:
-	int modelId, textureId;
     SDL_Rect src; // Deprecated
 };

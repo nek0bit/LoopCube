@@ -1,13 +1,13 @@
 #include "gameclient.hpp"
 
-GameClient::GameClient(Timer& timer, WinSize& winSize)
+GameClient::GameClient(const GLuint shader, Timer& timer, WinSize& winSize)
     : exit{false},
       server{nullptr},
       clientSocket{nullptr},
       disconnectCallback{},
       winSize{winSize},
       serverPlayers{},
-      serverChunks{},
+      serverChunks{shader},
       mainPlayer{},
       entities{},
       fade{60},
@@ -43,14 +43,14 @@ GameClient::GameClient(Timer& timer, WinSize& winSize)
     init();
 }
 
-GameClient::GameClient(std::string address, uint16_t port, Timer& timer, WinSize& winSize)
+GameClient::GameClient(const GLuint shader, std::string address, uint16_t port, Timer& timer, WinSize& winSize)
     : exit{false},
       server{nullptr},
       clientSocket{nullptr},
       serverThread{},
       winSize{winSize},
       serverPlayers{},
-      serverChunks{},
+      serverChunks{shader},
       mainPlayer{},
       entities{},
       fade{60},
@@ -245,6 +245,8 @@ void GameClient::mouseEvents(Camera& camera, EventWrapper& events)
             
             // Check if block found
             if (block != nullptr) {
+                // Regenerate chunk mesh
+                chunk->generateChunkMesh();
                 // Send request to destroy block on server side
                 Api::sendDestroyBlock(clientSocket->fd, chunkX, chunkY, withinX, withinY);
                 // Generate particles
@@ -275,6 +277,7 @@ void GameClient::mouseEvents(Camera& camera, EventWrapper& events)
             //item.addCount(-1);
             
             if (chunk->placeBlock(0, withinX, withinY)) {
+                chunk->generateChunkMesh();
                 Api::sendPlaceBlock(clientSocket->fd, 0, chunkX, chunkY, withinX, withinY);
             }
         }
@@ -316,9 +319,10 @@ void GameClient::handleCamera(Camera& camera)
 	float amount = 15.0f;
 	moveX += (x - moveX) * amount * timer.deltaTime;
 	moveY += (y - moveY) * amount * timer.deltaTime;
-	
-    camera.position.x = -moveX;
-    camera.position.y = -moveY;
-    camera.center.x = -moveX;
-    camera.center.y = -moveY;
+
+    // Rounded since screen is in pixels and makes things look less blurry
+    camera.position.x = -static_cast<int>(moveX);
+    camera.position.y = -static_cast<int>(moveY);
+    camera.center.x = -static_cast<int>(moveX);
+    camera.center.y = -static_cast<int>(moveY);
 }

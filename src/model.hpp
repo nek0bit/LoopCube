@@ -19,14 +19,15 @@ struct Model
     Model(Model&& source);
     ~Model();
 
-    void setupVertexLayout(const GLuint shader);
-    void setBufferData(const GLuint shader, const std::vector<Vertex>& vertices, const GLenum usage = GL_STATIC_DRAW);
+    void setupVertexLayout();
+    void setBufferData(const std::vector<Vertex>& vertices, const GLenum usage = GL_STATIC_DRAW);
     void draw(const GLint& uModel,
               const GLint& uTex,
-              const glm::vec3& translate = {0.0f, 0.0f, 0.0f},
-              const glm::vec3& scale = {0.0f, 0.0f, 0.0f},
+              const glm::vec3& translate = {1.0f, 1.0f, 1.0f},
+              const glm::vec3& scale = {1.0f, 1.0f, 1.0f},
               const glm::vec2& texturePos = {1.0f, 1.0f}) const noexcept;
 
     GLuint vao, vbo;
     uint16_t size;
+    const GLuint shader;
 };

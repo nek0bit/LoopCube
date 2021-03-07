@@ -139,6 +139,7 @@ void _ChunkDataSplit::updateBorderedChunks(std::unordered_map<long int,
             chunkLeft->borders.right = newChunk;
             chunkLeft->regenBlockBorders();
             newChunk->borders.left = chunkLeft;
+            newChunk->regenBlockBorders();
         }
     }
 
@@ -150,6 +151,7 @@ void _ChunkDataSplit::updateBorderedChunks(std::unordered_map<long int,
             chunkRight->borders.left = newChunk;
             chunkRight->regenBlockBorders();
             newChunk->borders.right = chunkRight;
+            newChunk->regenBlockBorders();
         }
     }
 }
@@ -172,7 +174,7 @@ void _ChunkDataSplit::renderSplit(const Graphics& graphics, const Camera& camera
 {
     for (auto& chunk: loadedChunks)
     {
-        if (chunk != nullptr) chunk->renderAllBlocks(graphics, camera);
+        if (chunk != nullptr) chunk->renderChunk(graphics, camera);
     }
 }
 #endif
