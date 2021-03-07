@@ -17,7 +17,7 @@ struct Model
     Model(const GLuint shader, const std::vector<Vertex>& vertices = {});
     Model(const Model&) = delete;
     Model(Model&& source);
-    ~Model();
+    virtual ~Model();
 
     void setupVertexLayout();
     void setBufferData(const std::vector<Vertex>& vertices, const GLenum usage = GL_STATIC_DRAW);
