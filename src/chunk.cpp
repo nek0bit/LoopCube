@@ -60,24 +60,6 @@ void Chunk::renderInfo(const Graphics& graphics, const Camera& camera) const
     }
 }
 
-// Note: I don't recommend this function as it's unoptimized and doesn't cull properly
-// so it basically multiplies the amount of render calls
-// If only SDL had a feature to mesh multiple blocks together :(
-// I think its possible with textures but it would take up a bit of memory
-void Chunk::renderAllShadows(const Graphics& graphics, const Camera& camera) const
-{
-    iterateFunctor(camera, [&](Block& blk) {
-        blk.renderShadow(graphics, camera);
-    });
-}
-
-void Chunk::renderAllBlocks(const Graphics& graphics, const Camera& camera) const
-{
-    iterateFunctor(camera, [&](Block& blk) {
-        blk.render(graphics, camera);
-    });
-}
-
 void Chunk::renderChunk(const Graphics& graphics, const Camera& camera) const
 {
     if (chunkInView(camera))
@@ -392,9 +374,17 @@ size_t Chunk::posToIndex(const unsigned int x, const unsigned int y) const
 #ifndef __HEADLESS
 bool Chunk::chunkInView(const Camera& camera) const
 {
-    // Disable culling temporarily
-    SDL_Rect windowRect{(int)camera.position.x, (int)camera.position.y, camera.size.w, camera.size.h};
-    return Generic::collision(getChunkRect(camera), windowRect);
+    constexpr int CHUNK_R_WIDTH = constants::chunkWidth * constants::blockW;
+    constexpr int CHUNK_R_HEIGHT = constants::chunkWidth * constants::blockW;
+    
+    if (x * CHUNK_R_WIDTH + CHUNK_R_WIDTH > camera.position.x &&
+        y * CHUNK_R_HEIGHT + CHUNK_R_HEIGHT > camera.position.y &&
+        x * CHUNK_R_WIDTH - camera.size.w < camera.position.x &&
+        y * CHUNK_R_HEIGHT - camera.size.h < camera.position.y)
+    {
+        return true;
+    }
+    return false;
 }
 
 SDL_Rect Chunk::getChunkRect(const Camera& camera) const

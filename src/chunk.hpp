@@ -52,8 +52,6 @@ struct Chunk
 
     // Renderer
     void renderInfo(const Graphics& graphics, const Camera& camera) const;
-    void renderAllShadows(const Graphics& graphics, const Camera& camera) const;
-    void renderAllBlocks(const Graphics& graphics, const Camera& camera) const;
     void renderChunk(const Graphics& graphics, const Camera& camera) const;
 #endif
 
