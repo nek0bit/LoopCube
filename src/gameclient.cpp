@@ -15,7 +15,8 @@ GameClient::GameClient(const GLuint shader, Timer& timer, WinSize& winSize)
       particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
       timer{timer},
-      background{std::make_shared<BackgroundOverworld>()}
+      background{std::make_shared<BackgroundOverworld>()},
+      test{shader}
 {    
     try
     {
@@ -58,7 +59,8 @@ GameClient::GameClient(const GLuint shader, std::string address, uint16_t port, 
       particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
       timer{timer},
-      background{std::make_shared<BackgroundOverworld>()}
+      background{std::make_shared<BackgroundOverworld>()},
+      test{shader}
 {
     clientSocket = std::make_shared<ClientSocket>(address.c_str(), port);
     serverChunks.setFd(clientSocket->fd);
@@ -80,6 +82,23 @@ void GameClient::init()
         exit = true;
         std::cout << "[Debug] Connection closed" << std::endl;
     };
+
+    test.setBufferData({
+            {{0.0f, 42.0f, 0.0f},  {0.0f, 0.0f}},
+            {{42.0f, 42.0f, 0.0f},  {1.0f, 0.0f}},
+            {{42.0f, 0.0f, 0.0f},  {1.0f, 1.0f}},
+            
+            {{42.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
+            {{0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+            {{0.0f, 42.0f, 0.0f}, {0.0f, 0.0f}}
+        });
+
+    test.setInstanceData({
+            {{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+            {{20.0f, 20.0f, 1.0f}, {0.0f, 0.0f}},
+            {{40.0f, 40.0f, 1.0f}, {0.0f, 0.0f}},
+            {{60.0f, 60.0f, 1.0f}, {0.0f, 0.0f}},
+        });
 }
 
 void GameClient::serverThreadFunction()
@@ -181,14 +200,18 @@ void GameClient::update(Camera& camera, EventWrapper& events)
 void GameClient::render(Graphics& graphics, EventWrapper& events) const
 {
     if (background) background->render(graphics);
-    
+
+    // Draw chunks
     serverChunks.render(graphics, graphics.camera);
 
+    // Draw other players
     serverPlayers.renderPlayers(graphics, graphics.camera);
 
+    // Draw this player
     mainPlayer.render(graphics, graphics.camera);
 
     // Draw particles
+    // TODO instanced particles
     if (constants::config.getInt(CONFIG_SHOW_PARTICLES))
     {
         for (auto& particle: particles)
@@ -197,6 +220,10 @@ void GameClient::render(Graphics& graphics, EventWrapper& events) const
         }
     }
 
+    graphics.textures.getTexture(TEXTURE_PLAYER)->bind();
+    test.drawInstanced(graphics.uniforms.model, graphics.uniforms.tex);
+
+    // Draw the selection box for where we are hovering
     drawSelection(graphics, getSelection(graphics.camera, events));
 }
 

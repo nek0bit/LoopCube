@@ -37,6 +37,7 @@
 #include "time.hpp"
 #include "timer.hpp"
 #include "player_group.hpp"
+#include "instancedmodel.hpp"
 
 struct SelectInfo
 {
@@ -90,4 +91,6 @@ private:
     Timer& timer;
 
     std::shared_ptr<Background> background;
+
+    InstancedModel test;
 };

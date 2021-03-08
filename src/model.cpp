@@ -51,7 +51,7 @@ void Model::setupVertexLayout()
     constexpr uint8_t texCoordSize = 2;
     const GLuint positionAttribute = glGetAttribLocation(shader, "position");
     const GLuint texCoordAttribute = glGetAttribLocation(shader, "texCoord");
-
+    
     // Position
     // InputAttrib - valSize - Type - shouldNormalize - Stride - Offset
     glVertexAttribPointer(positionAttribute, positionSize, GL_FLOAT, GL_FALSE, Stride, 0);

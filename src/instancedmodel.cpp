@@ -3,16 +3,16 @@
 InstancedModel::InstancedModel(const GLuint shader, const std::vector<Vertex>& vertices)
     : Model{shader, vertices},
       positionBuffer{0},
-      textureBuffer{0}
+      textureBuffer{0},
+      instanceSize{0}
 {
+    glBindVertexArray(vao);
     glGenBuffers(1, &positionBuffer);
-
 }
 
 InstancedModel::~InstancedModel()
 {
     glDeleteBuffers(1, &positionBuffer);
-    glDeleteBuffers(1, &textureBuffer);
 }
 
 void InstancedModel::setInstanceData(const std::vector<Vertex>& instances)
@@ -21,26 +21,34 @@ void InstancedModel::setInstanceData(const std::vector<Vertex>& instances)
     constexpr uint8_t positionSize = 3;
     constexpr uint8_t texCoordOffset = sizeof(glm::vec3); // First element in struct
     constexpr uint8_t texCoordSize = 2;    
-    const GLuint positionAttribute = glGetAttribLocation(shader, "position");
-    const GLuint texCoordAttribute = glGetAttribLocation(shader, "texCoord");
+    const GLuint positionAttribute = glGetAttribLocation(shader, "instanceTrans");
+    //const GLuint texCoordAttribute = glGetAttribLocation(shader, "texCoord");
 
     glBindVertexArray(vao);
+    instanceSize = instances.size();
     glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * instances.size(), &instances[0], GL_STREAM_DRAW);
 
-    glEnableVertexAttribArray(positionAttribute);
-    glEnableVertexAttribArray(texCoordAttribute);
-
     glVertexAttribPointer(positionAttribute, positionSize, GL_FLOAT, GL_FALSE, Stride, 0);
-    glVertexAttribPointer(texCoordAttribute, texCoordSize, GL_FLOAT, GL_FALSE, Stride, (void*)(texCoordOffset));
+    //glVertexAttribPointer(texCoordAttribute, texCoordSize, GL_FLOAT, GL_FALSE, Stride, (void*)(texCoordOffset));
+    
+    glEnableVertexAttribArray(positionAttribute);
+    //glEnableVertexAttribArray(texCoordAttribute);
 
-    glVertexAttribDivisor(0, 0);
-    glVertexAttribDivisor(1, 1);
+    glVertexAttribDivisor(positionAttribute, 1);
 }
 
-void InstancedModel::draw(const int amount)
+void InstancedModel::drawInstanced(const GLint& uModel,
+                                   const GLint& uTex) const
 {
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, amount);
+
+    glm::mat4 model{1.0f};
+    glm::vec2 tex{1.0f, 1.0f};
+    
+    glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(model));
+    glUniform2fv(uTex, 1, glm::value_ptr(tex));
+    
+    glDrawArraysInstanced(GL_TRIANGLES, 0, size, instanceSize);
 }

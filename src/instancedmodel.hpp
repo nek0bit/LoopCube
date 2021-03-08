@@ -7,9 +7,10 @@ struct InstancedModel: public Model
     ~InstancedModel();
 
     void setInstanceData(const std::vector<Vertex>& instances = {});
-    void draw(const int amount);
+    void drawInstanced(const GLint& uModel,
+                       const GLint& uTex) const;
 
     GLuint positionBuffer;
     GLuint textureBuffer;
-    size_t instanceSize;
+    GLuint instanceSize;
 };
