@@ -1,10 +1,11 @@
 #include "timer.hpp"
 
 Timer::Timer(const int FPS)
-    : FPS{0},
+    : fps{0},
       deltaTime{},
       lastFrame{},
-      currFrame{}
+      currFrame{},
+      FPS{0}
 {
     setFPS(FPS);
     lastFrame = std::chrono::high_resolution_clock::now().time_since_epoch();
@@ -13,6 +14,11 @@ Timer::Timer(const int FPS)
 void Timer::setFPS(const int FPS) noexcept
 {
     this->FPS = 1000 / FPS;
+}
+
+void Timer::calcFPS() noexcept
+{
+    fps = 1.0f / deltaTime;
 }
 
 void Timer::setTime()

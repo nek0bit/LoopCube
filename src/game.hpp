@@ -38,6 +38,8 @@ struct Game
 
 	void init(bool fullscreen);
 	void gameInit();
+    void handleFPS();
+    void updateTitle();
 	void eventHandler();
 	void render();
 	void update();
@@ -45,6 +47,7 @@ struct Game
 
     bool isRunning = false;
 private:
+    double tickTime;
     void createModels();
     int argc;
     char** argv;

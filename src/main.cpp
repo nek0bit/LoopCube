@@ -15,6 +15,8 @@ void gameLoop(int argc, char* argv[]) {
         
         int calc = timer.calcSleep();
         if (calc > 0) std::this_thread::sleep_for(std::chrono::milliseconds(timer.calcSleep()));
+
+        timer.calcFPS();
 	}
 		
 	game.free();

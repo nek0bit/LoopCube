@@ -16,8 +16,13 @@ struct Timer
             return std::floor(FPS - deltaTime);
         }
 
-    double FPS;
+    void calcFPS() noexcept;
+
+    double fps;
+    
     double deltaTime;
     std::chrono::high_resolution_clock::duration lastFrame;
     std::chrono::high_resolution_clock::duration currFrame;
+private:
+    double FPS;
 };

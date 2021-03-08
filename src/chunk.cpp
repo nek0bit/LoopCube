@@ -76,7 +76,6 @@ void Chunk::renderChunk(const Graphics& graphics, const Camera& camera) const
 
 std::vector<Block*> Chunk::isWithinBlocks(const glm::vec2& vec, const glm::vec2& size) const
 {
-    // TODO clean this up maybe?
     int posX = static_cast<int>((vec.x - (x * constants::chunkWidth * constants::blockW)) /
                                 constants::blockW);
     int posY = static_cast<int>((vec.y - (y * constants::chunkHeight * constants::blockH)) /

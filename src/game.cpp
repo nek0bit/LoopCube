@@ -27,6 +27,8 @@ Game::~Game()
 // Initiates Game objects
 void Game::gameInit()
 {
+    updateTitle();
+    
 	// Setup config
 	constants::config.set(CONFIG_SHOW_SHADOWS, true);
 	constants::config.set(CONFIG_SHOW_PARTICLES, true);
@@ -41,7 +43,6 @@ void Game::gameInit()
 	menu = std::make_shared<Menu>(graphics, events, timer, winSize);
     
     createModels();
-
 }
 
 void Game::createModels()
@@ -117,10 +118,30 @@ void Game::render() {
     SDL_GL_SwapWindow(graphics.window);
 }
 
+void Game::handleFPS()
+{
+    tickTime += timer.deltaTime;
+    
+    if (static_cast<int>(tickTime) % 10)
+    {
+        updateTitle();
+        tickTime = 0;
+    }
+}
+
+void Game::updateTitle()
+{
+    using namespace std::string_literals;
+    
+    std::string title = "LoopCube ["s + std::to_string(static_cast<int>(timer.fps)) + " fps]";
+    if (graphics.window != nullptr) SDL_SetWindowTitle(graphics.window, title.c_str());
+}
 
 // Game related loop stuff
 void Game::update()
 {
+    handleFPS();
+    
     // Update screen size
     SDL_GetWindowSize(graphics.window, &winSize.w, &winSize.h);
     
@@ -228,9 +249,6 @@ void Game::init(bool fullscreen = false) {
     if (fullscreen) win_flags |= SDL_WINDOW_FULLSCREEN;
     win_flags |= SDL_WINDOW_RESIZABLE;
     
-    //rend_flags = rend_flags | SDL_RENDERER_ACCELERATED;
-    //rend_flags = rend_flags | SDL_RENDERER_PRESENTVSYNC;	
-
     SDL_StartTextInput();
 
 
@@ -258,6 +276,9 @@ void Game::init(bool fullscreen = false) {
     // Initialize GLAD
     if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
         throw std::runtime_error("Failed to initialize GLAD");
+
+    // Disable VSYNC
+    SDL_GL_SetSwapInterval(0);
 
     graphics.init();
 
