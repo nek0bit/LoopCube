@@ -74,6 +74,33 @@ void Chunk::renderChunk(const Graphics& graphics, const Camera& camera) const
 }
 #endif
 
+std::vector<Block*> Chunk::isWithinBlocks(const glm::vec2& vec, const glm::vec2& size) const
+{
+    // TODO clean this up maybe?
+    int posX = static_cast<int>((vec.x - (x * constants::chunkWidth * constants::blockW)) /
+                                constants::blockW);
+    int posY = static_cast<int>((vec.y - (y * constants::chunkHeight * constants::blockH)) /
+                                constants::blockH);    
+
+    GridCollision_t col = Generic::gridCollision(constants::blockW, constants::blockH, vec, size);
+    
+    std::vector<Block*> bl{};
+
+    for (size_t i = 0; i < col.width + 1; ++i)
+    {
+        for (size_t j = 0; j < col.height + 1; ++j)
+        {
+            try
+            {
+                bl.emplace_back(data.at(posToIndex(posX + i, posY + j)).get());
+            }
+            catch (const std::out_of_range& err) {}
+        }
+    }
+
+    return bl;
+}
+
 // Does checking, Slower (but not by that much)
 bool Chunk::placeBlock(unsigned int id, unsigned int x, unsigned int y)
 {

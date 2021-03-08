@@ -62,6 +62,8 @@ struct Chunk
 
     void updateBlockBorders(const int x, const int y, const bool recurseOnce = false);
 
+    std::vector<Block*> isWithinBlocks(const glm::vec2& vec, const glm::vec2& size) const;
+
     // Generation
     void regenBlockBorders();
     void generateChunkMesh();

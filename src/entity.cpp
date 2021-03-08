@@ -44,23 +44,25 @@ void Entity::collisionTop() {}
 
 CollisionInfo Entity::checkBlockCollision(const ChunkGroup& chunks) const
 {
-    // TODO optimize entity position to work within blocks instead of chunks
-    // It's 100% easy and possible and should optimize a lot
-
     std::vector<Chunk*> inChunks = chunks.isWithinChunks(position, size);
 
+    GridCollision_t col = Generic::gridCollision(constants::blockW,
+                                                 constants::blockH,
+                                                 position, size);
+    
     for (auto& chunk: inChunks)
     {
         if (chunk == nullptr) continue;
-        t_blockCollection& data = chunk->data;
-        
-        for (auto& block: data) {
+
+        std::vector<Block*> blocks = chunk->isWithinBlocks(position, size);
+
+        for (auto& block: blocks) {
             if (block == nullptr) continue;
             
             auto blockinfo = block->blockinfo;
             CollisionInfo info = isColliding(*block);
             
-            while (info == true && blockinfo->noCollision != true) {
+            if (info == true && blockinfo->noCollision != true) {
                 return info;
             }
         }
