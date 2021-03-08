@@ -38,6 +38,7 @@
 #include "timer.hpp"
 #include "player_group.hpp"
 #include "instancedmodel.hpp"
+#include "particlegroup.hpp"
 
 struct SelectInfo
 {
@@ -70,7 +71,6 @@ private:
     void serverThreadFunction();
     void drawSelection(const Graphics& graphics, const SelectInfo pos) const;
     void handleCamera(Camera& camera);
-    void deadParticles();
     void mouseEvents(Camera& camera, EventWrapper& events);
 
     PlayerGroup serverPlayers;
@@ -85,12 +85,11 @@ private:
     Animation fade;
     Animation playerPosUpdate;
 
-    std::vector<GravityParticle> particles;
-
     Time time;
     Timer& timer;
 
     std::shared_ptr<Background> background;
 
-    InstancedModel test;
+    ParticleGroup particleGroup;
+    InstancedModel particleModel;
 };

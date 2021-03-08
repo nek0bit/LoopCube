@@ -8,7 +8,8 @@ GravityParticle::GravityParticle(int modelId, int textureId, double time, double
     src.x = 4 * constants::blockImgSize;
 }
 
-void GravityParticle::update(ChunkGroup& chunks, const Timer& timer) {
-	time += timer.deltaTime;
+void GravityParticle::update(const ChunkGroup& chunks, const Timer& timer) {
+    constexpr int AMOUNT = 400;
+	time += timer.deltaTime * AMOUNT;
 	updateBasicPhysics(chunks, timer);
 }

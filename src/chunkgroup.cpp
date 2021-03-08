@@ -256,7 +256,7 @@ void ChunkGroup::prepareLoaded()
 }
 
 // Cleaner way to get at data
-_ChunkDataSplit* ChunkGroup::getData(long int x)
+_ChunkDataSplit* ChunkGroup::getData(long int x) const
 {
     try { return data.at(x).get(); }
     catch (const std::out_of_range& err) { return nullptr; }
@@ -284,14 +284,14 @@ void ChunkGroup::render(const Graphics& graphics, const Camera& camera) const
 #endif
 
 // Wrapper for multiple getData calls
-Chunk* ChunkGroup::getChunkAt(const long int x, const long int y)
+Chunk* ChunkGroup::getChunkAt(const long int x, const long int y) const
 {
     _ChunkDataSplit* call = getData(x);
     
     return call == nullptr ? nullptr : getData(x)->getData(y);
 }
 
-std::vector<Chunk*> ChunkGroup::isWithinChunks(const glm::vec2& vec, const glm::vec2& size)
+std::vector<Chunk*> ChunkGroup::isWithinChunks(const glm::vec2& vec, const glm::vec2& size) const
 {
     ChunkPos inChunk = posToChunkPos(vec.x, vec.y);
     GridCollision_t col = Generic::gridCollision(constants::chunkWidth * constants::blockW,

@@ -21,7 +21,7 @@ Entity::~Entity()
 
 void Entity::update() {}
 
-void Entity::update(ChunkGroup& chunks, const Timer& timer)
+void Entity::update(const ChunkGroup& chunks, const Timer& timer)
 {
 	// Optional; You can use your own physics function
 	updateBasicPhysics(chunks, timer);
@@ -42,7 +42,7 @@ void Entity::collisionRight() {}
 void Entity::collisionBottom() {}
 void Entity::collisionTop() {}
 
-CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
+CollisionInfo Entity::checkBlockCollision(const ChunkGroup& chunks) const
 {
     // TODO optimize entity position to work within blocks instead of chunks
     // It's 100% easy and possible and should optimize a lot
@@ -69,7 +69,7 @@ CollisionInfo Entity::checkBlockCollision(ChunkGroup& chunks)
 	return CollisionInfo{};
 }
 
-void Entity::updateBasicPhysics(ChunkGroup& chunks, const Timer& timer) {
+void Entity::updateBasicPhysics(const ChunkGroup& chunks, const Timer& timer) {
     const int cap = 2000.0f;
     constexpr float friction = 20.0f;
 

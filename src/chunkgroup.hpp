@@ -95,8 +95,8 @@ struct ChunkGroup
     void render(const Graphics& renderer, const Camera& camera) const;
 #endif
 
-    Chunk* getChunkAt(const long x, const long y);
-    std::vector<Chunk*> isWithinChunks(const glm::vec2& vec, const glm::vec2& size);
+    Chunk* getChunkAt(const long x, const long y) const;
+    std::vector<Chunk*> isWithinChunks(const glm::vec2& vec, const glm::vec2& size) const;
     void generateChunkAt(const long x, const long y);
     void loadFromDeserialize(std::vector<unsigned char>& value, int start = 1);
 
@@ -117,7 +117,7 @@ private:
         checkSplitGenerate(long int x);
     void updateLoaded();
     void prepareLoaded();
-    _ChunkDataSplit* getData(long int x);
+    _ChunkDataSplit* getData(long int x) const;
     
     std::shared_ptr<ChunkGen> chunkGen;
     std::vector<_ChunkDataSplit*> loadedSplits;

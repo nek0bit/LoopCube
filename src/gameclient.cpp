@@ -12,11 +12,11 @@ GameClient::GameClient(const GLuint shader, Timer& timer, WinSize& winSize)
       entities{},
       fade{60},
       playerPosUpdate{6},
-      particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
       timer{timer},
       background{std::make_shared<BackgroundOverworld>()},
-      test{shader}
+      particleGroup{},
+      particleModel{shader}
 {    
     try
     {
@@ -56,11 +56,11 @@ GameClient::GameClient(const GLuint shader, std::string address, uint16_t port, 
       entities{},
       fade{60},
       playerPosUpdate{6},
-      particles{},
       time{8600, 28500, 8600, 22000, 1700, 1700},
       timer{timer},
       background{std::make_shared<BackgroundOverworld>()},
-      test{shader}
+      particleGroup{},
+      particleModel{shader}
 {
     clientSocket = std::make_shared<ClientSocket>(address.c_str(), port);
     serverChunks.setFd(clientSocket->fd);
@@ -83,21 +83,14 @@ void GameClient::init()
         std::cout << "[Debug] Connection closed" << std::endl;
     };
 
-    test.setBufferData({
-            {{0.0f, 42.0f, 0.0f},  {0.0f, 0.0f}},
-            {{42.0f, 42.0f, 0.0f},  {1.0f, 0.0f}},
-            {{42.0f, 0.0f, 0.0f},  {1.0f, 1.0f}},
+    particleModel.setBufferData({
+            {{0.0f, 4.0f, 0.0f},  {0.0f, 0.0f}},
+            {{4.0f, 4.0f, 0.0f},  {1.0f, 0.0f}},
+            {{4.0f, 0.0f, 0.0f},  {1.0f, 1.0f}},
             
-            {{42.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
+            {{4.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
             {{0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
-            {{0.0f, 42.0f, 0.0f}, {0.0f, 0.0f}}
-        });
-
-    test.setInstanceData({
-            {{1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
-            {{20.0f, 20.0f, 1.0f}, {0.0f, 0.0f}},
-            {{40.0f, 40.0f, 1.0f}, {0.0f, 0.0f}},
-            {{60.0f, 60.0f, 1.0f}, {0.0f, 0.0f}},
+            {{0.0f, 4.0f, 0.0f}, {0.0f, 0.0f}}
         });
 }
 
@@ -130,7 +123,6 @@ void GameClient::update(Camera& camera, EventWrapper& events)
     serverChunks.loadPtr.y = chunkPlayer.y + (serverChunks.loadDistance.y / 2);
     
     serverChunks.update(camera);
-
 
     //**************************************************
     // Player
@@ -177,15 +169,6 @@ void GameClient::update(Camera& camera, EventWrapper& events)
 
     mouseEvents(camera, events);
 
-    // update particles
-    if (constants::config.getInt(CONFIG_SHOW_PARTICLES))
-    {
-        for (auto& particle: particles)
-        {
-            particle.update(serverChunks, timer);
-        }
-    }
-
     time.tick(timer, 40);
     fade.tick(timer, 40);
 
@@ -194,7 +177,7 @@ void GameClient::update(Camera& camera, EventWrapper& events)
         Api::sendPlayerPos(clientSocket->fd, mainPlayer.position.x, mainPlayer.position.y);
     }
 
-    deadParticles();
+    particleGroup.update(serverChunks, timer, particleModel);
 }
 
 void GameClient::render(Graphics& graphics, EventWrapper& events) const
@@ -204,6 +187,8 @@ void GameClient::render(Graphics& graphics, EventWrapper& events) const
     // Draw chunks
     serverChunks.render(graphics, graphics.camera);
 
+    particleGroup.draw(graphics, particleModel);
+
     // Draw other players
     serverPlayers.renderPlayers(graphics, graphics.camera);
 
@@ -211,33 +196,15 @@ void GameClient::render(Graphics& graphics, EventWrapper& events) const
     mainPlayer.render(graphics, graphics.camera);
 
     // Draw particles
-    // TODO instanced particles
-    if (constants::config.getInt(CONFIG_SHOW_PARTICLES))
-    {
-        for (auto& particle: particles)
-        {
-            particle.render(graphics, graphics.camera);
-        }
-    }
-
-    graphics.textures.getTexture(TEXTURE_PLAYER)->bind();
-    test.drawInstanced(graphics.uniforms.model, graphics.uniforms.tex);
+    particleGroup.draw(graphics, particleModel);
 
     // Draw the selection box for where we are hovering
     drawSelection(graphics, getSelection(graphics.camera, events));
 }
 
-void GameClient::deadParticles()
-{
-    for (size_t i = 0; i < particles.size(); ++i)
-    {
-        if (particles[i].isDead()) particles.erase(particles.begin() + i);
-    }
-}
-
 void GameClient::mouseEvents(Camera& camera, EventWrapper& events)
 {
-    constexpr size_t MAX_PARTICLES = 4;
+    constexpr size_t MAX_PARTICLES = 16;
     SelectInfo pos;
     /*if (!inv->showInventoryMenu)*/ pos = getSelection(camera, events);
     int p1Fixed = pos.x, p2Fixed = pos.y;
@@ -280,17 +247,17 @@ void GameClient::mouseEvents(Camera& camera, EventWrapper& events)
                 if (constants::config.getInt(CONFIG_SHOW_PARTICLES)) {
                     for (size_t i = 0; i < MAX_PARTICLES; ++i)
                     {
-                        GravityParticle temp{block->textureId,
-                            static_cast<int>(.3 + (static_cast<float>(rand() % 100) / 100.0f)),
-                            rand() % 2 == 1 ? -230.0f : 230.0f,
-                            -180.0f,
-                            (double)pos.x * constants::blockW +
-                            (rand() % static_cast<int>(constants::blockW)),
-                            (double)pos.y * constants::blockH +
-                            (rand() % static_cast<int>(constants::blockH)),
-                            8,
-                            6};
-                        particles.push_back(temp);
+                        particleGroup.addParticle({0,
+                                block->textureId,
+                                static_cast<double>(300 + (static_cast<float>(rand() % 100) / 100.0f)),
+                                rand() % 2 == 1 ? -230.0f : 230.0f,
+                                -180.0f,
+                                static_cast<double>(pos.x) * constants::blockW +
+                                (rand() % static_cast<int>(constants::blockW)),
+                                static_cast<double>(pos.y) * constants::blockH +
+                                (rand() % static_cast<int>(constants::blockH)),
+                                4,
+                                4});
                     }
                 }
             }

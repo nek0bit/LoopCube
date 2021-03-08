@@ -15,7 +15,7 @@ struct Entity: public GameObject
 	virtual ~Entity();
 
     void update() override;
-    virtual void update(ChunkGroup& chunks, const Timer& timer);
+    virtual void update(const ChunkGroup& chunks, const Timer& timer);
 
 #ifndef __HEADLESS
     virtual void render(const Graphics& renderer, const Camera& camera)
@@ -33,8 +33,8 @@ struct Entity: public GameObject
     double velX;
 	double velY;
 protected:
-	void updateBasicPhysics(ChunkGroup& chunks, const Timer& timer);
-	CollisionInfo checkBlockCollision(ChunkGroup &chunks);
+	void updateBasicPhysics(const ChunkGroup& chunks, const Timer& timer);
+	CollisionInfo checkBlockCollision(const ChunkGroup& chunks) const;
 
     glm::vec3 displayPosition;
 
