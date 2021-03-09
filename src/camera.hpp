@@ -15,6 +15,7 @@ struct Camera
     void updateProj();
     void bindProj(const GLint& uProj) noexcept;
     void bindView(const GLint& uView) noexcept;
+    void bindZoom(const GLint& uZoom, const glm::vec2& zoom) noexcept;
     
     inline void updateView() noexcept
         {

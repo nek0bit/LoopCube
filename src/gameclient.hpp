@@ -52,8 +52,8 @@ struct GameClient
     GameClient(const GLuint shader, std::string address, uint16_t port, Timer& timer, WinSize& winSize);
     ~GameClient();
 
-    void update(Camera& camera, EventWrapper& events);
-    void render(Graphics& graphics, EventWrapper& events) const;
+    void update(Camera& camera, EventWrapper& events, const glm::vec2& camZoom);
+    void render(Graphics& graphics, EventWrapper& events, const glm::vec2& camZoom) const;
     bool exit;
 private:
     void init();
@@ -67,11 +67,11 @@ private:
     std::function<void(void)> disconnectCallback;
     
     WinSize& winSize;
-    SelectInfo getSelection(Camera& camera, EventWrapper& events) const;
+    SelectInfo getSelection(Camera& camera, EventWrapper& events, const glm::vec2& camZoom) const;
     void serverThreadFunction();
     void drawSelection(const Graphics& graphics, const SelectInfo pos) const;
     void handleCamera(Camera& camera);
-    void mouseEvents(Camera& camera, EventWrapper& events);
+    void mouseEvents(Camera& camera, EventWrapper& events, const glm::vec2& camZoom);
 
     PlayerGroup serverPlayers;
 

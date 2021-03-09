@@ -26,6 +26,11 @@ void Camera::updateProj()
                             0.1f, 5000.0f);
 }
 
+void Camera::bindZoom(const GLint& uZoom, const glm::vec2& zoom) noexcept
+{
+    glUniform2fv(uZoom, 1, glm::value_ptr(zoom));
+}
+
 void Camera::bindProj(const GLint& uProj) noexcept
 {
     glUniformMatrix4fv(uProj, 1, GL_FALSE, glm::value_ptr(projection));

@@ -22,6 +22,7 @@
 #include "menu.hpp"
 #include "winsize.hpp"
 #include "eventwrapper.hpp"
+#include "generic.hpp"
 
 enum GAME_STATE {
 	// Menu
@@ -47,8 +48,10 @@ struct Game
 
     bool isRunning = false;
 private:
-    double tickTime;
+    void handleZoom();
     void createModels();
+    glm::vec2 camZoom, camZoomRes;
+    double tickTime;
     int argc;
     char** argv;
 	const char* title;

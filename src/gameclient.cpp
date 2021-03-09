@@ -106,7 +106,7 @@ void GameClient::serverThreadFunction()
     }
 }
 
-void GameClient::update(Camera& camera, EventWrapper& events)
+void GameClient::update(Camera& camera, EventWrapper& events, const glm::vec2& camZoom)
 {
     //**************************************************
     // Multiplayer Groups
@@ -167,7 +167,7 @@ void GameClient::update(Camera& camera, EventWrapper& events)
 
     if (background) background->update(camera, time);
 
-    mouseEvents(camera, events);
+    mouseEvents(camera, events, camZoom);
 
     time.tick(timer, 40);
     fade.tick(timer, 40);
@@ -180,7 +180,7 @@ void GameClient::update(Camera& camera, EventWrapper& events)
     particleGroup.update(serverChunks, timer, particleModel);
 }
 
-void GameClient::render(Graphics& graphics, EventWrapper& events) const
+void GameClient::render(Graphics& graphics, EventWrapper& events, const glm::vec2& camZoom) const
 {
     if (background) background->render(graphics);
 
@@ -199,14 +199,14 @@ void GameClient::render(Graphics& graphics, EventWrapper& events) const
     particleGroup.draw(graphics, particleModel);
 
     // Draw the selection box for where we are hovering
-    drawSelection(graphics, getSelection(graphics.camera, events));
+    drawSelection(graphics, getSelection(graphics.camera, events, camZoom));
 }
 
-void GameClient::mouseEvents(Camera& camera, EventWrapper& events)
+void GameClient::mouseEvents(Camera& camera, EventWrapper& events, const glm::vec2& camZoom)
 {
     constexpr size_t MAX_PARTICLES = 16;
     SelectInfo pos;
-    /*if (!inv->showInventoryMenu)*/ pos = getSelection(camera, events);
+    /*if (!inv->showInventoryMenu)*/ pos = getSelection(camera, events, camZoom);
     int p1Fixed = pos.x, p2Fixed = pos.y;
     int withinX, withinY;
 
@@ -282,10 +282,13 @@ void GameClient::mouseEvents(Camera& camera, EventWrapper& events)
     }
 }
 
-SelectInfo GameClient::getSelection(Camera& camera, EventWrapper& events) const
+SelectInfo GameClient::getSelection(Camera& camera, EventWrapper& events, const glm::vec2& camZoom) const
 {
-    const int selX = floor((events.vmouse.x + camera.position.x) / constants::blockW);
-    const int selY = floor((Generic::topToBottomFlip(events.vmouse.y, camera.size.h) + camera.position.y) / constants::blockH);
+    const int& mouseX = events.vmouse.x;
+    const int& mouseY = Generic::topToBottomFlip(events.vmouse.y, camera.size.h);
+    
+    const int& selX = std::floor((mouseX + camera.position.x) / constants::blockW);
+    const int& selY = std::floor((mouseY + camera.position.y) / constants::blockH);
 
     return {selX, selY};
 }
