@@ -19,7 +19,6 @@
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "gameclient.hpp"
-#include "menu.hpp"
 #include "winsize.hpp"
 #include "eventwrapper.hpp"
 #include "generic.hpp"
@@ -59,7 +58,6 @@ private:
 
     std::stack<int> state;
     std::shared_ptr<GameClient> game;
-    std::shared_ptr<Menu> menu;
 
     WinSize winSize;
 

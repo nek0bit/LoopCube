@@ -30,11 +30,7 @@ enum block_enum
 enum texture_enum
 {
     TEXTURE_MOON_BLOCK,
-    TEXTURE_WOOD,
     TEXTURE_PLAYER,
-    TEXTURE_MENU_SOLID,
-    TEXTURE_MENU_SOLID_LEFT,
-    TEXTURE_MENU_SOLID_RIGHT,
     TEXTURE_HOTBAR_SLOT,
     TEXTURE_INVENTORY_MENU,
     TEXTURE_BG_SHINE,
@@ -43,16 +39,7 @@ enum texture_enum
     TEXTURE_BG_HILLS_HQ,
     TEXTURE_CAVE_BG,
     TEXTURE_SUN,
-    TEXTURE_MOON,
-    TEXTURE_BOX1,
-    TEXTURE_BOX2,
-    TEXTURE_BOX3,
-    TEXTURE_BOX4,
-    TEXTURE_BOX5,
-    TEXTURE_BOX6,
-    TEXTURE_BOX7,
-    TEXTURE_BOX8,
-    TEXTURE_BOX9
+    TEXTURE_MOON
 };
 
 enum config_enum
@@ -78,13 +65,9 @@ namespace constants
     constexpr char shaderPath[] = ROOT_PATH "shaders/";
 
 	// Please add comment with index for code readability
-    constexpr std::array<TextureInfo, 24> textureInfo = {
+    constexpr std::array<TextureInfo, 11> textureInfo = {
 		TextureInfo{"moon_block.png", TEXTURE_MOON_BLOCK, 256, 16, 16, 16},
-        TextureInfo{"wood.png", TEXTURE_WOOD},
 		TextureInfo{"player.png", TEXTURE_PLAYER, 170, 33, 17, 33},
-		TextureInfo{"menu_solid.png", TEXTURE_MENU_SOLID, 16, 32, 16, 16},
-		TextureInfo{"menu_solid_left.png", TEXTURE_MENU_SOLID_LEFT, 16, 32, 16, 16},
-		TextureInfo{"menu_solid_right.png", TEXTURE_MENU_SOLID_RIGHT, 16, 32, 16, 16},
 		TextureInfo{"hotbar_slot.png", TEXTURE_HOTBAR_SLOT, 16, 32, 16, 16},
 		TextureInfo{"inventory_menu.png", TEXTURE_INVENTORY_MENU},
 		TextureInfo{"bg_shine.png", TEXTURE_BG_SHINE},
@@ -94,20 +77,10 @@ namespace constants
 		TextureInfo{"cave_bg.png", TEXTURE_CAVE_BG},
 		TextureInfo{"sun.png", TEXTURE_SUN},
 		TextureInfo{"moon.png", TEXTURE_MOON},
-		TextureInfo{"box1.png", TEXTURE_BOX1},
-        TextureInfo{"box2.png", TEXTURE_BOX2},
-        TextureInfo{"box3.png", TEXTURE_BOX3},
-        TextureInfo{"box4.png", TEXTURE_BOX4},
-        TextureInfo{"box5.png", TEXTURE_BOX5},
-        TextureInfo{"box6.png", TEXTURE_BOX6},
-        TextureInfo{"box7.png", TEXTURE_BOX7},
-        TextureInfo{"box8.png", TEXTURE_BOX8},
-        TextureInfo{"box9.png", TEXTURE_BOX9}
 	};
 
-    constexpr std::array<BlockInfo, 2> blockInfo = {
-	    BlockInfo{BLOCK_MOON_BLOCK, "Moon Block", TEXTURE_MOON_BLOCK, false},
-		BlockInfo{BLOCK_WOOD, "Wood", TEXTURE_WOOD, true}
+    constexpr std::array<BlockInfo, 1> blockInfo = {
+	    BlockInfo{BLOCK_MOON_BLOCK, "Moon Block", TEXTURE_MOON_BLOCK, false}
     };
 
 	constexpr int blockW = 42;

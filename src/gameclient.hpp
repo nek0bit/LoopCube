@@ -28,8 +28,6 @@
 #include "chunkgroup.hpp"
 #include "player.hpp"
 #include "animation.hpp"
-#include "inventory.hpp"
-#include "text.hpp"
 #include "gravityparticle.hpp"
 #include "tree.hpp"
 #include "background.hpp"

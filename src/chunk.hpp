@@ -11,9 +11,7 @@
 #include <SDL2/SDL.h>
 #include "texturehandler.hpp"
 #include "camera.hpp"
-#include "inventory.hpp"
 #include "size.hpp"
-#include "text.hpp"
 #include "model.hpp"
 #include "chunkmesh.hpp"
 #endif

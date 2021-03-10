@@ -8,7 +8,6 @@ Game::Game(Timer& timer, int argc, char** argv)
       title{"LoopCube"},
       state{},
       game{nullptr},
-      menu{nullptr},
       winSize{},
       timer{timer},
       graphics{nullptr, winSize}
@@ -22,7 +21,6 @@ Game::~Game()
 	// Clean up all game objects/SDL stuff to prevent memory leakage
 	free();
     game = nullptr;
-    menu = nullptr;
 }
 
 // Game related stuff below
@@ -42,7 +40,7 @@ void Game::gameInit()
                                              "fonts/liberation-sans/LiberationSans-Regular.ttf",
                                              {10, 12, 14, 16, 18, 32});
 	
-	menu = std::make_shared<Menu>(graphics, events, timer, winSize);
+	//menu = std::make_shared<Menu>(graphics, events, timer, winSize);
     
     createModels();
 }
@@ -92,7 +90,7 @@ void Game::render() {
         switch(state.top()) {
         case STATE_MAIN_MENU:
             if (game != nullptr) game->render(graphics, events, camZoomRes);
-            if (menu != nullptr) menu->render();
+            //if (menu != nullptr) menu->render();
             break;
         case STATE_PLAYING:
             if (game != nullptr) game->render(graphics, events, camZoomRes);
@@ -154,7 +152,7 @@ void Game::update()
     {
         switch(state.top()) {
         case STATE_MAIN_MENU:
-            menu->update();
+            /*menu->update();
             if (game != nullptr && menu->showPlayBuffer == false)
             {
                 menu->showPlayBuffer = true;
@@ -181,6 +179,7 @@ void Game::update()
                 break;
             }
             break;
+            */
         case STATE_PLAYING:
             // Check if the game is nullptr, then create it
             if (game == nullptr) {
