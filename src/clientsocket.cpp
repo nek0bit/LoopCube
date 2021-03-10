@@ -158,7 +158,9 @@ void ClientSocket::modifyBlock(const std::vector<unsigned char>& value, ChunkGro
             else // Destroy Block
             {
                 chk->destroyBlock(blockX, blockY);
-            }                        
+            }
+
+            chk->generateChunkMesh();
         }
     }
     catch (const std::out_of_range& err)
