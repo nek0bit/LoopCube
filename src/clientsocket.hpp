@@ -39,6 +39,8 @@ struct ClientSocket
     
     int fd;
 private:
+    void actionPlayerUpdate(const std::vector<unsigned char>& value, PlayerGroup& players);
+    void modifyBlock(const std::vector<unsigned char>& value, ChunkGroup& chunks);
     void closeSocket();
 
     std::string address;

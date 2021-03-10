@@ -94,21 +94,8 @@ void ClientSocket::checkSocket(std::function<void(void)>& disconnectCallback,
             switch(value.at(0))
             {
             case ACTION_PLAYER_UPDATE:
-            {
-                const uint8_t idSize = value.at(1);
-                const uint8_t playerXSize = value.at(idSize+2);
-                const uint8_t playerYSize = value.at(idSize+playerXSize+3);
-
-                int id = Generic::deserializeSigned<std::vector<unsigned char>, long>
-                    (value, 2, idSize);
-                int playerX = Generic::deserializeSigned<std::vector<unsigned char>, long>
-                    (value, idSize+3, playerXSize);
-                int playerY = Generic::deserializeSigned<std::vector<unsigned char>, long>
-                    (value, idSize+playerXSize+4, playerYSize);
-
-                players.updateSpecificPlayer(id, playerX, playerY);
-            }
-            break;
+                actionPlayerUpdate(value, players);
+                break;
             case ACTION_GET_CHUNK:
             {
                 chunks.loadFromDeserialize(value);
@@ -117,49 +104,67 @@ void ClientSocket::checkSocket(std::function<void(void)>& disconnectCallback,
             break;
             case ACTION_PLACE_BLOCK:
             case ACTION_DESTROY_BLOCK:
-            {
-                // Extract info
-                try
-                {
-                    const int chunkXSize = value.at(1);
-                    const int chunkYSize = value.at(chunkXSize+2);
-                    const uint8_t blockX = value.at(chunkXSize + chunkYSize + 3);
-                    const uint8_t blockY = value.at(chunkXSize + chunkYSize + 4);
-
-                    // Extract chunkX and chunkY
-                    long chunkX = Generic::deserializeSigned<std::vector<unsigned char>,
-                                                             long>(value, 2, chunkXSize);
-                    long chunkY = Generic::deserializeSigned<std::vector<unsigned char>,
-                                                             long>(value,
-                                                                   chunkXSize + 3,
-                                                                   chunkYSize);
-
-                    Chunk* chk = chunks.getChunkAt(chunkX, chunkY);
-                    if (chk != nullptr)
-                    {
-                        if (value.at(0) == ACTION_PLACE_BLOCK)
-                        {
-                            chk->placeBlock(0, blockX, blockY);
-                        }
-                        else // Destroy Block
-                        {
-                            chk->destroyBlock(blockX, blockY);
-                        }
-                        
-                    }
-                }
-                catch (const std::out_of_range& err)
-                {
-                    std::cerr << "[Warning] Recieved incorrect block" << std::endl;
-                }
-            }
-            break;
+                modifyBlock(value, chunks);
+                break;
             default:
                 break;
             }
         }
         catch (const std::out_of_range& err) {}
     } while (res > 0);
+}
+
+void ClientSocket::actionPlayerUpdate(const std::vector<unsigned char>& value, PlayerGroup& players)
+{
+    const uint8_t idSize = value.at(1);
+    const uint8_t playerXSize = value.at(idSize+2);
+    const uint8_t playerYSize = value.at(idSize+playerXSize+3);
+
+    int id = Generic::deserializeSigned<std::vector<unsigned char>, long>
+        (value, 2, idSize);
+    int playerX = Generic::deserializeSigned<std::vector<unsigned char>, long>
+        (value, idSize+3, playerXSize);
+    int playerY = Generic::deserializeSigned<std::vector<unsigned char>, long>
+        (value, idSize+playerXSize+4, playerYSize);
+
+    players.updateSpecificPlayer(id, playerX, playerY);
+}
+
+void ClientSocket::modifyBlock(const std::vector<unsigned char>& value, ChunkGroup& chunks)
+{
+    // Extract info
+    try
+    {
+        const int chunkXSize = value.at(1);
+        const int chunkYSize = value.at(chunkXSize+2);
+        const uint8_t blockX = value.at(chunkXSize + chunkYSize + 3);
+        const uint8_t blockY = value.at(chunkXSize + chunkYSize + 4);
+
+        // Extract chunkX and chunkY
+        long chunkX = Generic::deserializeSigned<std::vector<unsigned char>,
+                                                 long>(value, 2, chunkXSize);
+        long chunkY = Generic::deserializeSigned<std::vector<unsigned char>,
+                                                 long>(value,
+                                                       chunkXSize + 3,
+                                                       chunkYSize);
+
+        Chunk* chk = chunks.getChunkAt(chunkX, chunkY);
+        if (chk != nullptr)
+        {
+            if (value.at(0) == ACTION_PLACE_BLOCK)
+            {
+                chk->placeBlock(0, blockX, blockY);
+            }
+            else // Destroy Block
+            {
+                chk->destroyBlock(blockX, blockY);
+            }                        
+        }
+    }
+    catch (const std::out_of_range& err)
+    {
+        std::cerr << "[Warning] Recieved incorrect block" << std::endl;
+    }
 }
 
 void ClientSocket::closeSocket()

@@ -48,7 +48,6 @@ struct Game
 
     bool isRunning = false;
 private:
-    void handleZoom();
     void createModels();
     glm::vec2 camZoom, camZoomRes;
     double tickTime;

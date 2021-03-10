@@ -22,7 +22,6 @@ struct Uniforms
     GLint view;
     GLint model;
     GLint tex;
-    GLint zoom;
 };
 
 struct Graphics

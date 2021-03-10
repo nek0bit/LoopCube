@@ -228,30 +228,7 @@ void Game::update()
         state.pop(); // Switch game state to menu
     }
 
-    handleZoom();
-    
-    graphics.camera.bindZoom(graphics.uniforms.zoom, camZoomRes);
-
     glViewport(0, 0, winSize.w, winSize.h);
-}
-
-void Game::handleZoom()
-{
-    constexpr float amount = 15.0f;
-    
-    if (events.vmouse.scroll > 0)
-    {
-        camZoom.x *= amount * (events.vmouse.scroll/10.0f);
-        camZoom.y *= amount * (events.vmouse.scroll/10.0f);
-    }
-    else if (events.vmouse.scroll < 0)
-    {
-        camZoom.x /= -(amount * events.vmouse.scroll/10.0f);
-        camZoom.y /= -(amount * events.vmouse.scroll/10.0f);
-    }
-
-    camZoomRes.x = Generic::lerp(camZoomRes.x, camZoom.x, 0.1);
-    camZoomRes.y = Generic::lerp(camZoomRes.y, camZoom.y, 0.1);
 }
 
 // SDL2 related stuff below

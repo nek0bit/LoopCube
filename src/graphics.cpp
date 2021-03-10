@@ -113,7 +113,6 @@ void Graphics::setupUniforms()
     uniforms.proj = glGetUniformLocation(shader, "projection");
     uniforms.view = glGetUniformLocation(shader, "view");
     uniforms.tex = glGetUniformLocation(shader, "texPos");
-    uniforms.zoom = glGetUniformLocation(shader, "zoom");
 }
 
 void Graphics::postShader()
