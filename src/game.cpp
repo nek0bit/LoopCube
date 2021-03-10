@@ -335,4 +335,5 @@ void Game::free() {
 	}
 
 	hasFreed = true;
+
 }
