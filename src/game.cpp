@@ -8,12 +8,12 @@ Game::Game(Timer& timer, int argc, char** argv)
       title{"LoopCube"},
       state{},
       game{nullptr},
+      menu{nullptr},
       winSize{},
       timer{timer},
       graphics{nullptr, winSize}
 {
-    //state.push(STATE_MAIN_MENU);
-    state.push(STATE_PLAYING);
+    state.push(STATE_MAIN_MENU);
 }
 
 Game::~Game()
@@ -21,6 +21,7 @@ Game::~Game()
 	// Clean up all game objects/SDL stuff to prevent memory leakage
 	free();
     game = nullptr;
+    menu = nullptr;
 }
 
 // Game related stuff below
@@ -39,8 +40,9 @@ void Game::gameInit()
     constants::fontHandler.addFontByFilename(static_cast<std::string>(constants::rootPath) +
                                              "fonts/liberation-sans/LiberationSans-Regular.ttf",
                                              {10, 12, 14, 16, 18, 32});
-	
-	//menu = std::make_shared<Menu>(graphics, events, timer, winSize);
+
+    // Create menu
+	menu = std::make_unique<Menu>(graphics);
     
     createModels();
 }
@@ -89,8 +91,8 @@ void Game::render() {
     {
         switch(state.top()) {
         case STATE_MAIN_MENU:
-            if (game != nullptr) game->render(graphics, events, camZoomRes);
-            //if (menu != nullptr) menu->render();
+            //if (game != nullptr) game->render(graphics, events, camZoomRes);
+            if (menu != nullptr) menu->render(graphics);
             break;
         case STATE_PLAYING:
             if (game != nullptr) game->render(graphics, events, camZoomRes);
@@ -121,7 +123,8 @@ void Game::render() {
 void Game::handleFPS()
 {
     tickTime += timer.deltaTime;
-    
+
+    // 1 second
     if (static_cast<int>(tickTime) % 10)
     {
         updateTitle();
@@ -147,42 +150,18 @@ void Game::update()
     
     graphics.camera.position.z = 100.0f;
 
-    // TEMP set camera to mouse position    
     if (state.size() > 0)
     {
         switch(state.top()) {
         case STATE_MAIN_MENU:
-            /*menu->update();
-            if (game != nullptr && menu->showPlayBuffer == false)
-            {
-                menu->showPlayBuffer = true;
-            }
-            switch(menu->getPressed()) {
-            case 0:
-                // Set state, we need to redo this switch case afterwards
-                state.push(STATE_PLAYING);
-			
-                // Go through switch-case again so we can setup the game
-                update();
-			
-                break;
-            case 1:
-                // NOTE not implemented yet
-                break;
-            case 2:
-                menu->setState(1);
-                break;
-            case 3:
-                isRunning = false;
-                break;
-            default:
-                break;
-            }
+            if (menu == nullptr) break;
+            menu->update(events);
+            
             break;
-            */
         case STATE_PLAYING:
             // Check if the game is nullptr, then create it
             if (game == nullptr) {
+                
                 if (argc >= 3)
                 {
                     try
@@ -190,7 +169,7 @@ void Game::update()
                         std::string address = argv[1];
                         uint16_t port = std::stoi(std::string(argv[2]));
                         
-                        game = std::make_shared<GameClient>(graphics.shader, address, port, timer, winSize);
+                        game = std::make_unique<GameClient>(graphics.shader, address, port, timer, winSize);
                     }
                     catch (const std::invalid_argument& err)
                     {
@@ -207,14 +186,11 @@ void Game::update()
                 }
                 else
                 {
-                    game = std::make_shared<GameClient>(graphics.shader, timer, winSize);
+                    game = std::make_unique<GameClient>(graphics.shader, timer, winSize);
                 }
-                // Let's pre-load a frame so everything can generate and render
-                // This may need to change depending on world generation in the future
-                game->update(graphics.camera, events, camZoomRes);
-            } else {
-                game->update(graphics.camera, events, camZoomRes);
+                // Next we preload a frame
             }
+            game->update(graphics.camera, events, camZoomRes);
             break;
         default:
             break;
@@ -234,7 +210,6 @@ void Game::update()
 // Initiates Window/Game Loop
 void Game::init(bool fullscreen = false) {
     int win_flags = 0;
-    int rend_flags = 0;
 
     int defWidth = 800;
     int defHeight = 600;
@@ -334,5 +309,4 @@ void Game::free() {
 	}
 
 	hasFreed = true;
-
 }

@@ -6,6 +6,7 @@
 #include "block.hpp"
 #include "model.hpp"
 #include "constants.hpp"
+#include "generic.hpp"
 
 namespace ChunkMesh
 {

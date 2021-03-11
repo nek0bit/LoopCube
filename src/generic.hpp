@@ -107,6 +107,8 @@ namespace Generic
                              const int width, const int height, const int gap, const int top,
                              const bool verticle = false, const int srcX = 0, const int srcY = 0,
                              int srcW = -1, int srcH = -1) noexcept;
+        void generateSquare(std::vector<Vertex>& mesh, float, float, float, float,
+                            float, float, float, float);
     }
 #endif
 }

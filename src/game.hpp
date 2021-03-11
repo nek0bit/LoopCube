@@ -19,6 +19,7 @@
 #include "constants.hpp"
 #include "texturehandler.hpp"
 #include "gameclient.hpp"
+#include "menu.hpp"
 #include "winsize.hpp"
 #include "eventwrapper.hpp"
 #include "generic.hpp"
@@ -57,7 +58,8 @@ private:
 	bool hasFreed = false;
 
     std::stack<int> state;
-    std::shared_ptr<GameClient> game;
+    std::unique_ptr<GameClient> game;
+    std::unique_ptr<Menu> menu;
 
     WinSize winSize;
 

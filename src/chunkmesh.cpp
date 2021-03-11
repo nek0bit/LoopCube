@@ -28,13 +28,9 @@ void ChunkMesh::mutableGenerateChunkMesh(Model& modifyMesh, const std::vector<st
             const float endX = begX + BLOCK_W,
                 endY = begY + BLOCK_H;
 
-            mesh.emplace_back(glm::vec3(begX, endY, 0.0f), glm::vec2(tCoord.begX, tCoord.begY));
-            mesh.emplace_back(glm::vec3(endX, endY, 0.0f), glm::vec2(tCoord.endX, tCoord.begY));
-            mesh.emplace_back(glm::vec3(endX, begY, 0.0f), glm::vec2(tCoord.endX, tCoord.endY));
-            
-            mesh.emplace_back(glm::vec3(endX, begY, 0.0f), glm::vec2(tCoord.endX, tCoord.endY));
-            mesh.emplace_back(glm::vec3(begX, begY, 0.0f), glm::vec2(tCoord.begX, tCoord.endY));
-            mesh.emplace_back(glm::vec3(begX, endY, 0.0f), glm::vec2(tCoord.begX, tCoord.begY));
+            Generic::Render::generateSquare(mesh, begX, begY, endX, endY,
+                                            tCoord.begX, tCoord.begY, tCoord.endX, tCoord.endY);
+
         }
     }
 
