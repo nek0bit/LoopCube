@@ -11,6 +11,6 @@ public:
     Menu(const Graphics& graphics);
     ~Menu();
 
-    void update(const EventWrapper& events);
+    void update(const Camera& camera, const EventWrapper& events);
     void render(const Graphics& graphics) const noexcept;
 };

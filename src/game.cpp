@@ -155,8 +155,7 @@ void Game::update()
         switch(state.top()) {
         case STATE_MAIN_MENU:
             if (menu == nullptr) break;
-            menu->update(events);
-            
+            menu->update(graphics.camera, events);
             break;
         case STATE_PLAYING:
             // Check if the game is nullptr, then create it

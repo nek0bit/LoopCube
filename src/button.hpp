@@ -15,10 +15,10 @@ namespace UI
         Model model;
     public:
         Button(const GLuint shader, const unsigned id,
-               const glm::ivec2& position = {0, 0}, const glm::ivec2& size = {0, 0});
+               const glm::ivec2& position = {0, 0}, const int size = 0);
         ~Button();
 
-        void update(const EventWrapper& events) override;
+        void update(const Camera& camera, const EventWrapper& events) override;
         void draw(const Graphics& graphics) const noexcept override;
     };
 }
