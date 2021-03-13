@@ -4,6 +4,28 @@ Texture::Texture(const std::string filename)
 {
     SDL_Surface* image = IMG_Load(filename.c_str());
     
+    if (generateTextureFromSurface(image) == 1)
+    {
+        std::cerr << "Failed to load image at " << filename << std::endl;
+    }
+
+    // I think we're done here...
+    SDL_FreeSurface(image);
+}
+
+Texture::Texture(SDL_Surface* texFromSurface)
+{
+    if (generateTextureFromSurface(texFromSurface) == 1)
+    {
+        throw std::runtime_error("Got nullptr from texture!");
+    }
+}
+
+int Texture::generateTextureFromSurface(SDL_Surface* surface)
+{
+    constexpr int SUCCESS = 0;
+    constexpr int ERROR_NULLPTR = 1;
+    // Generate and bind texture so we can set it up
     glGenTextures(1, &texture);
     bind();
 
@@ -13,24 +35,19 @@ Texture::Texture(const std::string filename)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     
-    if (image != nullptr)
+    if (surface != nullptr)
     {
-        const int mode = image->format->BytesPerPixel == 4 ? GL_RGBA : GL_RGB;
+        const int mode = surface->format->BytesPerPixel == 4 ? GL_RGBA : GL_RGB;
         
-        // Load image into texture
-        glTexImage2D(GL_TEXTURE_2D, 0, mode, image->w, image->h, 0, mode, GL_UNSIGNED_BYTE, image->pixels);
+        // Load surface into texture
+        glTexImage2D(GL_TEXTURE_2D, 0, mode, surface->w, surface->h, 0, mode, GL_UNSIGNED_BYTE, surface->pixels);
         
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_NEAREST);
         glGenerateMipmap(GL_TEXTURE_2D);
+        return SUCCESS;
     }
-    else
-    {
-        std::cerr << "Failed to load texture: " << filename << std::endl;
-    }
-
-    // We're done here
-    SDL_FreeSurface(image);
+    return ERROR_NULLPTR;
 }
 
 // Move

@@ -2,6 +2,7 @@
 #include "graphics.hpp"
 #include "eventwrapper.hpp"
 #include "button.hpp"
+#include "constants.hpp"
 
 class Menu
 {

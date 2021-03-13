@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 struct texcoord_info
 {
@@ -25,9 +26,13 @@ struct texcoord_t
     float endY;
 };
 
-struct Texture
+class Texture
 {
-    Texture(const std::string filename);
+private:
+    int generateTextureFromSurface(SDL_Surface* surface);
+public:
+    Texture(const std::string filename); // Filename texture
+    Texture(SDL_Surface* texFromSurface); // Font
     Texture(const Texture&) = delete;
     Texture(Texture&& source);
     ~Texture();

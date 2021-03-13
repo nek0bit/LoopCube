@@ -1,10 +1,12 @@
 #include "button.hpp"
 
 // Size has fixed width
-UI::Button::Button(const GLuint shader, const unsigned id,
-                   const glm::ivec2& position, const int size)
+UI::Button::Button(const GLuint shader, const unsigned id, const std::string& text,
+                   TTF_Font* font, const glm::ivec2& position, const int size)
     : GenericComponent(id, position, {(size > 64 ? size : 64), 32}),
-      model{shader}
+      model{shader},
+      // TODO don't hardcode color!
+      textModel{shader, text, {255, 255, 255, 255}, font}
 {
     generateButtonMesh();
 }
@@ -52,11 +54,26 @@ void UI::Button::generateButtonMesh()
 
     // Bind data
     model.setBufferData(mesh);
+
+    updateButtonText();
+}
+
+void UI::Button::setText(const std::string& text)
+{
+    textModel.setText(text);
+}
+
+void UI::Button::updateButtonText()
+{
+    textModel.position = glm::vec3(position.x, position.y, 0.0f);
+    textModel.scale = glm::vec3(scale.x, scale.y, 0.0f);
 }
 
 void UI::Button::update(const Camera& camera, const EventWrapper& events)
 {
     handleEvents(camera, events);
+
+    updateButtonText();
 }
 
 void UI::Button::draw(const Graphics& graphics) const noexcept
@@ -65,4 +82,7 @@ void UI::Button::draw(const Graphics& graphics) const noexcept
     model.draw(graphics.uniforms.model, graphics.uniforms.tex,
                glm::vec3(position.x, position.y, 0.0f),
                scale);
+
+    // Draw text
+    textModel.draw(graphics);
 }
