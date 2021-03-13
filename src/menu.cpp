@@ -3,9 +3,9 @@
 Menu::Menu(const Graphics& graphics)
     : button{graphics.shader, 0, {50, 50}, 128}
 {
-    button.onClick([](unsigned id) {
-        std::cout << "Button " << id << " clicked" << std::endl;
-        });
+    button.onClick = [&button = button]() {
+        button.scale += glm::vec3(1.0f, 1.0f, 0.0f);
+    };
 }
 
 Menu::~Menu()
