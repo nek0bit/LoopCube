@@ -1,0 +1,10 @@
+#pragma once
+
+enum component_t
+{
+    COMPONENT_BUTTON,
+    COMPONENT_TEXT,
+    COMPONENT_CHECKBOX,
+    COMPONENT_TEXTBOX,
+    COMPONENT_CONTAINER,
+};

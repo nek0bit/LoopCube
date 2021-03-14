@@ -1,13 +1,19 @@
 #include "genericcomponent.hpp"
 
-UI::GenericComponent::GenericComponent(const unsigned id, const glm::ivec2& position, const glm::ivec2& size)
+UI::GenericComponent::GenericComponent(const component_t type,
+                                       const unsigned id,
+                                       const glm::ivec2& position,
+                                       const glm::ivec2& size)
     : position{position},
       size{size},
+      type{type},
       id{id},
-      onClick{},
-      onHover{},
+      onClick{[](){}},
+      onHover{[](){}},
       scale{1.0f, 1.0f, 1.0f}
-{}
+{
+    fixed = fixed | FIXED_W | FIXED_H;
+}
 
 UI::GenericComponent::~GenericComponent()
 {}

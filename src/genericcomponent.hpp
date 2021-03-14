@@ -8,6 +8,13 @@
 #include "eventwrapper.hpp"
 #include "graphics.hpp"
 #include "transform.hpp"
+#include "componenttypes.hpp"
+
+enum fixedsize_t
+{
+    FIXED_W,
+    FIXED_H
+};
 
 namespace UI
 {
@@ -24,12 +31,16 @@ namespace UI
         
         void handleEvents(const Camera& camera, const EventWrapper& events); // Calls all event methods
     public:
-        GenericComponent(const unsigned id, const glm::ivec2& position = {0, 0}, const glm::ivec2& size = {0, 0});
+        GenericComponent(const component_t type,
+                         const unsigned id,
+                         const glm::ivec2& position = {0, 0},
+                         const glm::ivec2& size = {0, 0});
         virtual ~GenericComponent();
 
         virtual void update(const Camera& camera, const EventWrapper& events);
         virtual void draw(const Graphics&, const Transform& = {}) const noexcept;
 
+        const component_t type;
         const unsigned id;
 
         // Events
@@ -38,5 +49,7 @@ namespace UI
         
         // Properties
         glm::vec3 scale;
+
+        uint8_t fixed;
     };
 }

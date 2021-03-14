@@ -3,12 +3,14 @@
 // Size has fixed width
 UI::Button::Button(const GLuint shader, const unsigned id, const std::string& text,
                    TTF_Font* font, const glm::ivec2& position, const int size)
-    : GenericComponent(id, position, {(size > 64 ? size : 64), 32}),
+    : GenericComponent(COMPONENT_BUTTON, id, position, {(size > 64 ? size : 64), 32}),
       model{shader},
       // TODO don't hardcode color!
       textModel{shader, text, {255, 255, 255, 255}, font}
 {
+    fixed |= FIXED_H;
     generateButtonMesh();
+    
 }
 
 UI::Button::~Button()
