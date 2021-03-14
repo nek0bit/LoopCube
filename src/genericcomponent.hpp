@@ -17,6 +17,7 @@ namespace UI
         // Event handling (click, enter, etc.)
         [[nodiscard]] bool isVmouseTouching(const Camera& camera, const EventWrapper& events) const noexcept;
         void eventClick(const Camera& camera, const EventWrapper& events);
+        void eventHover(const Camera& camera, const EventWrapper& events);
     protected:
         glm::ivec2 position;
         glm::ivec2 size;
@@ -33,6 +34,7 @@ namespace UI
 
         // Events
         std::function<void(void)> onClick;
+        std::function<void(void)> onHover;
         
         // Properties
         glm::vec3 scale;

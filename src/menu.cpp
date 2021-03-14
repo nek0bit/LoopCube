@@ -3,8 +3,12 @@
 Menu::Menu(const Graphics& graphics)
     : button{graphics.shader, 0, "Yeah", constants::fontHandler.getFont(4), {50, 50}, 128}
 {
-    button.onClick = [&button = button]() {
-        button.scale += glm::vec3(1.0f, 1.0f, 0.0f);
+    button.onHover = [&]() {
+        std::cout << "Button hovered!" << std::endl;
+        // lol
+        int x, y;
+        SDL_GetWindowPosition(graphics.window, &x, &y);
+        SDL_SetWindowPosition(graphics.window, x+(rand()%10), y+(rand()%10));
     };
 }
 

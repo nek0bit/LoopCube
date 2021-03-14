@@ -5,6 +5,7 @@ UI::GenericComponent::GenericComponent(const unsigned id, const glm::ivec2& posi
       size{size},
       id{id},
       onClick{},
+      onHover{},
       scale{1.0f, 1.0f, 1.0f}
 {}
 
@@ -15,6 +16,7 @@ UI::GenericComponent::~GenericComponent()
 void UI::GenericComponent::handleEvents(const Camera& camera, const EventWrapper& events)
 {
     eventClick(camera, events);
+    eventHover(camera, events);
 }
 
 void UI::GenericComponent::eventClick(const Camera& camera, const EventWrapper& events)
@@ -22,6 +24,14 @@ void UI::GenericComponent::eventClick(const Camera& camera, const EventWrapper& 
     if (isVmouseTouching(camera, events) && events.vmouse.clicked)
     {
         onClick();
+    }
+}
+
+void UI::GenericComponent::eventHover(const Camera& camera, const EventWrapper& events)
+{
+    if (isVmouseTouching(camera, events))
+    {
+        onHover();
     }
 }
 
