@@ -36,6 +36,7 @@ public:
     void draw(const Graphics& graphics) const noexcept;
     inline const std::string& getText() const noexcept { return text; };
 
+    glm::ivec2 size;
     glm::vec3 position;
     glm::vec3 scale;
 };

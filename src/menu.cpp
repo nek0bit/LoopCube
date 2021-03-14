@@ -1,7 +1,7 @@
 #include "menu.hpp"
 
 Menu::Menu(const Graphics& graphics)
-    : button{graphics.shader, 0, "Test", constants::fontHandler.getFont(0), {50, 50}, 128}
+    : button{graphics.shader, 0, "Yeah", constants::fontHandler.getFont(4), {50, 50}, 128}
 {
     button.onClick = [&button = button]() {
         button.scale += glm::vec3(1.0f, 1.0f, 0.0f);

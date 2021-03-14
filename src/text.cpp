@@ -12,6 +12,7 @@ Text::Text(const GLuint shader,
       font{font},
       text{text},
       texture{nullptr},
+      size{0, 0},
       position{position},
       scale{scale}
 {    
@@ -36,8 +37,15 @@ void Text::createTextMesh()
 
     // Generate and bind the data to the model
     std::vector<Vertex> data;
-    if (surface) Generic::Render::generateSquare(data, 0.0f, 0.0f, surface->w, surface->h,
+    
+    if (surface)
+    {
+        Generic::Render::generateSquare(data, 0.0f, 0.0f, surface->w, surface->h,
                                                   0.0f, 0.0f, 1.0f, 1.0f);
+        size.x = surface->w;
+        size.y = surface->h;
+    }
+    
     model.setBufferData(data);
 }
 

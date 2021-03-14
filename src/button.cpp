@@ -65,8 +65,11 @@ void UI::Button::setText(const std::string& text)
 
 void UI::Button::updateButtonText()
 {
-    textModel.position = glm::vec3(position.x, position.y, 0.0f);
+    const uint16_t offsetX = size.x / 2 - (textModel.size.x / 2);
+    const uint16_t offsetY = size.y / 2 - (textModel.size.y / 2);
     textModel.scale = glm::vec3(scale.x, scale.y, 0.0f);
+    textModel.position = glm::vec3(position.x + offsetX * scale.x,
+                                   position.y + offsetY * scale.y, 0.0f);
 }
 
 void UI::Button::update(const Camera& camera, const EventWrapper& events)
