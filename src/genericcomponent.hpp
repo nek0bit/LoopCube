@@ -7,6 +7,7 @@
 #include "generic.hpp"
 #include "eventwrapper.hpp"
 #include "graphics.hpp"
+#include "transform.hpp"
 
 namespace UI
 {
@@ -26,7 +27,7 @@ namespace UI
         virtual ~GenericComponent();
 
         virtual void update(const Camera& camera, const EventWrapper& events);
-        virtual void draw(const Graphics& graphics) const noexcept;
+        virtual void draw(const Graphics&, const Transform& = {}) const noexcept;
 
         const unsigned id;
 

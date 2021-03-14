@@ -1,9 +1,9 @@
 #include "genericcomponent.hpp"
 
 UI::GenericComponent::GenericComponent(const unsigned id, const glm::ivec2& position, const glm::ivec2& size)
-    : id{id},
-      position{position},
+    : position{position},
       size{size},
+      id{id},
       onClick{},
       scale{1.0f, 1.0f, 1.0f}
 {}
@@ -39,5 +39,5 @@ void UI::GenericComponent::update(const Camera& camera, const EventWrapper& even
     handleEvents(camera, events);
 }
 
-void UI::GenericComponent::draw(const Graphics& graphics) const noexcept
+void UI::GenericComponent::draw(const Graphics&, const Transform&) const noexcept
 {}

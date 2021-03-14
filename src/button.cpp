@@ -79,13 +79,13 @@ void UI::Button::update(const Camera& camera, const EventWrapper& events)
     updateButtonText();
 }
 
-void UI::Button::draw(const Graphics& graphics) const noexcept
+void UI::Button::draw(const Graphics& graphics, const Transform& transform) const noexcept
 {
     graphics.textures.getTexture(TEXTURE_UI_BUTTON)->bind();
     model.draw(graphics.uniforms.model, graphics.uniforms.tex,
-               glm::vec3(position.x, position.y, 0.0f),
-               scale);
+               glm::vec3(position.x, position.y, 0.0f) + transform.translate,
+               scale + transform.scale);
 
     // Draw text
-    textModel.draw(graphics);
+    textModel.draw(graphics, transform);
 }

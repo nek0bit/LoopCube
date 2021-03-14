@@ -12,6 +12,7 @@
 #include "graphics.hpp"
 #include "model.hpp"
 #include "texture.hpp"
+#include "transform.hpp"
 
 class Text
 {
@@ -33,7 +34,7 @@ public:
 
     void createTextMesh();
     void setText(const std::string& text);
-    void draw(const Graphics& graphics) const noexcept;
+    void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept;
     inline const std::string& getText() const noexcept { return text; };
 
     glm::ivec2 size;

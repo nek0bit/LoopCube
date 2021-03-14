@@ -59,8 +59,10 @@ void Text::setText(const std::string& text)
     }
 }
 
-void Text::draw(const Graphics& graphics) const noexcept
+void Text::draw(const Graphics& graphics, const Transform& transform) const noexcept
 {
     texture->bind();
-    model.draw(graphics.uniforms.model, graphics.uniforms.tex, position, scale);
+    model.draw(graphics.uniforms.model, graphics.uniforms.tex,
+               position + transform.translate,
+               scale + transform.scale);
 }

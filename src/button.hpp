@@ -29,6 +29,6 @@ namespace UI
         void updateButtonText();
         
         void update(const Camera& camera, const EventWrapper& events) override;
-        void draw(const Graphics& graphics) const noexcept override;
+        void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept override;
     };
 }
