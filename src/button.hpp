@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <memory>
 
 #include "constants.hpp"
 #include "genericcomponent.hpp"
@@ -16,15 +17,15 @@ namespace UI
     private:
         void generateButtonMesh();
 
-        Model model;
-        Text textModel;
+        std::shared_ptr<Model> model;
+        std::shared_ptr<Text> textModel;
     public:
         Button(const GLuint shader, const unsigned id, const std::string& text,
                TTF_Font* font, const glm::ivec2& position = {0, 0}, const int size = 0);
         ~Button();
 
         void setText(const std::string& text);
-        inline const std::string& getText() const noexcept { return textModel.getText(); }
+        inline const std::string& getText() const noexcept { return textModel->getText(); }
 
         void updateButtonText();
         

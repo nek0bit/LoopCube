@@ -19,6 +19,14 @@ Model::~Model()
     glDeleteVertexArrays(1, &vao);
 }
 
+// Copy
+Model::Model(const Model& source)
+    : vao{source.vao},
+      vbo{source.vbo},
+      size{source.size},
+      shader{source.shader}
+{}
+
 // Move
 Model::Model(Model&& source)
     : vao{source.vao},

@@ -22,7 +22,7 @@ private:
     SDL_Color color;
     TTF_Font* font;
     std::string text;
-    std::unique_ptr<Texture> texture;
+    std::shared_ptr<Texture> texture;
 public:
     Text(const GLuint shader,
          const std::string& text,
@@ -30,6 +30,7 @@ public:
          TTF_Font* font,
          const glm::vec3& position = {0.0f, 0.0f, 0.0f},
          const glm::vec3& scale = {0.0f, 0.0f, 0.0f});
+    Text(Text&& source);
     ~Text();
 
     void createTextMesh();

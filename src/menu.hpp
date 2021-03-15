@@ -9,7 +9,6 @@ class Menu
 {
 private:
     UI::Container container;
-    UI::Button button;
 public:
     Menu(const Graphics& graphics);
     ~Menu();

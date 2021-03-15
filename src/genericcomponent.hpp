@@ -40,8 +40,8 @@ namespace UI
         virtual void update(const Camera& camera, const EventWrapper& events);
         virtual void draw(const Graphics&, const Transform& = {}) const noexcept;
 
-        const component_t type;
-        const unsigned id;
+        component_t type;
+        unsigned id;
 
         // Events
         std::function<void(void)> onClick;
@@ -51,5 +51,6 @@ namespace UI
         glm::vec3 scale;
 
         uint8_t fixed;
+        bool temporary;
     };
 }

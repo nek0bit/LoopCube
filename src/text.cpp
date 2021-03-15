@@ -30,10 +30,25 @@ Text::~Text()
     SDL_FreeSurface(surface);
 }
 
+// Move
+Text::Text(Text&& source)
+    : model{source.model},
+      surface{source.surface},
+      color{source.color},
+      font{source.font},
+      text{source.text},
+      texture{source.texture},
+      position{source.position},
+      scale{source.scale}
+{
+    source.surface = nullptr;
+    source.font = nullptr;
+}
+
 void Text::createTextMesh()
 {
     surface = TTF_RenderText_Blended(font, text.c_str(), color);
-    texture = std::make_unique<Texture>(surface);
+    texture = std::make_shared<Texture>(surface);
 
     // Generate and bind the data to the model
     std::vector<Vertex> data;

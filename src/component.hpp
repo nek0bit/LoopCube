@@ -7,7 +7,7 @@
 namespace UI
 {
     struct Component
-    {
+    {        
         component_t type;
         std::variant<
             UI::Button

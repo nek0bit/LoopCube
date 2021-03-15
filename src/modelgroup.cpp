@@ -9,7 +9,7 @@ ModelGroup::~ModelGroup()
 
 void ModelGroup::addModel(const GLuint shader, const std::vector<Vertex>& model)
 {
-    models.emplace_back(shader, model);
+    models.emplace_back(shader, std::move(model));
 }
 
 const Model& ModelGroup::getModel(const size_t index) const

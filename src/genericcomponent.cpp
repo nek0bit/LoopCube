@@ -10,9 +10,10 @@ UI::GenericComponent::GenericComponent(const component_t type,
       id{id},
       onClick{[](){}},
       onHover{[](){}},
-      scale{1.0f, 1.0f, 1.0f}
+      scale{1.0f, 1.0f, 1.0f},
+      fixed{FIXED_W | FIXED_H},
+      temporary{false}
 {
-    fixed = fixed | FIXED_W | FIXED_H;
 }
 
 UI::GenericComponent::~GenericComponent()

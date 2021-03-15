@@ -2,23 +2,30 @@
 #include "genericcomponent.hpp"
 #include "component.hpp"
 
-class Container
+namespace UI
 {
-private:
-    std::vector<UI::Component> components;
-public:
-    Container(const unsigned id,
-              const glm::ivec2& position = {0, 0},
-              const glm::ivec2& size = {0, 0});
-    ~Container();
+    class Container: public GenericComponent
+    {
+    private:
+        std::vector<UI::Component> components;
+    public:
+        Container(const unsigned id,
+                  const glm::ivec2& position = {0, 0},
+                  const glm::ivec2& size = {0, 0});
+        ~Container();
 
-    template <typename T>
-    void addComponent(const T& component) {
-        const component_t type = component.type;
+        void update(const Camera& camera, const EventWrapper& events) override;
+        void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept override;
 
-        components.emplace_back(UI::Component{
-                type,
-                component
-            });
-    }
-};
+        template <typename T>
+        void addComponent(T component) {
+            const component_t type = component.type;
+            component.temporary = true;
+            
+            components.push_back(UI::Component{
+                    type,
+                    component
+                });
+        }
+    };
+}

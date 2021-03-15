@@ -1,8 +1,7 @@
 #include "menu.hpp"
 
 Menu::Menu(const Graphics& graphics)
-    : container{0, {50, 50}, {300, 300}},
-      button{graphics.shader, 0, "Yeah", constants::fontHandler.getFont(4), {50, 50}, 128}
+    : container{0, {50, 50}, {300, 300}}
 {
     // button.onHover = [&]() {
     //     std::cout << "Button hovered!" << std::endl;
@@ -11,6 +10,10 @@ Menu::Menu(const Graphics& graphics)
     //     SDL_GetWindowPosition(graphics.window, &x, &y);
     //     SDL_SetWindowPosition(graphics.window, x+(rand()%10), y+(rand()%10));
     // };
+
+    container.addComponent(UI::Button(
+                               graphics.shader, 0, "Yeah", constants::fontHandler.getFont(4), {50, 50}, 128
+                               ));
 }
 
 Menu::~Menu()

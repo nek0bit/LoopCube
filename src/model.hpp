@@ -15,7 +15,7 @@
 struct Model
 {
     Model(const GLuint shader, const std::vector<Vertex>& vertices = {});
-    Model(const Model&) = delete;
+    Model(const Model&);
     Model(Model&& source);
     virtual ~Model();
 
