@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <memory>
 #include <vector>
 #include <cstdint>
 
@@ -12,8 +13,11 @@
 
 #include "vertex.hpp"
 
-struct Model
+class Model
 {
+private:
+    std::shared_ptr<int> refCount;
+public:
     Model(const GLuint shader, const std::vector<Vertex>& vertices = {});
     Model(const Model&);
     Model(Model&& source);

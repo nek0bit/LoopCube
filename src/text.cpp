@@ -12,6 +12,7 @@ Text::Text(const GLuint shader,
       font{font},
       text{text},
       texture{nullptr},
+      refCount{std::make_shared<int>(1)},
       size{0, 0},
       position{position},
       scale{scale}
@@ -27,22 +28,46 @@ Text::Text(const GLuint shader,
 
 Text::~Text()
 {
-    SDL_FreeSurface(surface);
+    if (*refCount == 1)
+    {
+        SDL_FreeSurface(surface);
+    }
+
+    // Bump the refCount down, another reference will probably delete it
+    (*refCount)--;
 }
 
-// Move
-Text::Text(Text&& source)
+// Copy
+Text::Text(const Text& source)
     : model{source.model},
       surface{source.surface},
       color{source.color},
       font{source.font},
       text{source.text},
       texture{source.texture},
+      refCount{source.refCount},
+      size{source.size},
       position{source.position},
       scale{source.scale}
 {
-    source.surface = nullptr;
-    source.font = nullptr;
+    (*refCount)++;
+}
+
+// Move
+Text::Text(Text&& source)
+    : model{std::move(source.model)},
+      surface{std::move(source.surface)},
+      color{std::move(source.color)},
+      font{std::move(source.font)},
+      text{std::move(source.text)},
+      texture{std::move(source.texture)},
+      refCount{std::move(source.refCount)},
+      size{std::move(source.size)},
+      position{std::move(source.position)},
+      scale{std::move(source.scale)}
+{
+    // The same thing as above pretty much, except this is just easier
+    (*refCount)++;
 }
 
 void Text::createTextMesh()

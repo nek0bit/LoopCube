@@ -51,6 +51,5 @@ namespace UI
         glm::vec3 scale;
 
         uint8_t fixed;
-        bool temporary;
     };
 }

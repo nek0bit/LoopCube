@@ -11,8 +11,7 @@ UI::GenericComponent::GenericComponent(const component_t type,
       onClick{[](){}},
       onHover{[](){}},
       scale{1.0f, 1.0f, 1.0f},
-      fixed{FIXED_W | FIXED_H},
-      temporary{false}
+      fixed{FIXED_W | FIXED_H}
 {
 }
 

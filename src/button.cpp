@@ -4,9 +4,9 @@
 UI::Button::Button(const GLuint shader, const unsigned id, const std::string& text,
                    TTF_Font* font, const glm::ivec2& position, const int size)
     : GenericComponent(COMPONENT_BUTTON, id, position, {(size > 64 ? size : 64), 32}),
-      model{std::make_shared<Model>(shader)},
+      model{shader},
       // TODO don't hardcode color!
-      textModel{std::make_shared<Text>(shader, text, SDL_Color{255, 255, 255, 255}, font)}
+      textModel{shader, text, SDL_Color{255, 255, 255, 255}, font}
 {
     fixed |= FIXED_H;
     generateButtonMesh();   
@@ -55,22 +55,22 @@ void UI::Button::generateButtonMesh()
                                     tCoord[2].begX, tCoord[2].begY, tCoord[2].endX, tCoord[2].endY);
 
     // Bind data
-    model->setBufferData(mesh);
+    model.setBufferData(mesh);
 
     updateButtonText();
 }
 
 void UI::Button::setText(const std::string& text)
 {
-    textModel->setText(text);
+    textModel.setText(text);
 }
 
 void UI::Button::updateButtonText()
 {
-    const uint16_t offsetX = size.x / 2 - (textModel->size.x / 2);
-    const uint16_t offsetY = size.y / 2 - (textModel->size.y / 2);
-    textModel->scale = glm::vec3(scale.x, scale.y, 0.0f);
-    textModel->position = glm::vec3(position.x + offsetX * scale.x,
+    const uint16_t offsetX = size.x / 2 - (textModel.size.x / 2);
+    const uint16_t offsetY = size.y / 2 - (textModel.size.y / 2);
+    textModel.scale = glm::vec3(scale.x, scale.y, 0.0f);
+    textModel.position = glm::vec3(position.x + offsetX * scale.x,
                                    position.y + offsetY * scale.y, 0.0f);
 }
 
@@ -84,10 +84,10 @@ void UI::Button::update(const Camera& camera, const EventWrapper& events)
 void UI::Button::draw(const Graphics& graphics, const Transform& transform) const noexcept
 {
     graphics.textures.getTexture(TEXTURE_UI_BUTTON)->bind();
-    model->draw(graphics.uniforms.model, graphics.uniforms.tex,
+    model.draw(graphics.uniforms.model, graphics.uniforms.tex,
                 glm::vec3(position.x, position.y, 0.0f) + transform.translate,
                 scale + transform.scale);
 
     // Draw text
-    textModel->draw(graphics, transform);
+    textModel.draw(graphics, transform);
 }

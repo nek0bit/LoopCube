@@ -1,4 +1,5 @@
 #pragma once
+#include <variant>
 #include "genericcomponent.hpp"
 #include "component.hpp"
 
@@ -18,12 +19,8 @@ namespace UI
         void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept override;
 
         template <typename T>
-        void addComponent(T component) {
-            const component_t type = component.type;
-            component.temporary = true;
-            
+        void addComponent(const T& component) {            
             components.push_back(UI::Component{
-                    type,
                     component
                 });
         }

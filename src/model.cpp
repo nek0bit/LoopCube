@@ -1,7 +1,8 @@
 #include "model.hpp"
 
 Model::Model(const GLuint shader, const std::vector<Vertex>& vertices)
-    : vao{0},
+    : refCount{std::make_shared<int>(1)},
+      vao{0},
       vbo{0},
       size{0},
       shader{shader}
@@ -15,29 +16,36 @@ Model::Model(const GLuint shader, const std::vector<Vertex>& vertices)
 
 Model::~Model()
 {
-    glDeleteBuffers(1, &vbo);
-    glDeleteVertexArrays(1, &vao);
+    if (*refCount == 1)
+    {
+        glDeleteBuffers(1, &vbo);
+        glDeleteVertexArrays(1, &vao);
+    }
+
+    (*refCount)--;
 }
 
 // Copy
 Model::Model(const Model& source)
-    : vao{source.vao},
-      vbo{source.vbo},
-      size{source.size},
-      shader{source.shader}
-{}
-
-// Move
-Model::Model(Model&& source)
-    : vao{source.vao},
+    : refCount{source.refCount},
+      vao{source.vao},
       vbo{source.vbo},
       size{source.size},
       shader{source.shader}
 {
-    // Sets source to 0 (glDeleteBuffers/VertexArrays ignores 0)
-    source.vao = 0;
-    source.vbo = 0;
-    source.size = 0;
+    (*refCount)++;
+}
+
+// Move
+Model::Model(Model&& source)
+    : refCount{std::move(source.refCount)},
+      vao{std::move(source.vao)},
+      vbo{std::move(source.vbo)},
+      size{std::move(source.size)},
+      shader{std::move(source.shader)}
+{
+    // Probably simpler to do it this way
+    (*refCount)++;
 }
 
 void Model::setBufferData(const std::vector<Vertex>& vertices, const GLenum usage)

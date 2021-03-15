@@ -23,6 +23,7 @@ private:
     TTF_Font* font;
     std::string text;
     std::shared_ptr<Texture> texture;
+    std::shared_ptr<int> refCount;
 public:
     Text(const GLuint shader,
          const std::string& text,
@@ -30,6 +31,7 @@ public:
          TTF_Font* font,
          const glm::vec3& position = {0.0f, 0.0f, 0.0f},
          const glm::vec3& scale = {0.0f, 0.0f, 0.0f});
+    Text(const Text& source);
     Text(Text&& source);
     ~Text();
 
