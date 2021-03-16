@@ -14,6 +14,12 @@ UI::Container::~Container()
 void UI::Container::updateComponents()
 {
     
+    for (auto& component: components)
+    {
+        std::visit([&](auto& data) {
+            std::cout << "Test" << std::endl;
+        }, component.data);
+    }
 }
 
 void UI::Container::update(const Camera& camera, const EventWrapper& events)

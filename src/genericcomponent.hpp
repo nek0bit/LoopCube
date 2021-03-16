@@ -26,11 +26,11 @@ namespace UI
         void eventClick(const Camera& camera, const EventWrapper& events);
         void eventHover(const Camera& camera, const EventWrapper& events);
     protected:
+        void handleEvents(const Camera& camera, const EventWrapper& events); // Calls all event methods
+    public:
         glm::ivec2 position;
         glm::ivec2 size;
         
-        void handleEvents(const Camera& camera, const EventWrapper& events); // Calls all event methods
-    public:
         GenericComponent(const component_t type,
                          const unsigned id,
                          const glm::ivec2& position = {0, 0},
