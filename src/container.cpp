@@ -11,6 +11,11 @@ UI::Container::~Container()
 {
 }
 
+void UI::Container::updateComponents()
+{
+    
+}
+
 void UI::Container::update(const Camera& camera, const EventWrapper& events)
 {
     for (auto& component: components)

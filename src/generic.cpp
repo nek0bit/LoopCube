@@ -88,13 +88,13 @@ void Generic::Render::renderRepeating(const Graphics& graphics,
 void Generic::Render::generateSquare(std::vector<Vertex>& mesh, float b1, float b2, float e1, float e2,
                                      float tb1, float tb2, float te1, float te2)
 {
-    mesh.emplace_back(glm::vec3(b1, e2, 0.0f), glm::vec2(tb1, tb2));
-    mesh.emplace_back(glm::vec3(e1, e2, 0.0f), glm::vec2(te1, tb2));
-    mesh.emplace_back(glm::vec3(e1, b2, 0.0f), glm::vec2(te1, te2));
+    mesh.emplace_back(glm::vec3(b1, e2, 0.0f), glm::vec2(tb1, te2));
+    mesh.emplace_back(glm::vec3(e1, e2, 0.0f), glm::vec2(te1, te2));
+    mesh.emplace_back(glm::vec3(e1, b2, 0.0f), glm::vec2(te1, tb2));
             
-    mesh.emplace_back(glm::vec3(e1, b2, 0.0f), glm::vec2(te1, te2));
-    mesh.emplace_back(glm::vec3(b1, b2, 0.0f), glm::vec2(tb1, te2));
-    mesh.emplace_back(glm::vec3(b1, e2, 0.0f), glm::vec2(tb1, tb2));
+    mesh.emplace_back(glm::vec3(e1, b2, 0.0f), glm::vec2(te1, tb2));
+    mesh.emplace_back(glm::vec3(b1, b2, 0.0f), glm::vec2(tb1, tb2));
+    mesh.emplace_back(glm::vec3(b1, e2, 0.0f), glm::vec2(tb1, te2));
 }
 // OpenGL wrappers
 #endif

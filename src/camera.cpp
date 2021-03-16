@@ -22,7 +22,7 @@ void Camera::updateProj()
                                   static_cast<float>(size.w) / static_cast<float>(size.h),
                                   1.0f, 10.0f);*/
     projection = glm::ortho(0.0f, static_cast<float>(size.w),
-                            0.0f, static_cast<float>(size.h),
+                            static_cast<float>(size.h), 0.0f,
                             0.1f, 5000.0f);
 }
 

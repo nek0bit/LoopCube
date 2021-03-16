@@ -15,6 +15,10 @@ namespace UI
                   const glm::ivec2& size = {0, 0});
         ~Container();
 
+        // Updates each components place and size appropriately
+        void updateComponents();
+        
+        // For game loop
         void update(const Camera& camera, const EventWrapper& events) override;
         void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept override;
 
@@ -23,6 +27,7 @@ namespace UI
             components.push_back(UI::Component{
                     component
                 });
+            updateComponents();
         }
     };
 }
