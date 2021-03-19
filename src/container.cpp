@@ -4,8 +4,8 @@ UI::Container::Container(const unsigned id,
                          const container_layout layout,
                          const glm::ivec2& position,
                          const glm::ivec2& size)
-    : GenericComponent{COMPONENT_CONTAINER, id, position, size},
-      components{},
+    : UI::GenericComponent{COMPONENT_CONTAINER, id, position, size},
+      UI::ComponentList{},
       layout{layout}
 {}
 

@@ -2,6 +2,7 @@
 #include <variant>
 #include "genericcomponent.hpp"
 #include "component.hpp"
+#include "componentlist.hpp"
 
 enum container_layout
 {
@@ -11,10 +12,9 @@ enum container_layout
 
 namespace UI
 {
-    class Container: public GenericComponent
+    class Container: public UI::GenericComponent,
+                     public UI::ComponentList
     {
-    private:
-        std::vector<UI::Component> components;
     public:
         Container(const unsigned id,
                   const container_layout layout,
@@ -23,19 +23,11 @@ namespace UI
         ~Container();
 
         // Updates each components place and size appropriately
-        void updateComponents();
+        void updateComponents() override;
         
         // For game loop
         void update(const Camera& camera, const EventWrapper& events) override;
         void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept override;
-
-        template <typename T>
-        void addComponent(const T& component) {            
-            components.push_back(UI::Component{
-                    component
-                });
-            updateComponents();
-        }
 
         container_layout layout;
     };
