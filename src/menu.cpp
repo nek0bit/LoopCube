@@ -11,13 +11,12 @@ Menu::Menu(const Graphics& graphics)
     //     SDL_SetWindowPosition(graphics.window, x+(rand()%10), y+(rand()%10));
     // };
 
-    container.addComponent(UI::Button(
-                               graphics.shader, 0, "Yeah", constants::fontHandler.getFont(4), {50, 50}, 128
-                               ));
+    container.addComponent(UI::Button(graphics.shader, 0, "Yeah", constants::fontHandler.getFont(4)));
     
-    container.addComponent(UI::Button(
-                               graphics.shader, 0, "Button", constants::fontHandler.getFont(4), {50, 50}, 300
-                               ));
+    container.addComponent(UI::Button(graphics.shader, 0, "Button", constants::fontHandler.getFont(4)));
+
+    
+    container.addComponent(UI::Button(graphics.shader, 0, "Test", constants::fontHandler.getFont(4)));
 }
 
 Menu::~Menu()
