@@ -80,13 +80,15 @@ namespace Generic
     Type deserializeSigned(const Container& value, const size_t begIndex, const uint8_t length)
     {
         constexpr uint8_t BYTE_SIZE = 8;
+        constexpr uint8_t BYTE_LAST = 0x80;
+        constexpr uint8_t BYTE_LAST_MINUS = BYTE_LAST - 1;
         Type result = 0;
 
-        bool isNegative = (value.at(begIndex + length - 1) & 128) == 128;
+        bool isNegative = (value.at(begIndex + length - 1) & BYTE_LAST) == BYTE_LAST;
         for (uint8_t i = 0; i < length; ++i)
         {
             uint8_t val = value.at(begIndex + i);
-            result |= (i+1 == length ? val & 127 : val) << (i * BYTE_SIZE);
+            result |= (i+1 == length ? val & BYTE_LAST_MINUS : val) << (i * BYTE_SIZE);
         }
         
         return isNegative ? -result : result;

@@ -13,11 +13,13 @@ UI::Container::~Container()
 
 void UI::Container::updateComponents()
 {
+    int x = 0;
     
+    // Go through each component and update its position and properties
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
-            std::cout << "Test" << std::endl;
+            
         }, component.data);
     }
 }
