@@ -12,7 +12,7 @@
 
 enum fixedsize_t
 {
-    FIXED_W,
+    FIXED_W = 1,
     FIXED_H
 };
 
@@ -37,6 +37,7 @@ namespace UI
                          const glm::ivec2& size = {0, 0});
         virtual ~GenericComponent();
 
+        virtual void refreshContent();
         virtual void update(const Camera& camera, const EventWrapper& events);
         virtual void draw(const Graphics&, const Transform& = {}) const noexcept;
 

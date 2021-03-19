@@ -14,6 +14,10 @@ Menu::Menu(const Graphics& graphics)
     container.addComponent(UI::Button(
                                graphics.shader, 0, "Yeah", constants::fontHandler.getFont(4), {50, 50}, 128
                                ));
+    
+    container.addComponent(UI::Button(
+                               graphics.shader, 0, "Button", constants::fontHandler.getFont(4), {50, 50}, 300
+                               ));
 }
 
 Menu::~Menu()

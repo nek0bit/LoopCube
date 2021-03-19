@@ -13,13 +13,27 @@ UI::Container::~Container()
 
 void UI::Container::updateComponents()
 {
-    int x = 0;
+    int32_t yIncrease = position.y;
     
     // Go through each component and update its position and properties
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
+            // Increase size if not fixed
+            if ((data.fixed & FIXED_W) == FIXED_W)
+                data.size.x = size.x;
             
+            if ((data.fixed & FIXED_H) == FIXED_H)
+                data.size.y = size.y;
+            
+            // Set positions to appropriate position
+            data.position.x = position.x;
+            data.position.y = yIncrease;
+
+            
+            yIncrease += data.size.y;
+
+            data.refreshContent();
         }, component.data);
     }
 }

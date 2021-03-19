@@ -8,7 +8,7 @@ UI::Button::Button(const GLuint shader, const unsigned id, const std::string& te
       // TODO don't hardcode color!
       textModel{shader, text, SDL_Color{255, 255, 255, 255}, font}
 {
-    fixed |= FIXED_H;
+    fixed = FIXED_W;
     generateButtonMesh();   
 }
 
@@ -65,6 +65,11 @@ void UI::Button::setText(const std::string& text)
     textModel.setText(text);
 }
 
+void UI::Button::refreshContent()
+{
+    generateButtonMesh();
+}
+
 void UI::Button::updateButtonText()
 {
     const uint16_t offsetX = size.x / 2 - (textModel.size.x / 2);
@@ -77,8 +82,6 @@ void UI::Button::updateButtonText()
 void UI::Button::update(const Camera& camera, const EventWrapper& events)
 {
     handleEvents(camera, events);
-
-    updateButtonText();
 }
 
 void UI::Button::draw(const Graphics& graphics, const Transform& transform) const noexcept

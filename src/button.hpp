@@ -28,7 +28,8 @@ namespace UI
         inline const std::string& getText() const noexcept { return textModel.getText(); }
 
         void updateButtonText();
-        
+
+        void refreshContent() override;
         void update(const Camera& camera, const EventWrapper& events) override;
         void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept override;
     };

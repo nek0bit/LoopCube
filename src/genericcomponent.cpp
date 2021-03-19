@@ -11,7 +11,7 @@ UI::GenericComponent::GenericComponent(const component_t type,
       onClick{[](){}},
       onHover{[](){}},
       scale{1.0f, 1.0f, 1.0f},
-      fixed{FIXED_W | FIXED_H}
+      fixed{0}
 {
 }
 
@@ -49,6 +49,9 @@ bool UI::GenericComponent::isVmouseTouching(const Camera& camera, const EventWra
          Generic::topToBottomFlip<int>(events.vmouse.y, camera.size.h), 0, 0,
          position.x, position.y, size.x * scale.x, size.y * scale.y);
 }
+
+void UI::GenericComponent::refreshContent()
+{}
 
 void UI::GenericComponent::update(const Camera& camera, const EventWrapper& events)
 {
