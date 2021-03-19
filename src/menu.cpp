@@ -1,7 +1,7 @@
 #include "menu.hpp"
 
 Menu::Menu(const Graphics& graphics)
-    : container{0, {50, 50}, {300, 300}}
+    : container{0, CONTAINER_HORIZONTAL, {0, 0}, {300, 300}}
 {
     // button.onHover = [&]() {
     //     std::cout << "Button hovered!" << std::endl;

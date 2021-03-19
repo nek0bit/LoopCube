@@ -8,7 +8,7 @@ UI::Button::Button(const GLuint shader, const unsigned id, const std::string& te
       // TODO don't hardcode color!
       textModel{shader, text, SDL_Color{255, 255, 255, 255}, font}
 {
-    fixed = FIXED_W;
+    fixed = FIXED_H;
     generateButtonMesh();   
 }
 

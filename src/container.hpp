@@ -3,6 +3,12 @@
 #include "genericcomponent.hpp"
 #include "component.hpp"
 
+enum container_layout
+{
+    CONTAINER_HORIZONTAL,
+    CONTAINER_VERTICAL
+};
+
 namespace UI
 {
     class Container: public GenericComponent
@@ -11,6 +17,7 @@ namespace UI
         std::vector<UI::Component> components;
     public:
         Container(const unsigned id,
+                  const container_layout layout,
                   const glm::ivec2& position = {0, 0},
                   const glm::ivec2& size = {0, 0});
         ~Container();
@@ -29,5 +36,7 @@ namespace UI
                 });
             updateComponents();
         }
+
+        container_layout layout;
     };
 }
