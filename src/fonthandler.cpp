@@ -38,12 +38,17 @@ void FontHandler::addFontByFilename(std::string filename, std::vector<size_t> si
         addFontByFilename(filename, i);
 }
 
-TTF_Font* FontHandler::getFont(size_t index)
+TTF_Font* FontHandler::getFont(size_t index) noexcept
 {
     if (index > fonts.size())
     {
         return nullptr;
     }
     
+    return fonts[index];
+}
+
+TTF_Font* FontHandler::operator[](size_t index) noexcept
+{
     return fonts[index];
 }

@@ -10,6 +10,12 @@
 #include "transform.hpp"
 #include "componenttypes.hpp"
 
+enum component_size_t
+{
+    SIZE_AUTO = -1,
+    SIZE_NONE
+};
+
 enum fixedsize_t
 {
     FIXED_W = 1,
@@ -30,6 +36,7 @@ namespace UI
     public:
         glm::ivec2 position;
         glm::ivec2 size;
+        glm::ivec2 initialSize;
         
         GenericComponent(const component_t type,
                          const unsigned id,

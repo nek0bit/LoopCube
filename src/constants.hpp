@@ -78,7 +78,7 @@ namespace constants
 		TextureInfo{"cave_bg.png", TEXTURE_CAVE_BG},
 		TextureInfo{"sun.png", TEXTURE_SUN},
 		TextureInfo{"moon.png", TEXTURE_MOON},
-        TextureInfo{"ui_button.png", TEXTURE_UI_BUTTON, 96, 64, 32, 32}
+        TextureInfo{"ui_button.png", TEXTURE_UI_BUTTON, 96, 32, 32, 32}
 	};
 
     constexpr std::array<BlockInfo, 1> blockInfo = {

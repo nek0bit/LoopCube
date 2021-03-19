@@ -6,14 +6,14 @@ UI::GenericComponent::GenericComponent(const component_t type,
                                        const glm::ivec2& size)
     : position{position},
       size{size},
+      initialSize{size},
       type{type},
       id{id},
       onClick{[](){}},
       onHover{[](){}},
       scale{1.0f, 1.0f, 1.0f},
       fixed{0}
-{
-}
+{}
 
 UI::GenericComponent::~GenericComponent()
 {}
