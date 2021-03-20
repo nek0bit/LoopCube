@@ -6,13 +6,13 @@
 
 namespace UI
 {
-    class List: public UI::GenericComponent,
-                public UI::ComponentList // Only needed for generic addComponent method and vector
+    class ScrollList: public UI::GenericComponent,
+                      public UI::ComponentList // Only needed for generic addComponent method and vector
     {
-        List(const unsigned id,
+        ScrollList(const unsigned id,
              const glm::ivec2& size = {0, 0},
              const glm::ivec2& position = {0, 0});
-        ~List();
+        ~ScrollList();
 
         void updateComponents() override;
 
