@@ -31,7 +31,7 @@ void UI::Container::updateComponents()
                 fixedSize.y += data.size.y;
                 fixedCount.y++;
             }
-        }, component.data);
+        }, component);
     }
     
     // Set it to container position at start
@@ -86,7 +86,7 @@ void UI::Container::updateComponents()
     };
     
     // Go through each component and update its position and properties
-    for (size_t i = 0; i < components.size(); ++i)
+    for (auto& component: components)
     {
         std::visit([&](auto& data) {
             data.position.x = xIncrease;
@@ -104,7 +104,7 @@ void UI::Container::updateComponents()
             };
 
             data.refreshContent();
-        }, components[i].data);
+        }, component);
     }
 }
 
@@ -114,7 +114,7 @@ void UI::Container::update(const Camera& camera, const EventWrapper& events)
     {
         std::visit([&](auto& data) {
             data.update(camera, events);
-        }, component.data);
+        }, component);
     }
 }
 
@@ -124,6 +124,6 @@ void UI::Container::draw(const Graphics& graphics, const Transform& transform) c
     {
         std::visit([&](auto& data) {
             data.draw(graphics, transform);
-        }, component.data);
+        }, component);
     }
 }

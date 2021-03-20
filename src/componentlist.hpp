@@ -9,17 +9,15 @@ namespace UI
     protected:
         std::vector<UI::Component> components;
     public:
-        ComponentList(const std::vector<UI::Component>& components = {})
-            : components{components} {};
+        ComponentList()
+            : components{} {};
         virtual ~ComponentList() {};
 
         virtual void updateComponents() {};
         
         template <typename T>
         void addComponent(const T& component) {
-            components.push_back(UI::Component{
-                    component
-                });
+            components.push_back(component);
             updateComponents();
         }
     };

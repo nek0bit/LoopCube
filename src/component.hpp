@@ -1,15 +1,17 @@
 #pragma once
 #include <variant>
 
-#include "componenttypes.hpp"
-#include "button.hpp"
-
 namespace UI
 {
-    struct Component
-    {        
-        std::variant<
-            UI::Button
-            > data;
-    };
+    class Container;
+    class Button;
+    class Scrollbar;
+    class ScrollList;
+
+    using Component = std::variant<
+        UI::Container,
+        UI::Button,
+        UI::Scrollbar,
+        UI::ScrollList
+    >;
 }

@@ -3,6 +3,7 @@
 #include "eventwrapper.hpp"
 #include "container.hpp"
 #include "button.hpp"
+#include "scrollbar.hpp"
 #include "constants.hpp"
 
 class Menu

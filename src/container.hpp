@@ -1,8 +1,13 @@
 #pragma once
 #include <variant>
 #include "genericcomponent.hpp"
-#include "component.hpp"
 #include "componentlist.hpp"
+
+// Elements
+// TODO clean this up
+#include "button.hpp"
+#include "scrollbar.hpp"
+#include "scrolllist.hpp"
 
 enum container_layout
 {

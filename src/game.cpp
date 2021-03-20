@@ -58,7 +58,7 @@ void Game::createModels()
     
     const texcoord_t pModGet = Texture::getTilemapCoord(pModInfo, 0, 0);
     
-    // BLOCK
+    // SQUARE
     graphics.models.addModel(graphics.shader, {
             {{0.0f, 1.0f, 0.0f},  {0.0f, 0.0f}},
             {{1.0f, 1.0f, 0.0f},  {1.0f, 0.0f}},
