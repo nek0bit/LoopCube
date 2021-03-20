@@ -10,18 +10,23 @@ Menu::Menu(const Graphics& graphics)
             )
         );
 
-    UI::Container container2{0, CONTAINER_HORIZONTAL, {0, 0}, {400, 500}};
-
+    UI::Container container2{0, CONTAINER_HORIZONTAL, {100, 200}, {400, 800}};
     
     container2.addComponent(
         UI::Button(
-            graphics.shader, 0, "in 2", constants::fontHandler[3]
+            graphics.shader, 0, "in 1", constants::fontHandler[3]
             )
         );
 
     container2.addComponent(
         UI::Button(
             graphics.shader, 0, "in 2", constants::fontHandler[2]
+            )
+        );
+    
+    container2.addComponent(
+        UI::Button(
+            graphics.shader, 0, "in 3", constants::fontHandler[2]
             )
         );
     
