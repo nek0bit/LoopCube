@@ -1,12 +1,13 @@
 # -*- mode: makefile -*-
 CXX ?= g++
-CXXFLAGS = -Wall -Wextra -pipe -pedantic $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
-LDFLAGS = $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
-SRC_DIR = ./src
-OBJ_DIR = ./obj
+CXXFLAGS += -std=c++17 -Wall -Wextra -pipe -pedantic -Iinclude/ -I/usr/include/glm $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
+LDFLAGS += -pthread -ldl -framework OpenGL $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
+SRC_DIR = src
+OBJ_DIR = obj
 TARGET = loopcube
 SRC = $(wildcard src/*.cpp)
-OBJ = $(patsubst %.cpp,obj/%.o,$(SRC))
+OBJ = $(patsubst %.cpp,obj/%.o,$(SRC)) obj/src/glad.o
+MAKE ?= make
 
 ifeq ($(strip $(DATA_LOCATION)),)
 CXXFLAGS += -DDATA_LOCATION=\".\"
@@ -14,16 +15,18 @@ else
 CXXFLAGS += -DDATA_LOCATION=\"$(DATA_LOCATION)\"
 endif
 
-CXXFLAGS += -DINPUT_BACKEND_SDL2 -DGRAPHIC_BACKEND_SDL2 -D_SDL2
-
 all: debug
+server:
+	@$(MAKE) -f Makefile.server all
 
 obj/%.o: %.cpp %.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ 
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+obj/src/glad.o: src/glad.c
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJ)
 	$(CXX) -o $(TARGET) $^ $(LDFLAGS) 
-
 
 debug: CXXFLAGS += -g
 debug: setup
@@ -36,19 +39,20 @@ release: $(TARGET)
 install:
 	@echo "Installing... Make sure your binary has DATA_LOCATION set to a loopcube folder"
 	mkdir -p $(DATA_LOCATION)
-	mkdir -p $(PREFIX)
 	cp -r data $(DATA_LOCATION)/data
-	install -m755 $(TARGET) $(PREFIX)/$(TARGET)
+	install -Dm755 $(TARGET) $(PREFIX)/$(TARGET)
 
 uninstall:
 	@echo "Uninstalling... type yes if prompted (be careful)"
-	rm -r $(DATA_LOCATION)
-	rm -r $(PREFIX)/$(TARGET)
+	rm -Ir $(DATA_LOCATION)
+	rm -ir $(PREFIX)/$(TARGET)
 
 setup:
 	@mkdir -p obj/src/
+	@mkdir -p obj/server/
 
-.PHONY: all clean setup debug release install
 clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(TARGET)
+
+.PHONY: all server clean setup debug release install

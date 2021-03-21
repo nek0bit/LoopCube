@@ -13,7 +13,7 @@ Game::Game(Timer& timer, int argc, char** argv)
       timer{timer},
       graphics{nullptr, winSize}
 {
-    state.push(STATE_MAIN_MENU);
+    state.push(STATE_PLAYING);
 }
 
 Game::~Game()
