@@ -307,8 +307,8 @@ void GameClient::drawSelection(const Graphics& graphics, const SelectInfo pos) c
 
 void GameClient::handleCamera(Camera& camera)
 {
-	double x = -std::floor(mainPlayer.position.x) + (winSize.w / 2) - mainPlayer.size.x/2;
-	double y = -std::floor(mainPlayer.position.y) + (winSize.h / 2) - mainPlayer.size.y/2;
+	double x = -std::floor(mainPlayer.position.x) + (winSize.w / 2) - mainPlayer.size.x / 2;
+	double y = -std::floor(mainPlayer.position.y) + (winSize.h / 2) - mainPlayer.size.y / 2;
 	
 	static double moveX = x;
 	static double moveY = y;
