@@ -7,14 +7,12 @@ Model::Model(const GLuint shader, const std::vector<Vertex>& vertices)
       size{0},
       shader{shader}
 {
-    if (shader != 0)
-    {
-        glGenVertexArrays(1, &vao);
-        glGenBuffers(1, &vbo);
+    std::cout << shader << " " << glGetError() << std::endl;
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
 
-        if (vertices.size() > 0)
-            setBufferData(vertices);
-    }
+    if (vertices.size() > 0)
+        setBufferData(vertices);
 }
 
 Model::~Model()
@@ -90,16 +88,14 @@ void Model::draw(const GLint& uModel,
                  const glm::vec3& scale,
                  const glm::vec2& texturePos) const noexcept
 {
-    if (shader != 0) {
-        glBindVertexArray(vao);
-        glm::mat4 model{1.0f};
+    glBindVertexArray(vao);
+    glm::mat4 model{1.0f};
 
-        model = glm::translate(model, translate);
-        model = glm::scale(model, scale);    
+    model = glm::translate(model, translate);
+    model = glm::scale(model, scale);    
     
-        glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(model));
-        glUniform2fv(uTex, 1, glm::value_ptr(texturePos));
+    glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(model));
+    glUniform2fv(uTex, 1, glm::value_ptr(texturePos));
 
-        glDrawArrays(GL_TRIANGLES, 0, size);
-    }
+    glDrawArrays(GL_TRIANGLES, 0, size);
 }
