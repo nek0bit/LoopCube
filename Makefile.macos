@@ -1,5 +1,5 @@
 # -*- mode: makefile -*-
-CXX ?= g++
+CXX ?= c++
 CXXFLAGS += -std=c++17 -Wall -Wextra -pipe -pedantic -Iinclude/ -I/usr/include/glm $(shell pkg-config --cflags sdl2 SDL2_image SDL2_ttf)
 LDFLAGS += -pthread -ldl -framework OpenGL $(shell pkg-config --libs sdl2 SDL2_image SDL2_ttf)
 SRC_DIR = src

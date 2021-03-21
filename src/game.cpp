@@ -71,13 +71,13 @@ void Game::createModels()
     
     // PLAYER
     graphics.models.addModel(graphics.shader, {
-            {{0.0f, 1.0f, 0.0f},  {pModGet.begX, 0.0f}},
-            {{1.0f, 1.0f, 0.0f},  {pModGet.endX, 0.0f}},
-            {{1.0f, 0.0f, 0.0f},  {pModGet.endX, 1.0f}},
+            {{0.0f, 1.0f, 0.0f},  {pModGet.begX, 1.0f}},
+            {{1.0f, 1.0f, 0.0f},  {pModGet.endX, 1.0f}},
+            {{1.0f, 0.0f, 0.0f},  {pModGet.endX, 0.0f}},
             
-            {{1.0f, 0.0f, 0.0f}, {pModGet.endX, 1.0f}},
-            {{0.0f, 0.0f, 0.0f}, {pModGet.begX, 1.0f}},
-            {{0.0f, 1.0f, 0.0f}, {pModGet.begX, 0.0f}}
+            {{1.0f, 0.0f, 0.0f}, {pModGet.endX, 0.0f}},
+            {{0.0f, 0.0f, 0.0f}, {pModGet.begX, 0.0f}},
+            {{0.0f, 1.0f, 0.0f}, {pModGet.begX, 1.0f}}
         });
 }
 
@@ -253,7 +253,7 @@ void Game::init(bool fullscreen = false) {
         throw std::runtime_error("Failed to initialize GLAD");
 
     // Disable VSYNC
-    SDL_GL_SetSwapInterval(0);
+    //SDL_GL_SetSwapInterval(0);
 
     graphics.init();
 

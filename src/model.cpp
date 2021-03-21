@@ -7,17 +7,19 @@ Model::Model(const GLuint shader, const std::vector<Vertex>& vertices)
       size{0},
       shader{shader}
 {
-    std::cout << shader << " " << glGetError() << std::endl;
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-
-    if (vertices.size() > 0)
-        setBufferData(vertices);
+    if (shader != 0)
+    {
+        glGenVertexArrays(1, &vao);
+        glGenBuffers(1, &vbo);
+        
+        if (vertices.size() > 0)
+            setBufferData(vertices);
+    }
 }
 
 Model::~Model()
 {
-    if (*refCount == 1)
+    if (*refCount == 1 && shader != 0)
     {
         glDeleteBuffers(1, &vbo);
         glDeleteVertexArrays(1, &vao);
@@ -51,13 +53,16 @@ Model::Model(Model&& source)
 
 void Model::setBufferData(const std::vector<Vertex>& vertices, const GLenum usage)
 {
-    // Bind both values
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    if (shader != 0)
+    {
+        // Bind both values
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
     
-    size = vertices.size(); // Used for glDrawArrays size
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], usage);
-    setupVertexLayout();
+        size = vertices.size(); // Used for glDrawArrays size
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], usage);
+        setupVertexLayout();
+    }
 }
 
 void Model::setupVertexLayout()

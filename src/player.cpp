@@ -116,12 +116,12 @@ void Player::update(ChunkGroup& chunks, Timer& timer,
 
 void Player::jump(ChunkGroup &chunks, Timer&)
 {
-	position.y -= 1;
-	if (onGround && jumpEnabled && checkBlockCollision(chunks).bottom != -1) {
+	position.y += 1;
+	if (onGround && jumpEnabled && checkBlockCollision(chunks).top != -1) {
         velY = -885.0f;
         onGround = false;
     }
-	position.y += 1;
+	position.y -= 1;
 	jumping = true;
 	canJump = false;
 }

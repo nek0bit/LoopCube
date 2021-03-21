@@ -101,7 +101,7 @@ void Entity::updateBasicPhysics(const ChunkGroup& chunks, const Timer& timer) {
     }
 		
     velY += 2000.0f * timer.deltaTime;
-    position.y -= velY * timer.deltaTime;
+    position.y += velY * timer.deltaTime;
 
     // Cap +Y velocity
     if (velY > cap) {

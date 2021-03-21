@@ -7,7 +7,9 @@ Chunk::Chunk(const GLuint shader, std::shared_ptr<ChunkGen> chunkGen, long int x
       MAX_HEIGHT{static_cast<unsigned>(constants::chunkHeight)},
       data{},
       borders{nullptr, nullptr, nullptr, nullptr},
+#ifndef __HEADLESS
       chunkMesh{shader},
+#endif
       chunkGen{chunkGen}
 {
     data.resize(MAX_WIDTH*MAX_HEIGHT, nullptr);
@@ -344,10 +346,14 @@ indPos Chunk::indexToPos(const size_t index) const
     return {x, y};
 }
 
+
 void Chunk::generateChunkMesh()
 {
+#ifndef __HEADLESS
     ChunkMesh::mutableGenerateChunkMesh(chunkMesh, data, x, y);
+#endif
 }
+
 
 void Chunk::generateChunk()
 {    

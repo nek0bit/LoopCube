@@ -28,7 +28,7 @@ void ChunkMesh::mutableGenerateChunkMesh(Model& modifyMesh, const std::vector<st
             const float endX = begX + BLOCK_W,
                 endY = begY + BLOCK_H;
 
-            Generic::Render::generateSquare(mesh, begX, begY, endX, endY,
+            Generic::Render::generateSquare(mesh, begX, endY, endX, begY,
                                             tCoord.begX, tCoord.begY, tCoord.endX, tCoord.endY);
 
         }

@@ -285,7 +285,7 @@ void GameClient::mouseEvents(Camera& camera, EventWrapper& events, const glm::ve
 SelectInfo GameClient::getSelection(Camera& camera, EventWrapper& events, const glm::vec2& camZoom) const
 {
     const int& mouseX = events.vmouse.x;
-    const int& mouseY = Generic::topToBottomFlip(events.vmouse.y, camera.size.h);
+    const int& mouseY = events.vmouse.y;
     
     const int& selX = std::floor((mouseX + camera.position.x) / constants::blockW);
     const int& selY = std::floor((mouseY + camera.position.y) / constants::blockH);
