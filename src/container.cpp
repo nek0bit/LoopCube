@@ -120,10 +120,12 @@ void UI::Container::update(const Camera& camera, const EventWrapper& events)
 
 void UI::Container::draw(const Graphics& graphics, const Transform& transform) const noexcept
 {
+    Transform newTransform = transform;
+    newTransform.translate += glm::vec3(position.x, position.y, 0);
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
-            data.draw(graphics, transform);
+            data.draw(graphics, newTransform);
         }, component);
     }
 }

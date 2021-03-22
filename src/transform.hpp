@@ -11,7 +11,7 @@ struct Transform
           texturePos{texturePos}
         {}
     
-    const glm::vec3 translate;
-    const glm::vec3 scale;
-    const glm::vec2 texturePos;
+    glm::vec3 translate;
+    glm::vec3 scale;
+    glm::vec2 texturePos;
 };

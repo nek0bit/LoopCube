@@ -10,7 +10,7 @@ Menu::Menu(const Graphics& graphics)
             )
         );
 
-    UI::Container container2{0, CONTAINER_HORIZONTAL, {100, 200}, {400, 800}};
+    UI::Container container2{0, CONTAINER_HORIZONTAL, {0, 0}, {400, 800}};
     
     container2.addComponent(
         UI::Button(
