@@ -1,49 +1,40 @@
 #include "menu.hpp"
 
 Menu::Menu(const Graphics& graphics)
-    : container{0, CONTAINER_VERTICAL, {0, 0}, {800, 600}}
+    : container{0, {800, 600}, {0, 0}}
 {
     // What the fuck
     container.addComponent(
         UI::Button(
-            graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], 128
+            graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 80}
             )
         );
 
-    UI::Container container2{0, CONTAINER_HORIZONTAL, {0, 0}, {SIZE_AUTO, SIZE_AUTO}};
-    
-    container2.addComponent(
+    container.addComponent(
         UI::Button(
-            graphics.shader, 0, "in 1", constants::fontHandler[3]
+            graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 40}
             )
         );
 
-    container2.addComponent(
+    UI::Container miniContainer{0, CONTAINER_HORIZONTAL, {0, 0}, {SIZE_AUTO, 40}};
+    miniContainer.addComponent(
         UI::Button(
-            graphics.shader, 0, "in 2", constants::fontHandler[2]
+            graphics.shader, 1, "Button 1", constants::fontHandler[4], {SIZE_AUTO, SIZE_AUTO}
             )
         );
-    
-    container2.addComponent(
+
+    miniContainer.addComponent(
         UI::Button(
-            graphics.shader, 0, "in 3", constants::fontHandler[2]
+            graphics.shader, 1, "Button 2", constants::fontHandler[4], {SIZE_AUTO, SIZE_AUTO}
             )
         );
-    
-    container.addComponent(
-        container2);
-    
-    container.addComponent(
+
+    miniContainer.addComponent(
         UI::Button(
-            graphics.shader, 0, "Auto", constants::fontHandler[4]
-            )
+            graphics.shader, 1, "Button 3", constants::fontHandler[4], {SIZE_AUTO, SIZE_AUTO})
         );
-    
-    container.addComponent(
-        UI::Button(
-            graphics.shader, 0, "Fixed: 256", constants::fontHandler[4], 256
-            )
-        );
+
+    container.addComponent(miniContainer);
 }
 
 Menu::~Menu()

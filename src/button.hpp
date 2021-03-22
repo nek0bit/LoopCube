@@ -21,7 +21,7 @@ namespace UI
         Text textModel;
     public:
         Button(const GLuint shader, const unsigned id, const std::string& text,
-               TTF_Font* font, const int sizeX = SIZE_AUTO, const glm::ivec2& position = {0, 0});
+               TTF_Font* font, const glm::ivec2& size = {SIZE_AUTO, SIZE_AUTO}, const glm::ivec2& position = {0, 0});
         ~Button();
 
         void setText(const std::string& text);

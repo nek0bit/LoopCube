@@ -2,6 +2,7 @@
 #include "graphics.hpp"
 #include "eventwrapper.hpp"
 #include "container.hpp"
+#include "scrolllist.hpp"
 #include "button.hpp"
 #include "scrollbar.hpp"
 #include "constants.hpp"
@@ -9,7 +10,7 @@
 class Menu
 {
 private:
-    UI::Container container;
+    UI::ScrollList container;
 public:
     Menu(const Graphics& graphics);
     ~Menu();
