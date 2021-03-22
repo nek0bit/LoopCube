@@ -57,9 +57,13 @@ void UI::Container::updateComponents()
                 xIncrease += data.size.x;
             }
         }
+        else
+        {
+            xIncrease += data.size.x;
+        }
 
         // Fix height of each element if possible
-        if ((data.fixed & FIXED_H) != FIXED_H) data.size.y = size.y;        
+        if ((data.fixed & FIXED_H) != FIXED_H) data.size.y = size.y;
     };
 
     // Vertical layout
@@ -79,6 +83,10 @@ void UI::Container::updateComponents()
             {
                 yIncrease += data.size.y;
             }
+        }
+        else
+        {
+            yIncrease += data.size.y;
         }
 
         // Fix width of each element if possible
@@ -108,6 +116,11 @@ void UI::Container::updateComponents()
     }
 }
 
+void UI::Container::refreshContent()
+{
+    updateComponents();
+}
+
 void UI::Container::update(const Camera& camera, const EventWrapper& events)
 {
     for (auto& component: components)
@@ -120,12 +133,10 @@ void UI::Container::update(const Camera& camera, const EventWrapper& events)
 
 void UI::Container::draw(const Graphics& graphics, const Transform& transform) const noexcept
 {
-    Transform newTransform = transform;
-    newTransform.translate += glm::vec3(position.x, position.y, 0);
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
-            data.draw(graphics, newTransform);
+            data.draw(graphics, transform);
         }, component);
     }
 }

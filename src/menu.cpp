@@ -1,7 +1,7 @@
 #include "menu.hpp"
 
 Menu::Menu(const Graphics& graphics)
-    : container{0, CONTAINER_HORIZONTAL, {0, 0}, {1200, 500}}
+    : container{0, CONTAINER_VERTICAL, {0, 0}, {800, 600}}
 {
     // What the fuck
     container.addComponent(
@@ -10,7 +10,7 @@ Menu::Menu(const Graphics& graphics)
             )
         );
 
-    UI::Container container2{0, CONTAINER_HORIZONTAL, {0, 0}, {400, 800}};
+    UI::Container container2{0, CONTAINER_HORIZONTAL, {0, 0}, {SIZE_AUTO, SIZE_AUTO}};
     
     container2.addComponent(
         UI::Button(

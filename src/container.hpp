@@ -27,6 +27,8 @@ namespace UI
                   const glm::ivec2& size = {0, 0});
         ~Container();
 
+        void refreshContent() override;
+
         // Updates each components place and size appropriately
         void updateComponents() override;
         
