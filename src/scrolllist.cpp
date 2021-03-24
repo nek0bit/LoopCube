@@ -8,7 +8,11 @@ UI::ScrollList::ScrollList(const unsigned id,
     : UI::GenericComponent{COMPONENT_SCROLL_LIST, id, position, size},
       UI::ComponentList{},
       scrollbar{id, -1, -1, {SCROLLBAR_WIDTH, SIZE_AUTO}, {0, 0}}
-{}
+{
+    scrollbar.isScrolled = [&](const double scrollPos) {
+        std::cout << scrollPos << std::endl;
+    };
+}
 
 UI::ScrollList::~ScrollList()
 {}
@@ -27,7 +31,7 @@ void UI::ScrollList::updateComponents()
         std::visit([&](auto& data) {
             if (data.initialSize.x == SIZE_AUTO)
             {
-                data.size.x = size.x - scrollbar.size.x;
+                data.size.x = size.x - (scrollbar.scrollbarEnabled ? scrollbar.size.x : 0);
             }
 
             // Increase sizes
@@ -47,6 +51,8 @@ void UI::ScrollList::updateComponents()
             position.y};
     scrollbar.position = scrollbarOffset;
     scrollbar.size.y = size.y;
+
+    scrollbar.fullHeight = yIncrease;
 }
 
 void UI::ScrollList::update(const Camera& camera, const EventWrapper& events)

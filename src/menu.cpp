@@ -9,10 +9,33 @@ Menu::Menu(const Graphics& graphics)
             graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 80}
             )
         );
-
     container.addComponent(
         UI::Button(
             graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 40}
+            )
+        );
+
+    container.addComponent(
+        UI::Button(
+            graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 500}
+            )
+        );
+
+    container.addComponent(
+        UI::Button(
+            graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 300}
+            )
+        );
+
+    container.addComponent(
+        UI::Button(
+            graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 300}
+            )
+        );
+    
+    container.addComponent(
+        UI::Button(
+            graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 300}
             )
         );
 

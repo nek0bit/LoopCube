@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include <glm/glm.hpp>
 #include "genericcomponent.hpp"
 
@@ -16,8 +17,16 @@ namespace UI
 
         void update(const Camera& camera, const EventWrapper& events) override;
         void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept override;
+
+        bool isClickingScrollbar(const EventWrapper& events) const noexcept;
         
+        double scrollPosition;
         int fullHeight;
-        int viewHeight;
+        float viewHeight;
+        // If true then scrollbar will draw and respond to events
+        bool scrollbarEnabled;
+
+        // Events
+        std::function<void(double)> isScrolled;
     };
 }
