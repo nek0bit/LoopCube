@@ -47,7 +47,7 @@ void UI::Scrollbar::update(const Camera& camera, const EventWrapper& events)
 
 void UI::Scrollbar::fixScrollbar() noexcept
 {
-    const double maxView = size.y - (viewHeight * size.y);
+    const int maxView = size.y - (viewHeight * size.y);
 
     if (scrollPosition < 0)
         scrollPosition = 0;
