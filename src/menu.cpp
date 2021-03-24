@@ -15,6 +15,7 @@ Menu::Menu(const Graphics& graphics)
             )
         );
 
+    /*
     container.addComponent(
         UI::Button(
             graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 500}
@@ -26,7 +27,7 @@ Menu::Menu(const Graphics& graphics)
             graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 300}
             )
         );
-
+*/
     container.addComponent(
         UI::Button(
             graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 300}
