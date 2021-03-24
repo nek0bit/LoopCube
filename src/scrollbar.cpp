@@ -7,12 +7,12 @@ UI::Scrollbar::Scrollbar(const unsigned id,
                          const glm::ivec2& position)
     : GenericComponent{COMPONENT_SCROLLBAR, id, position, size},
     scrollPosition{0.0},
-    scrollOffset{0.0},
+    scrollScale{0.0},
     fullHeight{fullHeight},
     viewHeight{viewHeight},
     scrollbarEnabled{size.y < fullHeight},
     isBeingDragged{false},
-    isScrolled{[](double d){}}
+    isScrolled{[](double, double){}}
 {}
 
 UI::Scrollbar::~Scrollbar() {}
@@ -31,11 +31,12 @@ void UI::Scrollbar::update(const Camera& camera, const EventWrapper& events)
 
     if (isBeingDragged)
     {
-        scrollOffset += events.vmouse.y - lastMousePos; // Normalized scroll position
+        scrollScale = static_cast<double>(fullHeight) / (viewHeight * size.y); // Normalized scroll position
+        std::cout << fullHeight << " " << viewHeight * size.y << std::endl;
         scrollPosition += events.vmouse.y - lastMousePos; // Real scroll position
         // Fix scrollbar from going in negatives and similar things
         fixScrollbar();
-        isScrolled(scrollPosition);
+        isScrolled(scrollPosition, scrollScale);
     }
 
     // Stop dragging when mouse down is released

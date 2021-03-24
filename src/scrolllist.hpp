@@ -15,6 +15,8 @@ namespace UI
     {
     private:
         UI::Scrollbar scrollbar;
+
+        double translateComponentsY;
     public:
         ScrollList(const unsigned id,
              const glm::ivec2& size = {0, 0},

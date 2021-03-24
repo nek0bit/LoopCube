@@ -23,7 +23,7 @@ namespace UI
             bool isClickingScrollbar(const EventWrapper& events) const noexcept;
 
             double scrollPosition;
-            double scrollOffset;
+            double scrollScale;
             int fullHeight;
             float viewHeight;
             // If true then scrollbar will draw and respond to events
@@ -31,6 +31,6 @@ namespace UI
             bool isBeingDragged;
 
             // Events
-            std::function<void(double)> isScrolled;
+            std::function<void(double, double)> isScrolled;
     };
 }

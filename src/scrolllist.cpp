@@ -7,10 +7,12 @@ UI::ScrollList::ScrollList(const unsigned id,
                            const glm::ivec2& position)
     : UI::GenericComponent{COMPONENT_SCROLL_LIST, id, position, size},
       UI::ComponentList{},
-      scrollbar{id, -1, -1, {SCROLLBAR_WIDTH, SIZE_AUTO}, {0, 0}}
+      scrollbar{id, -1, -1, {SCROLLBAR_WIDTH, SIZE_AUTO}, {0, 0}},
+      translateComponentsY{0.0}
 {
-    scrollbar.isScrolled = [&](const double scrollPos) {
-        std::cout << scrollPos << std::endl;
+    scrollbar.isScrolled = [&](const double scrollPos, const double scrollScale) {
+        translateComponentsY = -(scrollPos * scrollScale);
+        std::cout << scrollScale << std::endl;
     };
 }
 
@@ -70,11 +72,14 @@ void UI::ScrollList::update(const Camera& camera, const EventWrapper& events)
 
 void UI::ScrollList::draw(const Graphics& graphics, const Transform& transform) const noexcept
 {
+    Transform tCopy = transform;
+    tCopy.translate.y += translateComponentsY;
+
     // Components
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
-            data.draw(graphics, transform);
+            data.draw(graphics, tCopy);
         }, component);
     }
 
