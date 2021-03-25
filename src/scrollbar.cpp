@@ -9,7 +9,7 @@ UI::Scrollbar::Scrollbar(const unsigned id,
     scrollPosition{0.0},
     scrollScale{0.0},
     fullHeight{fullHeight},
-    viewHeight{viewHeight},
+    viewHeight{static_cast<float>(viewHeight)},
     scrollbarEnabled{size.y < fullHeight},
     isBeingDragged{false},
     isScrolled{[](double, double){}}
