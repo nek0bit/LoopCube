@@ -63,7 +63,7 @@ bool UI::Scrollbar::isClickingScrollbar(const EventWrapper& events) const noexce
                 position.x, position.y + scrollPosition, size.x, viewHeight * size.y);
 }
 
-void UI::Scrollbar::draw(const Graphics& graphics, const Transform& transform) const noexcept
+void UI::Scrollbar::draw(const Graphics& graphics, Transform transform) const noexcept
 {
     if (scrollbarEnabled)
     {

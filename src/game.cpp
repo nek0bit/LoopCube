@@ -85,6 +85,7 @@ void Game::createModels()
 void Game::render() {
     // Clear screen
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+    glScissor(0, 0, graphics.camera.size.w, graphics.camera.size.h);
     glClear(GL_COLOR_BUFFER_BIT);
 
     if (state.size() > 0)
@@ -253,7 +254,7 @@ void Game::init(bool fullscreen = false) {
         throw std::runtime_error("Failed to initialize GLAD");
 
     // Disable VSYNC
-    //SDL_GL_SetSwapInterval(0);
+    SDL_GL_SetSwapInterval(0);
 
     graphics.init();
 

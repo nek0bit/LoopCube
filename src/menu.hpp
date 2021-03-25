@@ -10,7 +10,7 @@
 class Menu
 {
 private:
-    UI::ScrollList container;
+    UI::Container container;
 public:
     Menu(const Graphics& graphics);
     ~Menu();

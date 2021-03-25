@@ -1,7 +1,7 @@
 #include "menu.hpp"
 
 Menu::Menu(const Graphics& graphics)
-    : container{0, {400, 400}, {40, 40}}
+    : container{0, CONTAINER_VERTICAL, {400, 400}, {60, 60}}
 {
     container.addComponent(
         UI::Button(

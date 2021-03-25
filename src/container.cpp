@@ -2,8 +2,8 @@
 
 UI::Container::Container(const unsigned id,
                          const container_layout layout,
-                         const glm::ivec2& position,
-                         const glm::ivec2& size)
+                         const glm::ivec2& size,
+                         const glm::ivec2& position)
     : UI::GenericComponent{COMPONENT_CONTAINER, id, position, size},
       UI::ComponentList{},
       layout{layout}
@@ -35,8 +35,8 @@ void UI::Container::updateComponents()
     }
     
     // Set it to container position at start
-    float xIncrease = position.x;
-    float yIncrease = position.y;
+    float xIncrease = 0;
+    float yIncrease = 0;
 
     // For each layout...
     // Horizontal layout
@@ -131,8 +131,11 @@ void UI::Container::update(const Camera& camera, const EventWrapper& events)
     }
 }
 
-void UI::Container::draw(const Graphics& graphics, const Transform& transform) const noexcept
+void UI::Container::draw(const Graphics& graphics, Transform transform) const noexcept
 {
+    transform.translate.x += position.x;
+    transform.translate.y += position.y;
+
     for (auto& component: components)
     {
         std::visit([&](auto& data) {

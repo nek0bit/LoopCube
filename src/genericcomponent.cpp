@@ -58,5 +58,5 @@ void UI::GenericComponent::update(const Camera& camera, const EventWrapper& even
     handleEvents(camera, events);
 }
 
-void UI::GenericComponent::draw(const Graphics&, const Transform&) const noexcept
+void UI::GenericComponent::draw(const Graphics&, Transform) const noexcept
 {}

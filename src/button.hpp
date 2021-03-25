@@ -31,6 +31,6 @@ namespace UI
 
         void refreshContent() override;
         void update(const Camera& camera, const EventWrapper& events) override;
-        void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept override;
+        void draw(const Graphics& graphics, Transform transform = {}) const noexcept override;
     };
 }

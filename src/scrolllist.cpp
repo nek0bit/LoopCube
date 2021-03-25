@@ -69,11 +69,10 @@ void UI::ScrollList::update(const Camera& camera, const EventWrapper& events)
     scrollbar.update(camera, events);
 }
 
-void UI::ScrollList::draw(const Graphics& graphics, const Transform& transform) const noexcept
+void UI::ScrollList::draw(const Graphics& graphics, Transform transform) const noexcept
 {
-    Transform tCopy = transform;
-    tCopy.translate.x += position.x;
-    tCopy.translate.y += translateComponentsY + position.y;
+    transform.translate.x += position.x;
+    transform.translate.y += translateComponentsY + position.y;
 
     // Clip components
     glScissor(position.x, Generic::topToBottomFlip(size.y + position.y, graphics.camera.size.h),
@@ -83,7 +82,7 @@ void UI::ScrollList::draw(const Graphics& graphics, const Transform& transform) 
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
-            data.draw(graphics, tCopy);
+            data.draw(graphics, transform);
         }, component);
     }
 

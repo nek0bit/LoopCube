@@ -23,8 +23,8 @@ namespace UI
     public:
         Container(const unsigned id,
                   const container_layout layout,
-                  const glm::ivec2& position = {0, 0},
-                  const glm::ivec2& size = {0, 0});
+                  const glm::ivec2& size = {0, 0},
+                  const glm::ivec2& position = {0, 0});
         ~Container();
 
         void refreshContent() override;
@@ -34,7 +34,7 @@ namespace UI
         
         // For game loop
         void update(const Camera& camera, const EventWrapper& events) override;
-        void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept override;
+        void draw(const Graphics& graphics, Transform transform = {}) const noexcept override;
 
         container_layout layout;
     };

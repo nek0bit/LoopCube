@@ -46,7 +46,7 @@ namespace UI
 
         virtual void refreshContent();
         virtual void update(const Camera& camera, const EventWrapper& events);
-        virtual void draw(const Graphics&, const Transform& = {}) const noexcept;
+        virtual void draw(const Graphics&, Transform = {}) const noexcept;
 
         component_t type;
         unsigned id;

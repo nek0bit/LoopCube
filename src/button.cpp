@@ -83,7 +83,7 @@ void UI::Button::update(const Camera& camera, const EventWrapper& events)
     handleEvents(camera, events);
 }
 
-void UI::Button::draw(const Graphics& graphics, const Transform& transform) const noexcept
+void UI::Button::draw(const Graphics& graphics, Transform transform) const noexcept
 {
     graphics.textures.getTexture(TEXTURE_UI_BUTTON)->bind();
     model.draw(graphics.uniforms.model, graphics.uniforms.tex,
