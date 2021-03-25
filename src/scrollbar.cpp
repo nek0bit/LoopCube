@@ -31,8 +31,7 @@ void UI::Scrollbar::update(const Camera& camera, const EventWrapper& events)
 
     if (isBeingDragged)
     {
-        scrollScale = static_cast<double>(fullHeight) / (viewHeight * size.y); // Normalized scroll position
-        std::cout << fullHeight << " " << viewHeight * size.y << std::endl;
+        scrollScale = static_cast<double>(size.y) / (viewHeight * size.y);
         scrollPosition += events.vmouse.y - lastMousePos; // Real scroll position
         // Fix scrollbar from going in negatives and similar things
         fixScrollbar();
