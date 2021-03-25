@@ -1,9 +1,8 @@
 #include "menu.hpp"
 
 Menu::Menu(const Graphics& graphics)
-    : container{0, {800, 600}, {0, 0}}
+    : container{0, {400, 400}, {40, 40}}
 {
-    // What the fuck
     container.addComponent(
         UI::Button(
             graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 80}

@@ -12,7 +12,6 @@ UI::ScrollList::ScrollList(const unsigned id,
 {
     scrollbar.isScrolled = [&](const double scrollPos, const double scrollScale) {
         translateComponentsY = -(scrollPos * scrollScale);
-        std::cout << scrollScale << std::endl;
     };
 }
 
@@ -26,7 +25,7 @@ void UI::ScrollList::refreshContent()
 
 void UI::ScrollList::updateComponents()
 {
-    int yIncrease = position.x;
+    int yIncrease = 0;
     
     for (auto& component: components)
     {
@@ -37,7 +36,7 @@ void UI::ScrollList::updateComponents()
             }
 
             // Increase sizes
-            data.position.x = position.x;
+            data.position.x = 0;
             data.position.y = yIncrease;
 
             // Effects rest of components
@@ -73,7 +72,12 @@ void UI::ScrollList::update(const Camera& camera, const EventWrapper& events)
 void UI::ScrollList::draw(const Graphics& graphics, const Transform& transform) const noexcept
 {
     Transform tCopy = transform;
-    tCopy.translate.y += translateComponentsY;
+    tCopy.translate.x += position.x;
+    tCopy.translate.y += translateComponentsY + position.y;
+
+    // Clip components
+    glScissor(position.x, Generic::topToBottomFlip(size.y + position.y, graphics.camera.size.h),
+            size.x, size.y);
 
     // Components
     for (auto& component: components)
@@ -82,6 +86,9 @@ void UI::ScrollList::draw(const Graphics& graphics, const Transform& transform) 
             data.draw(graphics, tCopy);
         }, component);
     }
+
+    // Stop clipping
+    glScissor(0, 0, graphics.camera.size.w, graphics.camera.size.h);
 
     // Scrollbar
     scrollbar.draw(graphics, transform);

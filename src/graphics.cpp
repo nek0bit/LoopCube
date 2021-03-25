@@ -22,6 +22,7 @@ Graphics::~Graphics()
 void Graphics::init()
 {
     glEnable(GL_BLEND);
+    glEnable(GL_SCISSOR_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
