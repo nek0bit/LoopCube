@@ -1,11 +1,10 @@
 #pragma once
 #include "graphics.hpp"
 #include "eventwrapper.hpp"
-#include "container.hpp"
-#include "scrolllist.hpp"
-#include "button.hpp"
-#include "scrollbar.hpp"
 #include "constants.hpp"
+
+// I'm lazy for now
+#include "components.hpp"
 
 class Menu
 {

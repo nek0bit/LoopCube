@@ -7,11 +7,13 @@ namespace UI
     class Button;
     class Scrollbar;
     class ScrollList;
+    class TextComponent;
 
     using Component = std::variant<
         UI::Container,
         UI::Button,
         UI::Scrollbar,
-        UI::ScrollList
+        UI::ScrollList,
+        UI::TextComponent
     >;
 }
