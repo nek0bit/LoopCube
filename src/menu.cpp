@@ -1,7 +1,7 @@
 #include "menu.hpp"
 
 Menu::Menu(const Graphics& graphics)
-    : container{0, CONTAINER_VERTICAL, {400, 400}, {60, 60}}
+    : container{0, {800, 600}, {0, 0}}
 {
     container.addComponent(
         UI::Button(
@@ -31,13 +31,9 @@ Menu::Menu(const Graphics& graphics)
             )
         );
     
-    container.addComponent(
-        UI::Button(
-            graphics.shader, 0, "Fixed: 128", constants::fontHandler[4], {SIZE_AUTO, 300}
-            )
-        );
+   
 
-    UI::Container miniContainer{0, CONTAINER_HORIZONTAL, {0, 0}, {SIZE_AUTO, 40}};
+    UI::Container miniContainer{0, CONTAINER_HORIZONTAL, {SIZE_AUTO, 120}};
     miniContainer.addComponent(
         UI::Button(
             graphics.shader, 1, "Button 1", constants::fontHandler[4], {SIZE_AUTO, SIZE_AUTO}
@@ -56,6 +52,13 @@ Menu::Menu(const Graphics& graphics)
         );
 
     container.addComponent(miniContainer);
+
+
+    container.addComponent(
+        UI::Button(
+            graphics.shader, 0, "Last", constants::fontHandler[4], {SIZE_AUTO, 300}
+            )
+        );
 }
 
 Menu::~Menu()
