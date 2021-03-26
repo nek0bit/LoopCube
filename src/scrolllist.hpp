@@ -1,12 +1,9 @@
 #pragma once
 #include <variant>
 #include "genericcomponent.hpp"
-#include "component.hpp"
 
 // Elements
-#include "button.hpp"
-#include "scrollbar.hpp"
-#include "container.hpp"
+#include "components.hpp"
 
 namespace UI
 {

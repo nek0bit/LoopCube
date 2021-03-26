@@ -20,6 +20,7 @@ UI::TextComponent::~TextComponent()
 void UI::TextComponent::updateButtonText()
 {
     textModel.createTextMesh();
+    size.x = textModel.size.x;
 }
 
 void UI::TextComponent::setText(const std::string& text)
