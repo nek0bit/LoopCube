@@ -17,12 +17,10 @@ Currently it can be compiled with SDL2 support.
 ![v0.3(beta) alpha screenshot 2](meta/screenshot-2.png)
 
 # Building
-## Linux
+## Linux / macOS
 Ensure you are in the current directory, if not, textures may not load properly
 
-### SDL2
-
-Requires: `sdl2 sdl2_image sdl2_ttf`
+Requires: `sdl2 sdl2_image sdl2_ttf glm`
 
 ###### If you want to simply run the application in the current directory
 
@@ -34,38 +32,16 @@ If you would like to build for release, run `make release`
 
 Run `make DATA_LOCATION=/usr/local/share/loopcube release`
 
-## MacOS
-
-On macOS, LoopCube requires GCC to build. Using the regular Xcode development tools will not work.
-
-If you use Homebrew, you can satisfy the dependencies with this command:
-
-`brew install gcc sdl2 sdl2_image sdl2_ttf`
-
-The instructions for building vary depending on which shell you use.
-
-If you use bash (default on 10.14 and below), run:
-
-`CXX=g++-n make -f Makefile.macos DATA_LOCATION=/usr/local/share/loopcube`
-
-If you use zsh (default on 10.15 and later), run:
-
-`CXX=g++-n; make -f Makefile.macos DATA_LOCATION=/usr/local/share/loopcube`
-
-where *n* is the version of GCC installed by Homebrew.
-
 # Installing
 ## Linux
+
+Copy the data folder into wherever you set the DATA_LOCATION value to be
 
 `sudo make DATA_LOCATION=/usr/local/share/loopcube PREFIX=/usr/local/bin install`
 
 Replace `install` with `uninstall` if you want to remove it.
 
-## MacOS
-
-`sudo make -f Makefile.macos DATA_LOCATION=/usr/local/share/loopcube PREFIX=/usr/local/bin install`
-
-Replace `install` with `uninstall` if you want to remove it.
+*Note:* I haven't tested this on macOS yet, be careful
 
 # License
 
