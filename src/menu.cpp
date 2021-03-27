@@ -62,7 +62,7 @@ Menu::Menu(const Graphics& graphics)
 
     container.addComponent(
             UI::TextComponent(
-                graphics.shader, 1, "Last", 
+                graphics.shader, 1, "Hello world", 
                 SDL_Color{255, 255, 255, 255}, constants::fontHandler[4], {SIZE_AUTO, SIZE_AUTO}
                 )
             );
