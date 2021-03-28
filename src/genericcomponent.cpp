@@ -46,7 +46,7 @@ bool UI::GenericComponent::isVmouseTouching(const Camera& camera, const EventWra
 {
     return Generic::collision<float>
         (events.vmouse.x,
-         Generic::topToBottomFlip<int>(events.vmouse.y, camera.size.h), 0, 0,
+         events.vmouse.y, 0, 0,
          position.x, position.y, size.x * scale.x, size.y * scale.y);
 }
 

@@ -29,8 +29,7 @@ struct EventWrapper
 	void listen();
 
 	// Text mode
-    bool textMode;    
-	std::string textModeBuffer;
+	char textChar;
 
 	std::vector<int> buttonMapping; // Maps to proper state index
 	std::vector<int> buttonState;

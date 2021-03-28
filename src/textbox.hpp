@@ -8,6 +8,7 @@
 #include "texture.hpp"
 #include "generic.hpp"
 #include "text.hpp"
+#include "textbuffer.hpp"
 
 namespace UI
 {
@@ -15,9 +16,12 @@ namespace UI
     {
     private:
         void generateMesh();
+        void handleInputs(const EventWrapper& events);
 
         Model model;
         Text textModel;
+        bool isFocused;
+        TextBuffer buffer;
     public:
         Textbox(const GLuint shader, const unsigned id, TTF_Font* font,
                 const SDL_Color color, const int sizeX, const std::string& defaultText = "",

@@ -1,7 +1,12 @@
+/* TODO
+ * It's a lot cleaner and more efficient if we quit polling for events
+ * and start using event listeners for events
+ */
+
 #include "eventwrapper.hpp"
 
 EventWrapper::EventWrapper()
-    : textMode{false},
+    : textChar{NULL},
       quit{false},
       vmouse{0, 0, 0, 0, 0},
       controller{nullptr}
@@ -91,11 +96,11 @@ void EventWrapper::updateControllers() {
 }
 
 void EventWrapper::listen() {
-	// TODO move exceptions from SDL2 into internal class
 	std::vector<int> exceptions{4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
 	std::vector<int> controller_exceptions{6, 8};
 
-	
+    textChar = NULL;
+
 	// Disable Exceptions
 	for (auto exc: exceptions) {
 		if (keyState[exc] == 1) {
@@ -108,7 +113,6 @@ void EventWrapper::listen() {
 			buttonState[exc] = 0;
 		}
 	}
-	// End TODO
 	
 	if (vmouse.down == 1) vmouse.clicked = 0;
     vmouse.scroll = 0;
@@ -195,22 +199,19 @@ void EventWrapper::listen() {
 		}
 
 		switch(event.type) {
-			case SDL_TEXTINPUT:
-			if (textMode) {
-				textModeBuffer += event.text.text;
-			}
-			break;
+        case SDL_TEXTINPUT:
+			textChar = event.text.text[0];
 		case SDL_KEYDOWN:
 			for (auto exc: exceptions) {
 				if (keystate[keyMapping[exc]]) {
 					keyState[exc] = 1;
 				}
 			}
-			if (textMode && event.key.keysym.sym == SDLK_BACKSPACE) {
-				if (textModeBuffer.length() != 0) {
-					textModeBuffer.pop_back();
-				}
-			}
+			// if (textMode && event.key.keysym.sym == SDLK_BACKSPACE) {
+			// 	if (textModeBuffer.length() != 0) {
+			// 		textModeBuffer.pop_back();
+			// 	}
+			// }
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			vmouse.down = event.button.button;

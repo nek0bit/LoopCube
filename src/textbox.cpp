@@ -5,12 +5,14 @@
 UI::Textbox::Textbox(const GLuint shader, const unsigned id, TTF_Font* font,
         const SDL_Color color, const int sizeX, const std::string& defaultText, const glm::ivec2& position)
     : GenericComponent(COMPONENT_TEXTBOX, id, position, {sizeX, 32}),
-    model{shader},
-    textModel{shader, defaultText, color, font}
+      model{shader},
+      textModel{shader, defaultText, color, font},
+      isFocused{false},
+      buffer{}
 {
     generateMesh();
 
-    // TODO update textbox text position
+    updateTextboxText();
 }
 
 UI::Textbox::~Textbox()
@@ -72,12 +74,39 @@ void UI::Textbox::updateTextboxText()
     constexpr uint16_t X_BEGIN = 16;
     textModel.scale = glm::vec3(scale.x, scale.y, 0.0f);
     textModel.position = glm::vec3(position.x + X_BEGIN * scale.x,
-            position.y + midY * scale.y, 0.0f);
+                                   position.y + midY * scale.y, 0.0f);
 }
 
 void UI::Textbox::update(const Camera& camera, const EventWrapper& events)
 {
+    const bool touching = isVmouseTouching(camera, events);
     handleEvents(camera, events);
+
+    switch (events.vmouse.clicked)
+    {
+    case 1:
+        if (!isFocused && touching)
+        {
+            isFocused = true;
+        }
+        else if (isFocused && events.vmouse.clicked == 1 && !touching)
+        {
+            isFocused = false;
+        }
+
+        break;
+    default: break;
+    }
+
+    if (isFocused && events.textChar != NULL)
+    {
+        handleInputs(events);
+    }
+}
+
+void UI::Textbox::handleInputs(const EventWrapper& events)
+{
+    buffer.insert(events.textChar);
 }
 
 void UI::Textbox::draw(const Graphics& graphics, Transform transform) const noexcept

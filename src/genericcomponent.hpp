@@ -28,10 +28,10 @@ namespace UI
     {
     private:
         // Event handling (click, enter, etc.)
-        [[nodiscard]] bool isVmouseTouching(const Camera& camera, const EventWrapper& events) const noexcept;
         void eventClick(const Camera& camera, const EventWrapper& events);
         void eventHover(const Camera& camera, const EventWrapper& events);
     protected:
+        [[nodiscard]] bool isVmouseTouching(const Camera& camera, const EventWrapper& events) const noexcept;
         void handleEvents(const Camera& camera, const EventWrapper& events); // Calls all event methods
     public:
         glm::ivec2 position;
