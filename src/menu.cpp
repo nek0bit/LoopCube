@@ -11,7 +11,7 @@ Menu::Menu(const Graphics& graphics)
     
     container.addComponent(
             UI::Textbox(
-                graphics.shader, 0, constants::fontHandler[4], SDL_Color{255, 255, 255, 255}, SIZE_AUTO, "This is some text|"
+                graphics.shader, 0, constants::fontHandler[4], SDL_Color{255, 255, 255, 255}, SIZE_AUTO, "Type here"
                 )
             );
     container.addComponent(

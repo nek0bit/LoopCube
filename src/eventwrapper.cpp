@@ -32,7 +32,11 @@ EventWrapper::EventWrapper()
 		SDL_SCANCODE_0, // Slot 0
 		SDL_SCANCODE_F8, // DEBUG
 		SDL_SCANCODE_C, // SPAWN ENTITY
-        SDL_SCANCODE_ESCAPE // Exit
+        SDL_SCANCODE_ESCAPE, // Exit
+        SDL_SCANCODE_LEFT, // MOVE CHAR LEFT
+        SDL_SCANCODE_RIGHT, // MOVE CHAR RIGHT
+        SDL_SCANCODE_UP, // MOVE CHAR UP
+        SDL_SCANCODE_DOWN, // MOVE CHAR DOWN
 	};
 	buttonMapping = {
 #ifdef __SWITCH__
@@ -96,7 +100,7 @@ void EventWrapper::updateControllers() {
 }
 
 void EventWrapper::listen() {
-	std::vector<int> exceptions{4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
+	std::vector<int> exceptions{4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
 	std::vector<int> controller_exceptions{6, 8};
 
     textChar = NULL;

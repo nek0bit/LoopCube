@@ -102,11 +102,22 @@ void UI::Textbox::update(const Camera& camera, const EventWrapper& events)
     {
         handleInputs(events);
     }
+
+    // TODO clean this up
+    // Movement
+    if (events.keyState[18])
+    {
+        buffer.moveCursor(-1);
+    } else if (events.keyState[19])
+    {
+        buffer.moveCursor(1);
+    }
 }
 
 void UI::Textbox::handleInputs(const EventWrapper& events)
 {
     buffer.insert(events.textChar);
+    textModel.setText(buffer.getText());
 }
 
 void UI::Textbox::draw(const Graphics& graphics, Transform transform) const noexcept
