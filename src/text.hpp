@@ -14,6 +14,12 @@
 #include "texture.hpp"
 #include "transform.hpp"
 
+struct text_size
+{
+    int width;
+    int height;
+};
+
 class Text
 {
 private:
@@ -39,6 +45,8 @@ public:
     void setText(const std::string& text);
     void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept;
     inline const std::string& getText() const noexcept { return text; };
+
+    text_size getTextSize(const std::string& text);
 
     glm::ivec2 size;
     glm::vec3 position;

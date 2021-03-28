@@ -99,6 +99,31 @@ void Text::createTextMesh()
     model.setBufferData(data);
 }
 
+text_size Text::getTextSize(const std::string& text)
+{
+    using namespace std::string_literals;
+
+    // If text is empty return default struct
+    if (text == "")
+        return {0, 0};
+    
+    SDL_Surface* textSurface;
+
+    // It's a bit of a hack, but we will generate a rendertext surface
+    if ((textSurface = TTF_RenderText_Blended(font, text.c_str(), color)) == nullptr)
+    {
+        std::string msg = "Error creating text mesh: "s + TTF_GetError();
+        throw std::runtime_error(msg);
+    }
+
+    text_size value{textSurface->w, textSurface->h};
+
+    // Free since it's unneeded now
+    SDL_FreeSurface(textSurface);
+
+    return value;
+}
+
 void Text::setText(const std::string& text)
 {
     // Don't set and generate if the text is the exact same
