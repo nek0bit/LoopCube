@@ -2,11 +2,11 @@
 
 #include "textbox.hpp"
 
-UI::Textbox::Textbox(const GLuint shader, const unsigned id, const std::string& text,
-        TTF_Font* font, const SDL_Color color, const glm::ivec2& size, const glm::ivec2& position)
-    : GenericComponent(COMPONENT_TEXTBOX, id, position, size),
+UI::Textbox::Textbox(const GLuint shader, const unsigned id, TTF_Font* font,
+        const SDL_Color color, const int sizeX, const std::string& defaultText, const glm::ivec2& position)
+    : GenericComponent(COMPONENT_TEXTBOX, id, position, {sizeX, 32}),
     model{shader},
-    textModel{shader, text, color, font}
+    textModel{shader, defaultText, color, font}
 {
     generateMesh();
 
@@ -23,7 +23,7 @@ void UI::Textbox::generateMesh()
     const float TEXTBOX_END_W = TEXTBOX_MID_W + TEXTBOX_BL_W;
     std::vector<Vertex> mesh{};
 
-    const TextureInfo tInfo = constants::textureInfo[TEXTURE_TEXTBOX_BG];
+    const TextureInfo tInfo = constants::textureInfo[TEXTURE_UI_TEXTBOX];
 
     const texcoord_info info = {
         static_cast<unsigned>(tInfo.sizeX),
@@ -56,6 +56,8 @@ void UI::Textbox::generateMesh()
 
     // Bind data
     model.setBufferData(mesh);
+
+    updateTextboxText();
 }
 
 void UI::Textbox::refreshContent()
@@ -80,7 +82,7 @@ void UI::Textbox::update(const Camera& camera, const EventWrapper& events)
 
 void UI::Textbox::draw(const Graphics& graphics, Transform transform) const noexcept
 {
-    graphics.textures.getTexture(TEXTURE_TEXTBOX_BG)->bind();
+    graphics.textures.getTexture(TEXTURE_UI_TEXTBOX)->bind();
     model.draw(graphics.uniforms.model, graphics.uniforms.tex,
             glm::vec3(position.x, position.y, 0.0f) + transform.translate,
             scale + transform.scale);

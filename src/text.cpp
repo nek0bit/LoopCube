@@ -72,7 +72,17 @@ Text::Text(Text&& source)
 
 void Text::createTextMesh()
 {
-    surface = TTF_RenderText_Blended(font, text.c_str(), color);
+    using namespace std::string_literals;
+
+    // SDL_TTF doesn't like when text is blank
+    if (text == "") return;
+
+    if ((surface = TTF_RenderText_Blended(font, text.c_str(), color)) == nullptr)
+    {
+        std::string msg = "Error creating text mesh: "s + TTF_GetError();
+        throw std::runtime_error(msg);
+    }
+    
     texture = std::make_shared<Texture>(surface);
 
     // Generate and bind the data to the model
@@ -101,8 +111,10 @@ void Text::setText(const std::string& text)
 
 void Text::draw(const Graphics& graphics, const Transform& transform) const noexcept
 {
-    texture->bind();
-    model.draw(graphics.uniforms.model, graphics.uniforms.tex,
-               position + transform.translate,
-               scale + transform.scale);
+    if (texture) {
+        texture->bind();
+        model.draw(graphics.uniforms.model, graphics.uniforms.tex,
+                position + transform.translate,
+                scale + transform.scale);
+    }
 }

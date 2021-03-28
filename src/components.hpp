@@ -5,6 +5,7 @@
 #include "textcomponent.hpp"
 #include "button.hpp"
 #include "scrollbar.hpp"
+#include "textbox.hpp"
 
 // Allows containers to stack themselves
 #include "container.hpp"

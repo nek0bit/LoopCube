@@ -43,7 +43,7 @@ enum texture_enum
     TEXTURE_UI_BUTTON,
     TEXTURE_SCROLLBAR,
     TEXTURE_SCROLLBAR_BG,
-    TEXTURE_TEXTBOX_BG
+    TEXTURE_UI_TEXTBOX
 };
 
 enum config_enum
@@ -84,7 +84,7 @@ namespace constants
         TextureInfo{"ui_button.png", TEXTURE_UI_BUTTON, 96, 32, 32, 32},
         TextureInfo{"scrollbar.png", TEXTURE_SCROLLBAR},
         TextureInfo{"scrollbar_bg.png", TEXTURE_SCROLLBAR_BG},
-        TextureInfo{"textbox_bg.png", TEXTURE_TEXTBOX_BG, 96, 32, 32, 32},
+        TextureInfo{"ui_textbox.png", TEXTURE_UI_TEXTBOX, 96, 32, 32, 32},
 	};
 
     constexpr std::array<BlockInfo, 1> blockInfo = {

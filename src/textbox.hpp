@@ -19,8 +19,8 @@ namespace UI
         Model model;
         Text textModel;
     public:
-        Textbox(const GLuint shader, const unsigned id, const std::string& text,
-                TTF_Font* font, const SDL_Color color, const glm::ivec2& size = {SIZE_AUTO, SIZE_AUTO},
+        Textbox(const GLuint shader, const unsigned id, TTF_Font* font,
+                const SDL_Color color, const int sizeX, const std::string& defaultText = "",
                 const glm::ivec2& position = {0, 0});
         ~Textbox();
 

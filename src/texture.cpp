@@ -15,6 +15,7 @@ Texture::Texture(const std::string filename)
 
 Texture::Texture(SDL_Surface* texFromSurface)
 {
+    if (texFromSurface == nullptr) throw std::runtime_error("Recieved nullptr as argument!");
     if (generateTextureFromSurface(texFromSurface) == 1)
     {
         throw std::runtime_error("Got nullptr from texture!");
