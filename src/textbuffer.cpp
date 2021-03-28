@@ -17,10 +17,16 @@ void TextBuffer::push(const std::string& data)
     // TODO
 }
 
+void TextBuffer::backspace()
+{
+    if (col == 0) return;
+    buf.erase(col - 1, 1);
+    col--;
+}
+
 void TextBuffer::insert(const char data, bool increaseCol)
 {
     if (col > buf.size()) push(data);
-    else if (col < 0) buf.insert(buf.begin(), data);
     else buf.insert(buf.begin() + col, data);
 
     if (increaseCol) col++;
@@ -35,7 +41,7 @@ void TextBuffer::moveCursor(int move) noexcept
     }
     else if (static_cast<size_t>(result) > buf.size())
     {
-        col = buf.size()-1;
+        col = buf.size();
     }
     else
     {

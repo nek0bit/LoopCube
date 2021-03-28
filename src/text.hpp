@@ -44,9 +44,9 @@ public:
     void createTextMesh();
     void setText(const std::string& text);
     void draw(const Graphics& graphics, const Transform& transform = {}) const noexcept;
-    inline const std::string& getText() const noexcept { return text; };
+    inline const std::string& getText() const noexcept { return text; }
 
-    text_size getTextSize(const std::string& text);
+    text_size getTextSize(const std::string& text) const;
 
     glm::ivec2 size;
     glm::vec3 position;

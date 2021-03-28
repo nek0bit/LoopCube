@@ -17,11 +17,13 @@ namespace UI
     private:
         void generateMesh();
         void handleInputs(const EventWrapper& events);
+        void updateCursor();
 
         Model model;
         Text textModel;
         bool isFocused;
         TextBuffer buffer;
+        float cursorX;
     public:
         Textbox(const GLuint shader, const unsigned id, TTF_Font* font,
                 const SDL_Color color, const int sizeX, const std::string& defaultText = "",

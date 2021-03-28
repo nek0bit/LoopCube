@@ -8,7 +8,8 @@ UI::Textbox::Textbox(const GLuint shader, const unsigned id, TTF_Font* font,
       model{shader},
       textModel{shader, defaultText, color, font},
       isFocused{false},
-      buffer{}
+      buffer{defaultText},
+      cursorX{0}
 {
     generateMesh();
 
@@ -87,6 +88,7 @@ void UI::Textbox::update(const Camera& camera, const EventWrapper& events)
     case 1:
         if (!isFocused && touching)
         {
+            updateCursor();
             isFocused = true;
         }
         else if (isFocused && events.vmouse.clicked == 1 && !touching)
@@ -98,20 +100,39 @@ void UI::Textbox::update(const Camera& camera, const EventWrapper& events)
     default: break;
     }
 
-    if (isFocused && events.textChar != NULL)
-    {
-        handleInputs(events);
-    }
-
-    // TODO clean this up
     // Movement
     if (events.keyState[18])
     {
         buffer.moveCursor(-1);
-    } else if (events.keyState[19])
+        updateCursor();
+    }
+    else if (events.keyState[19])
     {
         buffer.moveCursor(1);
+        updateCursor();
     }
+    else if (events.keyState[22])
+    {
+        buffer.backspace();
+        updateCursor();
+        textModel.setText(buffer.getText());
+    }
+
+    // Any characters pressed get inserted
+    if (isFocused && events.textChar != NULL)
+    {
+        handleInputs(events);
+        updateCursor();
+    }
+}
+
+void UI::Textbox::updateCursor()
+{
+    // Split string at buffer.col ("big str" + 3 = "big")
+    const std::string stringBefore = textModel.getText().substr(0, buffer.col);
+    // Calculate width (aka split on string)
+    cursorX = textModel.position.x +
+        textModel.getTextSize(stringBefore).width;
 }
 
 void UI::Textbox::handleInputs(const EventWrapper& events)
@@ -122,6 +143,10 @@ void UI::Textbox::handleInputs(const EventWrapper& events)
 
 void UI::Textbox::draw(const Graphics& graphics, Transform transform) const noexcept
 {
+    constexpr float cursorWidth = 2.0f;
+    const float cursorHeight = textModel.size.y;
+
+    // Draw textbox
     graphics.textures.getTexture(TEXTURE_UI_TEXTBOX)->bind();
     model.draw(graphics.uniforms.model, graphics.uniforms.tex,
             glm::vec3(position.x, position.y, 0.0f) + transform.translate,
@@ -129,4 +154,13 @@ void UI::Textbox::draw(const Graphics& graphics, Transform transform) const noex
 
     // Draw text
     textModel.draw(graphics, transform);
+
+    if (isFocused)
+    {
+        // Draw cursor
+        graphics.textures.getTexture(TEXTURE_CURSOR)->bind();
+        graphics.models.getModel(MODEL_SQUARE).draw(graphics.uniforms.model, graphics.uniforms.tex,
+                                                    {cursorX, textModel.position.y, 1.0f},
+                                                    {cursorWidth, cursorHeight, 1.0f});
+    }
 }

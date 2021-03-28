@@ -16,5 +16,6 @@ public:
     void push(const char data);
     void push(const std::string& data);
     void insert(const char data, bool increaseCol = true);
+    void backspace();
     void moveCursor(int move) noexcept;
 };

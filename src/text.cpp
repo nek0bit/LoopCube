@@ -75,7 +75,13 @@ void Text::createTextMesh()
     using namespace std::string_literals;
 
     // SDL_TTF doesn't like when text is blank
-    if (text == "") return;
+    if (text == "")
+    {
+        SDL_FreeSurface(surface);
+        surface = nullptr;
+        texture = nullptr; // Texture is smartpointer and will delete itself
+        return;
+    }
 
     if ((surface = TTF_RenderText_Blended(font, text.c_str(), color)) == nullptr)
     {
@@ -99,7 +105,7 @@ void Text::createTextMesh()
     model.setBufferData(data);
 }
 
-text_size Text::getTextSize(const std::string& text)
+text_size Text::getTextSize(const std::string& text) const
 {
     using namespace std::string_literals;
 
