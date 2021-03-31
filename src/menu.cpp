@@ -3,7 +3,7 @@
 constexpr int MAIN_WIDTH = 300;
 
 Menu::Menu(const Graphics& graphics)
-    : mainContainer{0, CONTAINER_VERTICAL, {MAIN_WIDTH, 32*3}}
+    : mainContainer{CONTAINER_VERTICAL, {MAIN_WIDTH, 32*3}}
 {
     createMainMenuComponents(graphics);
 }
@@ -15,14 +15,13 @@ void Menu::createMainMenuComponents(const Graphics& graphics)
 {
     // Create other components
     // These components just stretch to list
-    UI::Button playButton = UI::Button(graphics.shader, 0, "Play",
-                                       constants::fontHandler[4], SIZE_AUTO);
+    UI::setShader(graphics.shader);
+    UI::setFont(constants::fontHandler[4]);
+    UI::Button playButton = UI::Button("Play", SIZE_AUTO);
 
-    UI::Button configButton = UI::Button(graphics.shader, 1, "Config",
-                                         constants::fontHandler[4], SIZE_AUTO);
+    UI::Button configButton = UI::Button("Config", SIZE_AUTO);
 
-    UI::Button quitButton = UI::Button(graphics.shader, 2, "Quit",
-                                       constants::fontHandler[4], SIZE_AUTO);
+    UI::Button quitButton = UI::Button("Quit", SIZE_AUTO);
 
     // Pack components
     mainContainer.addComponent(playButton);

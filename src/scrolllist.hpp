@@ -15,9 +15,8 @@ namespace UI
 
         double translateComponentsY;
     public:
-        ScrollList(const unsigned id,
-             const glm::ivec2& size = {0, 0},
-             const glm::ivec2& position = {0, 0});
+        ScrollList(const glm::ivec2& size = {0, 0},
+                   const glm::ivec2& position = {0, 0});
         ~ScrollList();
 
         // Calls updateComponents()

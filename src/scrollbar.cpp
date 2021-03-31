@@ -1,16 +1,13 @@
 #include "scrollbar.hpp"
 
-UI::Scrollbar::Scrollbar(const unsigned id,
-                         int fullHeight,
-                         int viewHeight,
-                         const glm::ivec2& size,
+UI::Scrollbar::Scrollbar(const glm::ivec2& size,
                          const glm::ivec2& position)
-    : GenericComponent{COMPONENT_SCROLLBAR, id, position, size},
+    : GenericComponent{COMPONENT_SCROLLBAR, position, size},
     scrollPosition{0.0},
     scrollScale{0.0},
     fullHeight{fullHeight},
-    viewHeight{static_cast<float>(viewHeight)},
-    scrollbarEnabled{size.y < fullHeight},
+    viewHeight{0.0f},
+    scrollbarEnabled{false},
     isBeingDragged{false},
     isScrolled{[](double, double){}}
 {}
@@ -20,7 +17,7 @@ UI::Scrollbar::~Scrollbar() {}
 void UI::Scrollbar::update(const Camera& camera, const EventWrapper& events)
 {
     // Calculate height
-    scrollbarEnabled = size.y < fullHeight;
+    scrollbarEnabled = static_cast<bool>(size.y < fullHeight);
     viewHeight = size.y / static_cast<float>(fullHeight);
     
     static int lastMousePos = events.vmouse.y;

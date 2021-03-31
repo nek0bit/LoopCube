@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "immediate.hpp"
 #include "constants.hpp"
 #include "genericcomponent.hpp"
 #include "model.hpp"
@@ -25,8 +26,9 @@ namespace UI
         TextBuffer buffer;
         float cursorX;
     public:
-        Textbox(const GLuint shader, const unsigned id, TTF_Font* font,
-                const SDL_Color color, const int sizeX, const std::string& defaultText = "",
+        Textbox(const int sizeX,
+                const std::string& defaultText = "",
+                const SDL_Color color = {0xFF, 0xFF, 0xFF, 0xFF},
                 const glm::ivec2& position = {0, 0});
         ~Textbox();
 

@@ -17,8 +17,7 @@ namespace UI
                      public UI::ComponentList
     {
     public:
-        Container(const unsigned id,
-                  const container_layout layout,
+        Container(const container_layout layout,
                   const glm::ivec2& size = {0, 0},
                   const glm::ivec2& position = {0, 0});
         ~Container();

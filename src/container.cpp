@@ -1,10 +1,9 @@
 #include "container.hpp"
 
-UI::Container::Container(const unsigned id,
-                         const container_layout layout,
+UI::Container::Container(const container_layout layout,
                          const glm::ivec2& size,
                          const glm::ivec2& position)
-    : UI::GenericComponent{COMPONENT_CONTAINER, id, position, size},
+    : UI::GenericComponent{COMPONENT_CONTAINER, position, size},
       UI::ComponentList{},
       layout{layout}
 {}

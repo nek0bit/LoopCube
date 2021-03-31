@@ -2,12 +2,11 @@
 
 constexpr int SCROLLBAR_WIDTH = 20;
 
-UI::ScrollList::ScrollList(const unsigned id,
-                           const glm::ivec2& size,
+UI::ScrollList::ScrollList(const glm::ivec2& size,
                            const glm::ivec2& position)
-    : UI::GenericComponent{COMPONENT_SCROLL_LIST, id, position, size},
+    : UI::GenericComponent{COMPONENT_SCROLL_LIST, position, size},
       UI::ComponentList{},
-      scrollbar{id, -1, -1, {SCROLLBAR_WIDTH, SIZE_AUTO}, {0, 0}},
+      scrollbar{{SCROLLBAR_WIDTH, SIZE_AUTO}, {0, 0}},
       translateComponentsY{0.0}
 {
     scrollbar.isScrolled = [&](const double scrollPos, const double scrollScale) {

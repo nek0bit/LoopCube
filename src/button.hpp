@@ -3,13 +3,13 @@
 #include <SDL2/SDL_ttf.h>
 #include <memory>
 
-#include "immediate.hpp"
 #include "constants.hpp"
 #include "genericcomponent.hpp"
 #include "model.hpp"
 #include "texture.hpp"
 #include "generic.hpp"
 #include "text.hpp"
+#include "immediate.hpp"
 
 namespace UI
 {
