@@ -206,6 +206,7 @@ void EventWrapper::listen() {
 		switch(event.type) {
         case SDL_TEXTINPUT:
 			textChar = event.text.text[0];
+            break;
 		case SDL_KEYDOWN:
 			for (auto exc: exceptions) {
 				if (keystate[keyMapping[exc]]) {

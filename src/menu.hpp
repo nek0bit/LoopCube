@@ -9,11 +9,15 @@
 class Menu
 {
 private:
-    UI::ScrollList container;
+    UI::Container mainContainer;
 public:
     Menu(const Graphics& graphics);
     ~Menu();
 
+    // Creates main menu components such as play button, quit button, etc.
+    void createMainMenuComponents(const Graphics& graphics);
+    
+    // Generic game loop stuff
     void update(const Camera& camera, const EventWrapper& events);
     void render(const Graphics& graphics) const noexcept;
 };

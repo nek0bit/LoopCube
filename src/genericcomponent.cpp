@@ -1,5 +1,11 @@
 #include "genericcomponent.hpp"
 
+/* Some TODOs
+ * - Make constructing components easier and cleaner (without constructors
+ *   being full of symbols)
+ * - margins
+ */
+
 UI::GenericComponent::GenericComponent(const component_t type,
                                        const unsigned id,
                                        const glm::ivec2& position,

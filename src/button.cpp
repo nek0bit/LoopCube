@@ -1,5 +1,6 @@
 #include "button.hpp"
 
+
 // Size has fixed width
 UI::Button::Button(const GLuint shader, const unsigned id, const std::string& text,
                    TTF_Font* font, const int sizeX, const glm::ivec2& position)
