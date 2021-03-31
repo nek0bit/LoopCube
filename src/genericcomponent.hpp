@@ -39,7 +39,6 @@ namespace UI
         glm::ivec2 initialSize;
         
         GenericComponent(const component_t type,
-                         const unsigned id,
                          const glm::ivec2& position = {0, 0},
                          const glm::ivec2& size = {0, 0});
         virtual ~GenericComponent();

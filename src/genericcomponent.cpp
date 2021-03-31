@@ -7,14 +7,13 @@
  */
 
 UI::GenericComponent::GenericComponent(const component_t type,
-                                       const unsigned id,
                                        const glm::ivec2& position,
                                        const glm::ivec2& size)
     : position{position},
       size{size},
       initialSize{size},
       type{type},
-      id{id},
+      id{0}, // 0 means not set
       onClick{[](){}},
       onHover{[](){}},
       scale{1.0f, 1.0f, 1.0f},

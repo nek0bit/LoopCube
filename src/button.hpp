@@ -3,6 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <memory>
 
+#include "immediate.hpp"
 #include "constants.hpp"
 #include "genericcomponent.hpp"
 #include "model.hpp"
@@ -20,8 +21,7 @@ namespace UI
         Model model;
         Text textModel;
     public:
-        Button(const GLuint shader, const unsigned id, const std::string& text,
-               TTF_Font* font, const int sizeX, const glm::ivec2& position = {0, 0});
+        Button(const std::string& text, const int sizeX, const glm::ivec2& position = {0, 0});
         ~Button();
 
         void setText(const std::string& text);
