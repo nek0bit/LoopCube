@@ -6,16 +6,16 @@ namespace UI
 {
     namespace _ImmediateMode
     {
-        TTF_Font* _FONT;
-        GLuint _SHADER;
+        extern TTF_Font* _FONT;
+        extern GLuint _SHADER;
     }
 
-    inline void setFont(TTF_Font* font)
+    inline void setFont(TTF_Font* font = nullptr)
     {
         UI::_ImmediateMode::_FONT = font;
     }
 
-    inline void setShader(const GLuint shader)
+    inline void setShader(const GLuint shader = 0)
     {
         UI::_ImmediateMode::_SHADER = shader;
     }
