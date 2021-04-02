@@ -11,7 +11,8 @@ namespace UI
         void fixScrollbar() noexcept;
     public:
         Scrollbar(const glm::ivec2& size = {SIZE_AUTO, SIZE_AUTO},
-                  const glm::ivec2& position = {0, 0});
+                  const glm::ivec2& position = {0, 0},
+                  const Margin& margin = {0, 0, 0, 0});
         virtual ~Scrollbar();
 
         void update(const Camera& camera, const EventWrapper& events) override;

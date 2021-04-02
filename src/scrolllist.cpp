@@ -3,8 +3,9 @@
 constexpr int SCROLLBAR_WIDTH = 20;
 
 UI::ScrollList::ScrollList(const glm::ivec2& size,
-                           const glm::ivec2& position)
-    : UI::GenericComponent{COMPONENT_SCROLL_LIST, position, size},
+                           const glm::ivec2& position,
+                           const Margin& margin)
+    : UI::GenericComponent{COMPONENT_SCROLL_LIST, position, size, margin},
       UI::ComponentList{},
       scrollbar{{SCROLLBAR_WIDTH, SIZE_AUTO}, {0, 0}},
       translateComponentsY{0.0}

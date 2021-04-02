@@ -1,14 +1,9 @@
 #include "genericcomponent.hpp"
 
-/* Some TODOs
- * - Make constructing components easier and cleaner (without constructors
- *   being full of symbols)
- * - margins
- */
-
 UI::GenericComponent::GenericComponent(const component_t type,
                                        const glm::ivec2& position,
-                                       const glm::ivec2& size)
+                                       const glm::ivec2& size,
+                                       const Margin& margin)
     : position{position},
       size{size},
       initialSize{size},
@@ -16,6 +11,7 @@ UI::GenericComponent::GenericComponent(const component_t type,
       id{0}, // 0 means not set
       onClick{[](){}},
       onHover{[](){}},
+      margin{margin},
       scale{1.0f, 1.0f, 1.0f},
       fixed{0}
 {}

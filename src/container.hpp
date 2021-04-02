@@ -19,7 +19,8 @@ namespace UI
     public:
         Container(const container_layout layout,
                   const glm::ivec2& size = {0, 0},
-                  const glm::ivec2& position = {0, 0});
+                  const glm::ivec2& position = {0, 0},
+                  const Margin& margin = {0, 0, 0, 0});
         ~Container();
 
         void refreshContent() override;

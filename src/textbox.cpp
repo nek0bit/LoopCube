@@ -5,8 +5,9 @@
 UI::Textbox::Textbox(const int sizeX,
                      const std::string& defaultText,
                      const SDL_Color color,
-                     const glm::ivec2& position)
-    : GenericComponent(COMPONENT_TEXTBOX, position, {sizeX, 32}),
+                     const glm::ivec2& position,
+                     const Margin& margin)
+    : GenericComponent(COMPONENT_TEXTBOX, position, {sizeX, 32}, margin),
       model{UI::_ImmediateMode::_SHADER},
       textModel{UI::_ImmediateMode::_SHADER, defaultText, color, UI::_ImmediateMode::_FONT},
       isFocused{false},

@@ -21,7 +21,10 @@ namespace UI
         Model model;
         Text textModel;
     public:
-        Button(const std::string& text, const int sizeX, const glm::ivec2& position = {0, 0});
+        Button(const std::string& text,
+               const int sizeX,
+               const glm::ivec2& position = {0, 0},
+               const Margin& margin = {0, 0, 0, 0});
         ~Button();
 
         void setText(const std::string& text);

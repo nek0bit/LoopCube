@@ -29,7 +29,8 @@ namespace UI
         Textbox(const int sizeX,
                 const std::string& defaultText = "",
                 const SDL_Color color = {0xFF, 0xFF, 0xFF, 0xFF},
-                const glm::ivec2& position = {0, 0});
+                const glm::ivec2& position = {0, 0},
+                const Margin& margin = {0, 0, 0, 0});
         ~Textbox();
 
         inline const std::string& getText() const noexcept { return textModel.getText(); }

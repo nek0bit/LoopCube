@@ -1,8 +1,9 @@
 #include "scrollbar.hpp"
 
 UI::Scrollbar::Scrollbar(const glm::ivec2& size,
-                         const glm::ivec2& position)
-    : GenericComponent{COMPONENT_SCROLLBAR, position, size},
+                         const glm::ivec2& position,
+                         const Margin& margin)
+    : GenericComponent{COMPONENT_SCROLLBAR, position, size, margin},
     scrollPosition{0.0},
     scrollScale{0.0},
     fullHeight{fullHeight},

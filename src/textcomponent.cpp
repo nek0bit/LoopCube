@@ -3,8 +3,9 @@
 UI::TextComponent::TextComponent(const std::string& text,
                                  SDL_Color color,
                                  const glm::ivec2& size,
-                                 const glm::ivec2& position)
-    : GenericComponent{COMPONENT_TEXT, position, size},
+                                 const glm::ivec2& position,
+                                 const Margin& margin)
+    : GenericComponent{COMPONENT_TEXT, position, size, margin},
       textModel{UI::_ImmediateMode::_SHADER, text, color, UI::_ImmediateMode::_FONT,
     glm::vec3{position.x, position.y, 0}, glm::vec3{size.x, size.y, 0}}
 {

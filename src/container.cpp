@@ -2,8 +2,9 @@
 
 UI::Container::Container(const container_layout layout,
                          const glm::ivec2& size,
-                         const glm::ivec2& position)
-    : UI::GenericComponent{COMPONENT_CONTAINER, position, size},
+                         const glm::ivec2& position,
+                         const Margin& margin)
+    : UI::GenericComponent{COMPONENT_CONTAINER, position, size, margin},
       UI::ComponentList{},
       layout{layout}
 {}

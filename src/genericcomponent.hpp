@@ -3,6 +3,7 @@
 #include <variant>
 #include <glm/glm.hpp>
 
+#include "margin.hpp"
 #include "camera.hpp"
 #include "generic.hpp"
 #include "eventwrapper.hpp"
@@ -40,7 +41,8 @@ namespace UI
         
         GenericComponent(const component_t type,
                          const glm::ivec2& position = {0, 0},
-                         const glm::ivec2& size = {0, 0});
+                         const glm::ivec2& size = {0, 0},
+                         const Margin& margin = {0, 0, 0, 0});
         virtual ~GenericComponent();
 
         virtual void refreshContent();
@@ -55,6 +57,7 @@ namespace UI
         std::function<void(void)> onHover;
         
         // Properties
+        Margin margin;
         glm::vec3 scale;
 
         uint8_t fixed;

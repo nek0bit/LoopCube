@@ -2,8 +2,11 @@
 
 
 // Size has fixed width
-UI::Button::Button(const std::string& text, const int sizeX, const glm::ivec2& position)
-    : GenericComponent(COMPONENT_BUTTON, position, {sizeX, 32}),
+UI::Button::Button(const std::string& text,
+                   const int sizeX,
+                   const glm::ivec2& position,
+                   const Margin& margin)
+    : GenericComponent(COMPONENT_BUTTON, position, {sizeX, 32}, margin),
       model{UI::_ImmediateMode::_SHADER},
       // TODO don't hardcode color!
       textModel{UI::_ImmediateMode::_SHADER, text,

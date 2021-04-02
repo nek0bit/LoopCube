@@ -16,7 +16,8 @@ namespace UI
         TextComponent(const std::string& text,
                       SDL_Color color,
                       const glm::ivec2& size = {SIZE_AUTO, SIZE_AUTO},
-                      const glm::ivec2& position = {0, 0});
+                      const glm::ivec2& position = {0, 0},
+                      const Margin& margin = {0, 0, 0, 0});
         ~TextComponent();
 
         void setText(const std::string& text);
