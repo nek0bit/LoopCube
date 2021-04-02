@@ -12,6 +12,7 @@ UI::Container::Container(const container_layout layout,
 UI::Container::~Container()
 {}
 
+// TODO Clean up this code, too much DRY
 void UI::Container::updateComponents()
 {
     // Get total size of all fixed size components
@@ -22,13 +23,13 @@ void UI::Container::updateComponents()
         std::visit([&](auto& data) {
             if (data.initialSize.x != SIZE_AUTO)
             {
-                fixedSize.x += data.size.x;
+                fixedSize.x += data.size.x + data.margin.left + data.margin.right;
                 fixedCount.x++;
             }
             
             if (data.initialSize.y != SIZE_AUTO)
             {
-                fixedSize.y += data.size.y;
+                fixedSize.y += data.size.y + data.margin.top + data.margin.bottom;
                 fixedCount.y++;
             }
         }, component);
@@ -50,16 +51,16 @@ void UI::Container::updateComponents()
             if (data.initialSize.x == SIZE_AUTO)
             {
                 data.size.x = sizeIncrease;
-                xIncrease += sizeIncrease;
+                xIncrease += sizeIncrease + data.margin.left;
             }
             else
             {
-                xIncrease += data.size.x;
+                xIncrease += data.size.x + data.margin.left;
             }
         }
         else
         {
-            xIncrease += data.size.x;
+            xIncrease += data.size.x + data.margin.left;
         }
 
         // Fix height of each element if possible
@@ -77,16 +78,16 @@ void UI::Container::updateComponents()
             if (data.initialSize.y == SIZE_AUTO)
             {
                 data.size.y = sizeIncrease;
-                yIncrease += sizeIncrease;
+                yIncrease += sizeIncrease + data.margin.top;
             }
             else
             {
-                yIncrease += data.size.y;
+                yIncrease += data.size.y + data.margin.top;
             }
         }
         else
         {
-            yIncrease += data.size.y;
+            yIncrease += data.size.y + data.margin.top;
         }
 
         // Fix width of each element if possible
@@ -104,9 +105,11 @@ void UI::Container::updateComponents()
             {
             case CONTAINER_HORIZONTAL:
                 horizontal(data);
+                xIncrease += data.margin.right;
                 break;
             case CONTAINER_VERTICAL:
                 vertical(data);
+                yIncrease += data.margin.bottom;
                 break;
             default: break;
             };

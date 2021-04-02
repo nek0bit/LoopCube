@@ -1,3 +1,5 @@
+// TODO padding support
+
 #include "scrolllist.hpp"
 
 constexpr int SCROLLBAR_WIDTH = 20;
