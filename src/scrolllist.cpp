@@ -1,5 +1,3 @@
-// TODO padding support
-
 #include "scrolllist.hpp"
 
 constexpr int SCROLLBAR_WIDTH = 20;
@@ -35,15 +33,18 @@ void UI::ScrollList::updateComponents()
         std::visit([&](auto& data) {
             if (data.initialSize.x == SIZE_AUTO)
             {
-                data.size.x = size.x - (scrollbar.scrollbarEnabled ? scrollbar.size.x : 0);
+                data.size.x = size.x - (scrollbar.scrollbarEnabled ? scrollbar.size.x : 0)
+                    - data.margin.left - data.margin.right;
             }
 
+            yIncrease += data.margin.top;
+
             // Increase sizes
-            data.position.x = 0;
+            data.position.x = data.margin.left;
             data.position.y = yIncrease;
 
             // Effects rest of components
-            yIncrease += data.size.y;
+            yIncrease += data.size.y + data.margin.bottom;
 
             // Update component
             data.refreshContent();
