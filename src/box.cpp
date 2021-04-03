@@ -4,7 +4,7 @@ UI::Box::Box(const int textureId,
              const glm::ivec2& size,
              const glm::ivec2& position,
              const Margin& margin)
-    : UI::GenericComponent{COMPONENT_BOX, size, position, margin},
+    : GenericComponent{COMPONENT_BOX, position, size, margin},
       textureId{textureId},
       model{UI::_ImmediateMode::_SHADER},
       component{nullptr}
@@ -44,16 +44,32 @@ void UI::Box::refreshContent()
     };
 
     // Begin vertices
-    float j = 0.0f;
-    for (size_t i = 0; i < T_COORD_SIZE; (i += 3, j += T_H))
-    {
-        Generic::Render::generateSquare(mesh, 0.0f, j, T_W, T_H,
-                                        tCoord[i].begX, tCoord[i].begY, tCoord[i].endX, tCoord[i].endY);
-        Generic::Render::generateSquare(mesh, T_W, j, T_W, T_H,
-                                        tCoord[i+1].begX, tCoord[i+1].begY, tCoord[i+1].endX, tCoord[i+1].endY);
-        Generic::Render::generateSquare(mesh, T_W * 2, j, T_W, T_H,
-                                        tCoord[i+2].begX, tCoord[i+2].begY, tCoord[i+2].endX, tCoord[i+2].endY);
-    }
+    const float midWidth = size.x;
+    const float midHeight = size.y;
+
+    // Oh this is bad
+    // TOP
+    Generic::Render::generateSquare(mesh, 0.0f, 0.0f, T_W, T_H,
+                                    tCoord[0].begX, tCoord[0].begY, tCoord[0].endX, tCoord[0].endY);
+    Generic::Render::generateSquare(mesh, T_W, 0.0f, midWidth - T_W, T_H,
+                                    tCoord[1].begX, tCoord[1].begY, tCoord[1].endX, tCoord[1].endY);
+    Generic::Render::generateSquare(mesh, midWidth - T_W, 0.0f, midWidth, T_H,
+                                    tCoord[2].begX, tCoord[2].begY, tCoord[2].endX, tCoord[2].endY);
+    // MIDDLE
+    Generic::Render::generateSquare(mesh, 0.0f, T_H, T_W, midHeight - T_H,
+                                    tCoord[3].begX, tCoord[3].begY, tCoord[3].endX, tCoord[3].endY);
+    Generic::Render::generateSquare(mesh, T_W, T_H, midWidth - T_W, midHeight - T_H,
+                                    tCoord[4].begX, tCoord[4].begY, tCoord[4].endX, tCoord[4].endY);
+    Generic::Render::generateSquare(mesh, midWidth - T_W, T_H, midWidth, midHeight - T_H,
+                                    tCoord[5].begX, tCoord[5].begY, tCoord[5].endX, tCoord[5].endY);
+
+    // BOTTOM
+    Generic::Render::generateSquare(mesh, 0.0f, midHeight - T_H, T_W, midHeight,
+                                    tCoord[6].begX, tCoord[6].begY, tCoord[6].endX, tCoord[6].endY);
+    Generic::Render::generateSquare(mesh, T_W, midHeight - T_H, midWidth - T_W, midHeight,
+                                    tCoord[7].begX, tCoord[7].begY, tCoord[7].endX, tCoord[7].endY);
+    Generic::Render::generateSquare(mesh, midWidth - T_W, midHeight - T_H, midWidth, midHeight,
+                                    tCoord[8].begX, tCoord[8].begY, tCoord[8].endX, tCoord[8].endY);
 
     // Bind data
     model.setBufferData(mesh);
