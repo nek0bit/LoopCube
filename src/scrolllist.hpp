@@ -15,7 +15,7 @@ namespace UI
 
         double translateComponentsY;
     public:
-        ScrollList(const glm::ivec2& size = {0, 0},
+        ScrollList(const glm::ivec2& size = {SIZE_AUTO, SIZE_AUTO},
                    const glm::ivec2& position = {0, 0},
                    const Margin& margin = {0, 0, 0, 0});
         ~ScrollList();

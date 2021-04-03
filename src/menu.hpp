@@ -11,6 +11,10 @@ class Menu
 {
 private:
     UI::Container mainContainer;
+
+    // Panes
+    UI::ScrollList leftPane;
+    UI::ScrollList rightPane;
 public:
     Menu(const Graphics& graphics);
     ~Menu();

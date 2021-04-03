@@ -77,7 +77,7 @@ void UI::ScrollList::draw(const Graphics& graphics, Transform transform) const n
     transform.translate.y += translateComponentsY + position.y;
 
     // Clip components
-    glScissor(position.x, Generic::topToBottomFlip(size.y + position.y, graphics.camera.size.h),
+    glScissor(transform.translate.x, Generic::topToBottomFlip<double>(size.y + transform.translate.y, graphics.camera.size.h),
             size.x, size.y);
 
     // Components
