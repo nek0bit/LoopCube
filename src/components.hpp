@@ -8,6 +8,7 @@
 #include "textbox.hpp"
 
 // Allows containers to stack themselves
+#include "box.hpp"
 #include "container.hpp"
 #include "scrolllist.hpp"
 
