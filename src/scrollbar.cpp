@@ -4,28 +4,29 @@ UI::Scrollbar::Scrollbar(const glm::ivec2& size,
                          const glm::ivec2& position,
                          const Margin& margin)
     : GenericComponent{COMPONENT_SCROLLBAR, position, size, margin},
-    scrollPosition{0.0},
-    scrollScale{0.0},
-    fullHeight{fullHeight},
-    viewHeight{0.0f},
-    scrollbarEnabled{false},
-    isBeingDragged{false},
-    isScrolled{[](double, double){}}
+      lastMousePos{0.0},
+      scrollPosition{0.0},
+      scrollScale{0.0},
+      fullHeight{fullHeight},
+      viewHeight{0.0f},
+      scrollbarEnabled{false},
+      isBeingDragged{false},
+      isScrolled{[](double, double){}}
 {}
 
 UI::Scrollbar::~Scrollbar() {}
 
-void UI::Scrollbar::update(const Camera& camera, const EventWrapper& events)
+void UI::Scrollbar::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
     // Calculate height
     scrollbarEnabled = static_cast<bool>(size.y < fullHeight);
     viewHeight = size.y / static_cast<float>(fullHeight);
     
-    static int lastMousePos = events.vmouse.y;
-
     // Set to dragging state
-    if (isClickingScrollbar(events))
+    if (scrollbarEnabled && isClickingScrollbar(events, transform))
+    {
         isBeingDragged = true;
+    }
 
     if (isBeingDragged)
     {
@@ -41,6 +42,9 @@ void UI::Scrollbar::update(const Camera& camera, const EventWrapper& events)
         isBeingDragged = false;
 
     lastMousePos = events.vmouse.y;
+
+    // Check if scrolled and fix it
+    if (!scrollbarEnabled && scrollPosition != 0.0f) scrollPosition = 0.0f;
 }
 
 void UI::Scrollbar::fixScrollbar() noexcept
@@ -51,14 +55,14 @@ void UI::Scrollbar::fixScrollbar() noexcept
         scrollPosition = 0;
     else if (scrollPosition > maxView)
         scrollPosition = maxView;
-
 }
 
-bool UI::Scrollbar::isClickingScrollbar(const EventWrapper& events) const noexcept
+bool UI::Scrollbar::isClickingScrollbar(const EventWrapper& events, const Transform& transform) const noexcept
 {
     return events.vmouse.clicked == 1 &&
         Generic::collision<float>(events.vmouse.x, events.vmouse.y, 0, 0,
-                position.x, position.y + scrollPosition, size.x, viewHeight * size.y);
+                                  position.x + transform.translate.x, position.y + transform.translate.y + scrollPosition,
+                                  size.x, viewHeight * size.y);
 }
 
 void UI::Scrollbar::draw(const Graphics& graphics, Transform transform) const noexcept
@@ -69,14 +73,14 @@ void UI::Scrollbar::draw(const Graphics& graphics, Transform transform) const no
         graphics.textures.getTexture(TEXTURE_SCROLLBAR_BG)->bind();
         graphics.models.getModel(MODEL_SQUARE).draw(graphics.uniforms.model,
                 graphics.uniforms.tex,
-                glm::vec3{position.x, position.y, Z_BUF},
+                glm::vec3{position.x + transform.translate.x, position.y + transform.translate.y, Z_BUF},
                 glm::vec3{size.x, size.y, Z_BUF});
 
         // Draw scrollView
         graphics.textures.getTexture(TEXTURE_SCROLLBAR)->bind();
         graphics.models.getModel(MODEL_SQUARE).draw(graphics.uniforms.model,
                 graphics.uniforms.tex,
-                glm::vec3{position.x, position.y + scrollPosition, Z_BUF},
+                glm::vec3{position.x + transform.translate.x, position.y + transform.translate.y + scrollPosition, Z_BUF},
                 glm::vec3{size.x, viewHeight * size.y, Z_BUF});
     }
 }

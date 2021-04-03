@@ -124,12 +124,14 @@ void UI::Container::refreshContent()
     updateComponents();
 }
 
-void UI::Container::update(const Camera& camera, const EventWrapper& events)
+void UI::Container::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
+    transform.translate.x += position.x;
+    transform.translate.y += position.y;
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
-            data.update(camera, events);
+            data.update(camera, events, transform);
         }, component);
     }
 }

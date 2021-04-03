@@ -32,7 +32,7 @@ void UI::TextComponent::refreshContent()
     updateButtonText();
 }
 
-void UI::TextComponent::update(const Camera& camera, const EventWrapper& events)
+void UI::TextComponent::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
     if (initialSize.x == SIZE_AUTO) size.x = textModel.size.x;
     if (initialSize.y == SIZE_AUTO) size.y = textModel.size.y;

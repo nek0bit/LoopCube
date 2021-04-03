@@ -81,10 +81,10 @@ void UI::Textbox::updateTextboxText()
                                    position.y + midY * scale.y, 0.0f);
 }
 
-void UI::Textbox::update(const Camera& camera, const EventWrapper& events)
+void UI::Textbox::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
-    const bool touching = isVmouseTouching(camera, events);
-    handleEvents(camera, events);
+    const bool touching = isVmouseTouching(camera, events, transform);
+    handleEvents(camera, events, transform);
 
     switch (events.vmouse.clicked)
     {
@@ -122,7 +122,7 @@ void UI::Textbox::update(const Camera& camera, const EventWrapper& events)
     }
 
     // Any characters pressed get inserted
-    if (isFocused && events.textChar != NULL)
+    if (isFocused && events.textChar != 0)
     {
         handleInputs(events);
         updateCursor();

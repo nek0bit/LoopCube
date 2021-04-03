@@ -1,8 +1,8 @@
 #include "menu.hpp"
 
 constexpr const char* GAME_TITLE = "LoopCube";
-constexpr int MAIN_WIDTH = 300;
-constexpr int MAIN_HEIGHT = 300;
+constexpr int MAIN_WIDTH = 500;
+constexpr int MAIN_HEIGHT = 400;
 constexpr int BUTTON_MARGIN_BOTTOM = 10;
 
 Menu::Menu(const Graphics& graphics)

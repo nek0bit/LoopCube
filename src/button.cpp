@@ -83,9 +83,9 @@ void UI::Button::updateButtonText()
                                    position.y + offsetY * scale.y, 0.0f);
 }
 
-void UI::Button::update(const Camera& camera, const EventWrapper& events)
+void UI::Button::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
-    handleEvents(camera, events);
+    handleEvents(camera, events, transform);
 }
 
 void UI::Button::draw(const Graphics& graphics, Transform transform) const noexcept

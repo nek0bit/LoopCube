@@ -29,11 +29,11 @@ namespace UI
     {
     private:
         // Event handling (click, enter, etc.)
-        void eventClick(const Camera& camera, const EventWrapper& events);
-        void eventHover(const Camera& camera, const EventWrapper& events);
+        void eventClick(const Camera& camera, const EventWrapper& events, const Transform& transform);
+        void eventHover(const Camera& camera, const EventWrapper& events, const Transform& transform);
     protected:
-        [[nodiscard]] bool isVmouseTouching(const Camera& camera, const EventWrapper& events) const noexcept;
-        void handleEvents(const Camera& camera, const EventWrapper& events); // Calls all event methods
+        [[nodiscard]] bool isVmouseTouching(const Camera& camera, const EventWrapper& events, const Transform& transform) const noexcept;
+        void handleEvents(const Camera& camera, const EventWrapper& events, const Transform& transform); // Calls all event methods
     public:
         glm::ivec2 position;
         glm::ivec2 size;
@@ -46,7 +46,7 @@ namespace UI
         virtual ~GenericComponent();
 
         virtual void refreshContent();
-        virtual void update(const Camera& camera, const EventWrapper& events);
+        virtual void update(const Camera& camera, const EventWrapper& events, Transform = {});
         virtual void draw(const Graphics&, Transform = {}) const noexcept;
 
         component_t type;

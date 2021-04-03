@@ -11,11 +11,7 @@ UI::ScrollList::ScrollList(const glm::ivec2& size,
       UI::ComponentList{},
       scrollbar{{SCROLLBAR_WIDTH, SIZE_AUTO}, {0, 0}},
       translateComponentsY{0.0}
-{
-    scrollbar.isScrolled = [&](const double scrollPos, const double scrollScale) {
-        translateComponentsY = -(scrollPos * scrollScale);
-    };
-}
+{}
 
 UI::ScrollList::~ScrollList()
 {}
@@ -23,6 +19,11 @@ UI::ScrollList::~ScrollList()
 void UI::ScrollList::refreshContent()
 {
     updateComponents();
+
+    // Regenerate scroll call
+    scrollbar.isScrolled = [&](const double scrollPos, const double scrollScale) {
+        translateComponentsY = -(scrollPos * scrollScale);
+    };
 }
 
 void UI::ScrollList::updateComponents()
@@ -50,36 +51,44 @@ void UI::ScrollList::updateComponents()
     }
 
     // Update scrollbar
-    const glm::ivec2& scrollbarOffset{position.x + size.x - scrollbar.size.x,
-            position.y};
+    const glm::ivec2& scrollbarOffset{size.x - scrollbar.size.x,
+            0};
     scrollbar.position = scrollbarOffset;
     scrollbar.size.y = size.y;
 
     scrollbar.fullHeight = yIncrease;
 }
 
-void UI::ScrollList::update(const Camera& camera, const EventWrapper& events)
+void UI::ScrollList::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
+    transform.translate.x += position.x;
+    transform.translate.y += position.y;
+
+    // Scrollbar
+    scrollbar.update(camera, events, transform);
+
+    // Increase transform again for components
+    transform.translate.y += translateComponentsY;
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
-            data.update(camera, events);
+            data.update(camera, events, transform);
         }, component);
     }
 
-    // Scrollbar
-    scrollbar.update(camera, events);
 }
 
 void UI::ScrollList::draw(const Graphics& graphics, Transform transform) const noexcept
 {
     transform.translate.x += position.x;
-    transform.translate.y += translateComponentsY + position.y;
+    transform.translate.y += position.y;
 
     // Clip components
     glScissor(transform.translate.x, Generic::topToBottomFlip<double>(size.y + transform.translate.y, graphics.camera.size.h),
             size.x, size.y);
 
+    // Increase transform for components
+    transform.translate.y += translateComponentsY;
     // Components
     for (auto& component: components)
     {
@@ -90,6 +99,9 @@ void UI::ScrollList::draw(const Graphics& graphics, Transform transform) const n
 
     // Stop clipping
     glScissor(0, 0, graphics.camera.size.w, graphics.camera.size.h);
+
+    // Decrease transform back
+    transform.translate.y -= translateComponentsY;
 
     // Scrollbar
     scrollbar.draw(graphics, transform);
