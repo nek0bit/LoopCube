@@ -44,7 +44,8 @@ enum texture_enum
     TEXTURE_SCROLLBAR,
     TEXTURE_SCROLLBAR_BG,
     TEXTURE_UI_TEXTBOX,
-    TEXTURE_CURSOR
+    TEXTURE_CURSOR,
+    TEXTURE_BOX
 };
 
 enum config_enum
@@ -70,7 +71,7 @@ namespace constants
     constexpr char shaderPath[] = ROOT_PATH "shaders/";
 
 	// Please add comment with index for code readability
-    constexpr std::array<TextureInfo, 16> textureInfo = {
+    constexpr std::array<TextureInfo, 17> textureInfo = {
 		TextureInfo{"moon_block.png", TEXTURE_MOON_BLOCK, 256, 16, 16, 16},
 		TextureInfo{"player.png", TEXTURE_PLAYER, 170, 33, 17, 33},
 		TextureInfo{"hotbar_slot.png", TEXTURE_HOTBAR_SLOT, 16, 32, 16, 16},
@@ -86,7 +87,8 @@ namespace constants
         TextureInfo{"scrollbar.png", TEXTURE_SCROLLBAR},
         TextureInfo{"scrollbar_bg.png", TEXTURE_SCROLLBAR_BG},
         TextureInfo{"ui_textbox.png", TEXTURE_UI_TEXTBOX, 96, 32, 32, 32},
-        TextureInfo{"cursor.png", TEXTURE_CURSOR}
+        TextureInfo{"cursor.png", TEXTURE_CURSOR},
+        TextureInfo{"box.png", TEXTURE_BOX, 96, 96, 32, 32}
 	};
 
     constexpr std::array<BlockInfo, 1> blockInfo = {
