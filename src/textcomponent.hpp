@@ -12,6 +12,7 @@ namespace UI
     {
     private:
         Text textModel;
+        glm::ivec2 textPosition;
     public:
         TextComponent(const std::string& text,
                       SDL_Color color,
