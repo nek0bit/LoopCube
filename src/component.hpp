@@ -9,6 +9,7 @@ namespace UI
     class ScrollList;
     class TextComponent;
     class Textbox;
+    class Box;
 
     using Component = std::variant<
         UI::Container,
@@ -16,6 +17,7 @@ namespace UI
         UI::Scrollbar,
         UI::ScrollList,
         UI::TextComponent,
-        UI::Textbox
+        UI::Textbox,
+        UI::Box
     >;
 }

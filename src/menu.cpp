@@ -10,7 +10,8 @@ Menu::Menu(const Graphics& graphics)
     : mainContainer{CONTAINER_HORIZONTAL,
                     {MAIN_WIDTH, MAIN_HEIGHT}},
       leftPane{{200, SIZE_AUTO}},
-      rightPane{}
+      rightPane{},
+      box{(UI::setShader(graphics.shader), TEXTURE_BOX), {MAIN_WIDTH, MAIN_HEIGHT}}
 {
     createMainMenuComponents(graphics);
 }
@@ -49,18 +50,22 @@ void Menu::createMainMenuComponents(const Graphics& graphics)
     // Add panes
     mainContainer.addComponent(leftPane);
     mainContainer.addComponent(rightPane);
+
+    box.setComponent(mainContainer);
 }
 
 void Menu::update(const Camera& camera, const EventWrapper& events)
 {
     // Center main list
-    mainContainer.position.x = (camera.size.w / 2) - (mainContainer.size.x / 2);
-    mainContainer.position.y = (camera.size.h / 2) - (mainContainer.size.y / 2);
+    box.position.x = (camera.size.w / 2) - (mainContainer.size.x / 2);
+    box.position.y = (camera.size.h / 2) - (mainContainer.size.y / 2);
 
-    mainContainer.update(camera, events);
+    // mainContainer.update(camera, events);
+    box.update(camera, events);
 }
 
 void Menu::render(const Graphics& graphics) const noexcept
 {
-    mainContainer.draw(graphics);
+    // mainContainer.draw(graphics);
+    box.draw(graphics);
 }

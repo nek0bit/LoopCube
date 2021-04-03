@@ -15,6 +15,8 @@ private:
     // Panes
     UI::ScrollList leftPane;
     UI::ScrollList rightPane;
+
+    UI::Box box;
 public:
     Menu(const Graphics& graphics);
     ~Menu();
