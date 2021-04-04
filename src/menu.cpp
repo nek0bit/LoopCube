@@ -1,8 +1,8 @@
 #include "menu.hpp"
 
 constexpr const char* GAME_TITLE = "LoopCube";
-constexpr int MAIN_WIDTH = 550;
-constexpr int MAIN_HEIGHT = 350;
+constexpr int MAIN_WIDTH = 600;
+constexpr int MAIN_HEIGHT = 400;
 constexpr int BUTTON_MARGIN_BOTTOM = 6;
 constexpr int BUTTON_MARGIN_SIDE = 0;
 
@@ -24,13 +24,16 @@ void Menu::createMainMenuComponents(const Graphics& graphics)
     UI::setShader(graphics.shader);
 
     // Margins
-    UI::Margin titleMargin{15, 0, 0, 0};
+    UI::Margin titleMargin{15, 10, 0, 0};
     UI::Margin buttonMargin{0, BUTTON_MARGIN_BOTTOM, BUTTON_MARGIN_SIDE, BUTTON_MARGIN_SIDE};
 
-    // Create title text
+    // Create text
     UI::setFont(constants::fontHandler[5]);
     UI::TextComponent titleText{"LoopCube", SDL_Color{255, 255, 255, 255},
                                 {SIZE_AUTO, SIZE_AUTO}, {}, titleMargin};
+    UI::setFont(constants::fontHandler[3]);
+    UI::TextComponent versionText{"Release ?", SDL_Color{155, 155, 155, 255},
+                                  {SIZE_AUTO, SIZE_AUTO}, {}, {35, 0, 0, 0}};
 
     // Create other components
     // Buttons
@@ -39,6 +42,9 @@ void Menu::createMainMenuComponents(const Graphics& graphics)
     UI::Button configButton{"Config", SIZE_AUTO, {}, buttonMargin};
     UI::Button quitButton{"Quit", SIZE_AUTO, {}, buttonMargin};
 
+    // Creates a line between both panes
+    UI::TextureComponent paneSeperator{TEXTURE_SEPERATOR, {1, SIZE_AUTO}, {}, {0, 0, 15, 15}};
+
     // Add components to right pane (it packs automagically)
     leftPane.addComponent(playButton);
     leftPane.addComponent(configButton);
@@ -46,9 +52,11 @@ void Menu::createMainMenuComponents(const Graphics& graphics)
 
     // Add components to left pane
     rightPane.addComponent(titleText);
+    rightPane.addComponent(versionText);
 
     // Add panes
     mainContainer.addComponent(leftPane);
+    mainContainer.addComponent(paneSeperator);
     mainContainer.addComponent(rightPane);
 
     box.setComponent(mainContainer);

@@ -24,5 +24,5 @@ void UI::TextureComponent::draw(const Graphics& graphics, Transform transform) c
     graphics.textures.getTexture(textureId)->bind();
     graphics.models.getModel(MODEL_SQUARE).draw(graphics.uniforms.model, graphics.uniforms.tex,
                                                 glm::vec3(position.x, position.y, 0.0f) + transform.translate,
-                                                scale + transform.scale);
+                                                glm::vec3(size.x, size.y, 0.0f) * scale + transform.scale);
 }

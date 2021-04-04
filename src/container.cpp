@@ -66,10 +66,12 @@ void UI::Container::updateComponents()
         }
 
         // Fix height of each element if possible
-        if ((data.fixed & FIXED_H) != FIXED_H) data.size.y = size.y;
+        if ((data.fixed & FIXED_H) != FIXED_H)
+            data.size.y = size.y - data.margin.top - data.margin.bottom;
     };
 
     // Vertical layout
+    // TODO fix margin for vertical
     auto vertical = [&](auto& data) {
         const float sizeIncrease = static_cast<float>(size.y - fixedSize.y)
             / static_cast<float>(components.size() - fixedCount.y);
