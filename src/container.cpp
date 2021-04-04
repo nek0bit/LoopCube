@@ -23,13 +23,13 @@ void UI::Container::updateComponents()
         std::visit([&](auto& data) {
             if (data.initialSize.x != SIZE_AUTO)
             {
-                fixedSize.x += data.size.x + data.margin.left + data.margin.right;
+                fixedSize.x += data.size.x;
                 fixedCount.x++;
             }
             
             if (data.initialSize.y != SIZE_AUTO)
             {
-                fixedSize.y += data.size.y + data.margin.top + data.margin.bottom;
+                fixedSize.y += data.size.y;
                 fixedCount.y++;
             }
         }, component);
@@ -50,16 +50,18 @@ void UI::Container::updateComponents()
         {
             if (data.initialSize.x == SIZE_AUTO)
             {
-                data.size.x = sizeIncrease;
-                xIncrease += sizeIncrease + data.margin.left;
+                data.size.x = sizeIncrease - data.margin.left - data.margin.right;
+                xIncrease += sizeIncrease;
             }
             else
             {
+                data.size.x -= data.margin.left - data.margin.right;
                 xIncrease += data.size.x + data.margin.left;
             }
         }
         else
         {
+            data.size.x -= data.margin.left - data.margin.right;
             xIncrease += data.size.x + data.margin.left;
         }
 
@@ -98,18 +100,16 @@ void UI::Container::updateComponents()
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
-            data.position.x = xIncrease;
-            data.position.y = yIncrease;
+            data.position.x = xIncrease + data.margin.left;
+            data.position.y = yIncrease + data.margin.top;
             
             switch(layout)
             {
             case CONTAINER_HORIZONTAL:
                 horizontal(data);
-                xIncrease += data.margin.right;
                 break;
             case CONTAINER_VERTICAL:
                 vertical(data);
-                yIncrease += data.margin.bottom;
                 break;
             default: break;
             };

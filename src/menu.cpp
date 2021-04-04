@@ -4,13 +4,13 @@ constexpr const char* GAME_TITLE = "LoopCube";
 constexpr int MAIN_WIDTH = 550;
 constexpr int MAIN_HEIGHT = 350;
 constexpr int BUTTON_MARGIN_BOTTOM = 6;
-constexpr int BUTTON_MARGIN_SIDE = 10;
+constexpr int BUTTON_MARGIN_SIDE = 0;
 
 Menu::Menu(const Graphics& graphics)
     : mainContainer{CONTAINER_HORIZONTAL,
                     {MAIN_WIDTH, MAIN_HEIGHT}},
-      leftPane{{200, SIZE_AUTO}},
-      rightPane{},
+      leftPane{{200, SIZE_AUTO}, {}, {15, 15, 15, 15}},
+      rightPane{{SIZE_AUTO, SIZE_AUTO}, {}, {15, 15, 15, 15}},
       box{(UI::setShader(graphics.shader), TEXTURE_BOX), {MAIN_WIDTH, MAIN_HEIGHT}}
 {
     createMainMenuComponents(graphics);
@@ -24,7 +24,7 @@ void Menu::createMainMenuComponents(const Graphics& graphics)
     UI::setShader(graphics.shader);
 
     // Margins
-    UI::Margin titleMargin{0, 0, 0, 0};
+    UI::Margin titleMargin{15, 0, 0, 0};
     UI::Margin buttonMargin{0, BUTTON_MARGIN_BOTTOM, BUTTON_MARGIN_SIDE, BUTTON_MARGIN_SIDE};
 
     // Create title text
