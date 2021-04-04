@@ -10,6 +10,7 @@ namespace UI
     class TextComponent;
     class Textbox;
     class Box;
+    class TextureComponent;
 
     using Component = std::variant<
         UI::Container,
@@ -18,6 +19,7 @@ namespace UI
         UI::ScrollList,
         UI::TextComponent,
         UI::Textbox,
-        UI::Box
+        UI::Box,
+        UI::TextureComponent
     >;
 }

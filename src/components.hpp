@@ -3,6 +3,7 @@
 
 // Generic components
 #include "textcomponent.hpp"
+#include "texturecomponent.hpp"
 #include "button.hpp"
 #include "scrollbar.hpp"
 #include "textbox.hpp"
