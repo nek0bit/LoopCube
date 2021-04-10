@@ -41,6 +41,7 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
     if (fcntl(fd, F_SETFL, flags) == -1)
         throw ConnectionError(strerror(errno));
     
+    /*
 #ifndef __NONODELAY__
     // Disables the Nagle algorithm, disables verification
     if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &no, sizeof(no)) == -1)
@@ -49,6 +50,7 @@ ClientSocket::ClientSocket(const char* address, const uint16_t port)
         throw ConnectionError(strerror(errno));
     }
 #endif
+    */
 }
 
 ClientSocket::~ClientSocket()
@@ -56,6 +58,7 @@ ClientSocket::~ClientSocket()
     closeSocket();
 }
 
+// WARNING the code below is SCARY
 void ClientSocket::checkSocket(std::function<void(void)>& disconnectCallback,
                                PlayerGroup& players, ChunkGroup& chunks)
 {
@@ -76,17 +79,14 @@ void ClientSocket::checkSocket(std::function<void(void)>& disconnectCallback,
         if (sizeByte <= 0) return;
 
         std::vector<unsigned char> readInto(std::begin(buffer), std::begin(buffer)+2);
-
         uint16_t dataLength = Generic::deserializeUnsigned<std::vector<unsigned char>, uint16_t>
             (readInto, 0, 2);
 
         // Receive rest of data
-        res = recv(fd, &buffer[2], dataLength-2, 0);
-
+        res = recv(fd, &buffer[2], (dataLength-2 > BUF_SIZE) ? BUF_SIZE - 2 : dataLength-2, 0);
         if (res <= 0) return;
             
         std::vector<unsigned char> value(std::begin(buffer)+2, std::begin(buffer)+res+2);
-
         if (value.at(dataLength-3) != 0xff) return;
         
         try
