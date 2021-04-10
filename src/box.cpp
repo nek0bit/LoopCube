@@ -77,6 +77,8 @@ void UI::Box::refreshContent()
 
 void UI::Box::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
+    transform.translate.x += position.x;
+    transform.translate.y += position.y;
     if (component) component->update(camera, events, transform);
 }
 

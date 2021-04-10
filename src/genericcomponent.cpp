@@ -48,7 +48,8 @@ bool UI::GenericComponent::isVmouseTouching(const Camera& camera, const EventWra
     return Generic::collision<float>
         (events.vmouse.x,
          events.vmouse.y, 0, 0,
-         position.x + transform.translate.x, position.y + transform.translate.y, size.x * scale.x, size.y * scale.y);
+         position.x + transform.translate.x, position.y + transform.translate.y,
+         size.x * scale.x, size.y * scale.y);
 }
 
 void UI::GenericComponent::refreshContent()
