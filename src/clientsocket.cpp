@@ -85,12 +85,12 @@ void ClientSocket::checkSocket(std::function<void(void)>& disconnectCallback,
         // Receive rest of data
         res = recv(fd, &buffer[2], (dataLength-2 > BUF_SIZE) ? BUF_SIZE - 2 : dataLength-2, 0);
         if (res <= 0) return;
-            
-        std::vector<unsigned char> value(std::begin(buffer)+2, std::begin(buffer)+res+2);
-        if (value.at(dataLength-3) != 0xff) return;
-        
+
         try
         {   
+            std::vector<unsigned char> value(std::begin(buffer)+2, std::begin(buffer)+res+2);
+            if (value.at(dataLength-3) != 0xff) return;
+
             switch(value.at(0))
             {
             case ACTION_PLAYER_UPDATE:
