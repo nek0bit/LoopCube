@@ -43,6 +43,9 @@ void Game::gameInit()
 
     // Create menu
 	menu = std::make_unique<Menu>(graphics);
+    menu->onPlayClick = [&]() {
+        state.push(STATE_PLAYING);
+    };
     
     createModels();
 }
@@ -155,6 +158,8 @@ void Game::update()
     {
         switch(state.top()) {
         case STATE_MAIN_MENU:
+            graphics.camera.position = {0.0f, 0.0f, 100.0f};
+            graphics.camera.center = {0.0f, 0.0f, 0.0f};
             if (menu == nullptr) break;
             menu->update(graphics.camera, events);
             break;

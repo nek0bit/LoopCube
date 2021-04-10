@@ -40,8 +40,7 @@ void Menu::createMainMenuComponents(const Graphics& graphics)
     UI::setFont(constants::fontHandler[4]);
     UI::Button playButton{"Play", SIZE_AUTO, {}, buttonMargin};
     playButton.onClick = [&](){
-        std::cout << "Watch this segfault..." << std::endl;
-        playButton.setText("Clicked...");
+        onPlayClick();
     };
     UI::Button configButton{"Config", SIZE_AUTO, {}, buttonMargin};
     UI::Button quitButton{"Quit", SIZE_AUTO, {}, buttonMargin};

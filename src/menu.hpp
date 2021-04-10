@@ -1,4 +1,5 @@
 #pragma once
+#include <functional>
 #include "immediate.hpp"
 #include "graphics.hpp"
 #include "eventwrapper.hpp"
@@ -27,4 +28,6 @@ public:
     // Generic game loop stuff
     void update(const Camera& camera, const EventWrapper& events);
     void render(const Graphics& graphics) const noexcept;
+
+    std::function<void(void)> onPlayClick;
 };
