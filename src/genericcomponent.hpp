@@ -2,6 +2,7 @@
 #include <functional>
 #include <variant>
 #include <glm/glm.hpp>
+#include <cmath>
 
 #include "margin.hpp"
 #include "camera.hpp"
@@ -23,6 +24,8 @@ enum fixedsize_t
     FIXED_H
 };
 
+// TODO use structs for arguments that get repeated a lot
+
 namespace UI
 {
     class GenericComponent
@@ -36,6 +39,7 @@ namespace UI
         void handleEvents(const Camera& camera, const EventWrapper& events, const Transform& transform); // Calls all event methods
     public:
         glm::ivec2 position;
+        glm::ivec2 realPosition;
         glm::ivec2 size;
         glm::ivec2 initialSize;
         
@@ -61,5 +65,8 @@ namespace UI
         glm::vec3 scale;
 
         uint8_t fixed;
+
+        // Any type can go here, but containers are recommended
+        GenericComponent* parentContainer;
     };
 }

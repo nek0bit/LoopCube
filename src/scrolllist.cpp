@@ -31,6 +31,7 @@ void UI::ScrollList::updateComponents()
     for (auto& component: components)
     {
         std::visit([&](auto& data) {
+            data.parentContainer = this;
             if (data.initialSize.x == SIZE_AUTO)
             {
                 data.size.x = size.x - (scrollbar.scrollbarEnabled ? scrollbar.size.x : 0)
@@ -64,6 +65,8 @@ void UI::ScrollList::update(const Camera& camera, const EventWrapper& events, Tr
 {
     transform.translate.x += position.x;
     transform.translate.y += position.y;
+
+    realPosition = transform.translate;
 
     // Scrollbar
     scrollbar.update(camera, events, transform);
