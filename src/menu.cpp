@@ -43,6 +43,15 @@ void Menu::createMainMenuComponents(const Graphics& graphics)
         onPlayClick();
     };
     UI::Button configButton{"Config", SIZE_AUTO, {}, buttonMargin};
+    UI::Button config1Button{"Config", SIZE_AUTO, {}, buttonMargin};
+    UI::Button config2Button{"Config", SIZE_AUTO, {}, buttonMargin};
+    UI::Button config3Button{"Config", SIZE_AUTO, {}, buttonMargin};
+    UI::Button config7Button{"Config", SIZE_AUTO, {}, buttonMargin};
+    UI::Button config8Button{"Config", SIZE_AUTO, {}, buttonMargin};
+    UI::Button config9Button{"Config", SIZE_AUTO, {}, buttonMargin};
+    UI::Button config4Button{"Config", SIZE_AUTO, {}, buttonMargin};
+    UI::Button config5Button{"Config", SIZE_AUTO, {}, buttonMargin};
+    UI::Button config6Button{"Config", SIZE_AUTO, {}, buttonMargin};
     UI::Button quitButton{"Quit", SIZE_AUTO, {}, buttonMargin};
 
     // Creates a line between both panes
@@ -51,6 +60,15 @@ void Menu::createMainMenuComponents(const Graphics& graphics)
     // Add components to right pane (it packs automagically)
     leftPane.addComponent(playButton);
     leftPane.addComponent(configButton);
+    leftPane.addComponent(config1Button);
+    leftPane.addComponent(config2Button);
+    leftPane.addComponent(config3Button);
+    leftPane.addComponent(config4Button);
+    leftPane.addComponent(config5Button);
+    leftPane.addComponent(config6Button);
+    leftPane.addComponent(config7Button);
+    leftPane.addComponent(config8Button);
+    leftPane.addComponent(config9Button);
     leftPane.addComponent(quitButton);
 
     // Add components to left pane

@@ -73,6 +73,7 @@ void UI::Box::refreshContent()
 
     // Bind data
     model.setBufferData(mesh);
+    if (component) component->refreshContent();
 }
 
 void UI::Box::update(const Camera& camera, const EventWrapper& events, Transform transform)

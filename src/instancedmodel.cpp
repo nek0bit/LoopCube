@@ -22,7 +22,6 @@ void InstancedModel::setInstanceData(const std::vector<Vertex>& instances)
     constexpr uint8_t texCoordOffset = sizeof(glm::vec3); // First element in struct
     constexpr uint8_t texCoordSize = 2;    
     const GLuint positionAttribute = glGetAttribLocation(shader, "instanceTrans");
-    //const GLuint texCoordAttribute = glGetAttribLocation(shader, "texCoord");
 
     glBindVertexArray(vao);
     instanceSize = instances.size();
@@ -30,10 +29,8 @@ void InstancedModel::setInstanceData(const std::vector<Vertex>& instances)
     glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * instances.size(), &instances[0], GL_STREAM_DRAW);
 
     glVertexAttribPointer(positionAttribute, positionSize, GL_FLOAT, GL_FALSE, Stride, 0);
-    //glVertexAttribPointer(texCoordAttribute, texCoordSize, GL_FLOAT, GL_FALSE, Stride, (void*)(texCoordOffset));
     
     glEnableVertexAttribArray(positionAttribute);
-    //glEnableVertexAttribArray(texCoordAttribute);
 
     glVertexAttribDivisor(positionAttribute, 1);
 }
