@@ -69,6 +69,12 @@ bool UI::GenericComponent::isVmouseTouching(const Camera& camera,
             : cutOffYSize + ySize));
 }
 
+void UI::GenericComponent::transformPropify(Transform& transform) noexcept
+{
+    transform.translate.x += position.x;
+    transform.translate.y += position.y;
+}
+
 void UI::GenericComponent::refreshContent()
 {}
 

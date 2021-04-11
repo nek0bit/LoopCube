@@ -2,7 +2,7 @@
 
 ![LoopCube Logo (Wii U Meta Image)](meta/icon.png)
 
-LoopCube is an open source Survival/Sandbox game written in C++.
+LoopCube is an open source Survival/Sandbox game written in C++ and OpenGL.
 
 It has infinite horizontal/vertical world generation, a day/night cycle, caves, and more.
 
@@ -42,6 +42,15 @@ Copy the data folder into wherever you set the DATA_LOCATION value to be
 Replace `install` with `uninstall` if you want to remove it.
 
 *Note:* I haven't tested this on macOS yet, be careful
+
+# TODO
+
+Please note that I do this project for fun, as a result, it's very slowly developed and might have some bugs I'm already aware of.
+
+- [ ] Clean up `src/` directory. I didn't expect it to get so big
+- [ ] Switch to CMake
+- [ ] Finish tweaking the UI system
+- [ ] Add old backgrounds back
 
 # License
 

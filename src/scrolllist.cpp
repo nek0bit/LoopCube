@@ -63,8 +63,7 @@ void UI::ScrollList::updateComponents()
 
 void UI::ScrollList::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
-    transform.translate.x += position.x;
-    transform.translate.y += position.y;
+    transformPropify(transform)
 
     realPosition = transform.translate;
 
@@ -84,8 +83,7 @@ void UI::ScrollList::update(const Camera& camera, const EventWrapper& events, Tr
 
 void UI::ScrollList::draw(const Graphics& graphics, Transform transform) const noexcept
 {
-    transform.translate.x += position.x;
-    transform.translate.y += position.y;
+    transformPropify(transform);
 
     // Clip components
     glScissor(transform.translate.x, Generic::topToBottomFlip<double>(size.y + transform.translate.y, graphics.camera.size.h),

@@ -78,21 +78,18 @@ void UI::Box::refreshContent()
 
 void UI::Box::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
-    transform.translate.x += position.x;
-    transform.translate.y += position.y;
+    transformPropify(transform);
     if (component) component->update(camera, events, transform);
 }
 
 void UI::Box::draw(const Graphics& graphics, Transform transform) const noexcept
 {
-
     graphics.textures.getTexture(textureId)->bind();
     model.draw(graphics.uniforms.model, graphics.uniforms.tex,
                 glm::vec3(position.x, position.y, 0.0f) + transform.translate,
                 scale + transform.scale);
 
-    transform.translate.x += position.x;
-    transform.translate.y += position.y;
+    transformPropify(transform);
 
     if (component) component->draw(graphics, transform);
 }
