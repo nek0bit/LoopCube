@@ -63,7 +63,7 @@ void UI::ScrollList::updateComponents()
 
 void UI::ScrollList::update(const Camera& camera, const EventWrapper& events, Transform transform)
 {
-    transformPropify(transform)
+    transformPropify(transform);
 
     realPosition = transform.translate;
 

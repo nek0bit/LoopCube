@@ -37,7 +37,7 @@ namespace UI
     protected:
         [[nodiscard]] bool isVmouseTouching(const Camera& camera, const EventWrapper& events, const Transform& transform) const noexcept;
         void handleEvents(const Camera& camera, const EventWrapper& events, const Transform& transform); // Calls all event methods
-        void transformPropify(Transform& transform) noexcept;
+        void transformPropify(Transform& transform) const noexcept;
     public:
         glm::ivec2 position;
         glm::ivec2 realPosition;
